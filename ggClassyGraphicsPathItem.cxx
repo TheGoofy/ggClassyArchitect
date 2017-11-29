@@ -7,7 +7,7 @@ ggClassyGraphicsPathItem::ggClassyGraphicsPathItem(QGraphicsItem* aParent) :
   mArrowLength(12.0f),
   mLineAnchorLength(3.0f)
 {
-  QPen vPen(QColor(150, 50, 0), 1.5f);
+  QPen vPen(QColor(180, 60, 0), 1.5f);
   vPen.setCapStyle(Qt::FlatCap);
   setPen(vPen);
   setBrush(Qt::NoBrush);
