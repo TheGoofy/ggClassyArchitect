@@ -71,7 +71,9 @@ void ggSubject::NotifyPrivate(const ggObserver* aObserverExcluded)
       const ggObserver* vObserver = dynamic_cast<const ggObserver*>(*vItemsWalker);
       if ((vObserver != nullptr) &&
           (vObserver != aObserverExcluded)) {
-        const_cast<ggObserver*>(vObserver)->UpdatePrivate(this);
+        if (!IsBlocking(vObserver)) {
+          const_cast<ggObserver*>(vObserver)->UpdatePrivate(this);
+        }
       }
     }
   }

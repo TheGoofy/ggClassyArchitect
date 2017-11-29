@@ -44,14 +44,10 @@ void ggObserver::Detach(const ggSubject* aSubject)
   ggItemLinked::Detach(aSubject);
 }
 
-/*
-void Attach(const ggItemLinked* aItem);
-void Detach(const ggItemLinked* aItem);
-*/
 
 void ggObserver::UpdatePrivate(const ggSubject* aSubject)
 {
-  if (!IsBlocking()) {
+  if (!IsBlocking() && !IsBlocking(aSubject)) {
     if (!IsSleeping()) Update(aSubject);
     else mUpdatePendingSubjects.insert(aSubject);
   }
