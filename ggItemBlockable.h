@@ -1,6 +1,7 @@
 #ifndef GGITEMBLOCKABLE_H
 #define GGITEMBLOCKABLE_H
 
+#include <set>
 
 /**
  * An item, which can be set to blocking
@@ -15,11 +16,13 @@ public:
 
   virtual ~ggItemBlockable();
 
-  bool IsBlocking() const;
-
+  /**
+   * makes item blocking as long as the blocker exists
+   */
   class Blocker {
   public:
     Blocker(ggItemBlockable* aItem);
+    Blocker(ggItemBlockable* aItem, const ggItemBlockable* aOtherItem);
     virtual ~Blocker();
   private:
     // hide default construction and copy
@@ -27,8 +30,12 @@ public:
     Blocker(const Blocker&);
     Blocker& operator = (const Blocker&);
     ggItemBlockable* mItem;
+    const ggItemBlockable* mOtherItem;
     bool mWasNotBlocking;
   };
+
+  bool IsBlocking() const;
+  bool IsBlocking(const ggItemBlockable* aItem) const;
 
 protected:
 
@@ -41,11 +48,14 @@ protected:
 private:
 
   void CopyFrom(const ggItemBlockable&);
+
   void BlockStartPrivate();
   void BlockFinishPrivate();
-
   bool mIsBlocking;
 
+  void BlockStartPrivate(const ggItemBlockable* aOtherItem);
+  void BlockFinishPrivate(const ggItemBlockable* aOtherItem);
+  std::set<const ggItemBlockable*> mIsBlockingOther;
 };
 
 #endif // GGITEMBLOCKABLE_H

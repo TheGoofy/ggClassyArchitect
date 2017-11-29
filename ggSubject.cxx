@@ -80,6 +80,9 @@ void ggSubject::NotifyPrivate(const ggObserver* aObserverExcluded)
 
 void ggSubject::CopyFrom(const ggSubject aOther)
 {
+  // there will be observers disconnected, when a new subject with different
+  // observers is assigned. if there is a notification pending (because of sleep),
+  // these observers have to be notified.
   // basically only observers that are going to be detached would need to be
   // notified (if there is a notification pending). for simplicity reasons
   // we're going to notify all observers.

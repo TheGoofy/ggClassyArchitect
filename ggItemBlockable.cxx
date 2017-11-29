@@ -31,8 +31,15 @@ bool ggItemBlockable::IsBlocking() const
 }
 
 
+bool ggItemBlockable::IsBlocking(const ggItemBlockable* aItem) const
+{
+  return mIsBlockingOther.find(aItem) != mIsBlockingOther.end();
+}
+
+
 ggItemBlockable::Blocker::Blocker(ggItemBlockable* aItem) :
   mItem(aItem),
+  mOtherItem(nullptr),
   mWasNotBlocking(false)
 {
   if (!mItem->IsBlocking()) {
@@ -42,10 +49,27 @@ ggItemBlockable::Blocker::Blocker(ggItemBlockable* aItem) :
 }
 
 
+ggItemBlockable::Blocker::Blocker(ggItemBlockable* aItem, const ggItemBlockable* aOtherItem) :
+  mItem(aItem),
+  mOtherItem(aOtherItem),
+  mWasNotBlocking(false)
+{
+  if (!mItem->IsBlocking(mOtherItem)) {
+    mWasNotBlocking = true;
+    mItem->BlockStartPrivate(mOtherItem);
+  }
+}
+
+
 ggItemBlockable::Blocker::~Blocker()
 {
   if (mWasNotBlocking) {
-    if (mItem->IsBlocking()) mItem->BlockFinishPrivate();
+    if (mOtherItem != nullptr) {
+      if (mItem->IsBlocking(mOtherItem)) mItem->BlockFinishPrivate(mOtherItem);
+    }
+    else {
+      if (mItem->IsBlocking()) mItem->BlockFinishPrivate();
+    }
   }
 }
 
@@ -67,4 +91,16 @@ void ggItemBlockable::BlockFinishPrivate()
 {
   mIsBlocking = false;
   BlockingFinish();
+}
+
+
+void ggItemBlockable::BlockStartPrivate(const ggItemBlockable* aOtherItem)
+{
+  mIsBlockingOther.insert(aOtherItem);
+}
+
+
+void ggItemBlockable::BlockFinishPrivate(const ggItemBlockable* aOtherItem)
+{
+  mIsBlockingOther.erase(aOtherItem);
 }

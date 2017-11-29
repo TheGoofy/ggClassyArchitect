@@ -16,6 +16,7 @@ class ggObserver;
  * iteration, it's potentially causing a performance issue (in particular, if
  * there are also many observers). The subject can be put to sleep before the
  * loop starts (and wakeup, when the loop ends).
+ * A blocked subject ignores all notifications.
  */
 class ggSubject :
   public ggItemLinked,

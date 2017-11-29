@@ -16,6 +16,7 @@ public:
   ggItemLazy();
   ggItemLazy(const ggItemLazy& aOther);
   ggItemLazy& operator = (const ggItemLazy& aOther);
+
   virtual ~ggItemLazy();
 
   /**
