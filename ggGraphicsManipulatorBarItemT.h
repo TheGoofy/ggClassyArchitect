@@ -77,18 +77,18 @@ public:
 
 protected:
 
-  void hoverEnterEvent(QGraphicsSceneHoverEvent* aEvent) override {
+  virtual void hoverEnterEvent(QGraphicsSceneHoverEvent* aEvent) override {
     ShowHandles();
     TBaseItem::hoverEnterEvent(aEvent);
   }
 
-  void hoverLeaveEvent(QGraphicsSceneHoverEvent* aEvent) override {
+  virtual void hoverLeaveEvent(QGraphicsSceneHoverEvent* aEvent) override {
     HideHandles();
     TBaseItem::hoverLeaveEvent(aEvent);
   }
 
-  QVariant itemChange(typename TBaseItem::GraphicsItemChange aChange,
-                      const QVariant& aValue) override {
+  virtual QVariant itemChange(typename TBaseItem::GraphicsItemChange aChange,
+                              const QVariant& aValue) override {
     // notify position change
     if (aChange == TBaseItem::ItemPositionHasChanged) {
       mSubjectPosition.Notify();
@@ -112,7 +112,7 @@ private:
   }
 
   void HideHandles() {
-    SetHandleBrush(QColor(255, 255, 255, 0));
+    SetHandleBrush(Qt::transparent);
   }
 
   void SetHandleBrush(const QBrush& aBrush) {

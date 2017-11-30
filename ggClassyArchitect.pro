@@ -38,7 +38,8 @@ SOURCES += \
     ggItemBlockable.cxx \
     ggClassyGraphicsBoxItems.cxx \
     ggClassyGraphicsPathItem.cxx \
-    ggClassyGraphicsScene.cxx
+    ggClassyGraphicsScene.cxx \
+    ggGraphicsCheckBoxItem.cxx
 
 HEADERS += \
     ggClassyMainWindow.h \
@@ -60,7 +61,8 @@ HEADERS += \
     ggClassyGraphicsBoxItems.h \
     ggSubjectValueT.h \
     ggClassyGraphicsPathItem.h \
-    ggClassyGraphicsScene.h
+    ggClassyGraphicsScene.h \
+    ggGraphicsCheckBoxItem.h
 
 FORMS += \
     ggClassyMainWindow.ui

@@ -11,17 +11,17 @@ class ggSubjectValueT :
 
 public:
 
-  ggSubjectValueT(bool aNotifyAssignment = true) :
-    ggSubject(), TValue(), mNotifyAssignment(aNotifyAssignment) {
+  ggSubjectValueT(bool aNotify = true) :
+    ggSubject(), TValue(), mNotify(aNotify) {
   }
 
   template <typename TOtherValue>
-  ggSubjectValueT(const TOtherValue& aOther, bool aNotifyAssignment = true) :
-    ggSubject(), TValue(aOther), mNotifyAssignment(aNotifyAssignment) {
+  ggSubjectValueT(const TOtherValue& aOther, bool aNotify = true) :
+    ggSubject(), TValue(aOther), mNotify(aNotify) {
   }
 
-  ggSubjectValueT(const ggSubjectValueT& aOther, bool aNotifyAssignment = true) :
-    ggSubject(aOther), TValue(aOther), mNotifyAssignment(aNotifyAssignment) {
+  ggSubjectValueT(const ggSubjectValueT& aOther, bool aNotify = true) :
+    ggSubject(aOther), TValue(aOther), mNotify(aNotify) {
   }
 
   virtual ~ggSubjectValueT() {
@@ -29,63 +29,63 @@ public:
 
   void Set(const TValue& aValue) {
     TValue::operator = (aValue);
-    if (mNotifyAssignment) Notify();
+    if (mNotify) Notify();
   }
 
   inline ggSubjectValueT& operator = (const ggSubjectValueT& aOther) {
     ggSubject::operator = (aOther);
     TValue::operator = (aOther);
-    mNotifyAssignment = aOther.mNotifyAssignment;
-    if (mNotifyAssignment) Notify();
+    mNotify = aOther.mNotify;
+    if (mNotify) Notify();
     return *this;
   }
 
   template <typename TOtherValue>
   inline ggSubjectValueT& operator = (const TOtherValue& aOther) {
     TValue::operator = (aOther);
-    if (mNotifyAssignment) Notify();
+    if (mNotify) Notify();
     return *this;
   }
 
   template <typename TOtherValue>
   inline ggSubjectValueT& operator += (const TOtherValue& aOther) {
     TValue::operator += (aOther);
-    if (mNotifyAssignment) Notify();
+    if (mNotify) Notify();
     return *this;
   }
 
   template <typename TOtherValue>
   inline ggSubjectValueT& operator -= (const TOtherValue& aOther) {
     TValue::operator -= (aOther);
-    if (mNotifyAssignment) Notify();
+    if (mNotify) Notify();
     return *this;
   }
 
   template <typename TOtherValue>
   inline ggSubjectValueT& operator *= (const TOtherValue& aOther) {
     TValue::operator *= (aOther);
-    if (mNotifyAssignment) Notify();
+    if (mNotify) Notify();
     return *this;
   }
 
   template <typename TOtherValue>
   inline ggSubjectValueT& operator /= (const TOtherValue& aOther) {
     TValue::operator /= (aOther);
-    if (mNotifyAssignment) Notify();
+    if (mNotify) Notify();
     return *this;
   }
 
   inline bool GetNotifyAssignment() const {
-    return mNotifyAssignment;
+    return mNotify;
   }
 
   inline void SetNotifyAssignment(bool aNotify) {
-    mNotifyAssignment = aNotify;
+    mNotify = aNotify;
   }
 
 private:
 
-  bool mNotifyAssignment;
+  bool mNotify;
 
 };
 

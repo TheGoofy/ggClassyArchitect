@@ -4,6 +4,7 @@
 #include "ggGraphicsManipulatorBarItemT.h"
 
 class ggGraphicsTextItem;
+class ggGraphicsCheckBoxItem;
 class ggClassyGraphicsBoxItems;
 class ggClassyClassBox;
 class ggClassyClass;
@@ -29,6 +30,8 @@ public:
 
 protected:
 
+  virtual void hoverEnterEvent(QGraphicsSceneHoverEvent* aEvent) override;
+  virtual void hoverLeaveEvent(QGraphicsSceneHoverEvent* aEvent) override;
   virtual void Update(const ggSubject* aSubject) override;
 
 private:
@@ -44,9 +47,11 @@ private:
   void UpdateClassBoxWrite();
   void NotifyClassBoxChange();
 
-  ggGraphicsTextItem* mNameText;
+  ggGraphicsTextItem* mClassNameText;
   ggGraphicsTextItem* mMembersText;
   ggGraphicsTextItem* mCommentText;
+  ggGraphicsCheckBoxItem* mMembersCheckBox;
+  ggGraphicsCheckBoxItem* mCommentCheckBox;
 
   ggSubject mSubjectHeight;
 
