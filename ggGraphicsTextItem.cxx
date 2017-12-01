@@ -16,6 +16,7 @@
 ggGraphicsTextItem::ggGraphicsTextItem(QGraphicsItem* aParent) :
   QGraphicsTextItem(aParent),
   mSubjectText(new ggSubject()),
+  mSubjectEditingFinished(new ggSubject()),
   mSuppressLineBreaks(false),
   mEnterKeyFinishesEdit(false),
   mLastMousePressPos(0.0f, 0.0f),
@@ -31,6 +32,7 @@ ggGraphicsTextItem::ggGraphicsTextItem(QGraphicsItem* aParent) :
 ggGraphicsTextItem::~ggGraphicsTextItem()
 {
   delete mSubjectText;
+  delete mSubjectEditingFinished;
 }
 
 
@@ -192,9 +194,9 @@ void ggGraphicsTextItem::SetEditable(bool aEditable)
     setFocus();
   }
   else {
-    textCursor().clearSelection();
-    setCursor(Qt::CrossCursor);
+    mSubjectEditingFinished->Notify();
     setTextInteractionFlags(Qt::NoTextInteraction);
+    setCursor(Qt::CrossCursor);
   }
 }
 
@@ -215,6 +217,12 @@ QString ggGraphicsTextItem::GetText() const
 const ggSubject* ggGraphicsTextItem::GetSubjectText() const
 {
   return mSubjectText;
+}
+
+
+const ggSubject* ggGraphicsTextItem::GetSubjectEditingFinished() const
+{
+  return mSubjectEditingFinished;
 }
 
 

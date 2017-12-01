@@ -31,6 +31,7 @@ public:
   void SetText(const QString& aText);
   QString GetText() const;
   const ggSubject* GetSubjectText() const;
+  const ggSubject* GetSubjectEditingFinished() const;
 
 protected:
 
@@ -52,6 +53,7 @@ private:
   void SetEditable(bool aEditable = true);
 
   ggSubject* mSubjectText;
+  ggSubject* mSubjectEditingFinished;
   bool mSuppressLineBreaks;
   bool mEnterKeyFinishesEdit;
   QPointF mLastMousePressPos;

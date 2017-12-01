@@ -91,8 +91,11 @@ void ggClassyGraphicsBoxItem::Construct()
   mCommentCheckBox = new ggGraphicsCheckBoxItem(this);
 
   Attach(mClassNameText->GetSubjectText());
+  Attach(mClassNameText->GetSubjectEditingFinished());
   Attach(mMembersText->GetSubjectText());
+  Attach(mMembersText->GetSubjectEditingFinished());
   Attach(mCommentText->GetSubjectText());
+  Attach(mCommentText->GetSubjectEditingFinished());
   Attach(mMembersCheckBox->GetSubjectChecked());
   Attach(mCommentCheckBox->GetSubjectChecked());
   Attach(GetSubjectPosition());
@@ -193,10 +196,15 @@ void ggClassyGraphicsBoxItem::Update(const ggSubject* aSubject)
            aSubject == mCommentText->GetSubjectText()) {
     UpdateLayout();
     NotifyHeight();
-    UpdateClassWrite();
-    NotifyClassChange();
     UpdateClassBoxWrite();
     NotifyClassBoxChange();
+  }
+
+  else if (aSubject == mClassNameText->GetSubjectEditingFinished() ||
+           aSubject == mMembersText->GetSubjectEditingFinished() ||
+           aSubject == mCommentText->GetSubjectEditingFinished()) {
+    UpdateClassWrite();
+    NotifyClassChange();
   }
 
   else if (aSubject == mMembersCheckBox->GetSubjectChecked() ||
