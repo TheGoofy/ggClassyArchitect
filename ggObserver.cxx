@@ -29,6 +29,7 @@ ggObserver::~ggObserver()
 
 void ggObserver::ExecutingStop(const ggBehaviorBlocking*)
 {
+  // bla
   // nothing to do here. missed updates can be ignored since we were blocking
 }
 
