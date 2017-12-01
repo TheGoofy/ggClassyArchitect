@@ -27,7 +27,10 @@ void ggClassyGraphicsScene::addItem(ggClassyGraphicsBoxItem* aBoxItem)
 
 void ggClassyGraphicsScene::AddClassBoxItems(ggClassyDataSet* aDataSet)
 {
+  // only notify box items change, when all boxes are added
   ggBehaviorLazy::Executor vLazy(mBoxItems);
+
+  // loop over box items
   typedef std::vector<ggClassyClassBox*> tClassBoxes;
   ggWalkerT<tClassBoxes::iterator> vClassBoxesIterator(aDataSet->mClassBoxes);
   while (vClassBoxesIterator) {
@@ -39,16 +42,21 @@ void ggClassyGraphicsScene::AddClassBoxItems(ggClassyDataSet* aDataSet)
 
 void ggClassyGraphicsScene::AddLineItems(ggClassyDataSet* aDataSet)
 {
+  // only notify box items, when all are added
   ggBehaviorLazy::Executor vLazy(mBoxItems);
-  typedef std::vector<ggClassyClassBox*> tClassBoxes;
-  ggWalkerT<tClassBoxes::iterator> vClassBoxesIterator(aDataSet->mClassBoxes);
-  while (vClassBoxesIterator) {
-    ggClassyClassBox* vClassBox = *vClassBoxesIterator;
-    if (vClassBox == nullptr) continue;
-    if (vClassBox->mClass == nullptr) continue;
-    ggWalkerT<ggStrings::iterator> vBaseClassNameWalker(vClassBox->mClass->mBaseClassNames);
+
+  // loop over classes
+  typedef std::set<ggClassyClass*> tClasses;
+  ggWalkerT<tClasses::const_iterator> vClassesWalker(aDataSet->mClasses);
+  while (vClassesWalker) {
+    const ggClassyClass* vClass = *vClassesWalker;
+
+    // loop over base classes
+    ggWalkerT<ggStrings::const_iterator> vBaseClassNameWalker(vClass->mBaseNames);
     while (vBaseClassNameWalker) {
-      const QString& vClassName = vClassBox->mClass->mName;
+
+      // lines between derived class and base class(es)
+      const QString& vClassName = vClass->mName;
       const QString& vBaseClassNames = *vBaseClassNameWalker;
       ggClassyGraphicsPathItem* vLine = new ggClassyGraphicsPathItem();
       vLine->SetBoxItems(mBoxItems);

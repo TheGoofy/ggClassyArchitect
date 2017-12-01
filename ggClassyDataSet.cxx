@@ -12,15 +12,15 @@ ggClassyDataSet* ggClassyDataSet::GenerateTestData()
 
   ggClassyClass* vClassB = new ggClassyClass();
   vClassB->mName = "ggClassB";
-  vClassB->mBaseClassNames.push_back("ggClassA");
+  vClassB->mBaseNames.push_back("ggClassA");
   vClassB->mMembers.push_back(ggClassyClassMember("Blubb()", "QString"));
   vClassB->mMembers.push_back(ggClassyClassMember("GetA()", "ggClassA"));
   vClassB->mComment = "One fish, two fish, red fish, blue fish.";
 
   ggClassyClass* vClassC = new ggClassyClass();
   vClassC->mName = "ggClassC";
-  vClassC->mBaseClassNames.push_back("ggClassA");
-  vClassC->mBaseClassNames.push_back("ggClassB");
+  vClassC->mBaseNames.push_back("ggClassA");
+  vClassC->mBaseNames.push_back("ggClassB");
   vClassC->mMembers.push_back(ggClassyClassMember("GetName()", "QString"));
   vClassC->mMembers.push_back(ggClassyClassMember("SayHello()", "QString"));
   vClassC->mComment = "This is a very useful comment!";
@@ -36,13 +36,10 @@ ggClassyDataSet* ggClassyDataSet::GenerateTestData()
   ggClassyClassBox* vClassBoxB1 = new ggClassyClassBox();
   vClassBoxB1->mClass = vClassB;
   vClassBoxB1->mPosition = QPointF(-100, -100);
-  vClassBoxB1->mMembersVisible = false;
 
   ggClassyClassBox* vClassBoxB2 = new ggClassyClassBox();
   vClassBoxB2->mClass = vClassB;
   vClassBoxB2->mPosition = QPointF(300, -100);
-  vClassBoxB2->mMembersVisible = false;
-  vClassBoxB2->mCommentVisible = false;
 
   ggClassyClassBox* vClassBoxC1 = new ggClassyClassBox();
   vClassBoxC1->mClass = vClassC;
@@ -52,8 +49,7 @@ ggClassyDataSet* ggClassyDataSet::GenerateTestData()
   ggClassyClassBox* vClassBoxC2 = new ggClassyClassBox();
   vClassBoxC2->mClass = vClassC;
   vClassBoxC2->mPosition = QPointF(150, 0);
-  vClassBoxC2->mWidth = 150.0f;
-  vClassBoxC2->mCommentVisible = false;
+  vClassBoxC2->mWidth = 250.0f;
 
   ggClassyDataSet* vDataSet = new ggClassyDataSet();
   vDataSet->mClasses.insert(vClassA);

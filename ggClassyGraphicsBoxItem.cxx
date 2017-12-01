@@ -20,8 +20,7 @@ ggClassyGraphicsBoxItem::ggClassyGraphicsBoxItem(const QRectF& aRect) :
   mCommentText(nullptr),
   mMembersCheckBox(nullptr),
   mCommentCheckBox(nullptr),
-  mClassBox(nullptr),
-  mBoxItems(nullptr)
+  mClassBox(nullptr)
 {
   Construct();
 
@@ -48,8 +47,7 @@ ggClassyGraphicsBoxItem::ggClassyGraphicsBoxItem(ggClassyClassBox* aClassBox) :
   mCommentText(nullptr),
   mMembersCheckBox(nullptr),
   mCommentCheckBox(nullptr),
-  mClassBox(nullptr),
-  mBoxItems(nullptr)
+  mClassBox(nullptr)
 {
   Construct();
   SetClassBox(aClassBox);
@@ -135,14 +133,6 @@ ggClassyClass* ggClassyGraphicsBoxItem::GetClass() const
 }
 
 
-void ggClassyGraphicsBoxItem::SetBoxItems(const ggClassyGraphicsBoxItems* aBoxItems)
-{
-  Detach(mBoxItems);
-  mBoxItems = aBoxItems;
-  Attach(mBoxItems);
-}
-
-
 const ggSubject* ggClassyGraphicsBoxItem::GetSubjectSize() const
 {
   return &mSubjectSize;
@@ -158,6 +148,51 @@ QPointF ggClassyGraphicsBoxItem::GetPositionTopCenter() const
 QPointF ggClassyGraphicsBoxItem::GetPositionBottomCenter() const
 {
   return GetPosition() + QPointF(rect().width()/2.0f, rect().height());
+}
+
+
+QPointF ggClassyGraphicsBoxItem::GetClassPositionLeft() const
+{
+  // offset from upper left corner
+  QPointF vPosition = GetPosition();
+  vPosition.ry() += mClassNameText->boundingRect().height() / 2.0f;
+  return vPosition;
+}
+
+
+QPointF ggClassyGraphicsBoxItem::GetClassPositionRight() const
+{
+  // same as left, just displaced by the box width
+  QPointF vPosition = GetClassPositionLeft();
+  vPosition.rx() += GetWidth();
+  return vPosition;
+}
+
+
+QPointF ggClassyGraphicsBoxItem::GetMemberPositionLeft(int aMemberIndex) const
+{
+  // calculate the height of a single member
+  int vNumberOfMembers = 1;
+  if (GetClass() != nullptr) vNumberOfMembers = GetClass()->mMembers.size();
+  if (vNumberOfMembers < 1) vNumberOfMembers = 1;
+  float vMemberHeight = mClassNameText->boundingRect().height() / vNumberOfMembers;
+
+  // offset from upper left corner
+  QPointF vPosition = GetPosition();
+  vPosition.ry() += mClassNameText->boundingRect().height();
+  vPosition.ry() += aMemberIndex * vMemberHeight + vMemberHeight / 2.0f;
+
+  // done...
+  return vPosition;
+}
+
+
+QPointF ggClassyGraphicsBoxItem::GetMemberPositionRight(int aMemberIndex) const
+{
+  // same as left, just displaced by the box width
+  QPointF vPosition = GetMemberPositionLeft(aMemberIndex);
+  vPosition.rx() += GetWidth();
+  return vPosition;
 }
 
 

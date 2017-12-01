@@ -22,11 +22,13 @@ public:
   ggClassyClassBox* GetClassBox() const;
   ggClassyClass* GetClass() const;
 
-  void SetBoxItems(const ggClassyGraphicsBoxItems* aBoxItems);
-
   const ggSubject* GetSubjectSize() const;
   QPointF GetPositionTopCenter() const;
   QPointF GetPositionBottomCenter() const;
+  QPointF GetClassPositionLeft() const;
+  QPointF GetClassPositionRight() const;
+  QPointF GetMemberPositionLeft(int aMemberIndex) const;
+  QPointF GetMemberPositionRight(int aMemberIndex) const;
 
 protected:
 
@@ -56,7 +58,6 @@ private:
   ggSubject mSubjectSize;
 
   ggClassyClassBox* mClassBox;
-  const ggClassyGraphicsBoxItems* mBoxItems;
 
 };
 

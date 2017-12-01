@@ -10,7 +10,6 @@ void ggClassyGraphicsBoxItems::AddItem(ggClassyGraphicsBoxItem* aBoxItem)
 {
   if (aBoxItem->GetClass() != nullptr) {
     mBoxItemsMap[aBoxItem->GetClass()->mName].push_back(aBoxItem);
-    aBoxItem->SetBoxItems(this);
     Notify();
   }
 }

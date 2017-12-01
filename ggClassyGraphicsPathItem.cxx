@@ -1,5 +1,7 @@
 #include "ggClassyGraphicsPathItem.h"
 
+#include <QVector2D>
+
 
 ggClassyGraphicsPathItem::ggClassyGraphicsPathItem(QGraphicsItem* aParent) :
   QGraphicsPathItem(aParent),
@@ -159,19 +161,18 @@ void ggClassyGraphicsPathItem::UpdatePath()
     ggWalkerT<tBoxItemsVec::iterator> vBoxItemsDstWalker(mBoxItemsDst);
     while (vBoxItemsDstWalker) {
       ggClassyGraphicsBoxItem* vBoxItemDst = *vBoxItemsDstWalker;
-      QPointF vPosition = vBoxItemDst->GetPositionBottomCenter();
-      // euclidean distance
-      float vDistanceE = QLineF(vPosSrc, vPosition).length();
-      // special distance along y: favor distance pointing into positive direction
-      float vDistanceY = vPosSrc.y() - vPosition.y();
-      if (vDistanceY < vDecorationSizeY) {
-        vDistanceY = -100.0f*(vDistanceY-vDecorationSizeY) + vDecorationSizeY;
-      }
-      // combine the two distances
-      float vDistance = vDistanceE + vDistanceY;
+      QPointF vPos = vBoxItemDst->GetPositionBottomCenter();
+      // distance: if pointing to top, favor vertical direction, else horizontal direction
+      QVector2D vVector(vPos - vPosSrc);
+      vVector[1] += vDecorationSizeY;
+      vVector[1] *= (vVector[1] < 0.0f ? 0.8f : 2.0f);
+      // extra penalty if pointing to the bottom
+      float vDistance = vVector.length();
+      if (vVector[1] > 0.0f) vDistance *= 10.0f;
+      // compare the "distorted" distance
       if (vDistance < vShortestDistance) {
         vShortestDistance = vDistance;
-        vPosDst = vPosition;
+        vPosDst = vPos;
       }
     }
 
@@ -199,7 +200,6 @@ void ggClassyGraphicsPathItem::UpdatePath()
 
       // a nice arrow using the same color from the line as a brush
       QPainterPath vArrowPath;
-      vArrowPath.setFillRule(Qt::WindingFill);
       vArrowPath.moveTo(vPosDst);
       vArrowPath.lineTo(vPosDst + QPointF( mArrowLength/2.5f, mArrowLength));
       vArrowPath.lineTo(vPosDst + QPointF(-mArrowLength/2.5f, mArrowLength));
