@@ -105,7 +105,7 @@ public:
   ggClassyClassBox() :
     mClass(nullptr),
     mPosition(0.0f, 0.0f),
-    mWidth(100.0f),
+    mWidth(150.0f),
     mMembersVisible(true),
     mCommentVisible(true) {}
   ggClassyClass* mClass;

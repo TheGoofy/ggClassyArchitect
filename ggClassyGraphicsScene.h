@@ -23,8 +23,6 @@ public:
 
 private:
 
-  void UpdateConnections();
-
   ggClassyGraphicsBoxItems* mBoxItems;
 
 };

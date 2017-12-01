@@ -25,14 +25,9 @@ void ggClassyGraphicsScene::addItem(ggClassyGraphicsBoxItem* aBoxItem)
 }
 
 
-void ggClassyGraphicsScene::UpdateConnections()
-{
-  mBoxItems->Notify();
-}
-
-
 void ggClassyGraphicsScene::AddClassBoxItems(ggClassyDataSet* aDataSet)
 {
+  ggBehaviorLazy::Executor vLazy(mBoxItems);
   typedef std::vector<ggClassyClassBox*> tClassBoxes;
   ggWalkerT<tClassBoxes::iterator> vClassBoxesIterator(aDataSet->mClassBoxes);
   while (vClassBoxesIterator) {
@@ -44,6 +39,7 @@ void ggClassyGraphicsScene::AddClassBoxItems(ggClassyDataSet* aDataSet)
 
 void ggClassyGraphicsScene::AddLineItems(ggClassyDataSet* aDataSet)
 {
+  ggBehaviorLazy::Executor vLazy(mBoxItems);
   typedef std::vector<ggClassyClassBox*> tClassBoxes;
   ggWalkerT<tClassBoxes::iterator> vClassBoxesIterator(aDataSet->mClassBoxes);
   while (vClassBoxesIterator) {
