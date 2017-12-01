@@ -1,13 +1,29 @@
 #ifndef GGBEHAVIORT_H
 #define GGBEHAVIORT_H
 
+/**
+ * A class, which can behave (or not behave) in a certain way.
+ *
+ * The type of behavior is defined by the template argument. E.g. "TBehavior" could
+ * be "lazy", or "sick". A behavior can not be executed again, if it is already
+ * executed. E.g. if the behavior "sick" is already executed, that particulat gehavior
+ * can't be executed again (because it already doe it).
+ *
+ * The behavuor can only be executed temporarily. When it is started, it will also
+ * be stopped. Nested calls are ignored. The Executor which has started the execution
+ * of the behavior will also stop it.
+ *
+ * Override "ExecutingStart" or "ExecutingStop" in order to get notified, when the
+ * behavior state is changed.
+ */
 template <class TBehavior>
 class ggBehaviorT {
 public:
 
-  ggBehaviorT() {
-  }
-
+  /**
+   * Sets the execution flag as long as the object exists. The behavior is started
+   * at construction, and it's deleted when the executor is destroyed.
+   */
   class Executor {
   public:
 
