@@ -111,8 +111,7 @@ void ggClassyGraphicsPathItem::InsertBoxItemSubjects(const tBoxItemsVec& aBoxIte
   while (vBoxItemsWalker) {
     ggClassyGraphicsBoxItem* vBoxItem = *vBoxItemsWalker;
     mBoxItemSubjects.insert(vBoxItem->GetSubjectPosition());
-    mBoxItemSubjects.insert(vBoxItem->GetSubjectWidth());
-    mBoxItemSubjects.insert(vBoxItem->GetSubjectHeight());
+    mBoxItemSubjects.insert(vBoxItem->GetSubjectSize());
   }
 }
 

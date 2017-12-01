@@ -24,7 +24,7 @@ public:
 
   void SetBoxItems(const ggClassyGraphicsBoxItems* aBoxItems);
 
-  const ggSubject* GetSubjectHeight() const;
+  const ggSubject* GetSubjectSize() const;
   QPointF GetPositionTopCenter() const;
   QPointF GetPositionBottomCenter() const;
 
@@ -39,7 +39,7 @@ private:
   void Construct();
 
   void UpdateLayout();
-  void NotifyHeight();
+  void NotifySize();
   void UpdateClassRead();
   void UpdateClassWrite();
   void NotifyClassChange();
@@ -53,7 +53,7 @@ private:
   ggGraphicsCheckBoxItem* mMembersCheckBox;
   ggGraphicsCheckBoxItem* mCommentCheckBox;
 
-  ggSubject mSubjectHeight;
+  ggSubject mSubjectSize;
 
   ggClassyClassBox* mClassBox;
   const ggClassyGraphicsBoxItems* mBoxItems;

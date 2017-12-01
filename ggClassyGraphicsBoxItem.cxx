@@ -143,9 +143,9 @@ void ggClassyGraphicsBoxItem::SetBoxItems(const ggClassyGraphicsBoxItems* aBoxIt
 }
 
 
-const ggSubject* ggClassyGraphicsBoxItem::GetSubjectHeight() const
+const ggSubject* ggClassyGraphicsBoxItem::GetSubjectSize() const
 {
-  return &mSubjectHeight;
+  return &mSubjectSize;
 }
 
 
@@ -186,7 +186,7 @@ void ggClassyGraphicsBoxItem::Update(const ggSubject* aSubject)
 
   else if (aSubject == GetSubjectWidth()) {
     UpdateLayout();
-    NotifyHeight();
+    NotifySize();
     UpdateClassBoxWrite();
     NotifyClassBoxChange();
   }
@@ -195,7 +195,7 @@ void ggClassyGraphicsBoxItem::Update(const ggSubject* aSubject)
            aSubject == mMembersText->GetSubjectText() ||
            aSubject == mCommentText->GetSubjectText()) {
     UpdateLayout();
-    NotifyHeight();
+    NotifySize();
     UpdateClassBoxWrite();
     NotifyClassBoxChange();
   }
@@ -210,7 +210,7 @@ void ggClassyGraphicsBoxItem::Update(const ggSubject* aSubject)
   else if (aSubject == mMembersCheckBox->GetSubjectChecked() ||
            aSubject == mCommentCheckBox->GetSubjectChecked()) {
     UpdateLayout();
-    NotifyHeight();
+    NotifySize();
     UpdateClassBoxWrite();
     NotifyClassBoxChange();
   }
@@ -218,13 +218,13 @@ void ggClassyGraphicsBoxItem::Update(const ggSubject* aSubject)
   else if (aSubject == GetClass()) {
     UpdateClassRead();
     UpdateLayout();
-    NotifyHeight();
+    NotifySize();
   }
 
   else if (aSubject == GetClassBox()) {
     UpdateClassBoxRead();
     UpdateLayout();
-    NotifyHeight();
+    NotifySize();
   }
 
   ggGraphicsManipulatorBarItemT<>::Update(aSubject);
@@ -359,9 +359,9 @@ void ggClassyGraphicsBoxItem::UpdateLayout()
 }
 
 
-void ggClassyGraphicsBoxItem::NotifyHeight()
+void ggClassyGraphicsBoxItem::NotifySize()
 {
-  mSubjectHeight.Notify();
+  mSubjectSize.Notify();
 }
 
 
