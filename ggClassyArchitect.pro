@@ -29,13 +29,11 @@ SOURCES += \
     ggClassyGraphicsView.cxx \
     ggClassyApplication.cxx \
     ggItemLinked.cxx \
-    ggItemLazy.cxx \
     ggObserver.cxx \
     ggSubject.cxx \
     ggGraphicsTextItem.cxx \
     ggClassyDataSet.cxx \
     ggClassyGraphicsBoxItem.cxx \
-    ggItemBlockable.cxx \
     ggClassyGraphicsBoxItems.cxx \
     ggClassyGraphicsPathItem.cxx \
     ggClassyGraphicsScene.cxx \
@@ -47,7 +45,6 @@ HEADERS += \
     ggSubject.h \
     ggClassyApplication.h \
     ggItemLinked.h \
-    ggItemLazy.h \
     ggObserver.h \
     ggSubjectT.h \
     ggWalkerT.h \
@@ -57,12 +54,14 @@ HEADERS += \
     ggGraphicsManipulatorBarItemT.h \
     ggGraphicsManipulatorRectItemT.h \
     ggClassyGraphicsBoxItem.h \
-    ggItemBlockable.h \
     ggClassyGraphicsBoxItems.h \
     ggSubjectValueT.h \
     ggClassyGraphicsPathItem.h \
     ggClassyGraphicsScene.h \
-    ggGraphicsCheckBoxItem.h
+    ggGraphicsCheckBoxItem.h \
+    ggBehaviorT.h \
+    ggBehaviorLazy.h \
+    ggBehaviorBlocking.h
 
 FORMS += \
     ggClassyMainWindow.ui

@@ -2,8 +2,8 @@
 #define GGSUBJECT_H
 
 #include "ggItemLinked.h"
-#include "ggItemBlockable.h"
-#include "ggItemLazy.h"
+#include "ggBehaviorBlocking.h"
+#include "ggBehaviorLazy.h"
 
 class ggObserver;
 
@@ -20,10 +20,13 @@ class ggObserver;
  */
 class ggSubject :
   public ggItemLinked,
-  public ggItemBlockable,
-  public ggItemLazy {
+  public ggBehaviorBlocking,
+  public ggBehaviorLazy {
 
 public:
+
+  typedef ggBehaviorBlocking::Executor ExecutorBlocking;
+  typedef ggBehaviorLazy::Executor ExecutorLazy;
 
   ggSubject();
   ggSubject(const ggSubject& aOther);
@@ -36,9 +39,13 @@ public:
   void Notify();
   void Notify(const ggObserver* aObserverExcluded);
 
+  bool IsBlocking(const ggBehaviorBlocking* aBehavior = nullptr) const;
+  bool IsLazy(const ggBehaviorLazy* aBehavior = nullptr) const;
+
 protected:
 
-  virtual void WakingUp() override;
+  virtual void ExecutingStop(const ggBehaviorBlocking* aBehavior) override;
+  virtual void ExecutingStop(const ggBehaviorLazy* aBehavior) override;
 
 private:
 

@@ -2,8 +2,8 @@
 #define GGOBSERVER_H
 
 #include "ggItemLinked.h"
-#include "ggItemBlockable.h"
-#include "ggItemLazy.h"
+#include "ggBehaviorBlocking.h"
+#include "ggBehaviorLazy.h"
 
 class ggSubject;
 
@@ -18,8 +18,8 @@ class ggSubject;
  */
 class ggObserver :
   public ggItemLinked,
-  public ggItemBlockable,
-  public ggItemLazy {
+  public ggBehaviorBlocking,
+  public ggBehaviorLazy {
 
 public:
 
@@ -34,9 +34,13 @@ public:
   // an ovserver has to override this method, otherwise it makes no sense to be observer
   virtual void Update(const ggSubject* aSubject) = 0;
 
+  bool IsBlocking(const ggBehaviorBlocking* aBehavior = nullptr) const;
+  bool IsLazy(const ggBehaviorLazy* aBehavior = nullptr) const;
+
 protected:
 
-  virtual void WakingUp() override;
+  virtual void ExecutingStop(const ggBehaviorBlocking* aBehavior) override;
+  virtual void ExecutingStop(const ggBehaviorLazy* aBehavior) override;
 
 private:
 

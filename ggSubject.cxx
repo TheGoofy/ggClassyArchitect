@@ -51,13 +51,32 @@ void ggSubject::Notify(const ggObserver* aObserverExcluded)
 {
   if (!IsBlocking()) {
     mNotifyPending = true;
-    if (!IsSleeping()) NotifyPrivate(aObserverExcluded);
+    if (!IsLazy()) NotifyPrivate(aObserverExcluded);
   }
 }
 
 
-void ggSubject::WakingUp()
+bool ggSubject::IsBlocking(const ggBehaviorBlocking* aBehavior) const
 {
+  return ggBehaviorBlocking::IsExecuting(aBehavior);
+}
+
+
+bool ggSubject::IsLazy(const ggBehaviorLazy* aBehavior) const
+{
+  return ggBehaviorLazy::IsExecuting(aBehavior);
+}
+
+
+void ggSubject::ExecutingStop(const ggBehaviorBlocking*)
+{
+  // we were intentionally blocking all notifications. no to notify any observer
+}
+
+
+void ggSubject::ExecutingStop(const ggBehaviorLazy*)
+{
+  // since we're no longer lazy, we'll inform all observers about the missed notification
   NotifyPrivate(nullptr);
 }
 
@@ -90,6 +109,6 @@ void ggSubject::CopyFrom(const ggSubject aOther)
   // we're going to notify all observers.
   NotifyPrivate(nullptr);
   ggItemLinked::operator = (aOther);
-  ggItemBlockable::operator = (aOther);
-  ggItemLazy::operator = (aOther);
+  ggBehaviorBlocking::operator = (aOther);
+  ggBehaviorLazy::operator = (aOther);
 }

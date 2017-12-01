@@ -27,8 +27,15 @@ ggObserver::~ggObserver()
 }
 
 
-void ggObserver::WakingUp()
+void ggObserver::ExecutingStop(const ggBehaviorBlocking*)
 {
+  // nothing to do here. missed updates can be ignored since we were blocking
+}
+
+
+void ggObserver::ExecutingStop(const ggBehaviorLazy*)
+{
+  // we certainly missed to update some subjects. do it now
   UpdatePendingSubjects();
 }
 
@@ -45,10 +52,22 @@ void ggObserver::Detach(const ggSubject* aSubject)
 }
 
 
+bool ggObserver::IsBlocking(const ggBehaviorBlocking* aBehavior) const
+{
+  return ggBehaviorBlocking::IsExecuting(aBehavior);
+}
+
+
+bool ggObserver::IsLazy(const ggBehaviorLazy* aBehavior) const
+{
+  return ggBehaviorLazy::IsExecuting(aBehavior);
+}
+
+
 void ggObserver::UpdatePrivate(const ggSubject* aSubject)
 {
   if (!IsBlocking() && !IsBlocking(aSubject)) {
-    if (!IsSleeping()) Update(aSubject);
+    if (!IsLazy()) Update(aSubject);
     else mUpdatePendingSubjects.insert(aSubject);
   }
 }
@@ -68,6 +87,6 @@ void ggObserver::CopyFrom(const ggObserver& aOther)
   // updated, and removed from the pendence list, but we're updating simply all.
   UpdatePendingSubjects();
   ggItemLinked::operator = (aOther);
-  ggItemBlockable::operator = (aOther);
-  ggItemLazy::operator = (aOther);
+  ggBehaviorBlocking::operator = (aOther);
+  ggBehaviorLazy::operator = (aOther);
 }

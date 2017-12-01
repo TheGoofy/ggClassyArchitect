@@ -86,13 +86,13 @@ void ggClassyMainWindow::on_mZoomFitPushButton_clicked()
 
 void ggClassyMainWindow::on_mAddClassPushButton_clicked()
 {
-  static ggItemLazy::Sleep* vItemSleep = nullptr;
-  if (vItemSleep == nullptr) {
-    vItemSleep = new ggItemLazy::Sleep(&ggClassyApplication::GetInstance().Zoom());
+  static ggSubject::ExecutorLazy* vExecutorLazy = nullptr;
+  if (vExecutorLazy == nullptr) {
+    vExecutorLazy = new ggSubject::ExecutorLazy(&ggClassyApplication::GetInstance().Zoom());
   }
   else {
-    delete vItemSleep;
-    vItemSleep = nullptr;
+    delete vExecutorLazy;
+    vExecutorLazy = nullptr;
   }
-  qDebug() << __PRETTY_FUNCTION__ << " - IsSleeping() = " << ggClassyApplication::GetInstance().Zoom().IsSleeping();
+  qDebug() << __PRETTY_FUNCTION__ << "- IsLazy() =" << ggClassyApplication::GetInstance().Zoom().IsLazy();
 }
