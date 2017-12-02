@@ -37,7 +37,13 @@ SOURCES += \
     ggClassyGraphicsBoxItems.cxx \
     ggClassyGraphicsPathItem.cxx \
     ggClassyGraphicsScene.cxx \
-    ggGraphicsCheckBoxItem.cxx
+    ggGraphicsCheckBoxItem.cxx \
+    ggConnectionPoint.cxx \
+    ggSubjectConnectionPoint.cxx \
+    ggGraphicsConnectionPointItem.cxx \
+    ggDecoration.cxx \
+    ggGraphicsDecoratedPathItem.cxx \
+    ggGraphicsAutoConnectPathItem.cxx
 
 HEADERS += \
     ggClassyMainWindow.h \
@@ -61,7 +67,13 @@ HEADERS += \
     ggGraphicsCheckBoxItem.h \
     ggBehaviorT.h \
     ggBehaviorLazy.h \
-    ggBehaviorBlocking.h
+    ggBehaviorBlocking.h \
+    ggConnectionPoint.h \
+    ggSubjectConnectionPoint.h \
+    ggGraphicsConnectionPointItem.h \
+    ggDecoration.h \
+    ggGraphicsDecoratedPathItem.h \
+    ggGraphicsAutoConnectPathItem.h
 
 FORMS += \
     ggClassyMainWindow.ui

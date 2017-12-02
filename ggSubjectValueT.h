@@ -1,6 +1,8 @@
 #ifndef GGSUBJECTVALUET_H
 #define GGSUBJECTVALUET_H
 
+#include "ggSubject.h"
+
 template <class TValue>
 
 class ggSubjectValueT :
