@@ -56,11 +56,11 @@ ggClassyDataSet* ggClassyDataSet::GenerateTestData()
   vDataSet->mClasses.insert(vClassB);
   vDataSet->mClasses.insert(vClassC);
   vDataSet->mClassBoxes.push_back(vClassBoxA1);
-  vDataSet->mClassBoxes.push_back(vClassBoxA2);
+//  vDataSet->mClassBoxes.push_back(vClassBoxA2);
   vDataSet->mClassBoxes.push_back(vClassBoxB1);
-  vDataSet->mClassBoxes.push_back(vClassBoxB2);
+//  vDataSet->mClassBoxes.push_back(vClassBoxB2);
   vDataSet->mClassBoxes.push_back(vClassBoxC1);
-  vDataSet->mClassBoxes.push_back(vClassBoxC2);
+//  vDataSet->mClassBoxes.push_back(vClassBoxC2);
 
   return vDataSet;
 }
