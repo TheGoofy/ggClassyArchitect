@@ -65,7 +65,8 @@ private:
 
 
 typedef QString ggString;
-typedef std::vector<ggString> ggStrings;
+typedef std::vector<ggString> ggStringVec;
+typedef std::set<ggString> ggStringSet;
 
 
 class ggClassyClass : public ggSubject
@@ -108,7 +109,7 @@ public:
   }
 
   ggString mName;
-  ggStrings mBaseNames;
+  ggStringSet mBaseNames;
   tMembers mMembers;
   QString mComment;
   ggClassyCollection* mCollection;

@@ -104,7 +104,7 @@ void ggClassyGraphicsScene::AddLineItems(ggClassyDataSet* aDataSet)
     const ggClassyClass* vClass = *vClassesWalker;
 
     // loop over base classes
-    ggWalkerT<ggStrings::const_iterator> vBaseClassNameWalker(vClass->mBaseNames);
+    ggWalkerT<ggStringSet::const_iterator> vBaseClassNameWalker(vClass->mBaseNames);
     while (vBaseClassNameWalker) {
 
       // lines between derived class and base class(es)

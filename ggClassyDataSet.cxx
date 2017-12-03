@@ -12,15 +12,15 @@ ggClassyDataSet* ggClassyDataSet::GenerateTestData()
 
   ggClassyClass* vClassB = new ggClassyClass();
   vClassB->mName = "ggClassB";
-  vClassB->mBaseNames.push_back("ggClassA");
+  vClassB->mBaseNames.insert("ggClassA");
   vClassB->mMembers.push_back(ggClassyClassMember("Blubb()", "QString"));
   vClassB->mMembers.push_back(ggClassyClassMember("GetA()", "ggClassA"));
   vClassB->mComment = "One fish, two fish, red fish, blue fish.";
 
   ggClassyClass* vClassC = new ggClassyClass();
   vClassC->mName = "ggClassC";
-  vClassC->mBaseNames.push_back("ggClassA");
-  vClassC->mBaseNames.push_back("ggClassB");
+  vClassC->mBaseNames.insert("ggClassA");
+  vClassC->mBaseNames.insert("ggClassB");
   vClassC->mMembers.push_back(ggClassyClassMember("GetName()", "QString"));
   vClassC->mMembers.push_back(ggClassyClassMember("SayHello()", "QString"));
   vClassC->mComment = "This is a very useful comment!";
