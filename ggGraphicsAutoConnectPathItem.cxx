@@ -70,18 +70,18 @@ void ggGraphicsAutoConnectPathItem::InsertPointsDst(const tPointSet& aPoints)
 
 void ggGraphicsAutoConnectPathItem::SetDecorationSrc(ggDecoration::cType aType,
                                                      float aLength,
-                                                     bool aSolid)
+                                                     ggDecoration::cFill aFill)
 {
-  ggGraphicsDecoratedPathItem::SetDecorationSrc(aType, aLength, aSolid);
+  ggGraphicsDecoratedPathItem::SetDecorationSrc(aType, aLength, aFill);
   RebuildPath();
 }
 
 
 void ggGraphicsAutoConnectPathItem::SetDecorationDst(ggDecoration::cType aType,
                                                      float aLength,
-                                                     bool aSolid)
+                                                     ggDecoration::cFill aFill)
 {
-  ggGraphicsDecoratedPathItem::SetDecorationDst(aType, aLength, aSolid);
+  ggGraphicsDecoratedPathItem::SetDecorationDst(aType, aLength, aFill);
   RebuildPath();
 }
 

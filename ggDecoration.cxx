@@ -4,17 +4,17 @@
 ggDecoration::ggDecoration() :
   mType(cType::eLine),
   mLength(0.0f),
-  mSolid(true)
+  mFill(cFill::eSolid)
 {
 }
 
 
 ggDecoration::ggDecoration(cType aType,
                            float aLength,
-                           bool aSolid) :
+                           cFill aFill) :
   mType(aType),
   mLength(aLength),
-  mSolid(aSolid)
+  mFill(aFill)
 {
 }
 
@@ -43,23 +43,35 @@ float ggDecoration::GetLength() const
 }
 
 
-void ggDecoration::SetSolid(bool aSolid)
+void ggDecoration::SetFill(cFill aFill)
 {
-  mSolid = aSolid;
+  mFill = aFill;
 }
 
 
-bool ggDecoration::GetSolid() const
+ggDecoration::cFill ggDecoration::GetFill() const
 {
-  return mSolid;
+  return mFill;
+}
+
+
+bool ggDecoration::GetFillEmpty() const
+{
+  return mFill == cFill::eEmpty;
+}
+
+
+bool ggDecoration::GetFillSolid() const
+{
+  return mFill == cFill::eSolid;
 }
 
 
 void ggDecoration::Set(cType aType,
                        float aLength,
-                       bool aSolid)
+                       cFill aFill)
 {
   mType = aType;
   mLength = aLength;
-  mSolid = aSolid;
+  mFill = aFill;
 }

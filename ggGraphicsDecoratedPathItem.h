@@ -23,11 +23,11 @@ public:
 
   void SetDecorationSrc(ggDecoration::cType aType,
                         float aLength = 12.0f,
-                        bool aSolid = true);
+                        ggDecoration::cFill aFill = ggDecoration::cFill::eSolid);
 
   void SetDecorationDst(ggDecoration::cType aType,
                         float aLength = 12.0f,
-                        bool aSolid = true);
+                        ggDecoration::cFill aFill = ggDecoration::cFill::eSolid);
 
 private:
 

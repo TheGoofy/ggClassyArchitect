@@ -8,16 +8,24 @@ public:
   enum class cType {
     eLine,
     eArrow,
+    eArrowBack,
     eTriangle,
+    eTriangleBack,
     eDiamond,
+    eCross,
     eCircle
+  };
+
+  enum class cFill {
+    eEmpty,
+    eSolid
   };
 
   ggDecoration();
 
   ggDecoration(cType aType,
                float aLength = 12.0f,
-               bool aSolid = true);
+               cFill aFill = cFill::eSolid);
 
   void SetType(cType aType);
   cType GetType() const;
@@ -25,18 +33,20 @@ public:
   void SetLength(float aLength);
   float GetLength() const;
 
-  void SetSolid(bool aSolid);
-  bool GetSolid() const;
+  void SetFill(cFill aFill);
+  cFill GetFill() const;
+  bool GetFillEmpty() const;
+  bool GetFillSolid() const;
 
   void Set(cType aType,
            float aLength = 12.0f,
-           bool aSolid = true);
+           cFill aFill = cFill::eSolid);
 
 private:
 
   cType mType;
   float mLength;
-  bool mSolid;
+  cFill mFill;
 
 };
 

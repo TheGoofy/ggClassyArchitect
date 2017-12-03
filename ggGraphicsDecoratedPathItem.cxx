@@ -51,31 +51,34 @@ const ggDecoration& ggGraphicsDecoratedPathItem::DecorationDst() const
 
 
 void ggGraphicsDecoratedPathItem::SetDecorationSrc(ggDecoration::cType aType,
-                                          float aLength,
-                                          bool aSolid)
+                                                   float aLength,
+                                                   ggDecoration::cFill aFill)
 {
-  mDecorationSrc.Set(aType, aLength, aSolid);
+  mDecorationSrc.Set(aType, aLength, aFill);
   RebuildPath();
 }
 
 
 void ggGraphicsDecoratedPathItem::SetDecorationDst(ggDecoration::cType aType,
-                                          float aLength,
-                                          bool aSolid)
+                                                   float aLength,
+                                                   ggDecoration::cFill aFill)
 {
-  mDecorationDst.Set(aType, aLength, aSolid);
+  mDecorationDst.Set(aType, aLength, aFill);
   RebuildPath();
 }
 
 
 bool ggGraphicsDecoratedPathItem::NeedExtraPath(const ggDecoration& aDecoration) const
 {
-  if (aDecoration.GetSolid()) {
+  if (aDecoration.GetFill() == ggDecoration::cFill::eSolid) {
     return (aDecoration.GetType() == ggDecoration::cType::eCircle) ||
-           (aDecoration.GetType() == ggDecoration::cType::eDiamond);
+           (aDecoration.GetType() == ggDecoration::cType::eTriangleBack) ||
+           (aDecoration.GetType() == ggDecoration::cType::eDiamond) ||
+           (aDecoration.GetType() == ggDecoration::cType::eCross);
   }
   else {
-    return (aDecoration.GetType() == ggDecoration::cType::eArrow);
+    return (aDecoration.GetType() == ggDecoration::cType::eArrow) ||
+           (aDecoration.GetType() == ggDecoration::cType::eCross);
   }
 }
 
@@ -118,7 +121,7 @@ QGraphicsItem* ggGraphicsDecoratedPathItem::CreateDecoration(const ggConnectionP
   QPen vPen(pen());
   vPen.setStyle(Qt::SolidLine);
   QBrush vBrush(vPen.color());
-  if (!aDecoration.GetSolid()) vBrush = Qt::NoBrush;
+  if (!aDecoration.GetFillSolid()) vBrush = Qt::NoBrush;
 
   float vLength = aDecoration.GetLength();
   float vWidth = 0.4f * vLength;
@@ -141,6 +144,14 @@ QGraphicsItem* ggGraphicsDecoratedPathItem::CreateDecoration(const ggConnectionP
     vPath.lineTo(vPointB.toPointF());
     vBrush = Qt::NoBrush;
   }
+  else if (aDecoration.GetType() == ggDecoration::cType::eArrowBack) {
+    QVector2D vPointA(QVector2D(aPoint.GetPosition()) + vWidth*vNormal);
+    QVector2D vPointB(QVector2D(aPoint.GetPosition()) - vWidth*vNormal);
+    vPath.moveTo(vPointA.toPointF());
+    vPath.lineTo(vPointControl.toPointF());
+    vPath.lineTo(vPointB.toPointF());
+    vBrush = Qt::NoBrush;
+  }
   else if (aDecoration.GetType() == ggDecoration::cType::eTriangle) {
     QVector2D vPointA(vPointControl + vWidth*vNormal);
     QVector2D vPointB(vPointControl - vWidth*vNormal);
@@ -148,7 +159,16 @@ QGraphicsItem* ggGraphicsDecoratedPathItem::CreateDecoration(const ggConnectionP
     vPath.lineTo(aPoint.GetPosition());
     vPath.lineTo(vPointB.toPointF());
     vPath.closeSubpath();
-    if (aDecoration.GetSolid()) vPen = Qt::NoPen;
+    if (aDecoration.GetFillSolid()) vPen = Qt::NoPen;
+  }
+  else if (aDecoration.GetType() == ggDecoration::cType::eTriangleBack) {
+    QVector2D vPointA(QVector2D(aPoint.GetPosition()) + vWidth*vNormal);
+    QVector2D vPointB(QVector2D(aPoint.GetPosition()) - vWidth*vNormal);
+    vPath.moveTo(vPointA.toPointF());
+    vPath.lineTo(vPointControl.toPointF());
+    vPath.lineTo(vPointB.toPointF());
+    vPath.closeSubpath();
+    if (aDecoration.GetFillSolid()) vPen = Qt::NoPen;
   }
   else if (aDecoration.GetType() == ggDecoration::cType::eDiamond) {
     QVector2D vCenter(aPoint.GetControlPoint(vLength / 2.0f));
@@ -159,13 +179,24 @@ QGraphicsItem* ggGraphicsDecoratedPathItem::CreateDecoration(const ggConnectionP
     vPath.lineTo(aPoint.GetPosition());
     vPath.lineTo(vPointB.toPointF());
     vPath.closeSubpath();
-    if (aDecoration.GetSolid()) vPen = Qt::NoPen;
+    if (aDecoration.GetFillSolid()) vPen = Qt::NoPen;
   }
   else if (aDecoration.GetType() == ggDecoration::cType::eCircle) {
     float vRadius = vLength / 2.0f;
     QPointF vCenter(aPoint.GetControlPoint(vRadius));
     vPath.addEllipse(vCenter, vRadius, vRadius);
-    if (aDecoration.GetSolid()) vPen = Qt::NoPen;
+    if (aDecoration.GetFillSolid()) vPen = Qt::NoPen;
+  }
+  else if (aDecoration.GetType() == ggDecoration::cType::eCross) {
+    QVector2D vPointA(vPointControl + vWidth*vNormal);
+    QVector2D vPointB(vPointControl - vWidth*vNormal);
+    QVector2D vPointC(QVector2D(aPoint.GetPosition()) + vWidth*vNormal);
+    QVector2D vPointD(QVector2D(aPoint.GetPosition()) - vWidth*vNormal);
+    vPath.moveTo(vPointA.toPointF());
+    vPath.lineTo(vPointD.toPointF());
+    vPath.moveTo(vPointB.toPointF());
+    vPath.lineTo(vPointC.toPointF());
+    vBrush = Qt::NoBrush;
   }
 
   vPathItem->setPath(vPath);
