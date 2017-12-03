@@ -1,5 +1,7 @@
 #include "ggGraphicsDecoratedPathItem.h"
 
+#include "ggPainterPath.h"
+
 #include <QPen>
 
 
@@ -68,23 +70,8 @@ void ggGraphicsDecoratedPathItem::SetDecorationDst(ggDecoration::cType aType,
 }
 
 
-bool ggGraphicsDecoratedPathItem::NeedExtraPath(const ggDecoration& aDecoration) const
-{
-  if (aDecoration.GetFill() == ggDecoration::cFill::eSolid) {
-    return (aDecoration.GetType() == ggDecoration::cType::eCircle) ||
-           (aDecoration.GetType() == ggDecoration::cType::eTriangleBack) ||
-           (aDecoration.GetType() == ggDecoration::cType::eDiamond) ||
-           (aDecoration.GetType() == ggDecoration::cType::eCross);
-  }
-  else {
-    return (aDecoration.GetType() == ggDecoration::cType::eArrow) ||
-           (aDecoration.GetType() == ggDecoration::cType::eCross);
-  }
-}
-
-
 QPainterPath ggGraphicsDecoratedPathItem::GetPath(const ggConnectionPoint& aPointSrc,
-                                         const ggConnectionPoint& aPointDst) const
+                                                  const ggConnectionPoint& aPointDst) const
 {
   // calculate the key points
   QPointF vPointSrcBase = aPointSrc.GetControlPoint(mDecorationSrc.GetLength());
@@ -94,8 +81,8 @@ QPainterPath ggGraphicsDecoratedPathItem::GetPath(const ggConnectionPoint& aPoin
   QPointF vPointDstControl = aPointDst.GetControlPoint(mDecorationDst.GetLength() + vDistance/2.5f);
 
   // some decorations need a bit a longer path
-  bool vExtraSrcPath = NeedExtraPath(mDecorationSrc);
-  bool vExtraDstPath = NeedExtraPath(mDecorationDst);
+  bool vExtraSrcPath = ggPainterPath::ConnectToCenter(mDecorationSrc.GetType(), mDecorationSrc.GetFill());
+  bool vExtraDstPath = ggPainterPath::ConnectToCenter(mDecorationDst.GetType(), mDecorationDst.GetFill());
   QPointF vPointSrcExtraBase = vExtraSrcPath ? aPointSrc.GetControlPoint(mDecorationSrc.GetLength()/2.0f) : vPointSrcBase;
   QPointF vPointDstExtraBase = vExtraDstPath ? aPointDst.GetControlPoint(mDecorationDst.GetLength()/2.0f) : vPointDstBase;
 
@@ -113,96 +100,28 @@ QPainterPath ggGraphicsDecoratedPathItem::GetPath(const ggConnectionPoint& aPoin
 
 
 QGraphicsItem* ggGraphicsDecoratedPathItem::CreateDecoration(const ggConnectionPoint& aPoint,
-                                                    const ggDecoration& aDecoration)
+                                                             const ggDecoration& aDecoration)
 {
-  QGraphicsPathItem* vPathItem = new QGraphicsPathItem(this);
-  QPainterPath vPath;
-
   QPen vPen(pen());
   vPen.setStyle(Qt::SolidLine);
-  QBrush vBrush(vPen.color());
-  if (!aDecoration.GetFillSolid()) vBrush = Qt::NoBrush;
+  if (aDecoration.GetFillSolid() &&
+      ggPainterPath::IsClosed(aDecoration.GetType())) {
+    vPen = Qt::NoPen;
+  }
 
-  float vLength = aDecoration.GetLength();
-  float vWidth = 0.4f * vLength;
-  QVector2D vPointControl(aPoint.GetControlPoint(vLength));
-  QVector2D vNormal(aPoint.GetDirection().y(), -aPoint.GetDirection().x());
-
-  if (aDecoration.GetType() == ggDecoration::cType::eLine) {
-    vPath.moveTo(aPoint.GetPosition());
-    vPath.lineTo(vPointControl.toPointF());
-    vBrush = Qt::NoBrush;
-  }
-  else if (aDecoration.GetType() == ggDecoration::cType::eArrow) {
-    QVector2D vCenter(aPoint.GetControlPoint(vLength / 2.0f));
-    QVector2D vPointA(vPointControl + vWidth*vNormal);
-    QVector2D vPointB(vPointControl - vWidth*vNormal);
-    vPath.moveTo(aPoint.GetPosition());
-    vPath.lineTo(vCenter.toPointF());
-    vPath.moveTo(vPointA.toPointF());
-    vPath.lineTo(aPoint.GetPosition());
-    vPath.lineTo(vPointB.toPointF());
-    vBrush = Qt::NoBrush;
-  }
-  else if (aDecoration.GetType() == ggDecoration::cType::eArrowBack) {
-    QVector2D vPointA(QVector2D(aPoint.GetPosition()) + vWidth*vNormal);
-    QVector2D vPointB(QVector2D(aPoint.GetPosition()) - vWidth*vNormal);
-    vPath.moveTo(vPointA.toPointF());
-    vPath.lineTo(vPointControl.toPointF());
-    vPath.lineTo(vPointB.toPointF());
-    vBrush = Qt::NoBrush;
-  }
-  else if (aDecoration.GetType() == ggDecoration::cType::eTriangle) {
-    QVector2D vPointA(vPointControl + vWidth*vNormal);
-    QVector2D vPointB(vPointControl - vWidth*vNormal);
-    vPath.moveTo(vPointA.toPointF());
-    vPath.lineTo(aPoint.GetPosition());
-    vPath.lineTo(vPointB.toPointF());
-    vPath.closeSubpath();
-    if (aDecoration.GetFillSolid()) vPen = Qt::NoPen;
-  }
-  else if (aDecoration.GetType() == ggDecoration::cType::eTriangleBack) {
-    QVector2D vPointA(QVector2D(aPoint.GetPosition()) + vWidth*vNormal);
-    QVector2D vPointB(QVector2D(aPoint.GetPosition()) - vWidth*vNormal);
-    vPath.moveTo(vPointA.toPointF());
-    vPath.lineTo(vPointControl.toPointF());
-    vPath.lineTo(vPointB.toPointF());
-    vPath.closeSubpath();
-    if (aDecoration.GetFillSolid()) vPen = Qt::NoPen;
-  }
-  else if (aDecoration.GetType() == ggDecoration::cType::eDiamond) {
-    QVector2D vCenter(aPoint.GetControlPoint(vLength / 2.0f));
-    QVector2D vPointA(vCenter + 0.6f*vWidth*vNormal);
-    QVector2D vPointB(vCenter - 0.6f*vWidth*vNormal);
-    vPath.moveTo(vPointControl.toPointF());
-    vPath.lineTo(vPointA.toPointF());
-    vPath.lineTo(aPoint.GetPosition());
-    vPath.lineTo(vPointB.toPointF());
-    vPath.closeSubpath();
-    if (aDecoration.GetFillSolid()) vPen = Qt::NoPen;
-  }
-  else if (aDecoration.GetType() == ggDecoration::cType::eCircle) {
-    float vRadius = vLength / 2.0f;
-    QPointF vCenter(aPoint.GetControlPoint(vRadius));
-    vPath.addEllipse(vCenter, vRadius, vRadius);
-    if (aDecoration.GetFillSolid()) vPen = Qt::NoPen;
-  }
-  else if (aDecoration.GetType() == ggDecoration::cType::eCross) {
-    QVector2D vPointA(vPointControl + vWidth*vNormal);
-    QVector2D vPointB(vPointControl - vWidth*vNormal);
-    QVector2D vPointC(QVector2D(aPoint.GetPosition()) + vWidth*vNormal);
-    QVector2D vPointD(QVector2D(aPoint.GetPosition()) - vWidth*vNormal);
-    vPath.moveTo(vPointA.toPointF());
-    vPath.lineTo(vPointD.toPointF());
-    vPath.moveTo(vPointB.toPointF());
-    vPath.lineTo(vPointC.toPointF());
+  QBrush vBrush(pen().color());
+  if (aDecoration.GetFillEmpty() ||
+      ggPainterPath::IsOpen(aDecoration.GetType())) {
     vBrush = Qt::NoBrush;
   }
 
-  vPathItem->setPath(vPath);
+  ggPainterPath vPath;
+  vPath.AddDecoration(aDecoration, aPoint.GetPosition(), aPoint.GetDirection());
+
+  QGraphicsPathItem* vPathItem = new QGraphicsPathItem(this);
   vPathItem->setPen(vPen);
   vPathItem->setBrush(vBrush);
-  vPathItem->setZValue(5.0f);
+  vPathItem->setPath(vPath);
 
   return vPathItem;
 }

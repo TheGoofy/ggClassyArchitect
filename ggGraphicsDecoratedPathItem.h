@@ -31,8 +31,6 @@ public:
 
 private:
 
-  bool NeedExtraPath(const ggDecoration& aDecoration) const;
-
   QPainterPath GetPath(const ggConnectionPoint& aPointSrc,
                        const ggConnectionPoint& aPointDst) const;
 

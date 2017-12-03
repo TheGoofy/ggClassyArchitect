@@ -47,15 +47,15 @@ void ggClassyGraphicsScene::AddClassBoxItems(ggClassyDataSet* aDataSet)
   vPath1->InsertPointSrc(vPointB->GetSubjectConnectionPoint());
   vPath1->InsertPointDst(vPointC->GetSubjectConnectionPoint());
   vPath1->InsertPointDst(vPointD->GetSubjectConnectionPoint());
-  vPath1->SetDecorationSrc(ggDecoration::cType::eDiamond, 20.0f, ggDecoration::cFill::eEmpty);
+  vPath1->SetDecorationSrc(ggDecoration::cType::eDiamond, 15.0f, ggDecoration::cFill::eEmpty);
   vPath1->SetDecorationDst(ggDecoration::cType::eCircle, 10.0f, ggDecoration::cFill::eEmpty);
   ggGraphicsAutoConnectPathItem* vPath2 = new ggGraphicsAutoConnectPathItem();
   vPath2->InsertPointSrc(vPointC->GetSubjectConnectionPoint());
   vPath2->InsertPointSrc(vPointD->GetSubjectConnectionPoint());
   vPath2->InsertPointDst(vPointA->GetSubjectConnectionPoint());
   vPath2->InsertPointDst(vPointB->GetSubjectConnectionPoint());
-  vPath2->SetDecorationSrc(ggDecoration::cType::eArrowBack, 13.0f, ggDecoration::cFill::eEmpty);
-  vPath2->SetDecorationDst(ggDecoration::cType::eTriangleBack, 13.0f, ggDecoration::cFill::eSolid);
+  vPath2->SetDecorationSrc(ggDecoration::cType::eArrow, 13.0f, ggDecoration::cFill::eEmpty);
+  vPath2->SetDecorationDst(ggDecoration::cType::eCross, 13.0f, ggDecoration::cFill::eSolid);
   QGraphicsScene::addItem(vPointA);
   QGraphicsScene::addItem(vPointB);
   QGraphicsScene::addItem(vPointC);
@@ -95,7 +95,7 @@ void ggClassyGraphicsScene::AddLineItems(ggClassyDataSet* aDataSet)
         const QString& vBaseClassName = *vBaseClassNamesWalker;
         ggGraphicsAutoConnectPathItem* vAutoPath = new ggGraphicsAutoConnectPathItem();
         vAutoPath->SetDecorationSrc(ggDecoration::cType::eLine, 2.0f);
-        vAutoPath->SetDecorationDst(ggDecoration::cType::eTriangle, 12.0f, ggDecoration::cFill::eSolid);
+        vAutoPath->SetDecorationDst(ggDecoration::cType::eTriangle, 13.0f, ggDecoration::cFill::eSolid);
         vAutoPath->InsertPointSrc(vBoxItem->GetClassConnectionTop());
         vAutoPath->InsertPointsDst(mBoxItems->GetClassPointsBottom(vBaseClassName));
         QGraphicsScene::addItem(vAutoPath);
@@ -108,7 +108,7 @@ void ggClassyGraphicsScene::AddLineItems(ggClassyDataSet* aDataSet)
         // connect member with class
         const QString& vMemberClassName = vMembers[vMemberIndex].GetClassName();
         ggGraphicsAutoConnectPathItem* vAutoPath = new ggGraphicsAutoConnectPathItem();
-        vAutoPath->SetDecorationSrc(ggDecoration::cType::eDiamond, 20.0f, ggDecoration::cFill::eEmpty);
+        vAutoPath->SetDecorationSrc(ggDecoration::cType::eDiamond, 15.0f, ggDecoration::cFill::eEmpty);
         vAutoPath->SetDecorationDst(ggDecoration::cType::eLine, 2.0f);
         vAutoPath->InsertPointSrc(vBoxItem->GetMemberConnectionLeft(vMemberIndex));
         vAutoPath->InsertPointSrc(vBoxItem->GetMemberConnectionRight(vMemberIndex));
