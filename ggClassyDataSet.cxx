@@ -7,7 +7,8 @@ ggClassyDataSet* ggClassyDataSet::GenerateTestData()
   vClassA->mName = "ggClassA";
   vClassA->mMembers.push_back(ggClassyClassMember("Ping()", "void"));
   vClassA->mMembers.push_back(ggClassyClassMember("Pong()", "void"));
-  vClassA->mMembers.push_back(ggClassyClassMember("GetB()", "ggClassB"));
+  vClassA->mMembers.push_back(ggClassyClassMember("GetB1()", "ggClassB"));
+  vClassA->mMembers.push_back(ggClassyClassMember("GetB2()", "ggClassB"));
   vClassA->mComment = "The answer to life the universe and everything.";
 
   ggClassyClass* vClassB = new ggClassyClass();

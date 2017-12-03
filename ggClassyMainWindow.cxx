@@ -86,9 +86,9 @@ void ggClassyMainWindow::on_mZoomFitPushButton_clicked()
 
 void ggClassyMainWindow::on_mAddClassPushButton_clicked()
 {
-  static ggSubject::ExecutorLazy* vExecutorLazy = nullptr;
+  static ggSubject::cExecutorLazy* vExecutorLazy = nullptr;
   if (vExecutorLazy == nullptr) {
-    vExecutorLazy = new ggSubject::ExecutorLazy(&ggClassyApplication::GetInstance().Zoom());
+    vExecutorLazy = new ggSubject::cExecutorLazy(&ggClassyApplication::GetInstance().Zoom());
   }
   else {
     delete vExecutorLazy;

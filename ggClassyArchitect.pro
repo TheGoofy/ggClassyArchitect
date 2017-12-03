@@ -42,7 +42,8 @@ SOURCES += \
     ggGraphicsConnectionPointItem.cxx \
     ggDecoration.cxx \
     ggGraphicsDecoratedPathItem.cxx \
-    ggGraphicsAutoConnectPathItem.cxx
+    ggGraphicsAutoConnectPathItem.cxx \
+    ggUtility.cxx
 
 HEADERS += \
     ggClassyMainWindow.h \
@@ -71,7 +72,9 @@ HEADERS += \
     ggGraphicsConnectionPointItem.h \
     ggDecoration.h \
     ggGraphicsDecoratedPathItem.h \
-    ggGraphicsAutoConnectPathItem.h
+    ggGraphicsAutoConnectPathItem.h \
+    ggTypes.h \
+    ggUtility.h
 
 FORMS += \
     ggClassyMainWindow.ui

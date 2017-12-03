@@ -1,6 +1,7 @@
 #ifndef GGCLASSYBOX_H
 #define GGCLASSYBOX_H
 
+#include "ggTypes.h"
 #include "ggGraphicsManipulatorBarItemT.h"
 #include "ggSubjectConnectionPoint.h"
 
@@ -29,8 +30,8 @@ public:
   const ggSubjectConnectionPoint* GetClassConnectionBottom() const;
   const ggSubjectConnectionPoint* GetClassConnectionLeft() const;
   const ggSubjectConnectionPoint* GetClassConnectionRight() const;
-  const ggSubjectConnectionPoint* GetMemberConnectionLeft(int aMemberIndex) const;
-  const ggSubjectConnectionPoint* GetMemberConnectionRight(int aMemberIndex) const;
+  const ggSubjectConnectionPoint* GetMemberConnectionLeft(ggUSize aMemberIndex) const;
+  const ggSubjectConnectionPoint* GetMemberConnectionRight(ggUSize aMemberIndex) const;
 
 protected:
 
@@ -46,8 +47,8 @@ private:
   QPointF GetClassPositionBottom() const;
   QPointF GetClassPositionLeft() const;
   QPointF GetClassPositionRight() const;
-  QPointF GetMemberPositionLeft(int aMemberIndex) const;
-  QPointF GetMemberPositionRight(int aMemberIndex) const;
+  QPointF GetMemberPositionLeft(ggUSize aMemberIndex) const;
+  QPointF GetMemberPositionRight(ggUSize aMemberIndex) const;
 
   void UpdateLayout();
   void NotifySize();
@@ -71,10 +72,14 @@ private:
 
   ggSubject mSubjectSize;
 
+  typedef std::vector<ggSubjectConnectionPoint> tSubjectConnectionPoints;
+
   ggSubjectConnectionPoint mClassConnectionTop;
   ggSubjectConnectionPoint mClassConnectionBottom;
   ggSubjectConnectionPoint mClassConnectionLeft;
   ggSubjectConnectionPoint mClassConnectionRight;
+  tSubjectConnectionPoints mMembersConnectionLeft;
+  tSubjectConnectionPoints mMembersConnectionRight;
 
   ggClassyClassBox* mClassBox;
 

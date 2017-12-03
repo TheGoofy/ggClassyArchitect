@@ -9,7 +9,7 @@ public:
     eLine,
     eArrow,
     eTriangle,
-    eRhomb,
+    eDiamond,
     eCircle
   };
 

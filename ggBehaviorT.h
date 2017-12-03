@@ -24,10 +24,10 @@ public:
    * Sets the execution flag as long as the object exists. The behavior is started
    * at construction, and it's deleted when the executor is destroyed.
    */
-  class Executor {
+  class cExecutor {
   public:
 
-    Executor(ggBehaviorT* aBehavior) :
+    cExecutor(ggBehaviorT* aBehavior) :
       mBehavior(aBehavior),
       mBehaviorOther(nullptr),
       mWasExecuting(true) {
@@ -37,7 +37,7 @@ public:
       }
     }
 
-    Executor(ggBehaviorT* aBehavior, const ggBehaviorT* aBehaviorOther) :
+    cExecutor(ggBehaviorT* aBehavior, const ggBehaviorT* aBehaviorOther) :
       mBehavior(aBehavior),
       mBehaviorOther(aBehaviorOther),
       mWasExecuting(true) {
@@ -47,7 +47,7 @@ public:
       }
     }
 
-    virtual ~Executor() {
+    virtual ~cExecutor() {
       if (!mWasExecuting) {
         if (mBehaviorOther == nullptr) mBehavior->ExecuteStop();
         else mBehavior->ExecuteStop(mBehaviorOther);

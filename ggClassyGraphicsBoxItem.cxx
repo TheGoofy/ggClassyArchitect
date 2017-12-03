@@ -176,17 +176,18 @@ QPointF ggClassyGraphicsBoxItem::GetClassPositionRight() const
 }
 
 
-QPointF ggClassyGraphicsBoxItem::GetMemberPositionLeft(int aMemberIndex) const
+QPointF ggClassyGraphicsBoxItem::GetMemberPositionLeft(ggUSize aMemberIndex) const
 {
-  // calculate the height of a single member
-  int vNumberOfMembers = 1;
+  // calculate the height of a single member  
+  ggUSize vNumberOfMembers = 1;
   if (GetClass() != nullptr) vNumberOfMembers = GetClass()->mMembers.size();
   if (vNumberOfMembers < 1) vNumberOfMembers = 1;
-  float vMemberHeight = mClassNameText->boundingRect().height() / vNumberOfMembers;
+  float vIndentY = 3.0f;
+  float vMemberHeight = (mMembersText->boundingRect().height() - 2.0f* vIndentY) / vNumberOfMembers;
 
   // offset from upper left corner
   QPointF vPosition = GetPosition();
-  vPosition.ry() += mClassNameText->boundingRect().height();
+  vPosition.ry() += mClassNameText->boundingRect().height() + vIndentY;
   vPosition.ry() += aMemberIndex * vMemberHeight + vMemberHeight / 2.0f;
 
   // done...
@@ -194,7 +195,7 @@ QPointF ggClassyGraphicsBoxItem::GetMemberPositionLeft(int aMemberIndex) const
 }
 
 
-QPointF ggClassyGraphicsBoxItem::GetMemberPositionRight(int aMemberIndex) const
+QPointF ggClassyGraphicsBoxItem::GetMemberPositionRight(ggUSize aMemberIndex) const
 {
   // same as left, just displaced by the box width
   QPointF vPosition = GetMemberPositionLeft(aMemberIndex);
@@ -227,14 +228,20 @@ const ggSubjectConnectionPoint* ggClassyGraphicsBoxItem::GetClassConnectionRight
 }
 
 
-const ggSubjectConnectionPoint* ggClassyGraphicsBoxItem::GetMemberConnectionLeft(int aMemberIndex) const
+const ggSubjectConnectionPoint* ggClassyGraphicsBoxItem::GetMemberConnectionLeft(ggUSize aMemberIndex) const
 {
+  if (aMemberIndex < mMembersConnectionLeft.size()) {
+    return &mMembersConnectionLeft[aMemberIndex];
+  }
   return nullptr;
 }
 
 
-const ggSubjectConnectionPoint* ggClassyGraphicsBoxItem::GetMemberConnectionRight(int aMemberIndex) const
+const ggSubjectConnectionPoint* ggClassyGraphicsBoxItem::GetMemberConnectionRight(ggUSize aMemberIndex) const
 {
+  if (aMemberIndex < mMembersConnectionRight.size()) {
+    return &mMembersConnectionRight[aMemberIndex];
+  }
   return nullptr;
 }
 
@@ -461,6 +468,23 @@ void ggClassyGraphicsBoxItem::UpdateConnectionPoints()
   mClassConnectionBottom.SetPosition(GetClassPositionBottom());
   mClassConnectionLeft.SetPosition(GetClassPositionLeft());
   mClassConnectionRight.SetPosition(GetClassPositionRight());
+  if (GetClass() != nullptr) {
+    const ggClassyClass::tMembers& vMembers = GetClass()->mMembers;
+    mMembersConnectionLeft.resize(vMembers.size());
+    mMembersConnectionRight.resize(vMembers.size());
+    for (ggUSize vIndex = 0; vIndex < vMembers.size(); vIndex++) {
+      mMembersConnectionLeft[vIndex].SetPosition(GetMemberPositionLeft(vIndex));
+      mMembersConnectionLeft[vIndex].SetDirectionLeft();
+      mMembersConnectionLeft[vIndex].SetVisible(mMembersText->isVisible());
+      mMembersConnectionRight[vIndex].SetPosition(GetMemberPositionRight(vIndex));
+      mMembersConnectionRight[vIndex].SetDirectionRight();
+      mMembersConnectionRight[vIndex].SetVisible(mMembersText->isVisible());
+    }
+  }
+  else {
+    mMembersConnectionLeft.clear();
+    mMembersConnectionRight.clear();
+  }
 }
 
 
@@ -470,4 +494,8 @@ void ggClassyGraphicsBoxItem::NotifyConnectionPoints()
   mClassConnectionBottom.Notify();
   mClassConnectionLeft.Notify();
   mClassConnectionRight.Notify();
+  ggWalkerT<tSubjectConnectionPoints::iterator> vConnectionsWalkerLeft(mMembersConnectionLeft);
+  while (vConnectionsWalkerLeft) (*vConnectionsWalkerLeft).Notify();
+  ggWalkerT<tSubjectConnectionPoints::iterator> vConnectionsWalkerRight(mMembersConnectionRight);
+  while (vConnectionsWalkerRight) (*vConnectionsWalkerRight).Notify();
 }

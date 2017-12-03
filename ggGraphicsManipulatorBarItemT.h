@@ -55,7 +55,7 @@ public:
   }
 
   void SetPosition(const QPointF& aPosition) {
-    ggSubject::ExecutorBlocking vBlocker(&mSubjectPosition);
+    ggSubject::cExecutorBlocking vBlocker(&mSubjectPosition);
     TBaseItem::setPos(aPosition);
     QRectF vRect(TBaseItem::rect());
     vRect.moveTo(0.0f, 0.0f);
@@ -67,7 +67,7 @@ public:
   }
 
   void SetWidth(float aWidth) {
-    ggSubject::ExecutorBlocking vBlocker(&mSubjectWidth);
+    ggSubject::cExecutorBlocking vBlocker(&mSubjectWidth);
     mHandleItemTR->setPos(QPointF(mHandleItemTL->pos()) + QPointF(aWidth, 0.0f));
   }
 

@@ -25,6 +25,7 @@ public:
   tPointsSet GetClassPointsTop(const QString& aClassName) const;
   tPointsSet GetClassPointsBottom(const QString& aClassName) const;
   tPointsSet GetClassPointsLeftRight(const QString& aClassName) const;
+  tPointsSet GetClassPointsMembers(const QString& aClassName, ggUSize aMemberIndex) const;
 
 private:
 

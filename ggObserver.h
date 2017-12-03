@@ -23,6 +23,9 @@ class ggObserver :
 
 public:
 
+  typedef ggBehaviorBlocking::cExecutor cExecutorBlocking;
+  typedef ggBehaviorLazy::cExecutor cExecutorLazy;
+
   ggObserver();
   ggObserver(const ggObserver& aOther);
   ggObserver& operator = (const ggObserver& aOther);

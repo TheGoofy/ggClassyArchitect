@@ -72,7 +72,7 @@ bool ggGraphicsDecoratedPathItem::NeedExtraPath(const ggDecoration& aDecoration)
 {
   if (aDecoration.GetSolid()) {
     return (aDecoration.GetType() == ggDecoration::cType::eCircle) ||
-           (aDecoration.GetType() == ggDecoration::cType::eRhomb);
+           (aDecoration.GetType() == ggDecoration::cType::eDiamond);
   }
   else {
     return (aDecoration.GetType() == ggDecoration::cType::eArrow);
@@ -150,10 +150,10 @@ QGraphicsItem* ggGraphicsDecoratedPathItem::CreateDecoration(const ggConnectionP
     vPath.closeSubpath();
     if (aDecoration.GetSolid()) vPen = Qt::NoPen;
   }
-  else if (aDecoration.GetType() == ggDecoration::cType::eRhomb) {
+  else if (aDecoration.GetType() == ggDecoration::cType::eDiamond) {
     QVector2D vCenter(aPoint.GetControlPoint(vLength / 2.0f));
-    QVector2D vPointA(vCenter + 0.5f*vWidth*vNormal);
-    QVector2D vPointB(vCenter - 0.5f*vWidth*vNormal);
+    QVector2D vPointA(vCenter + 0.6f*vWidth*vNormal);
+    QVector2D vPointB(vCenter - 0.6f*vWidth*vNormal);
     vPath.moveTo(vPointControl.toPointF());
     vPath.lineTo(vPointA.toPointF());
     vPath.lineTo(aPoint.GetPosition());
@@ -171,6 +171,7 @@ QGraphicsItem* ggGraphicsDecoratedPathItem::CreateDecoration(const ggConnectionP
   vPathItem->setPath(vPath);
   vPathItem->setPen(vPen);
   vPathItem->setBrush(vBrush);
+  vPathItem->setZValue(5.0f);
 
   return vPathItem;
 }

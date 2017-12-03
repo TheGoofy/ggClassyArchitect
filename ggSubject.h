@@ -25,8 +25,8 @@ class ggSubject :
 
 public:
 
-  typedef ggBehaviorBlocking::Executor ExecutorBlocking;
-  typedef ggBehaviorLazy::Executor ExecutorLazy;
+  typedef ggBehaviorBlocking::cExecutor cExecutorBlocking;
+  typedef ggBehaviorLazy::cExecutor cExecutorLazy;
 
   ggSubject();
   ggSubject(const ggSubject& aOther);

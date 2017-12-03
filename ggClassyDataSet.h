@@ -6,6 +6,7 @@
 #include <QFont>
 #include <set>
 
+#include "ggTypes.h"
 #include "ggSubject.h"
 #include "ggWalkerT.h"
 
@@ -64,7 +65,6 @@ private:
 };
 
 
-typedef QString ggString;
 typedef std::vector<ggString> ggStringVec;
 typedef std::set<ggString> ggStringSet;
 

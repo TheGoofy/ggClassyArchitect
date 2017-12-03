@@ -47,7 +47,7 @@ void ggClassyGraphicsScene::AddClassBoxItems(ggClassyDataSet* aDataSet)
   vPath1->InsertPointSrc(vPointB->GetSubjectConnectionPoint());
   vPath1->InsertPointDst(vPointC->GetSubjectConnectionPoint());
   vPath1->InsertPointDst(vPointD->GetSubjectConnectionPoint());
-  vPath1->SetDecorationSrc(ggDecoration::cType::eRhomb, 20.0f, false);
+  vPath1->SetDecorationSrc(ggDecoration::cType::eDiamond, 20.0f, false);
   vPath1->SetDecorationDst(ggDecoration::cType::eCircle, 10.0f, false);
   ggGraphicsAutoConnectPathItem* vPath2 = new ggGraphicsAutoConnectPathItem();
   vPath2->InsertPointSrc(vPointC->GetSubjectConnectionPoint());
@@ -65,7 +65,7 @@ void ggClassyGraphicsScene::AddClassBoxItems(ggClassyDataSet* aDataSet)
 
 
   // only notify box items change, when all boxes are added
-  ggBehaviorLazy::Executor vLazy(mBoxItems);
+  ggBehaviorLazy::cExecutor vLazy(mBoxItems);
 
   // loop over box items
   typedef std::vector<ggClassyClassBox*> tClassBoxes;
@@ -94,9 +94,28 @@ void ggClassyGraphicsScene::AddLineItems(ggClassyDataSet* aDataSet)
         // lines between derived class and base class
         const QString& vBaseClassName = *vBaseClassNamesWalker;
         ggGraphicsAutoConnectPathItem* vAutoPath = new ggGraphicsAutoConnectPathItem();
+        vAutoPath->SetDecorationSrc(ggDecoration::cType::eLine, 2.0f);
         vAutoPath->SetDecorationDst(ggDecoration::cType::eTriangle, 12.0f);
         vAutoPath->InsertPointSrc(vBoxItem->GetClassConnectionTop());
         vAutoPath->InsertPointsDst(mBoxItems->GetClassPointsBottom(vBaseClassName));
+        QGraphicsScene::addItem(vAutoPath);
+      }
+
+      // loop over members
+      const ggClassyClass::tMembers& vMembers = vClass->mMembers;
+      for (ggUSize vMemberIndex = 0; vMemberIndex < vMembers.size(); vMemberIndex++) {
+
+        // connect member with class
+        const QString& vMemberClassName = vMembers[vMemberIndex].GetClassName();
+        ggGraphicsAutoConnectPathItem* vAutoPath = new ggGraphicsAutoConnectPathItem();
+        vAutoPath->SetDecorationSrc(ggDecoration::cType::eDiamond, 20.0f, false);
+        vAutoPath->SetDecorationDst(ggDecoration::cType::eLine, 2.0f);
+        vAutoPath->InsertPointSrc(vBoxItem->GetMemberConnectionLeft(vMemberIndex));
+        vAutoPath->InsertPointSrc(vBoxItem->GetMemberConnectionRight(vMemberIndex));
+        vAutoPath->InsertPointsDst(mBoxItems->GetClassPointsLeftRight(vMemberClassName));
+        QPen vPen(vAutoPath->pen());
+        vPen.setStyle(Qt::DashLine);
+        vAutoPath->setPen(vPen);
         QGraphicsScene::addItem(vAutoPath);
       }
     }
