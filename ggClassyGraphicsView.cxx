@@ -11,7 +11,6 @@
 #include "ggClassyGraphicsBoxItem.h"
 #include "ggClassyDataSet.h"
 #include "ggClassyGraphicsBoxItems.h"
-#include "ggClassyGraphicsPathItem.h"
 #include "ggClassyGraphicsScene.h"
 
 

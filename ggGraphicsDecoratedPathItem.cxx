@@ -9,13 +9,13 @@ ggGraphicsDecoratedPathItem::ggGraphicsDecoratedPathItem(QGraphicsItem* aParent)
   mDecorationItemDst(nullptr)
 {
   QPen vPen(pen());
-  vPen.setStyle(Qt::DashLine);
   vPen.setCapStyle(Qt::FlatCap);
   vPen.setJoinStyle(Qt::MiterJoin);
-  vPen.setColor(Qt::blue);
+  vPen.setColor(QColor(180, 60, 0));
   vPen.setWidthF(1.5f);
   setPen(vPen);
   setBrush(Qt::NoBrush);
+  setZValue(-1.0f);
 }
 
 
@@ -121,7 +121,7 @@ QGraphicsItem* ggGraphicsDecoratedPathItem::CreateDecoration(const ggConnectionP
   if (!aDecoration.GetSolid()) vBrush = Qt::NoBrush;
 
   float vLength = aDecoration.GetLength();
-  float vWidth = 0.5f * vLength;
+  float vWidth = 0.4f * vLength;
   QVector2D vPointControl(aPoint.GetControlPoint(vLength));
   QVector2D vNormal(aPoint.GetDirection().y(), -aPoint.GetDirection().x());
 

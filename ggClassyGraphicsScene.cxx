@@ -1,23 +1,8 @@
 #include "ggClassyGraphicsScene.h"
 
 #include "ggClassyGraphicsBoxItems.h"
-#include "ggClassyGraphicsPathItem.h"
-
-
-#include <math.h>
-#include <set>
-#include <QVector2D>
-#include <QCursor>
-#include <QGraphicsSceneWheelEvent>
-#include "ggSubjectT.h"
-#include "ggSubjectValueT.h"
-#include "ggSubjectConnectionPoint.h"
-#include "ggGraphicsConnectionPointItem.h"
-#include "ggDecoration.h"
-#include "ggGraphicsDecoratedPathItem.h"
 #include "ggGraphicsAutoConnectPathItem.h"
-
-
+#include "ggGraphicsConnectionPointItem.h"
 
 
 ggClassyGraphicsScene::ggClassyGraphicsScene(QObject* aParent) :
@@ -94,26 +79,50 @@ void ggClassyGraphicsScene::AddClassBoxItems(ggClassyDataSet* aDataSet)
 
 void ggClassyGraphicsScene::AddLineItems(ggClassyDataSet* aDataSet)
 {
-  // only notify box items, when all are added
-  ggBehaviorLazy::Executor vLazy(mBoxItems);
+  // loop over class box items
+  typedef ggClassyGraphicsBoxItems::tBoxItemsSet tBoxItemsSet;
+  ggWalkerT<tBoxItemsSet::const_iterator> vBoxItemsWalker(mBoxItems->GetBoxItems());
+  while (vBoxItemsWalker) {
+    const ggClassyGraphicsBoxItem* vBoxItem = *vBoxItemsWalker;
+    ggClassyClass* vClass = vBoxItem->GetClass();
+    if (vClass != nullptr) {
 
-  // loop over classes
-  typedef std::set<ggClassyClass*> tClasses;
-  ggWalkerT<tClasses::const_iterator> vClassesWalker(aDataSet->mClasses);
-  while (vClassesWalker) {
-    const ggClassyClass* vClass = *vClassesWalker;
+      // loop over base classes
+      ggWalkerT<ggStringSet::const_iterator> vBaseClassNamesWalker(vClass->mBaseNames);
+      while (vBaseClassNamesWalker) {
 
-    // loop over base classes
-    ggWalkerT<ggStringSet::const_iterator> vBaseClassNameWalker(vClass->mBaseNames);
-    while (vBaseClassNameWalker) {
-
-      // lines between derived class and base class(es)
-      const QString& vClassName = vClass->mName;
-      const QString& vBaseClassNames = *vBaseClassNameWalker;
-      ggClassyGraphicsPathItem* vLine = new ggClassyGraphicsPathItem();
-      vLine->SetBoxItems(mBoxItems);
-      vLine->SetConnection(vClassName, vBaseClassNames);
-      QGraphicsScene::addItem(vLine);
+        // lines between derived class and base class
+        const QString& vBaseClassName = *vBaseClassNamesWalker;
+        ggGraphicsAutoConnectPathItem* vAutoPath = new ggGraphicsAutoConnectPathItem();
+        vAutoPath->SetDecorationDst(ggDecoration::cType::eTriangle, 12.0f);
+        vAutoPath->InsertPointSrc(vBoxItem->GetClassConnectionTop());
+        vAutoPath->InsertPointsDst(mBoxItems->GetClassPointsBottom(vBaseClassName));
+        QGraphicsScene::addItem(vAutoPath);
+      }
     }
   }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -35,7 +35,6 @@ SOURCES += \
     ggClassyDataSet.cxx \
     ggClassyGraphicsBoxItem.cxx \
     ggClassyGraphicsBoxItems.cxx \
-    ggClassyGraphicsPathItem.cxx \
     ggClassyGraphicsScene.cxx \
     ggGraphicsCheckBoxItem.cxx \
     ggConnectionPoint.cxx \
@@ -62,7 +61,6 @@ HEADERS += \
     ggClassyGraphicsBoxItem.h \
     ggClassyGraphicsBoxItems.h \
     ggSubjectValueT.h \
-    ggClassyGraphicsPathItem.h \
     ggClassyGraphicsScene.h \
     ggGraphicsCheckBoxItem.h \
     ggBehaviorT.h \

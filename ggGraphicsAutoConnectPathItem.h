@@ -14,13 +14,17 @@ public:
 
   ggGraphicsAutoConnectPathItem(QGraphicsItem* aParent = nullptr);
 
+  typedef std::set<const ggSubjectConnectionPoint*> tPointSet;
+
   void SetConnection(const ggSubjectConnectionPoint* aPointSrc,
                      const ggSubjectConnectionPoint* aPointDst);
 
   void ClearPointsSrc();
   void ClearPointsDst();
-  void InsertPointSrc(const ggSubjectConnectionPoint* aPointSrc);
-  void InsertPointDst(const ggSubjectConnectionPoint* aPointDst);
+  void InsertPointSrc(const ggSubjectConnectionPoint* aPoint);
+  void InsertPointDst(const ggSubjectConnectionPoint* aPoint);
+  void InsertPointsSrc(const tPointSet& aPoints);
+  void InsertPointsDst(const tPointSet& aPoints);
 
   void SetDecorationSrc(ggDecoration::cType aType,
                         float aLength = 12.0f,
@@ -36,10 +40,8 @@ protected:
 
 private:
 
-  typedef std::set<const ggSubjectConnectionPoint*> tPoints;
-
-  void Attach(const tPoints& aPoints);
-  void Detach(const tPoints& aPoints);
+  void Attach(const tPointSet& aPoints);
+  void Detach(const tPointSet& aPoints);
 
   float GetDistanceCost(const ggConnectionPoint& aPointSrc,
                         const ggConnectionPoint& aPointDst) const;
@@ -47,8 +49,8 @@ private:
   void RebuildPath();
 
   // the connection points
-  tPoints mPointsSrc;
-  tPoints mPointsDst;
+  tPointSet mPointsSrc;
+  tPointSet mPointsDst;
 
 };
 

@@ -37,6 +37,7 @@ ggClassyGraphicsBoxItem::ggClassyGraphicsBoxItem(const QRectF& aRect) :
                         "sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.");
 
   UpdateLayout();
+  UpdateConnectionPoints();
 }
 
 
@@ -88,6 +89,11 @@ void ggClassyGraphicsBoxItem::Construct()
   mMembersCheckBox = new ggGraphicsCheckBoxItem(this);
   mCommentCheckBox = new ggGraphicsCheckBoxItem(this);
 
+  mClassConnectionTop.SetDirectionUp();
+  mClassConnectionBottom.SetDirectionDown();
+  mClassConnectionLeft.SetDirectionLeft();
+  mClassConnectionRight.SetDirectionRight();
+
   Attach(mClassNameText->GetSubjectText());
   Attach(mClassNameText->GetSubjectEditingFinished());
   Attach(mMembersText->GetSubjectText());
@@ -116,6 +122,7 @@ void ggClassyGraphicsBoxItem::SetClassBox(ggClassyClassBox* aClassBox)
     UpdateClassRead();
     UpdateClassBoxRead();
     UpdateLayout();
+    UpdateConnectionPoints();
   }
 }
 
@@ -139,13 +146,13 @@ const ggSubject* ggClassyGraphicsBoxItem::GetSubjectSize() const
 }
 
 
-QPointF ggClassyGraphicsBoxItem::GetPositionTopCenter() const
+QPointF ggClassyGraphicsBoxItem::GetClassPositionTop() const
 {
   return GetPosition() + QPointF(rect().width()/2.0f, 0.0f);
 }
 
 
-QPointF ggClassyGraphicsBoxItem::GetPositionBottomCenter() const
+QPointF ggClassyGraphicsBoxItem::GetClassPositionBottom() const
 {
   return GetPosition() + QPointF(rect().width()/2.0f, rect().height());
 }
@@ -196,6 +203,42 @@ QPointF ggClassyGraphicsBoxItem::GetMemberPositionRight(int aMemberIndex) const
 }
 
 
+const ggSubjectConnectionPoint* ggClassyGraphicsBoxItem::GetClassConnectionTop() const
+{
+  return &mClassConnectionTop;
+}
+
+
+const ggSubjectConnectionPoint* ggClassyGraphicsBoxItem::GetClassConnectionBottom() const
+{
+  return &mClassConnectionBottom;
+}
+
+
+const ggSubjectConnectionPoint* ggClassyGraphicsBoxItem::GetClassConnectionLeft() const
+{
+  return &mClassConnectionLeft;
+}
+
+
+const ggSubjectConnectionPoint* ggClassyGraphicsBoxItem::GetClassConnectionRight() const
+{
+  return &mClassConnectionRight;
+}
+
+
+const ggSubjectConnectionPoint* ggClassyGraphicsBoxItem::GetMemberConnectionLeft(int aMemberIndex) const
+{
+  return nullptr;
+}
+
+
+const ggSubjectConnectionPoint* ggClassyGraphicsBoxItem::GetMemberConnectionRight(int aMemberIndex) const
+{
+  return nullptr;
+}
+
+
 void ggClassyGraphicsBoxItem::hoverEnterEvent(QGraphicsSceneHoverEvent* aEvent)
 {
   mMembersCheckBox->SetHighlightOn();
@@ -217,6 +260,8 @@ void ggClassyGraphicsBoxItem::Update(const ggSubject* aSubject)
   if (aSubject == GetSubjectPosition()) {
     UpdateClassBoxWrite();
     NotifyClassBoxChange();
+    UpdateConnectionPoints();
+    NotifyConnectionPoints();
   }
 
   else if (aSubject == GetSubjectWidth()) {
@@ -224,6 +269,8 @@ void ggClassyGraphicsBoxItem::Update(const ggSubject* aSubject)
     NotifySize();
     UpdateClassBoxWrite();
     NotifyClassBoxChange();
+    UpdateConnectionPoints();
+    NotifyConnectionPoints();
   }
 
   else if (aSubject == mClassNameText->GetSubjectText() ||
@@ -233,6 +280,8 @@ void ggClassyGraphicsBoxItem::Update(const ggSubject* aSubject)
     NotifySize();
     UpdateClassBoxWrite();
     NotifyClassBoxChange();
+    UpdateConnectionPoints();
+    NotifyConnectionPoints();
   }
 
   else if (aSubject == mClassNameText->GetSubjectEditingFinished() ||
@@ -248,18 +297,24 @@ void ggClassyGraphicsBoxItem::Update(const ggSubject* aSubject)
     NotifySize();
     UpdateClassBoxWrite();
     NotifyClassBoxChange();
+    UpdateConnectionPoints();
+    NotifyConnectionPoints();
   }
 
   else if (aSubject == GetClass()) {
     UpdateClassRead();
     UpdateLayout();
     NotifySize();
+    UpdateConnectionPoints();
+    NotifyConnectionPoints();
   }
 
   else if (aSubject == GetClassBox()) {
     UpdateClassBoxRead();
     UpdateLayout();
     NotifySize();
+    UpdateConnectionPoints();
+    NotifyConnectionPoints();
   }
 
   ggGraphicsManipulatorBarItemT<>::Update(aSubject);
@@ -400,3 +455,19 @@ void ggClassyGraphicsBoxItem::NotifySize()
 }
 
 
+void ggClassyGraphicsBoxItem::UpdateConnectionPoints()
+{
+  mClassConnectionTop.SetPosition(GetClassPositionTop());
+  mClassConnectionBottom.SetPosition(GetClassPositionBottom());
+  mClassConnectionLeft.SetPosition(GetClassPositionLeft());
+  mClassConnectionRight.SetPosition(GetClassPositionRight());
+}
+
+
+void ggClassyGraphicsBoxItem::NotifyConnectionPoints()
+{
+  mClassConnectionTop.Notify();
+  mClassConnectionBottom.Notify();
+  mClassConnectionLeft.Notify();
+  mClassConnectionRight.Notify();
+}

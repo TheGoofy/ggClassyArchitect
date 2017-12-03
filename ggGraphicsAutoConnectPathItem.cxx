@@ -36,18 +36,34 @@ void ggGraphicsAutoConnectPathItem::ClearPointsDst()
 }
 
 
-void ggGraphicsAutoConnectPathItem::InsertPointSrc(const ggSubjectConnectionPoint* aPointSrc)
+void ggGraphicsAutoConnectPathItem::InsertPointSrc(const ggSubjectConnectionPoint* aPoint)
 {
-  mPointsSrc.insert(aPointSrc);
-  ggObserver::Attach(aPointSrc);
+  mPointsSrc.insert(aPoint);
+  ggObserver::Attach(aPoint);
   RebuildPath();
 }
 
 
-void ggGraphicsAutoConnectPathItem::InsertPointDst(const ggSubjectConnectionPoint* aPointDst)
+void ggGraphicsAutoConnectPathItem::InsertPointDst(const ggSubjectConnectionPoint* aPoint)
 {
-  mPointsDst.insert(aPointDst);
-  ggObserver::Attach(aPointDst);
+  mPointsDst.insert(aPoint);
+  ggObserver::Attach(aPoint);
+  RebuildPath();
+}
+
+
+void ggGraphicsAutoConnectPathItem::InsertPointsSrc(const tPointSet& aPoints)
+{
+  mPointsSrc.insert(aPoints.begin(), aPoints.end());
+  Attach(aPoints);
+  RebuildPath();
+}
+
+
+void ggGraphicsAutoConnectPathItem::InsertPointsDst(const tPointSet& aPoints)
+{
+  mPointsDst.insert(aPoints.begin(), aPoints.end());
+  Attach(aPoints);
   RebuildPath();
 }
 
@@ -82,16 +98,16 @@ void ggGraphicsAutoConnectPathItem::Update(const ggSubject* aSubject)
 }
 
 
-void ggGraphicsAutoConnectPathItem::Attach(const tPoints& aPoints)
+void ggGraphicsAutoConnectPathItem::Attach(const tPointSet& aPoints)
 {
-  ggWalkerT<tPoints::const_iterator> vPointsWalker(aPoints);
+  ggWalkerT<tPointSet::const_iterator> vPointsWalker(aPoints);
   while (vPointsWalker) ggObserver::Attach(*vPointsWalker);
 }
 
 
-void ggGraphicsAutoConnectPathItem::Detach(const tPoints& aPoints)
+void ggGraphicsAutoConnectPathItem::Detach(const tPointSet& aPoints)
 {
-  ggWalkerT<tPoints::const_iterator> vPointsWalker(aPoints);
+  ggWalkerT<tPointSet::const_iterator> vPointsWalker(aPoints);
   while (vPointsWalker) ggObserver::Detach(*vPointsWalker);
 }
 
@@ -99,12 +115,30 @@ void ggGraphicsAutoConnectPathItem::Detach(const tPoints& aPoints)
 float ggGraphicsAutoConnectPathItem::GetDistanceCost(const ggConnectionPoint& aPointSrc,
                                                      const ggConnectionPoint& aPointDst) const
 {
+  // distance between base points
   QPointF vPointSrcBase = aPointSrc.GetControlPoint(DecorationSrc().GetLength());
   QPointF vPointDstBase = aPointDst.GetControlPoint(DecorationDst().GetLength());
-  float vDistance = QLineF(vPointSrcBase, vPointDstBase).length();
-  QPointF vPointSrcControl = aPointSrc.GetControlPoint(DecorationSrc().GetLength() + vDistance/4.0f);
-  QPointF vPointDstControl = aPointDst.GetControlPoint(DecorationDst().GetLength() + vDistance/4.0f);
-  return QLineF(vPointSrcControl, vPointDstControl).length();
+  float vBaseDistance = QLineF(vPointSrcBase, vPointDstBase).length();
+
+  // distance between control points (depends on connection direction)
+  QPointF vPointSrcControl = aPointSrc.GetControlPoint(DecorationSrc().GetLength() + vBaseDistance/4.0f);
+  QPointF vPointDstControl = aPointDst.GetControlPoint(DecorationDst().GetLength() + vBaseDistance/4.0f);
+  float vControlDistance = QLineF(vPointSrcControl, vPointDstControl).length();
+
+  // distance along direction (negative direction means that one point is behind the other point)
+  QVector2D vDirectionSrcToDst(vPointDstBase - vPointSrcBase);
+  QVector2D vDirectionDstToSrc(vPointSrcBase - vPointDstBase);
+  float vDistanceDst = QVector2D::dotProduct(vDirectionSrcToDst, aPointSrc.GetDirection());
+  float vDistanceSrc = QVector2D::dotProduct(vDirectionDstToSrc, aPointDst.GetDirection());
+
+  // conditions for low costs:
+  // - control points are close to each other
+  // - points do not hide behind each other (very bad)
+  float vCost = vControlDistance;
+  if (vDistanceSrc < 0.0f) vCost += -5.0f * vDistanceSrc;
+  if (vDistanceDst < 0.0f) vCost += -5.0f * vDistanceDst;
+
+  return vCost;
 }
 
 
@@ -116,11 +150,11 @@ void ggGraphicsAutoConnectPathItem::RebuildPath()
   const ggConnectionPoint* vPointDst = nullptr;
 
   // loop over all visible src- and dst-points
-  ggWalkerT<tPoints::const_iterator> vPointsSrcWalker(mPointsSrc);
+  ggWalkerT<tPointSet::const_iterator> vPointsSrcWalker(mPointsSrc);
   while (vPointsSrcWalker) {
 
     if ((**vPointsSrcWalker).GetVisible()) {
-      ggWalkerT<tPoints::const_iterator> vPointsDstWalker(mPointsDst);
+      ggWalkerT<tPointSet::const_iterator> vPointsDstWalker(mPointsDst);
       while (vPointsDstWalker) {
 
         if ((**vPointsDstWalker).GetVisible()) {
