@@ -17,9 +17,9 @@ ggClassyGraphicsBoxItem::ggClassyGraphicsBoxItem(const QRectF& aRect) :
   ggGraphicsManipulatorBarItemT<>(QRect()),
   mClassNameText(nullptr),
   mMembersText(nullptr),
-  mCommentText(nullptr),
+  mDescriptionText(nullptr),
   mMembersCheckBox(nullptr),
-  mCommentCheckBox(nullptr),
+  mDescriptionCheckBox(nullptr),
   mClassBox(nullptr)
 {
   Construct();
@@ -33,7 +33,7 @@ ggClassyGraphicsBoxItem::ggClassyGraphicsBoxItem(const QRectF& aRect) :
   mMembersText->SetText("GetName()\n"
                         "YouWannaDance()\n"
                         "DamnImLookingGood()");
-  mCommentText->SetText("Lorem ipsum dolor sit amet, consectetur adipiscing elit, "
+  mDescriptionText->SetText("Lorem ipsum dolor sit amet, consectetur adipiscing elit, "
                         "sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.");
 
   UpdateLayout();
@@ -45,9 +45,9 @@ ggClassyGraphicsBoxItem::ggClassyGraphicsBoxItem(ggClassyClassBox* aClassBox) :
   ggGraphicsManipulatorBarItemT<>(QRect()),
   mClassNameText(nullptr),
   mMembersText(nullptr),
-  mCommentText(nullptr),
+  mDescriptionText(nullptr),
   mMembersCheckBox(nullptr),
-  mCommentCheckBox(nullptr),
+  mDescriptionCheckBox(nullptr),
   mClassBox(nullptr)
 {
   Construct();
@@ -80,14 +80,14 @@ void ggClassyGraphicsBoxItem::Construct()
   mMembersText->SetBrush(brush());
   mMembersText->SetPen(Qt::NoPen);
 
-  mCommentText = new ggGraphicsTextItem(this);
-  mCommentText->SetSuppressLineBreaks(false);
-  mCommentText->SetEnterKeyFinishesEdit(false);
-  mCommentText->SetBrush(QColor(255, 240, 220, 255));
-  mCommentText->SetPen(Qt::NoPen);
+  mDescriptionText = new ggGraphicsTextItem(this);
+  mDescriptionText->SetSuppressLineBreaks(false);
+  mDescriptionText->SetEnterKeyFinishesEdit(false);
+  mDescriptionText->SetBrush(QColor(255, 240, 220, 255));
+  mDescriptionText->SetPen(Qt::NoPen);
 
   mMembersCheckBox = new ggGraphicsCheckBoxItem(this);
-  mCommentCheckBox = new ggGraphicsCheckBoxItem(this);
+  mDescriptionCheckBox = new ggGraphicsCheckBoxItem(this);
 
   mClassConnectionTop.SetDirectionUp();
   mClassConnectionBottom.SetDirectionDown();
@@ -98,10 +98,10 @@ void ggClassyGraphicsBoxItem::Construct()
   Attach(mClassNameText->GetSubjectEditingFinished());
   Attach(mMembersText->GetSubjectText());
   Attach(mMembersText->GetSubjectEditingFinished());
-  Attach(mCommentText->GetSubjectText());
-  Attach(mCommentText->GetSubjectEditingFinished());
+  Attach(mDescriptionText->GetSubjectText());
+  Attach(mDescriptionText->GetSubjectEditingFinished());
   Attach(mMembersCheckBox->GetSubjectChecked());
-  Attach(mCommentCheckBox->GetSubjectChecked());
+  Attach(mDescriptionCheckBox->GetSubjectChecked());
   Attach(GetSubjectPosition());
   Attach(GetSubjectWidth());
 }
@@ -249,7 +249,7 @@ const ggSubjectConnectionPoint* ggClassyGraphicsBoxItem::GetMemberConnectionRigh
 void ggClassyGraphicsBoxItem::hoverEnterEvent(QGraphicsSceneHoverEvent* aEvent)
 {
   mMembersCheckBox->SetHighlightOn();
-  mCommentCheckBox->SetHighlightOn();
+  mDescriptionCheckBox->SetHighlightOn();
   ggGraphicsManipulatorBarItemT<>::hoverEnterEvent(aEvent);
 }
 
@@ -257,7 +257,7 @@ void ggClassyGraphicsBoxItem::hoverEnterEvent(QGraphicsSceneHoverEvent* aEvent)
 void ggClassyGraphicsBoxItem::hoverLeaveEvent(QGraphicsSceneHoverEvent* aEvent)
 {
   mMembersCheckBox->SetHighlightOff();
-  mCommentCheckBox->SetHighlightOff();
+  mDescriptionCheckBox->SetHighlightOff();
   ggGraphicsManipulatorBarItemT<>::hoverLeaveEvent(aEvent);
 }
 
@@ -282,7 +282,7 @@ void ggClassyGraphicsBoxItem::Update(const ggSubject* aSubject)
 
   else if (aSubject == mClassNameText->GetSubjectText() ||
            aSubject == mMembersText->GetSubjectText() ||
-           aSubject == mCommentText->GetSubjectText()) {
+           aSubject == mDescriptionText->GetSubjectText()) {
     UpdateLayout();
     NotifySize();
     UpdateClassBoxWrite();
@@ -293,13 +293,13 @@ void ggClassyGraphicsBoxItem::Update(const ggSubject* aSubject)
 
   else if (aSubject == mClassNameText->GetSubjectEditingFinished() ||
            aSubject == mMembersText->GetSubjectEditingFinished() ||
-           aSubject == mCommentText->GetSubjectEditingFinished()) {
+           aSubject == mDescriptionText->GetSubjectEditingFinished()) {
     UpdateClassWrite();
     NotifyClassChange();
   }
 
   else if (aSubject == mMembersCheckBox->GetSubjectChecked() ||
-           aSubject == mCommentCheckBox->GetSubjectChecked()) {
+           aSubject == mDescriptionCheckBox->GetSubjectChecked()) {
     UpdateLayout();
     NotifySize();
     UpdateClassBoxWrite();
@@ -333,7 +333,7 @@ void ggClassyGraphicsBoxItem::UpdateClassRead()
   if (GetClass() != nullptr) {
     mClassNameText->SetText(GetClass()->mName);
     mMembersText->SetText(GetClass()->GetMembersText());
-    mCommentText->SetText(GetClass()->mComment);
+    mDescriptionText->SetText(GetClass()->mDescription);
   }
 }
 
@@ -343,7 +343,7 @@ void ggClassyGraphicsBoxItem::UpdateClassWrite()
   if (GetClass() != nullptr) {
     GetClass()->mName = mClassNameText->GetText();
     GetClass()->SetMembersText(mMembersText->GetText());
-    GetClass()->mComment = mCommentText->GetText();
+    GetClass()->mDescription = mDescriptionText->GetText();
   }
 }
 
@@ -360,7 +360,7 @@ void ggClassyGraphicsBoxItem::UpdateClassBoxRead()
     SetPosition(GetClassBox()->mPosition);
     SetWidth(GetClassBox()->mWidth);
     mMembersCheckBox->SetChecked(GetClassBox()->mMembersVisible);
-    mCommentCheckBox->SetChecked(GetClassBox()->mCommentVisible);
+    mDescriptionCheckBox->SetChecked(GetClassBox()->mDescriptionVisible);
   }
 }
 
@@ -371,7 +371,7 @@ void ggClassyGraphicsBoxItem::UpdateClassBoxWrite()
     GetClassBox()->mPosition = GetPosition();
     GetClassBox()->mWidth = GetWidth();
     GetClassBox()->mMembersVisible = mMembersCheckBox->GetChecked();
-    GetClassBox()->mCommentVisible = mCommentCheckBox->GetChecked();
+    GetClassBox()->mDescriptionVisible = mDescriptionCheckBox->GetChecked();
   }
 }
 
@@ -388,18 +388,18 @@ void ggClassyGraphicsBoxItem::UpdateLayout()
   float vWidth = rect().width();
   mClassNameText->setTextWidth(vWidth);
   mMembersText->setTextWidth(vWidth);
-  mCommentText->setTextWidth(vWidth);
+  mDescriptionText->setTextWidth(vWidth);
 
   // get the resulting heights of the text items
   float vClassNameTextHeight = mClassNameText->boundingRect().height();
   float vMembersTextHeight = mMembersText->boundingRect().height();
-  float vCommentTextHeight = mCommentText->boundingRect().height();
+  float vDescriptionTextHeight = mDescriptionText->boundingRect().height();
 
   // adjust height of check boxes depending on font height
   float vClassNameFontHeight = QFontMetrics(mClassNameText->font()).height();
   float vCheckBoxSize = vClassNameFontHeight / 2.0f;
   mMembersCheckBox->SetSize(vCheckBoxSize);
-  mCommentCheckBox->SetSize(vCheckBoxSize);
+  mDescriptionCheckBox->SetSize(vCheckBoxSize);
 
   // positions and heights...
   float vCheckBoxIndent = 3.0f;
@@ -425,14 +425,14 @@ void ggClassyGraphicsBoxItem::UpdateLayout()
     vTotalHeight += vMembersTextHeight;
   }
 
-  // adjust comment area
-  mCommentText->setVisible(mCommentCheckBox->GetChecked());
-  if (mCommentText->isVisible()) {
-    mCommentText->setPos(vPos);
-    mCommentCheckBox->setPos(vPosCheckBox);
-    vPos.ry() += vCommentTextHeight;
-    vPosCheckBox.ry() += vCommentTextHeight;
-    vTotalHeight += vCommentTextHeight;
+  // adjust description area
+  mDescriptionText->setVisible(mDescriptionCheckBox->GetChecked());
+  if (mDescriptionText->isVisible()) {
+    mDescriptionText->setPos(vPos);
+    mDescriptionCheckBox->setPos(vPosCheckBox);
+    vPos.ry() += vDescriptionTextHeight;
+    vPosCheckBox.ry() += vDescriptionTextHeight;
+    vTotalHeight += vDescriptionTextHeight;
   }
 
   // place checkboxes of invisible text areas into class name area
@@ -443,8 +443,8 @@ void ggClassyGraphicsBoxItem::UpdateLayout()
     mMembersCheckBox->setPos(vPosCheckBox);
     vPosCheckBox.rx() -= vCheckBoxSize + vCheckBoxIndent;
   }
-  if (!mCommentText->isVisible()) {
-    mCommentCheckBox->setPos(vPosCheckBox);
+  if (!mDescriptionText->isVisible()) {
+    mDescriptionCheckBox->setPos(vPosCheckBox);
   }
 
   // adjust own overall height

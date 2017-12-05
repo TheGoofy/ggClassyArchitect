@@ -26,10 +26,10 @@ public:
   QFont mMembersFont;
   QColor mMembersColor;
   QBrush mMembersBackground;
-  // comment
-  QFont mCommentFont;
-  QColor mCommentColor;
-  QBrush mCommentBackground;
+  // description
+  QFont mDescriptionFont;
+  QColor mDescriptionColor;
+  QBrush mDescriptionBackground;
 };
 
 
@@ -111,7 +111,7 @@ public:
   ggString mName;
   ggStringSet mBaseNames;
   tMembers mMembers;
-  QString mComment;
+  QString mDescription;
   ggClassyCollection* mCollection;
 };
 
@@ -124,12 +124,12 @@ public:
     mPosition(0.0f, 0.0f),
     mWidth(150.0f),
     mMembersVisible(true),
-    mCommentVisible(true) {}
+    mDescriptionVisible(true) {}
   ggClassyClass* mClass;
   QPointF mPosition;
   float mWidth;
   bool mMembersVisible;
-  bool mCommentVisible;
+  bool mDescriptionVisible;
 };
 
 

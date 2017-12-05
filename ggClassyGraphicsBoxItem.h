@@ -66,9 +66,9 @@ private:
 
   ggGraphicsTextItem* mClassNameText;
   ggGraphicsTextItem* mMembersText;
-  ggGraphicsTextItem* mCommentText;
+  ggGraphicsTextItem* mDescriptionText;
   ggGraphicsCheckBoxItem* mMembersCheckBox;
-  ggGraphicsCheckBoxItem* mCommentCheckBox;
+  ggGraphicsCheckBoxItem* mDescriptionCheckBox;
 
   ggSubject mSubjectSize;
 

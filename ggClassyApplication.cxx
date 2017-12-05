@@ -78,11 +78,11 @@ void ggClassyApplication::SaveDataSet(QIODevice* aDevice)
       vClassMemberElement.appendChild(vMemberNameText);
     }
 
-    // comment
-    QDomElement vClassCommentElement = vDomDocument.createElement("mComment");
-    vClassElement.appendChild(vClassCommentElement);
-    QDomText vCommentText = vDomDocument.createTextNode(vClass->mComment);
-    vClassCommentElement.appendChild(vCommentText);
+    // description
+    QDomElement vClassDescriptionElement = vDomDocument.createElement("mDescription");
+    vClassElement.appendChild(vClassDescriptionElement);
+    QDomText vDescriptionText = vDomDocument.createTextNode(vClass->mDescription);
+    vClassDescriptionElement.appendChild(vDescriptionText);
 
   }
 
@@ -104,9 +104,8 @@ void ggClassyApplication::SaveDataSet(QIODevice* aDevice)
     vClassBoxElement.setAttribute("mPosition.y", vClassBox->mPosition.y());
     vClassBoxElement.setAttribute("mWidth", vClassBox->mWidth);
     vClassBoxElement.setAttribute("mMembersVisible", vClassBox->mMembersVisible);
-    vClassBoxElement.setAttribute("mCommentVisible", vClassBox->mCommentVisible);
+    vClassBoxElement.setAttribute("mDescriptionVisible", vClassBox->mDescriptionVisible);
     vClassBoxesElement.appendChild(vClassBoxElement);
-    vClassBoxesElement.appendChild(QDomElement(vClassBoxElement));
 
   }
 

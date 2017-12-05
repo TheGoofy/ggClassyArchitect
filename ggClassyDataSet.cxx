@@ -9,14 +9,14 @@ ggClassyDataSet* ggClassyDataSet::GenerateTestData()
   vClassA->mMembers.push_back(ggClassyClassMember("Pong()", "void"));
   vClassA->mMembers.push_back(ggClassyClassMember("GetB1()", "ggClassB"));
   vClassA->mMembers.push_back(ggClassyClassMember("GetB2()", "ggClassB"));
-  vClassA->mComment = "The answer to life the universe and everything.";
+  vClassA->mDescription = "The answer to life the universe and everything.";
 
   ggClassyClass* vClassB = new ggClassyClass();
   vClassB->mName = "ggClassB";
   vClassB->mBaseNames.insert("ggClassA");
   vClassB->mMembers.push_back(ggClassyClassMember("Blubb()", "QString"));
   vClassB->mMembers.push_back(ggClassyClassMember("GetA()", "ggClassA"));
-  vClassB->mComment = "One fish, two fish, red fish, blue fish.";
+  vClassB->mDescription = "One fish, two fish, red fish, blue fish.";
 
   ggClassyClass* vClassC = new ggClassyClass();
   vClassC->mName = "ggClassC";
@@ -24,7 +24,7 @@ ggClassyDataSet* ggClassyDataSet::GenerateTestData()
   vClassC->mBaseNames.insert("ggClassB");
   vClassC->mMembers.push_back(ggClassyClassMember("GetName()", "QString"));
   vClassC->mMembers.push_back(ggClassyClassMember("SayHello()", "QString"));
-  vClassC->mComment = "This is a very useful comment!";
+  vClassC->mDescription = "This is a very useful description ot the class!";
 
   ggClassyClassBox* vClassBoxA1 = new ggClassyClassBox();
   vClassBoxA1->mClass = vClassA;
