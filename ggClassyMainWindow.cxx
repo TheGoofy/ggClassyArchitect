@@ -2,6 +2,8 @@
 #include "ui_ggClassyMainWindow.h"
 
 #include <QLineEdit>
+#include <QFileDialog>
+#include <QMessageBox>
 
 #include "ggClassyApplication.h"
 
@@ -21,6 +23,7 @@ ggClassyMainWindow::ggClassyMainWindow(QWidget *parent) :
 
   // this connects automatically: connect(ui->mZoomComboBox, SIGNAL(currentIndexChanged(int)), this, SLOT(on_mZoomComboBox_currentIndexChanged(int)));
   connect(ui->mZoomComboBox->lineEdit(), SIGNAL(editingFinished()), this, SLOT(on_mZoomComboBox_editingFinished()));
+  connect(ui->mSaveAsPushButton, SIGNAL(clicked()), this, SLOT(SaveDataSetAs()));
 
   Attach(&ggClassyApplication::GetInstance().Zoom());
 
@@ -95,4 +98,24 @@ void ggClassyMainWindow::on_mAddClassPushButton_clicked()
     vExecutorLazy = nullptr;
   }
   qDebug() << __PRETTY_FUNCTION__ << "- IsLazy() =" << ggClassyApplication::GetInstance().Zoom().IsLazy();
+}
+
+
+void ggClassyMainWindow::SaveDataSetAs()
+{
+  QString vFileName = QFileDialog::getSaveFileName(this, tr("Save Classy Architect File"),
+                                                   QDir::currentPath(),
+                                                   tr("Classy Architect Files (*.cax *.xml)"));
+  if (vFileName.isEmpty()) return;
+
+  QFile vFile(vFileName);
+  if (!vFile.open(QFile::WriteOnly | QFile::Text)) {
+     QMessageBox::warning(this, tr("Classy Architect File"),
+                          tr("Cannot write file %1:\n%2.")
+                          .arg(vFileName)
+                          .arg(vFile.errorString()));
+    return;
+  }
+
+  ggClassyApplication::GetInstance().SaveDataSet(&vFile);
 }

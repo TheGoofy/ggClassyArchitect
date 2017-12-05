@@ -25,9 +25,10 @@ ggClassyGraphicsView::ggClassyGraphicsView(QWidget* aParent)
   //scene()->addRect(vRect);
   //scene()->setSceneRect(vRect);
 
-  ggClassyDataSet* vDataSet = ggClassyDataSet::GenerateTestData();
+  ggClassyDataSet* vDataSet = ggClassyApplication::GetInstance().GetDataSet();
 
-  vScene->addItem(new ggClassyGraphicsBoxItem(QRectF(0, 150, 200, 200)));
+  ggClassyGraphicsBoxItem* vClassBoxItem = new ggClassyGraphicsBoxItem(QRectF(0, 150, 200, 200));
+  vScene->addItem(vClassBoxItem);
 
   vScene->AddClassBoxItems(vDataSet);
   vScene->AddLineItems(vDataSet);

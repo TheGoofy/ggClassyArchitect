@@ -29,6 +29,7 @@ void ggClassyGraphicsScene::addItem(ggClassyGraphicsBoxItem* aBoxItem)
 void ggClassyGraphicsScene::AddClassBoxItems(ggClassyDataSet* aDataSet)
 {
 
+  /*
   // testing the auto-connect-path
   ggGraphicsConnectionPointItem* vPointA = new ggGraphicsConnectionPointItem();
   ggGraphicsConnectionPointItem* vPointB = new ggGraphicsConnectionPointItem();
@@ -62,7 +63,7 @@ void ggClassyGraphicsScene::AddClassBoxItems(ggClassyDataSet* aDataSet)
   QGraphicsScene::addItem(vPointD);
   QGraphicsScene::addItem(vPath1);
   QGraphicsScene::addItem(vPath2);
-
+  */
 
   // only notify box items change, when all boxes are added
   ggBehaviorLazy::cExecutor vLazy(mBoxItems);

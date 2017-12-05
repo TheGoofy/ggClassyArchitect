@@ -4,6 +4,9 @@
 #include <QApplication>
 #include "ggSubjectT.h"
 
+class ggClassyDataSet;
+class QIODevice;
+
 class ggClassyApplication : public QApplication
 {
   Q_OBJECT
@@ -18,7 +21,13 @@ public:
   ggSubjectFloat& Zoom();
   const ggSubjectFloat& Zoom() const;
 
+  ggClassyDataSet* GetDataSet();
+  const ggClassyDataSet* GetDataSet() const;
+  void SaveDataSet(QIODevice* aDevice);
+
 private:
+
+  ggClassyDataSet* mDataSet;
 
   ggSubjectFloat mZoom;
 

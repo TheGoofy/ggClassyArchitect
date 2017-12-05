@@ -147,8 +147,8 @@ class ggClassyDataSet : public ggSubject
 {
 public:
   static ggClassyDataSet* GenerateTestData();
-  std::set<ggClassyClass*> mClasses;
   std::set<ggClassyCollection*> mCollections;
+  std::set<ggClassyClass*> mClasses;
   std::vector<ggClassyClassBox*> mClassBoxes;
   std::vector<ggClassyFrame*> mFrames;
 };

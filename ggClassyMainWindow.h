@@ -25,12 +25,16 @@ protected slots:
   void on_mZoomComboBox_activated(int);
   void on_mZoomFitPushButton_clicked();
   void on_mAddClassPushButton_clicked();
+  void SaveDataSetAs();
 
 protected:
   virtual void Update(const ggSubject* aSubject) override;
 
 private:
+
+  // the main window form
   Ui::ggClassyMainWindow *ui;
+
   QString ZoomToString(float aZoomFloat) const;
   float StringToZoom(const QString& aZoomString) const;
 
