@@ -133,7 +133,7 @@ float ggGraphicsAutoConnectPathItem::GetDistanceCost(const ggConnectionPoint& aP
 
   // conditions for low costs:
   // - control points are close to each other
-  // - points do not hide behind each other (very bad)
+  // - points do not point away from each other (very bad)
   float vCost = vControlDistance;
   if (vDistanceSrc < 0.0f) vCost += -5.0f * vDistanceSrc;
   if (vDistanceDst < 0.0f) vCost += -5.0f * vDistanceDst;

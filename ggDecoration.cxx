@@ -75,3 +75,18 @@ void ggDecoration::Set(cType aType,
   mLength = aLength;
   mFill = aFill;
 }
+
+
+const ggDecoration::tTypes& ggDecoration::Types()
+{
+  static tTypes vTypes = {cType::eLine,
+                          cType::eArrow,
+                          cType::eArrowBack,
+                          cType::eTriangle,
+                          cType::eTriangleBack,
+                          cType::eDiamond,
+                          cType::eCross,
+                          cType::eCircle};
+  return vTypes;
+}
+

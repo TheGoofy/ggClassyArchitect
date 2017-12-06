@@ -32,6 +32,7 @@ ggClassyGraphicsView::ggClassyGraphicsView(QWidget* aParent)
 
   vScene->AddClassBoxItems(vDataSet);
   vScene->AddLineItems();
+  vScene->AddTestConnections();
 
   ggClassyApplication::GetInstance().Zoom().SetValue(GetSceneScale());
   Attach(&ggClassyApplication::GetInstance().Zoom());

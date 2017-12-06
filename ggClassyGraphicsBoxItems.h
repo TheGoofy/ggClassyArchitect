@@ -22,6 +22,7 @@ public:
 
   const tBoxItemsSet& GetBoxItems() const;
   const tBoxItemsVec& GetBoxItems(const QString& aClassName) const;
+
   tPointsSet GetClassPointsTop(const QString& aClassName) const;
   tPointsSet GetClassPointsBottom(const QString& aClassName) const;
   tPointsSet GetClassPointsLeftRight(const QString& aClassName) const;

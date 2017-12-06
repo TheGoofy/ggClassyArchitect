@@ -90,37 +90,24 @@ void ggClassyGraphicsScene::AddLineItems()
 
 void ggClassyGraphicsScene::AddTestConnections()
 {
-  // testing the auto-connect-path
-  ggGraphicsConnectionPointItem* vPointA = new ggGraphicsConnectionPointItem();
-  ggGraphicsConnectionPointItem* vPointB = new ggGraphicsConnectionPointItem();
-  ggGraphicsConnectionPointItem* vPointC = new ggGraphicsConnectionPointItem();
-  ggGraphicsConnectionPointItem* vPointD = new ggGraphicsConnectionPointItem();
-  vPointA->SetPointPosition(QPointF(100.0f, -100.0f));
-  vPointB->SetPointPosition(QPointF(100.0f,  100.0f));
-  vPointC->SetPointPosition(QPointF(300.0f, -100.0f));
-  vPointD->SetPointPosition(QPointF(300.0f,  100.0f));
-  vPointA->SetPointDirectionRight();
-  vPointB->SetPointDirectionRight();
-  vPointC->SetPointDirectionLeft();
-  vPointD->SetPointDirectionLeft();
-  ggGraphicsAutoConnectPathItem* vPath1 = new ggGraphicsAutoConnectPathItem();
-  vPath1->InsertPointSrc(vPointA->GetSubjectConnectionPoint());
-  vPath1->InsertPointSrc(vPointB->GetSubjectConnectionPoint());
-  vPath1->InsertPointDst(vPointC->GetSubjectConnectionPoint());
-  vPath1->InsertPointDst(vPointD->GetSubjectConnectionPoint());
-  vPath1->SetDecorationSrc(ggDecoration::cType::eDiamond, 15.0f, ggDecoration::cFill::eEmpty);
-  vPath1->SetDecorationDst(ggDecoration::cType::eCircle, 10.0f, ggDecoration::cFill::eEmpty);
-  ggGraphicsAutoConnectPathItem* vPath2 = new ggGraphicsAutoConnectPathItem();
-  vPath2->InsertPointSrc(vPointC->GetSubjectConnectionPoint());
-  vPath2->InsertPointSrc(vPointD->GetSubjectConnectionPoint());
-  vPath2->InsertPointDst(vPointA->GetSubjectConnectionPoint());
-  vPath2->InsertPointDst(vPointB->GetSubjectConnectionPoint());
-  vPath2->SetDecorationSrc(ggDecoration::cType::eArrow, 13.0f, ggDecoration::cFill::eEmpty);
-  vPath2->SetDecorationDst(ggDecoration::cType::eCross, 13.0f, ggDecoration::cFill::eSolid);
-  QGraphicsScene::addItem(vPointA);
-  QGraphicsScene::addItem(vPointB);
-  QGraphicsScene::addItem(vPointC);
-  QGraphicsScene::addItem(vPointD);
-  QGraphicsScene::addItem(vPath1);
-  QGraphicsScene::addItem(vPath2);
+  float vPositionY = 150.0f;
+  ggWalkerT<ggDecoration::tTypes::const_iterator> vDecorationTypesWalker(ggDecoration::Types());
+  while (vDecorationTypesWalker) {
+    const ggDecoration::cType vType = *vDecorationTypesWalker;
+    ggGraphicsConnectionPointItem* vPointA = new ggGraphicsConnectionPointItem();
+    ggGraphicsConnectionPointItem* vPointB = new ggGraphicsConnectionPointItem();
+    vPointA->SetPointPosition(QPointF(250.0f, vPositionY));
+    vPointB->SetPointPosition(QPointF(400.0f, vPositionY));
+    vPointA->SetPointDirectionRight();
+    vPointB->SetPointDirectionLeft();
+    ggGraphicsAutoConnectPathItem* vPath = new ggGraphicsAutoConnectPathItem();
+    vPath->InsertPointSrc(vPointA->GetSubjectConnectionPoint());
+    vPath->InsertPointDst(vPointB->GetSubjectConnectionPoint());
+    vPath->SetDecorationSrc(vType, 15.0f, ggDecoration::cFill::eEmpty);
+    vPath->SetDecorationDst(vType, 15.0f, ggDecoration::cFill::eSolid);
+    QGraphicsScene::addItem(vPointA);
+    QGraphicsScene::addItem(vPointB);
+    QGraphicsScene::addItem(vPath);
+    vPositionY += 20.0f;
+  }
 }

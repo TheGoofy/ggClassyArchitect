@@ -1,6 +1,8 @@
 #ifndef GGDECORATION_H
 #define GGDECORATION_H
 
+#include <vector>
+
 class ggDecoration
 {
 public:
@@ -41,6 +43,9 @@ public:
   void Set(cType aType,
            float aLength = 12.0f,
            cFill aFill = cFill::eSolid);
+
+  typedef std::vector<cType> tTypes;
+  static const tTypes& Types();
 
 private:
 

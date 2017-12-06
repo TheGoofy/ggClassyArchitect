@@ -5,26 +5,26 @@
 
 ggPainterPath::ggPainterPath() :
   QPainterPath(),
-  mRatio(0.0f)
+  mDecorationRatio(0.0f)
 {
 }
 
 
-void ggPainterPath::SetRatio(float aRatio)
+void ggPainterPath::SetDecorationRatio(float aRatio)
 {
-  mRatio = aRatio;
+  mDecorationRatio = aRatio;
 }
 
 
-float ggPainterPath::GetRatio() const
+float ggPainterPath::GetDecorationRatio() const
 {
-  return mRatio;
+  return mDecorationRatio;
 }
 
 
-float ggPainterPath::GetRatio(ggDecoration::cType aType) const
+float ggPainterPath::GetDecorationRatio(ggDecoration::cType aType) const
 {
-  if (mRatio != 0.0f) return mRatio;
+  if (mDecorationRatio != 0.0f) return mDecorationRatio;
   switch (aType) {
     case ggDecoration::cType::eLine: return 0.0f;
     case ggDecoration::cType::eArrow: return 0.8f;
@@ -118,7 +118,7 @@ void ggPainterPath::CalculateDimensions(ggDecoration::cType aType,
   aLength = aDirection.length();
   if (aLength != 0.0f) aDirection /= aLength;
   aNormal = QVector2D(aDirection.y(), -aDirection.x());
-  aWidth2 = aLength * GetRatio(aType) / 2.0f;
+  aWidth2 = aLength * GetDecorationRatio(aType) / 2.0f;
 }
 
 

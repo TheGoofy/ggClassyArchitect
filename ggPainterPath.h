@@ -14,8 +14,8 @@ public:
 
   ggPainterPath();
 
-  void SetRatio(float aRatio);
-  float GetRatio() const;
+  void SetDecorationRatio(float aRatio);
+  float GetDecorationRatio() const;
 
   void AddDecoration(const ggDecoration& aDecoration,
                      const QPointF& aEnd,
@@ -52,9 +52,9 @@ private:
                            float& aLength,
                            float& aWidth2) const;
 
-  float GetRatio(ggDecoration::cType aType) const;
+  float GetDecorationRatio(ggDecoration::cType aType) const;
 
-  float mRatio;
+  float mDecorationRatio;
 
 };
 
