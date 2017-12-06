@@ -31,10 +31,8 @@ ggItemLinked::~ggItemLinked()
 void ggItemLinked::Attach(const ggItemLinked* aItem)
 {
   if (aItem != nullptr) {
-    if (!IsAttached(aItem)) {
-      mItems.insert(aItem);
-      const_cast<ggItemLinked*>(aItem)->Attach(this);
-    }
+    mItems.insert(aItem);
+    const_cast<ggItemLinked*>(aItem)->mItems.insert(this);
   }
 }
 
@@ -42,10 +40,8 @@ void ggItemLinked::Attach(const ggItemLinked* aItem)
 void ggItemLinked::Detach(const ggItemLinked* aItem)
 {
   if (aItem != nullptr) {
-    if (IsAttached(aItem)) {
-      mItems.erase(aItem);
-      const_cast<ggItemLinked*>(aItem)->Detach(this);
-    }
+    mItems.erase(aItem);
+    const_cast<ggItemLinked*>(aItem)->mItems.erase(this);
   }
 }
 
