@@ -56,11 +56,11 @@ void ggClassyApplication::SaveDataSet(QIODevice* aDevice)
 
     // class name
     QDomElement vClassElement = vDomDocument.createElement("ggClassyClass");
-    vClassElement.setAttribute("mClassName", vClass->mName);
+    vClassElement.setAttribute("mClassName", vClass->mClassName);
     vClassesElement.appendChild(vClassElement);
 
     // base classes
-    ggWalkerT<ggStringSet::iterator> vBaseClassNamesIterator(vClass->mBaseNames);
+    ggWalkerT<ggStringSet::iterator> vBaseClassNamesIterator(vClass->mBaseClassNames);
     while (vBaseClassNamesIterator) {
       QDomElement vBaseClassElement = vDomDocument.createElement("mBaseClass");
       vBaseClassElement.setAttribute("mClassName", *vBaseClassNamesIterator);
@@ -99,7 +99,7 @@ void ggClassyApplication::SaveDataSet(QIODevice* aDevice)
 
     ggClassyClassBox* vClassBox = *vClassBoxesWalker;
     QDomElement vClassBoxElement = vDomDocument.createElement("ggClassyClassBox");
-    vClassBoxElement.setAttribute("mClassName", vClassBox->mClass->mName);
+    vClassBoxElement.setAttribute("mClassName", vClassBox->mClassName);
     vClassBoxElement.setAttribute("mPosition.x", vClassBox->mPosition.x());
     vClassBoxElement.setAttribute("mPosition.y", vClassBox->mPosition.y());
     vClassBoxElement.setAttribute("mWidth", vClassBox->mWidth);

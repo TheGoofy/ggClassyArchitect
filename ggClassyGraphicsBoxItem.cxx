@@ -20,6 +20,7 @@ ggClassyGraphicsBoxItem::ggClassyGraphicsBoxItem(const QRectF& aRect) :
   mDescriptionText(nullptr),
   mMembersCheckBox(nullptr),
   mDescriptionCheckBox(nullptr),
+  mClass(nullptr),
   mClassBox(nullptr)
 {
   Construct();
@@ -41,17 +42,19 @@ ggClassyGraphicsBoxItem::ggClassyGraphicsBoxItem(const QRectF& aRect) :
 }
 
 
-ggClassyGraphicsBoxItem::ggClassyGraphicsBoxItem(ggClassyClassBox* aClassBox) :
+ggClassyGraphicsBoxItem::ggClassyGraphicsBoxItem(ggClassyClass* aClass,
+                                                 ggClassyClassBox* aClassBox) :
   ggGraphicsManipulatorBarItemT<>(QRect()),
   mClassNameText(nullptr),
   mMembersText(nullptr),
   mDescriptionText(nullptr),
   mMembersCheckBox(nullptr),
   mDescriptionCheckBox(nullptr),
+  mClass(nullptr),
   mClassBox(nullptr)
 {
   Construct();
-  SetClassBox(aClassBox);
+  SetClassBox(aClass, aClassBox);
 }
 
 
@@ -107,18 +110,22 @@ void ggClassyGraphicsBoxItem::Construct()
 }
 
 
-void ggClassyGraphicsBoxItem::SetClassBox(ggClassyClassBox* aClassBox)
+void ggClassyGraphicsBoxItem::SetClassBox(ggClassyClass* aClass,
+                                          ggClassyClassBox* aClassBox)
 {
-  if (mClassBox != aClassBox) {
-    if (mClassBox != nullptr) {
-      Detach(mClassBox);
-      Detach(mClassBox->mClass);
-    }
+  // if class or class-box changed...
+  if (mClass != aClass ||
+      mClassBox != aClassBox) {
+    // detach previously attached subjects
+    Detach(mClassBox);
+    Detach(mClass);
+    // remember the new class and class-box
+    mClass = aClass;
     mClassBox = aClassBox;
-    if (mClassBox != nullptr) {
-      Attach(mClassBox);
-      Attach(mClassBox->mClass);
-    }
+    // re-attach them
+    Attach(mClassBox);
+    Attach(mClass);
+    // read the class information and update layout
     UpdateClassRead();
     UpdateClassBoxRead();
     UpdateLayout();
@@ -127,16 +134,15 @@ void ggClassyGraphicsBoxItem::SetClassBox(ggClassyClassBox* aClassBox)
 }
 
 
-ggClassyClassBox* ggClassyGraphicsBoxItem::GetClassBox() const
+ggClassyClass* ggClassyGraphicsBoxItem::GetClass() const
 {
-  return mClassBox;
+  return mClass;
 }
 
 
-ggClassyClass* ggClassyGraphicsBoxItem::GetClass() const
+ggClassyClassBox* ggClassyGraphicsBoxItem::GetClassBox() const
 {
-  if (mClassBox == nullptr) return nullptr;
-  return mClassBox->mClass;
+  return mClassBox;
 }
 
 
@@ -331,7 +337,7 @@ void ggClassyGraphicsBoxItem::Update(const ggSubject* aSubject)
 void ggClassyGraphicsBoxItem::UpdateClassRead()
 {
   if (GetClass() != nullptr) {
-    mClassNameText->SetText(GetClass()->mName);
+    mClassNameText->SetText(GetClass()->mClassName);
     mMembersText->SetText(GetClass()->GetMembersText());
     mDescriptionText->SetText(GetClass()->mDescription);
   }
@@ -341,7 +347,7 @@ void ggClassyGraphicsBoxItem::UpdateClassRead()
 void ggClassyGraphicsBoxItem::UpdateClassWrite()
 {
   if (GetClass() != nullptr) {
-    GetClass()->mName = mClassNameText->GetText();
+    GetClass()->mClassName = mClassNameText->GetText();
     GetClass()->SetMembersText(mMembersText->GetText());
     GetClass()->mDescription = mDescriptionText->GetText();
   }

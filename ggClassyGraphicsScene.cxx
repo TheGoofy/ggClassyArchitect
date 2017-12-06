@@ -28,43 +28,6 @@ void ggClassyGraphicsScene::addItem(ggClassyGraphicsBoxItem* aBoxItem)
 
 void ggClassyGraphicsScene::AddClassBoxItems(ggClassyDataSet* aDataSet)
 {
-
-  /*
-  // testing the auto-connect-path
-  ggGraphicsConnectionPointItem* vPointA = new ggGraphicsConnectionPointItem();
-  ggGraphicsConnectionPointItem* vPointB = new ggGraphicsConnectionPointItem();
-  ggGraphicsConnectionPointItem* vPointC = new ggGraphicsConnectionPointItem();
-  ggGraphicsConnectionPointItem* vPointD = new ggGraphicsConnectionPointItem();
-  vPointA->SetPointPosition(QPointF(100.0f, -100.0f));
-  vPointB->SetPointPosition(QPointF(100.0f,  100.0f));
-  vPointC->SetPointPosition(QPointF(300.0f, -100.0f));
-  vPointD->SetPointPosition(QPointF(300.0f,  100.0f));
-  vPointA->SetPointDirectionRight();
-  vPointB->SetPointDirectionRight();
-  vPointC->SetPointDirectionLeft();
-  vPointD->SetPointDirectionLeft();
-  ggGraphicsAutoConnectPathItem* vPath1 = new ggGraphicsAutoConnectPathItem();
-  vPath1->InsertPointSrc(vPointA->GetSubjectConnectionPoint());
-  vPath1->InsertPointSrc(vPointB->GetSubjectConnectionPoint());
-  vPath1->InsertPointDst(vPointC->GetSubjectConnectionPoint());
-  vPath1->InsertPointDst(vPointD->GetSubjectConnectionPoint());
-  vPath1->SetDecorationSrc(ggDecoration::cType::eDiamond, 15.0f, ggDecoration::cFill::eEmpty);
-  vPath1->SetDecorationDst(ggDecoration::cType::eCircle, 10.0f, ggDecoration::cFill::eEmpty);
-  ggGraphicsAutoConnectPathItem* vPath2 = new ggGraphicsAutoConnectPathItem();
-  vPath2->InsertPointSrc(vPointC->GetSubjectConnectionPoint());
-  vPath2->InsertPointSrc(vPointD->GetSubjectConnectionPoint());
-  vPath2->InsertPointDst(vPointA->GetSubjectConnectionPoint());
-  vPath2->InsertPointDst(vPointB->GetSubjectConnectionPoint());
-  vPath2->SetDecorationSrc(ggDecoration::cType::eArrow, 13.0f, ggDecoration::cFill::eEmpty);
-  vPath2->SetDecorationDst(ggDecoration::cType::eCross, 13.0f, ggDecoration::cFill::eSolid);
-  QGraphicsScene::addItem(vPointA);
-  QGraphicsScene::addItem(vPointB);
-  QGraphicsScene::addItem(vPointC);
-  QGraphicsScene::addItem(vPointD);
-  QGraphicsScene::addItem(vPath1);
-  QGraphicsScene::addItem(vPath2);
-  */
-
   // only notify box items change, when all boxes are added
   ggBehaviorLazy::cExecutor vLazy(mBoxItems);
 
@@ -73,12 +36,13 @@ void ggClassyGraphicsScene::AddClassBoxItems(ggClassyDataSet* aDataSet)
   ggWalkerT<tClassBoxes::iterator> vClassBoxesIterator(aDataSet->mClassBoxes);
   while (vClassBoxesIterator) {
     ggClassyClassBox* vClassBox = *vClassBoxesIterator;
-    addItem(new ggClassyGraphicsBoxItem(vClassBox));
+    ggClassyClass* vClass = aDataSet->mClasses.Find(vClassBox->mClassName);
+    addItem(new ggClassyGraphicsBoxItem(vClass, vClassBox));
   }
 }
 
 
-void ggClassyGraphicsScene::AddLineItems(ggClassyDataSet* aDataSet)
+void ggClassyGraphicsScene::AddLineItems()
 {
   // loop over class box items
   typedef ggClassyGraphicsBoxItems::tBoxItemsSet tBoxItemsSet;
@@ -89,7 +53,7 @@ void ggClassyGraphicsScene::AddLineItems(ggClassyDataSet* aDataSet)
     if (vClass != nullptr) {
 
       // loop over base classes
-      ggWalkerT<ggStringSet::const_iterator> vBaseClassNamesWalker(vClass->mBaseNames);
+      ggWalkerT<ggStringSet::const_iterator> vBaseClassNamesWalker(vClass->mBaseClassNames);
       while (vBaseClassNamesWalker) {
 
         // lines between derived class and base class
@@ -124,25 +88,39 @@ void ggClassyGraphicsScene::AddLineItems(ggClassyDataSet* aDataSet)
 }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+void ggClassyGraphicsScene::AddTestConnections()
+{
+  // testing the auto-connect-path
+  ggGraphicsConnectionPointItem* vPointA = new ggGraphicsConnectionPointItem();
+  ggGraphicsConnectionPointItem* vPointB = new ggGraphicsConnectionPointItem();
+  ggGraphicsConnectionPointItem* vPointC = new ggGraphicsConnectionPointItem();
+  ggGraphicsConnectionPointItem* vPointD = new ggGraphicsConnectionPointItem();
+  vPointA->SetPointPosition(QPointF(100.0f, -100.0f));
+  vPointB->SetPointPosition(QPointF(100.0f,  100.0f));
+  vPointC->SetPointPosition(QPointF(300.0f, -100.0f));
+  vPointD->SetPointPosition(QPointF(300.0f,  100.0f));
+  vPointA->SetPointDirectionRight();
+  vPointB->SetPointDirectionRight();
+  vPointC->SetPointDirectionLeft();
+  vPointD->SetPointDirectionLeft();
+  ggGraphicsAutoConnectPathItem* vPath1 = new ggGraphicsAutoConnectPathItem();
+  vPath1->InsertPointSrc(vPointA->GetSubjectConnectionPoint());
+  vPath1->InsertPointSrc(vPointB->GetSubjectConnectionPoint());
+  vPath1->InsertPointDst(vPointC->GetSubjectConnectionPoint());
+  vPath1->InsertPointDst(vPointD->GetSubjectConnectionPoint());
+  vPath1->SetDecorationSrc(ggDecoration::cType::eDiamond, 15.0f, ggDecoration::cFill::eEmpty);
+  vPath1->SetDecorationDst(ggDecoration::cType::eCircle, 10.0f, ggDecoration::cFill::eEmpty);
+  ggGraphicsAutoConnectPathItem* vPath2 = new ggGraphicsAutoConnectPathItem();
+  vPath2->InsertPointSrc(vPointC->GetSubjectConnectionPoint());
+  vPath2->InsertPointSrc(vPointD->GetSubjectConnectionPoint());
+  vPath2->InsertPointDst(vPointA->GetSubjectConnectionPoint());
+  vPath2->InsertPointDst(vPointB->GetSubjectConnectionPoint());
+  vPath2->SetDecorationSrc(ggDecoration::cType::eArrow, 13.0f, ggDecoration::cFill::eEmpty);
+  vPath2->SetDecorationDst(ggDecoration::cType::eCross, 13.0f, ggDecoration::cFill::eSolid);
+  QGraphicsScene::addItem(vPointA);
+  QGraphicsScene::addItem(vPointB);
+  QGraphicsScene::addItem(vPointC);
+  QGraphicsScene::addItem(vPointD);
+  QGraphicsScene::addItem(vPath1);
+  QGraphicsScene::addItem(vPath2);
+}

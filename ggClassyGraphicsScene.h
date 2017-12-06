@@ -6,6 +6,7 @@
 class ggClassyGraphicsBoxItem;
 class ggClassyGraphicsBoxItems;
 class ggClassyDataSet;
+class ggClassyClass;
 
 class ggClassyGraphicsScene :
   public QGraphicsScene
@@ -19,7 +20,9 @@ public:
   void addItem(ggClassyGraphicsBoxItem* aBoxItem);
 
   void AddClassBoxItems(ggClassyDataSet* aDataSet);
-  void AddLineItems(ggClassyDataSet* aDataSet);
+  void AddLineItems();
+
+  void AddTestConnections();
 
 private:
 

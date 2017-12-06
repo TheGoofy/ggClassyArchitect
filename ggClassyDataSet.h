@@ -73,11 +73,14 @@ class ggClassyClass : public ggSubject
 {
 public:
 
-  typedef std::vector<ggClassyClassMember> tMembers;
-
-  bool operator < (const ggClassyClass& aOther) const {
-    return (mName < aOther.mName);
+  ggClassyClass() {
   }
+
+  ggClassyClass(const QString& aClassName) :
+    mClassName(aClassName) {
+  }
+
+  typedef std::vector<ggClassyClassMember> tMembers;
 
   QString GetMembersText() const {
     QString vText;
@@ -108,24 +111,24 @@ public:
     }
   }
 
-  ggString mName;
-  ggStringSet mBaseNames;
+  ggString mClassName;
+  ggStringSet mBaseClassNames;
   tMembers mMembers;
   QString mDescription;
-  ggClassyCollection* mCollection;
+  QString mCollectionName;
 };
 
 
 class ggClassyClassBox : public ggSubject
 {
 public:
-  ggClassyClassBox() :
-    mClass(nullptr),
+  ggClassyClassBox(const QString& aClassName) :
+    mClassName(aClassName),
     mPosition(0.0f, 0.0f),
     mWidth(150.0f),
     mMembersVisible(true),
     mDescriptionVisible(true) {}
-  ggClassyClass* mClass;
+  QString mClassName;
   QPointF mPosition;
   float mWidth;
   bool mMembersVisible;
@@ -138,8 +141,31 @@ class ggClassyFrame : public ggSubject
 public:
   QString mText;
   Qt::Alignment mTextAlignment;
-  ggClassyCollection* mCollection;
+  QString mCollectionName;
   QRectF mRect;
+};
+
+
+
+struct ggClassyClassPtrLess {
+  bool operator() (const ggClassyClass* aClassA, const ggClassyClass* aClassB) const {
+    if (aClassA == nullptr || aClassB == nullptr) return aClassA < aClassB;
+    return aClassA->mClassName < aClassB->mClassName;
+  }
+};
+
+
+class ggClassyClassContainer :
+  public std::set<ggClassyClass*, ggClassyClassPtrLess>
+{
+public:
+  ggClassyClass* Find(const QString& aClassName) const
+  {
+    ggClassyClass vClass(aClassName);
+    ggClassyClassContainer::const_iterator vClassContainerIterator = find(&vClass);
+    if (vClassContainerIterator != end()) return *vClassContainerIterator;
+    else return nullptr;
+  }
 };
 
 
@@ -148,7 +174,7 @@ class ggClassyDataSet : public ggSubject
 public:
   static ggClassyDataSet* GenerateTestData();
   std::set<ggClassyCollection*> mCollections;
-  std::set<ggClassyClass*> mClasses;
+  ggClassyClassContainer mClasses;
   std::vector<ggClassyClassBox*> mClassBoxes;
   std::vector<ggClassyFrame*> mFrames;
 };

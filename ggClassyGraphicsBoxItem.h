@@ -18,11 +18,14 @@ class ggClassyGraphicsBoxItem :
 public:
 
   ggClassyGraphicsBoxItem(const QRectF& aRect);
-  ggClassyGraphicsBoxItem(ggClassyClassBox* aClassBox);
+  ggClassyGraphicsBoxItem(ggClassyClass* aClass,
+                          ggClassyClassBox* aClassBox);
 
-  void SetClassBox(ggClassyClassBox* aClassBox);
-  ggClassyClassBox* GetClassBox() const;
+  void SetClassBox(ggClassyClass* aClass,
+                   ggClassyClassBox* aClassBox);
+
   ggClassyClass* GetClass() const;
+  ggClassyClassBox* GetClassBox() const;
 
   const ggSubject* GetSubjectSize() const;
 
@@ -81,6 +84,7 @@ private:
   tSubjectConnectionPoints mMembersConnectionLeft;
   tSubjectConnectionPoints mMembersConnectionRight;
 
+  ggClassyClass* mClass;
   ggClassyClassBox* mClassBox;
 
 };
