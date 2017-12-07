@@ -80,6 +80,11 @@ public:
     mClassName(aClassName) {
   }
 
+  bool operator() (const ggClassyClass* aClassA, const ggClassyClass* aClassB) const {
+    if (aClassA == nullptr || aClassB == nullptr) return aClassA < aClassB;
+    return aClassA->mClassName < aClassB->mClassName;
+  }
+
   typedef std::vector<ggClassyClassMember> tMembers;
 
   QString GetMembersText() const {
@@ -146,17 +151,8 @@ public:
 };
 
 
-
-struct ggClassyClassPtrLess {
-  bool operator() (const ggClassyClass* aClassA, const ggClassyClass* aClassB) const {
-    if (aClassA == nullptr || aClassB == nullptr) return aClassA < aClassB;
-    return aClassA->mClassName < aClassB->mClassName;
-  }
-};
-
-
 class ggClassyClassContainer :
-  public std::set<ggClassyClass*, ggClassyClassPtrLess>
+  public std::set<ggClassyClass*, ggClassyClass>
 {
 public:
   ggClassyClass* Find(const QString& aClassName) const
