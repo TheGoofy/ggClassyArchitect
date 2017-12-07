@@ -55,7 +55,7 @@ private:
 
   // the helpers ...
   void NotifyPrivate(const ggObserver* aObserverExcluded);
-  void CopyFrom(const ggSubject aOther);
+  void CopyFrom(const ggSubject& aOther);
 
   bool mNotifyPending;
 
