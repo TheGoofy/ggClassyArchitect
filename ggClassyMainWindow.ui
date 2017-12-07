@@ -78,88 +78,71 @@
        </spacer>
       </item>
       <item>
-       <widget class="QGroupBox" name="groupBox">
-        <property name="title">
-         <string>Zoom</string>
+       <widget class="QLabel" name="mZoomLabel">
+        <property name="text">
+         <string>Zoom:</string>
         </property>
-        <layout class="QVBoxLayout" name="verticalLayout_2">
-         <property name="spacing">
-          <number>2</number>
+       </widget>
+      </item>
+      <item>
+       <widget class="QComboBox" name="mZoomComboBox">
+        <property name="editable">
+         <bool>true</bool>
+        </property>
+        <property name="currentIndex">
+         <number>3</number>
+        </property>
+        <property name="insertPolicy">
+         <enum>QComboBox::NoInsert</enum>
+        </property>
+        <item>
+         <property name="text">
+          <string>10%</string>
          </property>
-         <property name="leftMargin">
-          <number>2</number>
+        </item>
+        <item>
+         <property name="text">
+          <string>20%</string>
          </property>
-         <property name="topMargin">
-          <number>2</number>
+        </item>
+        <item>
+         <property name="text">
+          <string>50%</string>
          </property>
-         <property name="rightMargin">
-          <number>2</number>
+        </item>
+        <item>
+         <property name="text">
+          <string>100%</string>
          </property>
-         <property name="bottomMargin">
-          <number>2</number>
+        </item>
+        <item>
+         <property name="text">
+          <string>200%</string>
          </property>
-         <item>
-          <widget class="QComboBox" name="mZoomComboBox">
-           <property name="editable">
-            <bool>true</bool>
-           </property>
-           <property name="currentIndex">
-            <number>3</number>
-           </property>
-           <property name="insertPolicy">
-            <enum>QComboBox::NoInsert</enum>
-           </property>
-           <item>
-            <property name="text">
-             <string>10%</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string>20%</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string>50%</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string>100%</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string>200%</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string>500%</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string>1000%</string>
-            </property>
-           </item>
-          </widget>
-         </item>
-         <item>
-          <widget class="QPushButton" name="mZoomFitPushButton">
-           <property name="sizePolicy">
-            <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-             <horstretch>0</horstretch>
-             <verstretch>0</verstretch>
-            </sizepolicy>
-           </property>
-           <property name="text">
-            <string>Fit</string>
-           </property>
-          </widget>
-         </item>
-        </layout>
+        </item>
+        <item>
+         <property name="text">
+          <string>500%</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>1000%</string>
+         </property>
+        </item>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="mZoomFitPushButton">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="text">
+         <string>Fit</string>
+        </property>
        </widget>
       </item>
      </layout>

@@ -3,13 +3,12 @@
 #include <QGraphicsLineItem>
 #include <QGraphicsSceneMouseEvent>
 #include <QFontMetrics>
+#include <QMessageBox>
 #include <QDebug>
 
 #include "ggClassyApplication.h"
-#include "ggGraphicsManipulatorBarItemT.h"
 #include "ggGraphicsTextItem.h"
 #include "ggGraphicsCheckBoxItem.h"
-#include "ggClassyGraphicsBoxItems.h"
 #include "ggClassyDataSet.h"
 
 
@@ -344,10 +343,15 @@ void ggClassyGraphicsBoxItem::UpdateClassRead()
 }
 
 
+
+
 void ggClassyGraphicsBoxItem::UpdateClassWrite()
 {
   if (GetClass() != nullptr) {
-    GetClass()->mClassName = mClassNameText->GetText();
+    if (!ggClassyApplication::GetInstance().GetDataSet()->mClasses.RenameClass(GetClass()->mClassName, mClassNameText->GetText())) {
+      QMessageBox::information(nullptr, "Can't change class name", "Another class with the name \"" + mClassNameText->GetText() + "\" already exists. Please choose a different name!", QMessageBox::Ok);
+      mClassNameText->SetText(GetClass()->mClassName);
+    }
     GetClass()->SetMembersText(mMembersText->GetText());
     GetClass()->mDescription = mDescriptionText->GetText();
   }

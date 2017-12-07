@@ -2,6 +2,7 @@
 #define GGGRAPHICSMANIPULATORBART_H
 
 #include <QGraphicsRectItem>
+#include <QCursor>
 #include <QBrush>
 
 #include "ggGraphicsHandleItemT.h"

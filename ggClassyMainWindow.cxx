@@ -15,7 +15,10 @@ ggClassyMainWindow::ggClassyMainWindow(QWidget *parent) :
   ui->setupUi(this);
 
   ui->mainToolBar->hide();
-  ui->statusBar->hide();
+  ui->statusBar->setContentsMargins(0, -6, 0, -6);
+  ui->statusBar->addPermanentWidget(ui->mZoomLabel);
+  ui->statusBar->addPermanentWidget(ui->mZoomComboBox);
+  ui->statusBar->addPermanentWidget(ui->mZoomFitPushButton);
   ui->centralWidget->layout()->setMargin(2);
   ui->centralWidget->layout()->setSpacing(2);
   ui->mZoomComboBox->setCompleter(0);

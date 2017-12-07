@@ -36,7 +36,7 @@ void ggClassyGraphicsScene::AddClassBoxItems(ggClassyDataSet* aDataSet)
   ggWalkerT<tClassBoxes::iterator> vClassBoxesIterator(aDataSet->mClassBoxes);
   while (vClassBoxesIterator) {
     ggClassyClassBox* vClassBox = *vClassBoxesIterator;
-    ggClassyClass* vClass = aDataSet->mClasses.Find(vClassBox->mClassName);
+    ggClassyClass* vClass = aDataSet->mClasses.FindClass(vClassBox->mClassName);
     addItem(new ggClassyGraphicsBoxItem(vClass, vClassBox));
   }
 }

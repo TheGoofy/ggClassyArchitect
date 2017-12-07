@@ -45,11 +45,10 @@ void ggClassyApplication::SaveDataSet(QIODevice* aDevice)
   // classes
   //
 
-  QDomElement vClassesElement = vDomDocument.createElement("mClasses");
+  QDomElement vClassesElement = vDomDocument.createElement("ggClassyClassContainer");
   vDataSetElement.appendChild(vClassesElement);
 
-  typedef std::set<ggClassyClass*> tClasses;
-  ggWalkerT<tClasses::iterator> vClassesIterator(mDataSet->mClasses);
+  ggWalkerT<ggClassyClassContainer::iterator> vClassesIterator(mDataSet->mClasses);
   while (vClassesIterator) {
 
     ggClassyClass* vClass = *vClassesIterator;
