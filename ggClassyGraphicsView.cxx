@@ -37,6 +37,7 @@ ggClassyGraphicsView::ggClassyGraphicsView(QWidget* aParent)
   vScene->AddTestConnections();
   setScene(vScene);
 
+  // register subject zoom
   ggClassyApplication::GetInstance().Zoom().SetValue(GetSceneScale());
   Attach(&ggClassyApplication::GetInstance().Zoom());
 }
@@ -123,6 +124,8 @@ void ggClassyGraphicsView::mouseReleaseEvent(QMouseEvent* aEvent)
 void ggClassyGraphicsView::wheelEvent(QWheelEvent* aWheelEvent)
 {
   if (aWheelEvent->delta() != 0) {
+
+    // zoom at mouse pointer position
     if (aWheelEvent->modifiers() == Qt::NoModifier) {
       aWheelEvent->accept();
       float vScale = 1.0f;
@@ -135,15 +138,18 @@ void ggClassyGraphicsView::wheelEvent(QWheelEvent* aWheelEvent)
       translate(vDeltaPos.x(), vDeltaPos.y());
       NotifyZoom();
     }
+
+    // rotate around mouse pointer position
     if (aWheelEvent->modifiers() & Qt::AltModifier) {
       aWheelEvent->accept();
-      float vAngle = aWheelEvent->delta() > 0 ? 5.0f : -5.0f;
+      float vAngle = aWheelEvent->delta() > 0 ? -5.0f : 5.0f;
       QPointF vPos = mapToScene(aWheelEvent->pos());
       translate(vPos.x(), vPos.y());
       rotate(vAngle);
       translate(-vPos.x(), -vPos.y());
     }
   }
+
   if (!aWheelEvent->isAccepted()) {
     QGraphicsView::wheelEvent(aWheelEvent);
   }
