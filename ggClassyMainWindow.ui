@@ -18,7 +18,7 @@
     <item>
      <widget class="ggClassyGraphicsView" name="mClassyGraphicsView">
       <property name="renderHints">
-       <set>QPainter::Antialiasing|QPainter::HighQualityAntialiasing|QPainter::SmoothPixmapTransform|QPainter::TextAntialiasing</set>
+       <set>QPainter::Antialiasing|QPainter::TextAntialiasing</set>
       </property>
       <property name="transformationAnchor">
        <enum>QGraphicsView::NoAnchor</enum>

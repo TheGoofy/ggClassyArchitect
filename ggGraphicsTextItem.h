@@ -39,6 +39,7 @@ protected:
   void mousePressEvent(QGraphicsSceneMouseEvent* aEvent) override;
   void dropEvent(QGraphicsSceneDragDropEvent* aEvent) override;
   void contextMenuEvent(QGraphicsSceneContextMenuEvent* aEvent) override;
+  void focusInEvent(QFocusEvent* aEvent) override;
   void focusOutEvent(QFocusEvent* aEvent) override;
 
   void paint(QPainter* aPainter, const QStyleOptionGraphicsItem*, QWidget*) override;
@@ -56,6 +57,7 @@ private:
   ggSubject* mSubjectEditingFinished;
   bool mSuppressLineBreaks;
   bool mEnterKeyFinishesEdit;
+  QString mHtmlBackup;
   QPointF mLastMousePressPos;
   QBrush mBrush;
   QPen mPen;

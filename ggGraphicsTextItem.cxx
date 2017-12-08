@@ -74,6 +74,13 @@ void ggGraphicsTextItem::keyPressEvent(QKeyEvent* aEvent)
     }
   }
 
+  // interpret the escape key
+  if (aEvent->key() == Qt::Key_Escape) {
+    setHtml(mHtmlBackup);
+    clearFocus();
+    aEvent->accept();
+  }
+
   // do inherited event handling
   QGraphicsTextItem::keyPressEvent(aEvent);
 }
@@ -102,6 +109,16 @@ void ggGraphicsTextItem::mousePressEvent(QGraphicsSceneMouseEvent* aEvent)
 
   // do inherited event handling
   QGraphicsTextItem::mousePressEvent(aEvent);
+}
+
+
+void ggGraphicsTextItem::focusInEvent(QFocusEvent* aEvent)
+{
+  // remember previous text, in case user aborts editing with <esc>
+  mHtmlBackup = toHtml();
+
+  // do inherited event handling
+  QGraphicsTextItem::focusOutEvent(aEvent);
 }
 
 

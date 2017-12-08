@@ -1,7 +1,6 @@
 #include "ggClassyGraphicsView.h"
 
 #include <QObject>
-#include <QDebug>
 #include <QWheelEvent>
 #include <QTextEdit>
 #include <QScrollBar>
@@ -53,7 +52,6 @@ void ggClassyGraphicsView::SetZoomReset()
 {
   resetTransform();
   if (scene() != nullptr) {
-    qDebug() << scene()->itemsBoundingRect().center();
     centerOn(scene()->itemsBoundingRect().center());
     NotifyZoom();
   }
