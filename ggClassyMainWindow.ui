@@ -16,7 +16,14 @@
   <widget class="QWidget" name="centralWidget">
    <layout class="QHBoxLayout" name="horizontalLayout">
     <item>
-     <widget class="ggClassyGraphicsView" name="mClassyGraphicsView"/>
+     <widget class="ggClassyGraphicsView" name="mClassyGraphicsView">
+      <property name="renderHints">
+       <set>QPainter::Antialiasing|QPainter::HighQualityAntialiasing|QPainter::SmoothPixmapTransform|QPainter::TextAntialiasing</set>
+      </property>
+      <property name="transformationAnchor">
+       <enum>QGraphicsView::NoAnchor</enum>
+      </property>
+     </widget>
     </item>
     <item>
      <layout class="QVBoxLayout" name="verticalLayout_3">
@@ -130,6 +137,13 @@
           <string>1000%</string>
          </property>
         </item>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="mZoomResetPushButton">
+        <property name="text">
+         <string>Reset</string>
+        </property>
        </widget>
       </item>
       <item>

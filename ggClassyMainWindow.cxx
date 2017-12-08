@@ -19,6 +19,7 @@ ggClassyMainWindow::ggClassyMainWindow(QWidget *parent) :
   ui->statusBar->addPermanentWidget(ui->mZoomLabel);
   ui->statusBar->addPermanentWidget(ui->mZoomComboBox);
   ui->statusBar->addPermanentWidget(ui->mZoomFitPushButton);
+  ui->statusBar->addPermanentWidget(ui->mZoomResetPushButton);
   ui->centralWidget->layout()->setMargin(2);
   ui->centralWidget->layout()->setSpacing(2);
   ui->mZoomComboBox->setCompleter(0);
@@ -90,6 +91,12 @@ void ggClassyMainWindow::on_mZoomFitPushButton_clicked()
 }
 
 
+void ggClassyMainWindow::on_mZoomResetPushButton_clicked()
+{
+  ui->mClassyGraphicsView->SetZoomReset();
+}
+
+
 void ggClassyMainWindow::on_mAddClassPushButton_clicked()
 {
   static ggSubject::cExecutorLazy* vExecutorLazy = nullptr;
@@ -107,16 +114,15 @@ void ggClassyMainWindow::on_mAddClassPushButton_clicked()
 void ggClassyMainWindow::SaveDataSetAs()
 {
   QString vFileName = QFileDialog::getSaveFileName(this, tr("Save Classy Architect File"),
-                                                   QDir::currentPath(),
+                                                   "",//QDir::currentPath(),
                                                    tr("Classy Architect Files (*.cax *.xml)"));
   if (vFileName.isEmpty()) return;
 
   QFile vFile(vFileName);
   if (!vFile.open(QFile::WriteOnly | QFile::Text)) {
      QMessageBox::warning(this, tr("Classy Architect File"),
-                          tr("Cannot write file %1:\n%2.")
-                          .arg(vFileName)
-                          .arg(vFile.errorString()));
+                          tr("Cannot write file\n\"%1\"\n%2.")
+                          .arg(vFileName).arg(vFile.errorString()));
     return;
   }
 

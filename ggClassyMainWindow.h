@@ -24,6 +24,7 @@ protected slots:
   void on_mZoomComboBox_editingFinished();
   void on_mZoomComboBox_activated(int);
   void on_mZoomFitPushButton_clicked();
+  void on_mZoomResetPushButton_clicked();
   void on_mAddClassPushButton_clicked();
   void SaveDataSetAs();
 

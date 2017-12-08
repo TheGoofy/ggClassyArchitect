@@ -14,24 +14,29 @@ class ggClassyGraphicsView :
   Q_OBJECT
 
 public:
+
   explicit ggClassyGraphicsView(QWidget* aParent = nullptr);
+  void SetZoomReset();
   void SetZoomFit();
 
 protected:
+
   virtual void Update(const ggSubject* aSubject) override;
+
+  virtual void mousePressEvent(QMouseEvent* aEvent) override;
+  virtual void mouseMoveEvent(QMouseEvent* aEvent) override;
+  virtual void mouseReleaseEvent(QMouseEvent* aEvent) override;
   void wheelEvent(QWheelEvent* aWheelEvent) override;
 
-  void inputMethodEvent(QInputMethodEvent* aEvent) override
-  {
-    qDebug() << __PRETTY_FUNCTION__ << aEvent->type();
-    QGraphicsView::inputMethodEvent(aEvent);
-  }
-
-
 private:
+
   float GetSceneScale() const;
   void SetSceneScale(float aSceneScale);
   void NotifyZoom();
+
+  bool mMouseDrag;
+  QPoint mMouseDragStartPos;
+  QTransform mMouseDragStartTransform;
 
 };
 

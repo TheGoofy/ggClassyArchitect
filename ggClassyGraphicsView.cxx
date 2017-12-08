@@ -4,6 +4,7 @@
 #include <QDebug>
 #include <QWheelEvent>
 #include <QTextEdit>
+#include <QScrollBar>
 #include <map>
 #include <algorithm>
 
@@ -15,15 +16,17 @@
 
 
 ggClassyGraphicsView::ggClassyGraphicsView(QWidget* aParent)
- : QGraphicsView(aParent)
+ : QGraphicsView(aParent),
+   mMouseDrag(false)
 {
-  setRenderHint(QPainter::Antialiasing);
+  // suppress automatic scene centering
+  setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+  setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+  QRectF vRect(-10000.0f, -10000.0f, 20000.0f, 20000.0f);
+  setSceneRect(vRect);
 
   ggClassyGraphicsScene* vScene = new ggClassyGraphicsScene(this);
   setScene(vScene);
-  //QRectF vRect(-200, -200, 400, 400);
-  //scene()->addRect(vRect);
-  //scene()->setSceneRect(vRect);
 
   ggClassyDataSet* vDataSet = ggClassyApplication::GetInstance().GetDataSet();
 
@@ -46,11 +49,21 @@ void ggClassyGraphicsView::NotifyZoom()
 }
 
 
+void ggClassyGraphicsView::SetZoomReset()
+{
+  resetTransform();
+  if (scene() != nullptr) {
+    qDebug() << scene()->itemsBoundingRect().center();
+    centerOn(scene()->itemsBoundingRect().center());
+    NotifyZoom();
+  }
+}
+
+
 void ggClassyGraphicsView::SetZoomFit()
 {
   if (scene() != nullptr) {
     fitInView(scene()->itemsBoundingRect(), Qt::KeepAspectRatio);
-    //fitInView(scene()->sceneRect(), Qt::KeepAspectRatio);
     NotifyZoom();
   }
 }
@@ -77,21 +90,59 @@ void ggClassyGraphicsView::Update(const ggSubject* aSubject)
 }
 
 
+void ggClassyGraphicsView::mousePressEvent(QMouseEvent* aEvent)
+{
+  if (aEvent->buttons() & Qt::RightButton) {
+    mMouseDrag = true;
+    mMouseDragStartPos = aEvent->pos();
+    mMouseDragStartTransform = transform();
+  }
+  QGraphicsView::mousePressEvent(aEvent);
+}
+
+
+void ggClassyGraphicsView::mouseMoveEvent(QMouseEvent* aEvent)
+{
+  if (aEvent->buttons() & Qt::RightButton && mMouseDrag) {
+    QPointF vDeltaPos = mapToScene(aEvent->pos()) - mapToScene(mMouseDragStartPos);
+    QTransform vTransform(mMouseDragStartTransform);
+    setTransform(vTransform.translate(vDeltaPos.x(), vDeltaPos.y()));
+  }
+  QGraphicsView::mouseMoveEvent(aEvent);
+}
+
+
+void ggClassyGraphicsView::mouseReleaseEvent(QMouseEvent* aEvent)
+{
+  if (aEvent->buttons() & Qt::RightButton) {
+    mMouseDrag = false;
+  }
+  QGraphicsView::mouseReleaseEvent(aEvent);
+}
+
+
 void ggClassyGraphicsView::wheelEvent(QWheelEvent* aWheelEvent)
 {
   if (aWheelEvent->delta() != 0) {
-    if (aWheelEvent->modifiers() & Qt::ShiftModifier) {
+    if (aWheelEvent->modifiers() == Qt::NoModifier) {
       aWheelEvent->accept();
       float vScale = 1.0f;
       if (aWheelEvent->delta() > 0) vScale = 1.05f / 1.0f;
       if (aWheelEvent->delta() < 0) vScale = 1.0f / 1.05f;
+      QPointF vPosA = mapToScene(aWheelEvent->pos());
       scale(vScale, vScale);
+      QPointF vPosB = mapToScene(aWheelEvent->pos());
+      QPointF vDeltaPos = vPosB - vPosA;
+      translate(vDeltaPos.x(), vDeltaPos.y());
       NotifyZoom();
     }
     if (aWheelEvent->modifiers() & Qt::AltModifier) {
       aWheelEvent->accept();
       float vAngle = aWheelEvent->delta() > 0 ? 5.0f : -5.0f;
+      QPointF vPos = mapToScene(aWheelEvent->pos());
+      translate(vPos.x(), vPos.y());
       rotate(vAngle);
+      translate(-vPos.x(), -vPos.y());
     }
   }
   if (!aWheelEvent->isAccepted()) {
