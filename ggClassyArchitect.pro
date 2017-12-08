@@ -24,77 +24,76 @@ DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs depr
 
 
 SOURCES += \
-    Base/ggSubject.cxx \
     Base/ggItemLinked.cxx \
-    Base/ggUtility.cxx \
     Base/ggObserver.cxx \
-    Data/ggClassyDataSet.cxx \
-    Data/ggClassyFrame.cxx \
-    Data/ggClassyCollectionContainer.cxx \
-    Data/ggClassyCollection.cxx \
-    Data/ggClassyClassContainer.cxx \
-    Data/ggClassyClassBox.cxx \
-    Data/ggClassyClass.cxx \
-    Data/ggClassyClassDescription.cxx \
-    Data/ggClassyClassMember.cxx \
-    Graphics/ggClassyGraphicsBoxItems.cxx \
-    Graphics/ggClassyGraphicsBoxItem.cxx \
-    Graphics/ggGraphicsTextItem.cxx \
-    Graphics/ggPainterPath.cxx \
-    Graphics/ggGraphicsDecoratedPathItem.cxx \
-    Graphics/ggGraphicsAutoConnectPathItem.cxx \
-    Graphics/ggDecoration.cxx \
-    Graphics/ggSubjectConnectionPoint.cxx \
-    Graphics/ggGraphicsConnectionPointItem.cxx \
-    Graphics/ggGraphicsCheckBoxItem.cxx \
-    Graphics/ggConnectionPoint.cxx \
-    Graphics/ggClassyGraphicsScene.cxx \
-    Graphics/ggClassyGraphicsView.cxx \
-    Main/ggClassyApplication.cxx \
-    Main/ggClassyMainWindow.cxx \
-    Main/main.cxx
+    Base/ggSubject.cxx \
+    Base/ggUtility.cxx \
+    BaseGraphics/ggConnectionPoint.cxx \
+    BaseGraphics/ggDecoration.cxx \
+    BaseGraphics/ggGraphicsAutoConnectPathItem.cxx \
+    BaseGraphics/ggGraphicsCheckBoxItem.cxx \
+    BaseGraphics/ggGraphicsConnectionPointItem.cxx \
+    BaseGraphics/ggGraphicsDecoratedPathItem.cxx \
+    BaseGraphics/ggGraphicsTextItem.cxx \
+    BaseGraphics/ggPainterPath.cxx \
+    BaseGraphics/ggSubjectConnectionPoint.cxx \
+    ClassyData/ggClassyClass.cxx \
+    ClassyData/ggClassyClassBox.cxx \
+    ClassyData/ggClassyClassContainer.cxx \
+    ClassyData/ggClassyClassDescription.cxx \
+    ClassyData/ggClassyClassMember.cxx \
+    ClassyData/ggClassyCollection.cxx \
+    ClassyData/ggClassyCollectionContainer.cxx \
+    ClassyData/ggClassyDataSet.cxx \
+    ClassyData/ggClassyFrame.cxx \
+    ClassyGraphics/ggClassyGraphicsBoxItem.cxx \
+    ClassyGraphics/ggClassyGraphicsBoxItems.cxx \
+    ClassyGraphics/ggClassyGraphicsScene.cxx \
+    ClassyGraphics/ggClassyGraphicsView.cxx \
+    ClassyMain/ggClassyApplication.cxx \
+    ClassyMain/ggClassyMainWindow.cxx \
+    ClassyMain/main.cxx
 
 HEADERS += \
-    Base/ggSubject.h \
-    Base/ggObserver.h \
-    Base/ggTypes.h \
-    Base/ggWalkerT.h \
-    Base/ggUtility.h \
-    Base/ggBehaviorT.h \
-    Base/ggSubjectValueT.h \
-    Base/ggSubjectT.h \
-    Base/ggItemLinked.h \
-    Base/ggBehaviorLazy.h \
     Base/ggBehaviorBlocking.h \
-    Data/ggClassyDataSet.h \
-    Data/ggClassyFrame.h \
-    Data/ggClassyCollectionContainer.h \
-    Data/ggClassyCollection.h \
-    Data/ggClassyClassContainer.h \
-    Data/ggClassyClassBox.h \
-    Data/ggClassyClass.h \
-    Data/ggClassyClassDescription.h \
-    Data/ggClassyClassMember.h \
-    Graphics/ggGraphicsTextItem.h \
-    Graphics/ggGraphicsManipulatorBarItemT.h \
-    Graphics/ggClassyGraphicsBoxItem.h \
-    Graphics/ggPainterPath.h \
-    Graphics/ggDecoration.h \
-    Graphics/ggClassyGraphicsBoxItems.h \
-    Graphics/ggGraphicsDecoratedPathItem.h \
-    Graphics/ggGraphicsAutoConnectPathItem.h \
-    Graphics/ggSubjectConnectionPoint.h \
-    Graphics/ggGraphicsManipulatorRectItemT.h \
-    Graphics/ggGraphicsHandleItemT.h \
-    Graphics/ggGraphicsConnectionPointItem.h \
-    Graphics/ggGraphicsCheckBoxItem.h \
-    Graphics/ggConnectionPoint.h \
-    Graphics/ggClassyGraphicsScene.h \
-    Graphics/ggClassyGraphicsView.h \
-    Main/ggClassyApplication.h \
-    Main/ggClassyMainWindow.h
-
+    Base/ggBehaviorLazy.h \
+    Base/ggBehaviorT.h \
+    Base/ggItemLinked.h \
+    Base/ggObserver.h \
+    Base/ggSubject.h \
+    Base/ggSubjectT.h \
+    Base/ggSubjectValueT.h \
+    Base/ggTypes.h \
+    Base/ggUtility.h \
+    Base/ggWalkerT.h \
+    BaseGraphics/ggConnectionPoint.h \
+    BaseGraphics/ggDecoration.h \
+    BaseGraphics/ggGraphicsAutoConnectPathItem.h \
+    BaseGraphics/ggGraphicsCheckBoxItem.h \
+    BaseGraphics/ggGraphicsConnectionPointItem.h \
+    BaseGraphics/ggGraphicsDecoratedPathItem.h \
+    BaseGraphics/ggGraphicsHandleItemT.h \
+    BaseGraphics/ggGraphicsManipulatorBarItemT.h \
+    BaseGraphics/ggGraphicsManipulatorRectItemT.h \
+    BaseGraphics/ggGraphicsTextItem.h \
+    BaseGraphics/ggPainterPath.h \
+    BaseGraphics/ggSubjectConnectionPoint.h \
+    ClassyData/ggClassyClass.h \
+    ClassyData/ggClassyClassBox.h \
+    ClassyData/ggClassyClassContainer.h \
+    ClassyData/ggClassyClassDescription.h \
+    ClassyData/ggClassyClassMember.h \
+    ClassyData/ggClassyCollection.h \
+    ClassyData/ggClassyCollectionContainer.h \
+    ClassyData/ggClassyDataSet.h \
+    ClassyData/ggClassyFrame.h \
+    ClassyGraphics/ggClassyGraphicsBoxItem.h \
+    ClassyGraphics/ggClassyGraphicsBoxItems.h \
+    ClassyGraphics/ggClassyGraphicsScene.h \
+    ClassyGraphics/ggClassyGraphicsView.h \
+    ClassyMain/ggClassyApplication.h \
+    ClassyMain/ggClassyMainWindow.h
 
 FORMS += \
-    Main/ggClassyMainWindow.ui
+    ClassyMain/ggClassyMainWindow.ui
 
