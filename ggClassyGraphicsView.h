@@ -16,8 +16,11 @@ class ggClassyGraphicsView :
 public:
 
   explicit ggClassyGraphicsView(QWidget* aParent = nullptr);
+
   void SetZoomReset();
   void SetZoomFit();
+
+  void setScene(QGraphicsScene* aScene);
 
 protected:
 
@@ -26,17 +29,20 @@ protected:
   virtual void mousePressEvent(QMouseEvent* aEvent) override;
   virtual void mouseMoveEvent(QMouseEvent* aEvent) override;
   virtual void mouseReleaseEvent(QMouseEvent* aEvent) override;
-  void wheelEvent(QWheelEvent* aWheelEvent) override;
+  virtual void wheelEvent(QWheelEvent* aWheelEvent) override;
+  virtual void resizeEvent(QResizeEvent* aEvent) override;
 
 private:
 
+  void NotifyZoom();
   float GetSceneScale() const;
   void SetSceneScale(float aSceneScale);
-  void NotifyZoom();
+  QPoint ToPoint(const QSize& aSize) const;
 
   bool mMouseDrag;
   QPoint mMouseDragStartPos;
   QTransform mMouseDragStartTransform;
+  bool mZoomResetOnResize;
 
 };
 
