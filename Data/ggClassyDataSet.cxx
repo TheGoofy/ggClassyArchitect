@@ -1,5 +1,7 @@
 #include "Data/ggClassyDataSet.h"
 
+#include "Base/ggWalkerT.h"
+
 
 const QString& ggClassyDataSet::TypeID()
 {
@@ -11,6 +13,28 @@ const QString& ggClassyDataSet::TypeID()
 const QString& ggClassyDataSet::VTypeID() const
 {
   return TypeID();
+}
+
+
+QDomElement ggClassyDataSet::CreateDomElement(QDomDocument& aDocument) const
+{
+  QDomElement vElement = aDocument.createElement(TypeID());
+
+  // classes
+  vElement.appendChild(mClasses.CreateDomElement(aDocument));
+
+  // class boxes
+  QDomElement vClassBoxesElement = aDocument.createElement("mClassBoxes");
+  vElement.appendChild(vClassBoxesElement);
+  typedef std::vector<ggClassyClassBox*> tClassBoxes;
+  ggWalkerT<tClassBoxes::const_iterator> vClassBoxesWalker(mClassBoxes);
+  while (vClassBoxesWalker) {
+    ggClassyClassBox* vClassBox = *vClassBoxesWalker;
+    QDomElement vClassBoxElement = vClassBox->CreateDomElement(aDocument);
+    vClassBoxesElement.appendChild(vClassBoxElement);
+  }
+
+  return vElement;
 }
 
 

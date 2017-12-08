@@ -34,36 +34,13 @@ const ggClassyDataSet* ggClassyApplication::GetDataSet() const
 
 void ggClassyApplication::SaveDataSet(QIODevice* aDevice)
 {
+  //
+  // compile the DOM document
+  //
   QDomDocument vDomDocument;
-
   QDomElement vRootElement = vDomDocument.createElement("ClassyArchitectApplication");
   vDomDocument.appendChild(vRootElement);
-
-  QDomElement vDataSetElement = vDomDocument.createElement(ggClassyDataSet::TypeID());
-  vRootElement.appendChild(vDataSetElement);
-
-  //
-  // classes
-  //
-
-  vDataSetElement.appendChild(mDataSet->mClasses.CreateDomElement(vDomDocument));
-
-  //
-  // class boxes
-  //
-
-  QDomElement vClassBoxesElement = vDomDocument.createElement("mClassBoxes");
-  vDataSetElement.appendChild(vClassBoxesElement);
-
-  typedef std::vector<ggClassyClassBox*> tClassBoxes;
-  ggWalkerT<tClassBoxes::iterator> vClassBoxesWalker(mDataSet->mClassBoxes);
-  while (vClassBoxesWalker) {
-
-    ggClassyClassBox* vClassBox = *vClassBoxesWalker;
-    QDomElement vClassBoxElement = vClassBox->CreateDomElement(vDomDocument);
-    vClassBoxesElement.appendChild(vClassBoxElement);
-
-  }
+  vRootElement.appendChild(mDataSet->CreateDomElement(vDomDocument));
 
   //
   // write file

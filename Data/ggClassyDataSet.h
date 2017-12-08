@@ -14,6 +14,8 @@ public:
   static const QString& TypeID();
   virtual const QString& VTypeID() const;
 
+  QDomElement CreateDomElement(QDomDocument& aDocument) const;
+
   static ggClassyDataSet* GenerateTestData();
 
   ggClassyCollectionContainer mCollections;
