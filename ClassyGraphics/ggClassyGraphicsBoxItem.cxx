@@ -6,11 +6,11 @@
 #include <QMessageBox>
 #include <QDebug>
 
-#include "ClassyMain/ggClassyApplication.h"
+#include "Base/ggWalkerT.h"
 #include "BaseGraphics/ggGraphicsTextItem.h"
 #include "BaseGraphics/ggGraphicsCheckBoxItem.h"
 #include "ClassyData/ggClassyDataSet.h"
-#include "Base/ggWalkerT.h"
+#include "ClassyMain/ggClassyApplication.h"
 
 
 ggClassyGraphicsBoxItem::ggClassyGraphicsBoxItem(const QRectF& aRect) :

@@ -1,4 +1,5 @@
 #include "Base/ggObserver.h"
+
 #include "Base/ggSubject.h"
 #include "Base/ggWalkerT.h"
 

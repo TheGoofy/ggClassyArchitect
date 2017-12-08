@@ -1,9 +1,9 @@
 #include "ggClassyGraphicsScene.h"
 
-#include "ClassyGraphics/ggClassyGraphicsBoxItems.h"
+#include "Base/ggWalkerT.h"
 #include "BaseGraphics/ggGraphicsAutoConnectPathItem.h"
 #include "BaseGraphics/ggGraphicsConnectionPointItem.h"
-#include "Base/ggWalkerT.h"
+#include "ClassyGraphics/ggClassyGraphicsBoxItems.h"
 
 
 ggClassyGraphicsScene::ggClassyGraphicsScene(QObject* aParent) :

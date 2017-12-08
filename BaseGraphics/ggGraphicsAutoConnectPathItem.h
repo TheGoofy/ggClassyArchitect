@@ -1,8 +1,8 @@
 #ifndef GGGRAPHICSDECORATEDSHORTESTPATHITEM_H
 #define GGGRAPHICSDECORATEDSHORTESTPATHITEM_H
 
-#include "BaseGraphics/ggGraphicsDecoratedPathItem.h"
 #include "Base/ggObserver.h"
+#include "BaseGraphics/ggGraphicsDecoratedPathItem.h"
 
 class ggSubjectConnectionPoint;
 

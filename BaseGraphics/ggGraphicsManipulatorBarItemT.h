@@ -5,8 +5,8 @@
 #include <QCursor>
 #include <QBrush>
 
-#include "BaseGraphics/ggGraphicsHandleItemT.h"
 #include "Base/ggObserver.h"
+#include "BaseGraphics/ggGraphicsHandleItemT.h"
 
 template <typename TBaseItem = QGraphicsRectItem,
           typename THandleItem = ggGraphicsHandleItemEllipse>

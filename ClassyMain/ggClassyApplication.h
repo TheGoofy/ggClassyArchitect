@@ -2,6 +2,7 @@
 #define GGCLASSYAPPLICATION_H
 
 #include <QApplication>
+
 #include "Base/ggSubjectT.h"
 
 class ggClassyDataSet;

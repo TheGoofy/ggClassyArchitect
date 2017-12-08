@@ -1,6 +1,5 @@
 #include "BaseGraphics/ggGraphicsTextItem.h"
 
-#include <QGraphicsSceneDragDropEvent>
 #include <QMimeData>
 #include <QClipboard>
 #include <QFont>
@@ -9,6 +8,7 @@
 #include <QTextCursor>
 #include <QTextDocument>
 #include <QPainter>
+#include <QGraphicsSceneDragDropEvent>
 
 #include "ClassyMain/ggClassyApplication.h" // goofy!
 

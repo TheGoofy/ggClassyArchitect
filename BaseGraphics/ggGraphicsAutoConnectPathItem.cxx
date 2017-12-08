@@ -1,7 +1,7 @@
 #include "BaseGraphics/ggGraphicsAutoConnectPathItem.h"
 
-#include "BaseGraphics/ggSubjectConnectionPoint.h"
 #include "Base/ggWalkerT.h"
+#include "BaseGraphics/ggSubjectConnectionPoint.h"
 
 
 ggGraphicsAutoConnectPathItem::ggGraphicsAutoConnectPathItem(QGraphicsItem* aParent) :

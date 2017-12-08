@@ -7,11 +7,11 @@
 #include <map>
 #include <algorithm>
 
-#include "ClassyMain/ggClassyApplication.h"
-#include "ClassyGraphics/ggClassyGraphicsBoxItem.h"
 #include "ClassyData/ggClassyDataSet.h"
+#include "ClassyGraphics/ggClassyGraphicsBoxItem.h"
 #include "ClassyGraphics/ggClassyGraphicsBoxItems.h"
 #include "ClassyGraphics/ggClassyGraphicsScene.h"
+#include "ClassyMain/ggClassyApplication.h"
 
 
 ggClassyGraphicsView::ggClassyGraphicsView(QWidget* aParent)

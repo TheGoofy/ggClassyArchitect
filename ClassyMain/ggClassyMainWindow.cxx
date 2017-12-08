@@ -4,6 +4,7 @@
 #include <QLineEdit>
 #include <QFileDialog>
 #include <QMessageBox>
+#include <QDebug>
 
 #include "ClassyMain/ggClassyApplication.h"
 

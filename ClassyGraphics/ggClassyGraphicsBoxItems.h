@@ -1,8 +1,8 @@
 #ifndef GGCLASSYGRAPHICSBOXITEMS_H
 #define GGCLASSYGRAPHICSBOXITEMS_H
 
-#include "ClassyGraphics/ggClassyGraphicsBoxItem.h"
 #include "ClassyData/ggClassyDataSet.h"
+#include "ClassyGraphics/ggClassyGraphicsBoxItem.h"
 
 class ggClassyGraphicsBoxItems :
   public ggSubject

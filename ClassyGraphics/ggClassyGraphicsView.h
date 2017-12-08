@@ -2,7 +2,6 @@
 #define GGCLASSYGRAPHICSVIEW_H
 
 #include <QGraphicsView>
-#include <QDebug>
 #include <QInputMethodEvent>
 
 #include "Base/ggObserver.h"
