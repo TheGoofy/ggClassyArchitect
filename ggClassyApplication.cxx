@@ -38,52 +38,14 @@ void ggClassyApplication::SaveDataSet(QIODevice* aDevice)
   QDomElement vRootElement = vDomDocument.createElement("ClassyArchitectApplication");
   vDomDocument.appendChild(vRootElement);
 
-  QDomElement vDataSetElement = vDomDocument.createElement("ggClassyDataSet");
+  QDomElement vDataSetElement = vDomDocument.createElement(ggClassyDataSet::TypeID());
   vRootElement.appendChild(vDataSetElement);
 
   //
   // classes
   //
 
-  QDomElement vClassesElement = vDomDocument.createElement("ggClassyClassContainer");
-  vDataSetElement.appendChild(vClassesElement);
-
-  ggWalkerT<ggClassyClassContainer::iterator> vClassesIterator(mDataSet->mClasses);
-  while (vClassesIterator) {
-
-    ggClassyClass* vClass = *vClassesIterator;
-
-    // class name
-    QDomElement vClassElement = vDomDocument.createElement("ggClassyClass");
-    vClassElement.setAttribute("mClassName", vClass->mClassName);
-    vClassesElement.appendChild(vClassElement);
-
-    // base classes
-    ggWalkerT<ggStringSet::iterator> vBaseClassNamesIterator(vClass->mBaseClassNames);
-    while (vBaseClassNamesIterator) {
-      QDomElement vBaseClassElement = vDomDocument.createElement("mBaseClass");
-      vBaseClassElement.setAttribute("mClassName", *vBaseClassNamesIterator);
-      vClassElement.appendChild(vBaseClassElement);
-    }
-
-    // members
-    ggWalkerT<ggClassyClass::tMembers::iterator> vMembersWalker(vClass->mMembers);
-    while (vMembersWalker) {
-      const ggClassyClassMember& vMember = *vMembersWalker;
-      QDomElement vClassMemberElement = vDomDocument.createElement("mMember");
-      vClassElement.appendChild(vClassMemberElement);
-      vClassMemberElement.setAttribute("mClassName", vMember.GetClassName());
-      QDomText vMemberNameText = vDomDocument.createTextNode(vMember.GetName());
-      vClassMemberElement.appendChild(vMemberNameText);
-    }
-
-    // description
-    QDomElement vClassDescriptionElement = vDomDocument.createElement("mDescription");
-    vClassElement.appendChild(vClassDescriptionElement);
-    QDomText vDescriptionText = vDomDocument.createTextNode(vClass->mDescription);
-    vClassDescriptionElement.appendChild(vDescriptionText);
-
-  }
+  vDataSetElement.appendChild(mDataSet->mClasses.CreateDomElement(vDomDocument));
 
   //
   // class boxes
@@ -97,13 +59,7 @@ void ggClassyApplication::SaveDataSet(QIODevice* aDevice)
   while (vClassBoxesWalker) {
 
     ggClassyClassBox* vClassBox = *vClassBoxesWalker;
-    QDomElement vClassBoxElement = vDomDocument.createElement("ggClassyClassBox");
-    vClassBoxElement.setAttribute("mClassName", vClassBox->mClassName);
-    vClassBoxElement.setAttribute("mPosition.x", vClassBox->mPosition.x());
-    vClassBoxElement.setAttribute("mPosition.y", vClassBox->mPosition.y());
-    vClassBoxElement.setAttribute("mWidth", vClassBox->mWidth);
-    vClassBoxElement.setAttribute("mMembersVisible", vClassBox->mMembersVisible);
-    vClassBoxElement.setAttribute("mDescriptionVisible", vClassBox->mDescriptionVisible);
+    QDomElement vClassBoxElement = vClassBox->CreateDomElement(vDomDocument);
     vClassBoxesElement.appendChild(vClassBoxElement);
 
   }

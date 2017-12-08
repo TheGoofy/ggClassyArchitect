@@ -5,6 +5,7 @@
 #include <QPen>
 #include <QFont>
 #include <QDebug>
+#include <QDomDocument>
 #include <set>
 
 #include "ggTypes.h"
@@ -19,6 +20,13 @@ typedef std::set<ggString> ggStringSet;
 class ggClassyCollection : public ggSubject
 {
 public:
+  static const QString& TypeID() {
+    static const QString vTypeID("ggClassyCollection");
+    return vTypeID;
+  }
+  virtual const QString& VTypeID() const {
+    return TypeID();
+  }
   QString mName;
   // box frame and connections
   QPen mBoxBorder;
@@ -41,6 +49,13 @@ public:
 class ggClassyCollectionContainer :
   public std::set<ggClassyCollection*>
 {
+  static const QString& TypeID() {
+    static const QString vTypeID("ggClassyCollectionContainer");
+    return vTypeID;
+  }
+  virtual const QString& VTypeID() const {
+    return TypeID();
+  }
 };
 
 
@@ -51,6 +66,20 @@ public:
                       const QString& aClassName) :
     mName(aName),
     mClassName(aClassName) {
+  }
+  static const QString& TypeID() {
+    static const QString vTypeID("ggClassyClassMember");
+    return vTypeID;
+  }
+  virtual const QString& VTypeID() const {
+    return TypeID();
+  }
+  QDomElement CreateDomElement(QDomDocument& aDocument) const {
+    QDomElement vElement = aDocument.createElement(TypeID());
+    vElement.setAttribute("mClassName", mClassName);
+    QDomText vNameText = aDocument.createTextNode(mName);
+    vElement.appendChild(vNameText);
+    return vElement;
   }
   void SetName(const QString& aName) {
     mName = aName;
@@ -76,6 +105,35 @@ private:
 };
 
 
+class ggClassyDescription :
+  public QString
+{
+public:
+
+  template <typename T>
+  ggClassyDescription& operator = (const T& aOther) {
+    QString::operator = (aOther);
+    return *this;
+  }
+
+  static const QString& TypeID() {
+    static const QString vTypeID("ggClassyDescription");
+    return vTypeID;
+  }
+
+  virtual const QString& VTypeID() const {
+    return TypeID();
+  }
+
+  QDomElement CreateDomElement(QDomDocument& aDocument) const {
+    QDomElement vElement = aDocument.createElement(TypeID());
+    QDomText vDescriptionText = aDocument.createTextNode(*this);
+    vElement.appendChild(vDescriptionText);
+    return vElement;
+  }
+};
+
+
 class ggClassyClass : public ggSubject
 {
 public:
@@ -87,12 +145,60 @@ public:
     mClassName(aClassName) {
   }
 
+  static const QString& TypeID() {
+    static const QString vTypeID("ggClassyClass");
+    return vTypeID;
+  }
+
+  virtual const QString& VTypeID() const {
+    return TypeID();
+  }
+
+  typedef std::vector<ggClassyClassMember> tMembers;
+
+  static const QString& ClassyBaseClassTypeID() {
+    static const QString vTypeID("ggClassyBaseClass");
+    return vTypeID;
+  }
+
+  QDomElement CreateBaseClassDomElement(QDomDocument& aDocument, const QString& aBaseClassName) const {
+    QDomElement vElement = aDocument.createElement(ClassyBaseClassTypeID());
+    vElement.setAttribute("mClassName", aBaseClassName);
+    return vElement;
+  }
+
+  QDomElement CreateDomElement(QDomDocument& aDocument) const {
+
+    // main node
+    QDomElement vElement = aDocument.createElement(TypeID());
+
+    // name and collection
+    vElement.setAttribute("mClassName", mClassName);
+    vElement.setAttribute("mCollectionName", mCollectionName);
+
+    // base classes
+    ggWalkerT<ggStringSet::iterator> vBaseClassNamesIterator(mBaseClassNames);
+    while (vBaseClassNamesIterator) {
+      vElement.appendChild(CreateBaseClassDomElement(aDocument, *vBaseClassNamesIterator));
+    }
+
+    // members
+    ggWalkerT<tMembers::const_iterator> vMembersWalker(mMembers);
+    while (vMembersWalker) {
+      vElement.appendChild((*vMembersWalker).CreateDomElement(aDocument));
+    }
+
+    // description
+    vElement.appendChild(mDescription.CreateDomElement(aDocument));
+
+    // return dom node
+    return vElement;
+  }
+
   bool operator() (const ggClassyClass* aClassA, const ggClassyClass* aClassB) const {
     if (aClassA == nullptr || aClassB == nullptr) return aClassA < aClassB;
     return aClassA->mClassName < aClassB->mClassName;
   }
-
-  typedef std::vector<ggClassyClassMember> tMembers;
 
   QString GetMembersText() const {
     QString vText;
@@ -126,7 +232,7 @@ public:
   ggString mClassName;
   ggStringSet mBaseClassNames;
   tMembers mMembers;
-  QString mDescription;
+  ggClassyDescription mDescription;
   QString mCollectionName;
 };
 
@@ -139,7 +245,25 @@ public:
     mPosition(0.0f, 0.0f),
     mWidth(150.0f),
     mMembersVisible(true),
-    mDescriptionVisible(true) {}
+    mDescriptionVisible(true) {
+  }
+  static const QString& TypeID() {
+    static const QString vTypeID("ggClassyClassBox");
+    return vTypeID;
+  }
+  virtual const QString& VTypeID() const {
+    return TypeID();
+  }
+  QDomElement CreateDomElement(QDomDocument& aDocument) const {
+    QDomElement vElement = aDocument.createElement(TypeID());
+    vElement.setAttribute("mClassName", mClassName);
+    vElement.setAttribute("mPosition.x", mPosition.x());
+    vElement.setAttribute("mPosition.y", mPosition.y());
+    vElement.setAttribute("mWidth", mWidth);
+    vElement.setAttribute("mMembersVisible", mMembersVisible);
+    vElement.setAttribute("mDescriptionVisible", mDescriptionVisible);
+    return vElement;
+  }
   QString mClassName;
   QPointF mPosition;
   float mWidth;
@@ -151,6 +275,8 @@ public:
 class ggClassyFrame : public ggSubject
 {
 public:
+  static const QString& TypeID() { static const QString vTypeID("ggClassyFrame"); return vTypeID; }
+  virtual const QString& VTypeID() const { return TypeID(); }
   QString mText;
   Qt::Alignment mTextAlignment;
   QString mCollectionName;
@@ -163,6 +289,24 @@ class ggClassyClassContainer :
   public ggSubject
 {
 public:
+
+  static const QString& TypeID() {
+    static const QString vTypeID("ggClassyClassContainer");
+    return vTypeID;
+  }
+
+  virtual const QString& VTypeID() const {
+    return TypeID();
+  }
+
+  QDomElement CreateDomElement(QDomDocument& aDocument) const {
+    QDomElement vElement = aDocument.createElement(TypeID());
+    ggWalkerT<const_iterator> vClassesWalker(*this);
+    while (vClassesWalker) {
+      vElement.appendChild((*vClassesWalker)->CreateDomElement(aDocument));
+    }
+    return vElement;
+  }
 
   ggClassyClass* FindClass(const QString& aClassName) const
   {
@@ -234,6 +378,15 @@ public:
 class ggClassyDataSet : public ggSubject
 {
 public:
+
+  static const QString& TypeID() {
+    static const QString vTypeID("ggClassyDataSet");
+    return vTypeID;
+  }
+
+  virtual const QString& VTypeID() const {
+    return TypeID();
+  }
 
   static ggClassyDataSet* GenerateTestData();
 
