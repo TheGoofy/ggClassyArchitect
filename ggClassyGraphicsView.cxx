@@ -16,8 +16,8 @@
 
 ggClassyGraphicsView::ggClassyGraphicsView(QWidget* aParent)
  : QGraphicsView(aParent),
-   mZoomResetOnResize(false),
-   mMouseDrag(false)
+   mMouseDrag(false),
+   mZoomResetOnResize(false)
 {
   // suppress automatic scene centering
   setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);

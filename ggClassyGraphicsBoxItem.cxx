@@ -10,6 +10,7 @@
 #include "ggGraphicsTextItem.h"
 #include "ggGraphicsCheckBoxItem.h"
 #include "ggClassyDataSet.h"
+#include "ggWalkerT.h"
 
 
 ggClassyGraphicsBoxItem::ggClassyGraphicsBoxItem(const QRectF& aRect) :

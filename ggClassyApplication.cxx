@@ -4,6 +4,7 @@
 #include <QTextStream>
 
 #include "ggClassyDataSet.h"
+#include "ggWalkerT.h"
 
 
 ggClassyApplication::ggClassyApplication(int &argc, char **argv) :

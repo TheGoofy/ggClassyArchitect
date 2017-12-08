@@ -1,6 +1,19 @@
 #include "ggClassyDataSet.h"
 
 
+const QString& ggClassyDataSet::TypeID()
+{
+  static const QString vTypeID("ggClassyDataSet");
+  return vTypeID;
+}
+
+
+const QString& ggClassyDataSet::VTypeID() const
+{
+  return TypeID();
+}
+
+
 ggClassyDataSet* ggClassyDataSet::GenerateTestData()
 {
   ggClassyClass* vClassA = new ggClassyClass("ggClassA");

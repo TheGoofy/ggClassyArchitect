@@ -1,5 +1,7 @@
 #include "ggClassyGraphicsBoxItems.h"
 
+#include "ggWalkerT.h"
+
 
 ggClassyGraphicsBoxItems::ggClassyGraphicsBoxItems()
 {

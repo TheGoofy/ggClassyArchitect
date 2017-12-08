@@ -44,7 +44,15 @@ SOURCES += \
     ggGraphicsDecoratedPathItem.cxx \
     ggGraphicsAutoConnectPathItem.cxx \
     ggUtility.cxx \
-    ggPainterPath.cxx
+    ggPainterPath.cxx \
+    ggClassyClassMember.cxx \
+    ggClassyClassDescription.cxx \
+    ggClassyClass.cxx \
+    ggClassyClassBox.cxx \
+    ggClassyClassContainer.cxx \
+    ggClassyCollection.cxx \
+    ggClassyCollectionContainer.cxx \
+    ggClassyFrame.cxx
 
 HEADERS += \
     ggClassyMainWindow.h \
@@ -76,7 +84,15 @@ HEADERS += \
     ggGraphicsAutoConnectPathItem.h \
     ggTypes.h \
     ggUtility.h \
-    ggPainterPath.h
+    ggPainterPath.h \
+    ggClassyClassMember.h \
+    ggClassyClassDescription.h \
+    ggClassyClass.h \
+    ggClassyClassBox.h \
+    ggClassyClassContainer.h \
+    ggClassyCollection.h \
+    ggClassyCollectionContainer.h \
+    ggClassyFrame.h
 
 FORMS += \
     ggClassyMainWindow.ui

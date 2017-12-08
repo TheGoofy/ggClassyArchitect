@@ -3,6 +3,7 @@
 #include "ggClassyGraphicsBoxItems.h"
 #include "ggGraphicsAutoConnectPathItem.h"
 #include "ggGraphicsConnectionPointItem.h"
+#include "ggWalkerT.h"
 
 
 ggClassyGraphicsScene::ggClassyGraphicsScene(QObject* aParent) :
