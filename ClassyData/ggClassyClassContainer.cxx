@@ -70,7 +70,7 @@ bool ggClassyClassContainer::RenameClass(const QString& aOldClassName,
   // temporarily remove it from the set
   erase(vClass);
   // rename it
-  vClass->mClassName = aNewClassName;
+  vClass->mName = aNewClassName;
   // insert it again
   insert(vClass);
   // notify the change

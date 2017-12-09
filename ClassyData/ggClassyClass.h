@@ -6,14 +6,14 @@
 #include "Base/ggTypes.h"
 #include "Base/ggSubject.h"
 #include "ClassyData/ggClassyClassMember.h"
-#include "ClassyData/ggClassyClassDescription.h"
+#include "ClassyData/ggClassyDescription.h"
 
 class ggClassyClass : public ggSubject
 {
 public:
 
   ggClassyClass();
-  ggClassyClass(const QString& aClassName);
+  ggClassyClass(const QString& aName);
 
   static const QString& TypeID();
   virtual const QString& VTypeID() const;
@@ -34,7 +34,7 @@ public:
 
   typedef std::vector<ggClassyClassMember> tMembers;
 
-  ggString mClassName;
+  ggString mName;
   ggStringSet mBaseClassNames;
   tMembers mMembers;
   ggClassyDescription mDescription;

@@ -10,8 +10,8 @@ ggClassyClass::ggClassyClass()
 }
 
 
-ggClassyClass::ggClassyClass(const QString& aClassName) :
-  mClassName(aClassName)
+ggClassyClass::ggClassyClass(const QString& aName) :
+  mName(aName)
 {
 }
 
@@ -51,7 +51,7 @@ QDomElement ggClassyClass::CreateDomElement(QDomDocument& aDocument) const
   QDomElement vElement = aDocument.createElement(TypeID());
 
   // name and collection
-  vElement.setAttribute("mClassName", mClassName);
+  vElement.setAttribute("mName", mName);
   vElement.setAttribute("mCollectionName", mCollectionName);
 
   // base classes
@@ -80,7 +80,7 @@ bool ggClassyClass::operator() (const ggClassyClass* aClassA,
   if (aClassA == nullptr || aClassB == nullptr)
     return aClassA < aClassB;
   else
-    return aClassA->mClassName < aClassB->mClassName;
+    return aClassA->mName < aClassB->mName;
 }
 
 

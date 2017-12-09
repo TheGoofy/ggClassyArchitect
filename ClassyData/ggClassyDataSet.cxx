@@ -59,23 +59,23 @@ ggClassyDataSet* ggClassyDataSet::GenerateTestData()
   vClassC->mMembers.push_back(ggClassyClassMember("SayHello()", "QString"));
   vClassC->mDescription = "This is a very useful description ot the class!";
 
-  ggClassyClassBox* vClassBoxA1 = new ggClassyClassBox(vClassA->mClassName);
+  ggClassyClassBox* vClassBoxA1 = new ggClassyClassBox(vClassA->mName);
   vClassBoxA1->mPosition = QPointF(-300, -300);
 
-  ggClassyClassBox* vClassBoxA2 = new ggClassyClassBox(vClassA->mClassName);
+  ggClassyClassBox* vClassBoxA2 = new ggClassyClassBox(vClassA->mName);
   vClassBoxA2->mPosition = QPointF(100, -300);
 
-  ggClassyClassBox* vClassBoxB1 = new ggClassyClassBox(vClassB->mClassName);
+  ggClassyClassBox* vClassBoxB1 = new ggClassyClassBox(vClassB->mName);
   vClassBoxB1->mPosition = QPointF(-100, -100);
 
-  ggClassyClassBox* vClassBoxB2 = new ggClassyClassBox(vClassB->mClassName);
+  ggClassyClassBox* vClassBoxB2 = new ggClassyClassBox(vClassB->mName);
   vClassBoxB2->mPosition = QPointF(300, -100);
 
-  ggClassyClassBox* vClassBoxC1 = new ggClassyClassBox(vClassC->mClassName);
+  ggClassyClassBox* vClassBoxC1 = new ggClassyClassBox(vClassC->mName);
   vClassBoxC1->mPosition = QPointF(-250, 0);
   vClassBoxC1->mWidth = 250.0f;
 
-  ggClassyClassBox* vClassBoxC2 = new ggClassyClassBox(vClassC->mClassName);
+  ggClassyClassBox* vClassBoxC2 = new ggClassyClassBox(vClassC->mName);
   vClassBoxC2->mPosition = QPointF(150, 0);
   vClassBoxC2->mWidth = 250.0f;
 

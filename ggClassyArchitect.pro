@@ -40,7 +40,6 @@ SOURCES += \
     ClassyData/ggClassyClass.cxx \
     ClassyData/ggClassyClassBox.cxx \
     ClassyData/ggClassyClassContainer.cxx \
-    ClassyData/ggClassyClassDescription.cxx \
     ClassyData/ggClassyClassMember.cxx \
     ClassyData/ggClassyCollection.cxx \
     ClassyData/ggClassyCollectionContainer.cxx \
@@ -52,7 +51,8 @@ SOURCES += \
     ClassyGraphics/ggClassyGraphicsView.cxx \
     ClassyMain/ggClassyApplication.cxx \
     ClassyMain/ggClassyMainWindow.cxx \
-    ClassyMain/main.cxx
+    ClassyMain/main.cxx \
+    ClassyData/ggClassyDescription.cxx
 
 HEADERS += \
     Base/ggBehaviorBlocking.h \
@@ -81,7 +81,6 @@ HEADERS += \
     ClassyData/ggClassyClass.h \
     ClassyData/ggClassyClassBox.h \
     ClassyData/ggClassyClassContainer.h \
-    ClassyData/ggClassyClassDescription.h \
     ClassyData/ggClassyClassMember.h \
     ClassyData/ggClassyCollection.h \
     ClassyData/ggClassyCollectionContainer.h \
@@ -92,7 +91,8 @@ HEADERS += \
     ClassyGraphics/ggClassyGraphicsScene.h \
     ClassyGraphics/ggClassyGraphicsView.h \
     ClassyMain/ggClassyApplication.h \
-    ClassyMain/ggClassyMainWindow.h
+    ClassyMain/ggClassyMainWindow.h \
+    ClassyData/ggClassyDescription.h
 
 FORMS += \
     ClassyMain/ggClassyMainWindow.ui

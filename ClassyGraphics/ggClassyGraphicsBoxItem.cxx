@@ -337,7 +337,7 @@ void ggClassyGraphicsBoxItem::Update(const ggSubject* aSubject)
 void ggClassyGraphicsBoxItem::UpdateClassRead()
 {
   if (GetClass() != nullptr) {
-    mClassNameText->SetText(GetClass()->mClassName);
+    mClassNameText->SetText(GetClass()->mName);
     mMembersText->SetText(GetClass()->GetMembersText());
     mDescriptionText->SetText(GetClass()->mDescription);
   }
@@ -350,11 +350,11 @@ void ggClassyGraphicsBoxItem::UpdateClassWrite()
 {
   if (GetClass() != nullptr) {
     cExecutorBlocking vBlock(this, GetClass());
-    if (!ggClassyApplication::GetInstance().GetDataSet()->mClasses.RenameClass(GetClass()->mClassName, mClassNameText->GetText())) {
+    if (!ggClassyApplication::GetInstance().GetDataSet()->mClasses.RenameClass(GetClass()->mName, mClassNameText->GetText())) {
       QMessageBox::information(nullptr, "Can't change class name",
                                "Another class with the name \"" + mClassNameText->GetText() + "\" already exists. Please choose a different name!",
                                QMessageBox::Ok);
-      mClassNameText->SetText(GetClass()->mClassName);
+      mClassNameText->SetText(GetClass()->mName);
     }
     GetClass()->SetMembersText(mMembersText->GetText());
     GetClass()->mDescription = mDescriptionText->GetText();
