@@ -54,3 +54,23 @@ ggFloat ggUtility::RoundTo125(ggFloat aValue, cRoundType aRoundType)
   // done! :-)
   return vResult;
 }
+
+
+ggFloat ggUtility::RoundMagnitude(ggFloat aValue, ggUInt16 aMagnitude)
+{
+  // nothing to do, if value is 0
+  if (aValue == 0.0f) return aValue;
+
+  // calculate the order of magnitude / position of decimal point (negative if value below 1)
+  ggInt32 vDecimals = (ggInt32)log10(fabs(aValue));
+  vDecimals = fabs(aValue) < 1.0f ? vDecimals - 1 : vDecimals;
+
+  // compute a factor, which is a power of 10
+  ggFloat vFactor = pow(10.0f, vDecimals - aMagnitude + 1);
+
+  // divide, round, and multiply
+  ggFloat vRoundOffset = (aValue > 0.0f) ? 0.5f : -0.5f;
+  ggFloat vResult = (ggInt32)(aValue / vFactor + vRoundOffset) * vFactor;
+
+  return vResult;
+}

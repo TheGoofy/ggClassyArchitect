@@ -39,6 +39,9 @@ namespace ggUtility {
   // rounds to ... 0.01, 0.02, 0.05, 0.1, 0.2, 0.5, 1, 2, 5, 10, 20, 50 ...
   ggFloat RoundTo125(const ggFloat aValue, cRoundType aRoundType = cRoundType::eFactor20);
 
+  // 5321.215 => 5320.0 ... 0.08716813 => 0.0872 ... 2.575612 => 2.58
+  ggFloat RoundMagnitude(ggFloat aValue, ggUInt16 aMagnitude = 3);
+
   template <typename T>
   inline const T& Clamp(const T& aValue, const T& aValueMin, const T& aValueMax) {
     return (aValue < aValueMin) ? aValueMin : ((aValue > aValueMax) ? aValueMax : aValue);

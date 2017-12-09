@@ -130,9 +130,9 @@ void ggClassyGraphicsView::wheelEvent(QWheelEvent* aWheelEvent)
     if (aWheelEvent->modifiers() == Qt::NoModifier) {
       aWheelEvent->accept();
       float vScale = 1.0f;
-      if (aWheelEvent->delta() > 0) vScale = 1.2f / 1.0f;
-      if (aWheelEvent->delta() < 0) vScale = 1.0f / 1.2f;
-      vScale = ggUtility::RoundTo125(vScale * GetSceneScale(), ggUtility::cRoundType::eFactor12);
+      if (aWheelEvent->delta() > 0) vScale = 1.1f / 1.0f;
+      if (aWheelEvent->delta() < 0) vScale = 1.0f / 1.1f;
+      vScale = ggUtility::RoundMagnitude(vScale * GetSceneScale(), 2);
       QPointF vPosA = mapToScene(aWheelEvent->pos());
       SetSceneScale(vScale);
       QPointF vPosB = mapToScene(aWheelEvent->pos());
