@@ -18,17 +18,6 @@ const QString& ggClassyClassContainer::VTypeID() const
 }
 
 
-QDomElement ggClassyClassContainer::CreateDomElement(QDomDocument& aDocument) const
-{
-  QDomElement vElement = aDocument.createElement(TypeID());
-  ggWalkerT<const_iterator> vClassesWalker(*this);
-  while (vClassesWalker) {
-    vElement.appendChild((*vClassesWalker)->CreateDomElement(aDocument));
-  }
-  return vElement;
-}
-
-
 ggClassyClass* ggClassyClassContainer::FindClass(const QString& aClassName) const
 {
   ggClassyClass vClass(aClassName);

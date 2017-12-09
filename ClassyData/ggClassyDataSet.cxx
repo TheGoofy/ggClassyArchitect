@@ -21,17 +21,16 @@ QDomElement ggClassyDataSet::CreateDomElement(QDomDocument& aDocument) const
   QDomElement vElement = aDocument.createElement(TypeID());
 
   // classes
-  vElement.appendChild(mClasses.CreateDomElement(aDocument));
+  ggWalkerT<ggClassyClassContainer::const_iterator> vClassesWalker(mClasses);
+  while (vClassesWalker) {
+    vElement.appendChild((*vClassesWalker)->CreateDomElement(aDocument));
+  }
 
   // class boxes
-  QDomElement vClassBoxesElement = aDocument.createElement("mClassBoxes");
-  vElement.appendChild(vClassBoxesElement);
   typedef std::vector<ggClassyClassBox*> tClassBoxes;
   ggWalkerT<tClassBoxes::const_iterator> vClassBoxesWalker(mClassBoxes);
   while (vClassBoxesWalker) {
-    ggClassyClassBox* vClassBox = *vClassBoxesWalker;
-    QDomElement vClassBoxElement = vClassBox->CreateDomElement(aDocument);
-    vClassBoxesElement.appendChild(vClassBoxElement);
+    vElement.appendChild((*vClassBoxesWalker)->CreateDomElement(aDocument));
   }
 
   return vElement;

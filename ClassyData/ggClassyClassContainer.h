@@ -15,8 +15,6 @@ public:
   static const QString& TypeID();
   virtual const QString& VTypeID() const;
 
-  QDomElement CreateDomElement(QDomDocument& aDocument) const;
-
   ggClassyClass* FindClass(const QString& aClassName) const;
 
   bool RenameClass(const QString& aOldClassName,
