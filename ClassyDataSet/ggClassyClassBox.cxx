@@ -1,4 +1,4 @@
-#include "ClassyData/ggClassyClassBox.h"
+#include "ClassyDataSet/ggClassyClassBox.h"
 
 
 ggClassyClassBox::ggClassyClassBox(const QString& aClassName) :

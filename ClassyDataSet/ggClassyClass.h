@@ -5,8 +5,8 @@
 
 #include "Base/ggString.h"
 #include "Base/ggSubject.h"
-#include "ClassyData/ggClassyClassMember.h"
-#include "ClassyData/ggClassyDescription.h"
+#include "ClassyDataSet/ggClassyClassMember.h"
+#include "ClassyDataSet/ggClassyDescription.h"
 
 class ggClassyClass : public ggSubject
 {

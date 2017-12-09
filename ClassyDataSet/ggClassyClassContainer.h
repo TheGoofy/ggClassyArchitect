@@ -4,7 +4,7 @@
 #include <QDomElement>
 
 #include "Base/ggSubject.h"
-#include "ClassyData/ggClassyClass.h"
+#include "ClassyDataSet/ggClassyClass.h"
 
 class ggClassyClassContainer :
   public std::set<ggClassyClass*, ggClassyClass>,

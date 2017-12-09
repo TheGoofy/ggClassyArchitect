@@ -22,37 +22,11 @@ DEFINES += QT_DEPRECATED_WARNINGS
 # You can also select to disable deprecated APIs only up to a certain version of Qt.
 DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
+FORMS += \
+    ClassyMain/ggClassyMainWindow.ui
 
-SOURCES += \
-    Base/ggItemLinked.cxx \
-    Base/ggObserver.cxx \
-    Base/ggSubject.cxx \
-    Base/ggUtility.cxx \
-    BaseGraphics/ggConnectionPoint.cxx \
-    BaseGraphics/ggDecoration.cxx \
-    BaseGraphics/ggGraphicsAutoConnectPathItem.cxx \
-    BaseGraphics/ggGraphicsCheckBoxItem.cxx \
-    BaseGraphics/ggGraphicsConnectionPointItem.cxx \
-    BaseGraphics/ggGraphicsDecoratedPathItem.cxx \
-    BaseGraphics/ggGraphicsTextItem.cxx \
-    BaseGraphics/ggPainterPath.cxx \
-    BaseGraphics/ggSubjectConnectionPoint.cxx \
-    ClassyData/ggClassyClass.cxx \
-    ClassyData/ggClassyClassBox.cxx \
-    ClassyData/ggClassyClassContainer.cxx \
-    ClassyData/ggClassyClassMember.cxx \
-    ClassyData/ggClassyCollection.cxx \
-    ClassyData/ggClassyCollectionContainer.cxx \
-    ClassyData/ggClassyDataSet.cxx \
-    ClassyData/ggClassyFrame.cxx \
-    ClassyGraphics/ggClassyGraphicsBoxItem.cxx \
-    ClassyGraphics/ggClassyGraphicsBoxItems.cxx \
-    ClassyGraphics/ggClassyGraphicsScene.cxx \
-    ClassyGraphics/ggClassyGraphicsView.cxx \
-    ClassyMain/ggClassyApplication.cxx \
-    ClassyMain/ggClassyMainWindow.cxx \
-    ClassyMain/main.cxx \
-    ClassyData/ggClassyDescription.cxx
+DISTFILES += \
+    README.md
 
 HEADERS += \
     Base/ggBehaviorBlocking.h \
@@ -60,6 +34,7 @@ HEADERS += \
     Base/ggBehaviorT.h \
     Base/ggItemLinked.h \
     Base/ggObserver.h \
+    Base/ggString.h \
     Base/ggSubject.h \
     Base/ggSubjectT.h \
     Base/ggSubjectValueT.h \
@@ -78,23 +53,50 @@ HEADERS += \
     BaseGraphics/ggGraphicsTextItem.h \
     BaseGraphics/ggPainterPath.h \
     BaseGraphics/ggSubjectConnectionPoint.h \
-    ClassyData/ggClassyClass.h \
-    ClassyData/ggClassyClassBox.h \
-    ClassyData/ggClassyClassContainer.h \
-    ClassyData/ggClassyClassMember.h \
-    ClassyData/ggClassyCollection.h \
-    ClassyData/ggClassyCollectionContainer.h \
-    ClassyData/ggClassyDataSet.h \
-    ClassyData/ggClassyFrame.h \
+    ClassyDataSet/ggClassyClass.h \
+    ClassyDataSet/ggClassyClassBox.h \
+    ClassyDataSet/ggClassyClassContainer.h \
+    ClassyDataSet/ggClassyClassMember.h \
+    ClassyDataSet/ggClassyCollection.h \
+    ClassyDataSet/ggClassyCollectionContainer.h \
+    ClassyDataSet/ggClassyDataSet.h \
+    ClassyDataSet/ggClassyDescription.h \
+    ClassyDataSet/ggClassyFrame.h \
     ClassyGraphics/ggClassyGraphicsBoxItem.h \
     ClassyGraphics/ggClassyGraphicsBoxItems.h \
     ClassyGraphics/ggClassyGraphicsScene.h \
     ClassyGraphics/ggClassyGraphicsView.h \
     ClassyMain/ggClassyApplication.h \
-    ClassyMain/ggClassyMainWindow.h \
-    ClassyData/ggClassyDescription.h \
-    Base/QString.h
+    ClassyMain/ggClassyMainWindow.h
 
-FORMS += \
-    ClassyMain/ggClassyMainWindow.ui
+SOURCES += \
+    Base/ggItemLinked.cxx \
+    Base/ggObserver.cxx \
+    Base/ggSubject.cxx \
+    Base/ggUtility.cxx \
+    BaseGraphics/ggConnectionPoint.cxx \
+    BaseGraphics/ggDecoration.cxx \
+    BaseGraphics/ggGraphicsAutoConnectPathItem.cxx \
+    BaseGraphics/ggGraphicsCheckBoxItem.cxx \
+    BaseGraphics/ggGraphicsConnectionPointItem.cxx \
+    BaseGraphics/ggGraphicsDecoratedPathItem.cxx \
+    BaseGraphics/ggGraphicsTextItem.cxx \
+    BaseGraphics/ggPainterPath.cxx \
+    BaseGraphics/ggSubjectConnectionPoint.cxx \
+    ClassyDataSet/ggClassyClass.cxx \
+    ClassyDataSet/ggClassyClassBox.cxx \
+    ClassyDataSet/ggClassyClassContainer.cxx \
+    ClassyDataSet/ggClassyClassMember.cxx \
+    ClassyDataSet/ggClassyCollection.cxx \
+    ClassyDataSet/ggClassyCollectionContainer.cxx \
+    ClassyDataSet/ggClassyDataSet.cxx \
+    ClassyDataSet/ggClassyDescription.cxx \
+    ClassyDataSet/ggClassyFrame.cxx \
+    ClassyGraphics/ggClassyGraphicsBoxItem.cxx \
+    ClassyGraphics/ggClassyGraphicsBoxItems.cxx \
+    ClassyGraphics/ggClassyGraphicsScene.cxx \
+    ClassyGraphics/ggClassyGraphicsView.cxx \
+    ClassyMain/ggClassyApplication.cxx \
+    ClassyMain/ggClassyMainWindow.cxx \
+    ClassyMain/main.cxx
 

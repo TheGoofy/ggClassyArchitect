@@ -1,7 +1,7 @@
 #include "ggClassyGraphicsView.h"
 
 #include "Base/ggUtility.h"
-#include "ClassyData/ggClassyDataSet.h"
+#include "ClassyDataSet/ggClassyDataSet.h"
 #include "ClassyGraphics/ggClassyGraphicsBoxItem.h"
 #include "ClassyGraphics/ggClassyGraphicsScene.h"
 #include "ClassyMain/ggClassyApplication.h"

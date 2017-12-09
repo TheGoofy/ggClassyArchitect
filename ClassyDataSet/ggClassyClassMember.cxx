@@ -1,4 +1,4 @@
-#include "ClassyData/ggClassyClassMember.h"
+#include "ClassyDataSet/ggClassyClassMember.h"
 
 
 ggClassyClassMember::ggClassyClassMember(const QString& aName,

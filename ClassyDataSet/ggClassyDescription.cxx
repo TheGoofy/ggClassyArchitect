@@ -1,4 +1,4 @@
-#include "ClassyData/ggClassyDescription.h"
+#include "ClassyDataSet/ggClassyDescription.h"
 
 
 const QString& ggClassyDescription::TypeID()

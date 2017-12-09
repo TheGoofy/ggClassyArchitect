@@ -2,10 +2,10 @@
 #define GGCLASSYDATASET_H
 
 #include "Base/ggTypes.h"
-#include "ClassyData/ggClassyClassContainer.h"
-#include "ClassyData/ggClassyCollectionContainer.h"
-#include "ClassyData/ggClassyClassBox.h"
-#include "ClassyData/ggClassyFrame.h"
+#include "ClassyDataSet/ggClassyClassContainer.h"
+#include "ClassyDataSet/ggClassyCollectionContainer.h"
+#include "ClassyDataSet/ggClassyClassBox.h"
+#include "ClassyDataSet/ggClassyFrame.h"
 
 class ggClassyDataSet :
   public ggSubject

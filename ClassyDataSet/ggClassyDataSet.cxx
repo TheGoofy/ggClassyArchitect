@@ -1,4 +1,4 @@
-#include "ClassyData/ggClassyDataSet.h"
+#include "ClassyDataSet/ggClassyDataSet.h"
 
 #include "Base/ggWalkerT.h"
 

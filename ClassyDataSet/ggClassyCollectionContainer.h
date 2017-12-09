@@ -1,7 +1,7 @@
 #ifndef GGCLASSYCOLLECTIONCONTAINER_H
 #define GGCLASSYCOLLECTIONCONTAINER_H
 
-#include "ClassyData/ggClassyCollection.h"
+#include "ClassyDataSet/ggClassyCollection.h"
 
 class ggClassyCollectionContainer :
   public std::set<ggClassyCollection*>

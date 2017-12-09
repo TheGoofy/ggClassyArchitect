@@ -1,7 +1,7 @@
 #ifndef GGCLASSYGRAPHICSBOXITEMS_H
 #define GGCLASSYGRAPHICSBOXITEMS_H
 
-#include "ClassyData/ggClassyDataSet.h"
+#include "ClassyDataSet/ggClassyDataSet.h"
 #include "ClassyGraphics/ggClassyGraphicsBoxItem.h"
 
 class ggClassyGraphicsBoxItems :

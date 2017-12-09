@@ -1,4 +1,4 @@
-#include "ClassyData/ggClassyFrame.h"
+#include "ClassyDataSet/ggClassyFrame.h"
 
 
 const QString& ggClassyFrame::TypeID()
