@@ -7,6 +7,7 @@
 #include <map>
 #include <algorithm>
 
+#include "Base/ggUtility.h"
 #include "ClassyData/ggClassyDataSet.h"
 #include "ClassyGraphics/ggClassyGraphicsBoxItem.h"
 #include "ClassyGraphics/ggClassyGraphicsBoxItems.h"
@@ -129,10 +130,11 @@ void ggClassyGraphicsView::wheelEvent(QWheelEvent* aWheelEvent)
     if (aWheelEvent->modifiers() == Qt::NoModifier) {
       aWheelEvent->accept();
       float vScale = 1.0f;
-      if (aWheelEvent->delta() > 0) vScale = 1.05f / 1.0f;
-      if (aWheelEvent->delta() < 0) vScale = 1.0f / 1.05f;
+      if (aWheelEvent->delta() > 0) vScale = 1.2f / 1.0f;
+      if (aWheelEvent->delta() < 0) vScale = 1.0f / 1.2f;
+      vScale = ggUtility::RoundTo125(vScale * GetSceneScale(), ggUtility::cRoundType::eFactor12);
       QPointF vPosA = mapToScene(aWheelEvent->pos());
-      scale(vScale, vScale);
+      SetSceneScale(vScale);
       QPointF vPosB = mapToScene(aWheelEvent->pos());
       QPointF vDeltaPos = vPosB - vPosA;
       translate(vDeltaPos.x(), vDeltaPos.y());

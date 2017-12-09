@@ -3,32 +3,54 @@
 #include <math.h>
 #include <vector>
 
+#include <Base/ggWalkerT.h>
 
-ggFloat ggUtility::RoundTo125(ggFloat aValue)
+
+const std::vector<ggFloat> ggRoundFactors20 =
+  {-10.0f, -5.0f, -2.0f, -1.0f,
+     1.0f,  2.0f,  5.0f, 10.0f};
+
+const std::vector<ggFloat> ggRoundFactors15 =
+  {-10.0f, -7.0f, -5.0f, -3.0f, -2.0f, -1.5f, -1.0f,
+     1.0f,  1.5f,  2.0f,  3.0f,  5.0f,  7.0f, 10.0f};
+
+const std::vector<ggFloat> ggRoundFactors12 =
+  {-10.0f, -8.0f, -7.0f, -6.0f, -5.0f, -4.0f, -3.0f, -2.5f, -2.0f, -1.7f, -1.5f, -1.2f, -1.0f,
+     1.0f,  1.2f,  1.5f,  1.7f,  2.0f,  2.5f,  3.0f,  4.0f,  5.0f,  6.0f,  7.0f,  8.0f, 10.0f};
+
+
+ggFloat ggUtility::RoundTo125(ggFloat aValue, cRoundType aRoundType)
 {
-  if (aValue == 0.0f) {
-    return aValue;
-  }
+  // nothing to do, if value is 0
+  if (aValue == 0.0f) return aValue;
+
+  // preliminary result
+  ggFloat vResult = aValue;
+
+  // calculate the order of magnitude (negative if value below 1)
   ggInt32 vDecimals = (ggUInt32)log10(fabs(aValue));
   vDecimals = fabs(aValue) < 1.0f ? vDecimals - 1 : vDecimals;
-  std::vector<ggFloat> vFactor;
-  vFactor.push_back(-10.0f);
-  vFactor.push_back( -5.0f);
-  vFactor.push_back( -2.0f);
-  vFactor.push_back( -1.0f);
-  vFactor.push_back(  1.0f);
-  vFactor.push_back(  2.0f);
-  vFactor.push_back(  5.0f);
-  vFactor.push_back( 10.0f);
+
+  // select proper factors for rounding
+  const std::vector<ggFloat>* vFactors = &ggRoundFactors20;
+  switch (aRoundType) {
+    case cRoundType::eFactor20: vFactors = &ggRoundFactors20; break;
+    case cRoundType::eFactor15: vFactors = &ggRoundFactors15; break;
+    case cRoundType::eFactor12: vFactors = &ggRoundFactors12; break;
+    default: break;
+  }
+
+  // search the value, which is as close as possible to the value
   ggFloat vErrorMin = std::numeric_limits<ggFloat>::max();
-  ggFloat vResult = aValue;
-  for (ggUSize vFactorIndex = 0; vFactorIndex < vFactor.size(); vFactorIndex++) {
-    ggFloat vValue = vFactor[vFactorIndex] * pow(10.0f, (ggFloat)vDecimals);
+  ggWalkerT<std::vector<ggFloat>::const_iterator> vFactorsWalker(*vFactors);
+  while (vFactorsWalker) {
+    ggFloat vValue = *vFactorsWalker * pow(10.0f, (ggFloat)vDecimals);
     if (vErrorMin > fabs(vValue - aValue)) {
       vErrorMin = fabs(vValue - aValue);
       vResult = vValue;
     }
   }
+
+  // done! :-)
   return vResult;
 }
-

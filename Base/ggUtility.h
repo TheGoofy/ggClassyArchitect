@@ -29,7 +29,15 @@ namespace ggUtility {
   template <> inline cNumberType NumberType<ggFloat>() { return cNumberType::eFloat; }
   template <> inline cNumberType NumberType<ggDouble>() { return cNumberType::eDouble; }
 
-  ggFloat RoundTo125(const ggFloat aValue);
+  // different rounding resolutions
+  enum class cRoundType {
+    eFactor20,
+    eFactor15,
+    eFactor12
+  };
+
+  // rounds to ... 0.01, 0.02, 0.05, 0.1, 0.2, 0.5, 1, 2, 5, 10, 20, 50 ...
+  ggFloat RoundTo125(const ggFloat aValue, cRoundType aRoundType = cRoundType::eFactor20);
 
   template <typename T>
   inline const T& Clamp(const T& aValue, const T& aValueMin, const T& aValueMax) {
