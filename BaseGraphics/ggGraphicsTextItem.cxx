@@ -10,7 +10,7 @@
 #include <QPainter>
 #include <QGraphicsSceneDragDropEvent>
 
-#include "ClassyMain/ggClassyApplication.h" // goofy!
+#include "ClassyMain/ggClassyApplication.h" // goofy: need clipboard in order to re-format mime-data
 
 
 ggGraphicsTextItem::ggGraphicsTextItem(QGraphicsItem* aParent) :

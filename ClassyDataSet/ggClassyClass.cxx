@@ -3,14 +3,18 @@
 #include <QStringList>
 
 #include "Base/ggWalkerT.h"
+#include "ClassyDataSet/ggClassyDataSet.h"
 
 
-ggClassyClass::ggClassyClass()
+ggClassyClass::ggClassyClass(ggClassyDataSet* aDataSet) :
+  mDataSet(aDataSet)
 {
 }
 
 
-ggClassyClass::ggClassyClass(const QString& aName) :
+ggClassyClass::ggClassyClass(const QString& aName,
+                             ggClassyDataSet* aDataSet) :
+  mDataSet(aDataSet),
   mName(aName)
 {
 }
@@ -81,6 +85,24 @@ bool ggClassyClass::operator() (const ggClassyClass* aClassA,
     return aClassA < aClassB;
   else
     return aClassA->mName < aClassB->mName;
+}
+
+
+const QString& ggClassyClass::GetName() const
+{
+  return mName;
+}
+
+
+bool ggClassyClass::SetName(const QString& aName)
+{
+  if (mDataSet != nullptr) {
+    return mDataSet->RenameClass(mName, aName);
+  }
+  else {
+    mName = aName;
+    return true;
+  }
 }
 
 

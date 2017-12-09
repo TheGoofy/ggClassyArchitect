@@ -20,6 +20,11 @@ public:
 
   QDomElement CreateDomElement(QDomDocument& aDocument) const;
 
+  ggClassyClass* AddClass(ggClassyClass* aClass);
+
+  bool RenameClass(const QString& aOldClassName,
+                   const QString& aNewClassName);
+
   static ggClassyDataSet* GenerateTestData();
 
   ggClassyCollectionContainer mCollections;

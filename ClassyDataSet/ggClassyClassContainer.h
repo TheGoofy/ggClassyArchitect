@@ -17,9 +17,6 @@ public:
 
   ggClassyClass* FindClass(const QString& aClassName) const;
 
-  bool RenameClass(const QString& aOldClassName,
-                   const QString& aNewClassName);
-
 };
 
 #endif // GGCLASSYCLASSCONTAINER_H
