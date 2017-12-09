@@ -3,6 +3,14 @@
 #include "Base/ggWalkerT.h"
 
 
+ggClassyDataSet::ggClassyDataSet() :
+  mFormatVersionMajor(0),
+  mFormatVersionMinor(0),
+  mFormatVersionPatch(1)
+{
+}
+
+
 const QString& ggClassyDataSet::TypeID()
 {
   static const QString vTypeID("ggClassyDataSet");
@@ -16,9 +24,16 @@ const QString& ggClassyDataSet::VTypeID() const
 }
 
 
+QString ggClassyDataSet::GetFormatVersion() const
+{
+  return QString("%1.%2.%3").arg(mFormatVersionMajor).arg(mFormatVersionMinor).arg(mFormatVersionPatch);
+}
+
+
 QDomElement ggClassyDataSet::CreateDomElement(QDomDocument& aDocument) const
 {
   QDomElement vElement = aDocument.createElement(TypeID());
+  vElement.setAttribute("mFormatVersion", GetFormatVersion());
 
   // classes
   ggWalkerT<ggClassyClassContainer::const_iterator> vClassesWalker(mClasses);

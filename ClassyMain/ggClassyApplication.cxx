@@ -2,6 +2,7 @@
 
 #include <QDomDocument>
 #include <QTextStream>
+#include <QDateTime>
 
 #include "ClassyData/ggClassyDataSet.h"
 #include "Base/ggWalkerT.h"
@@ -9,6 +10,9 @@
 
 ggClassyApplication::ggClassyApplication(int &argc, char **argv) :
   QApplication(argc, argv),
+  mVersionMajor(0),
+  mVersionMinor(0),
+  mVersionPatch(1),
   mDataSet(nullptr)
 {
   mDataSet = ggClassyDataSet::GenerateTestData();
@@ -17,6 +21,43 @@ ggClassyApplication::ggClassyApplication(int &argc, char **argv) :
 
 ggClassyApplication::~ggClassyApplication()
 {
+}
+
+
+const QString& ggClassyApplication::TypeID()
+{
+  static const QString vTypeID("ggClassyApplication");
+  return vTypeID;
+}
+
+
+const QString& ggClassyApplication::VTypeID() const
+{
+  return TypeID();
+}
+
+
+QString ggClassyApplication::GetVersion() const
+{
+  return QString("%1.%2.%3").arg(mVersionMajor).arg(mVersionMinor).arg(mVersionPatch);
+}
+
+
+ggUInt32 ggClassyApplication::GetVersionMajor() const
+{
+  return mVersionMajor;
+}
+
+
+ggUInt32 ggClassyApplication::GetVersionMinor() const
+{
+  return mVersionMinor;
+}
+
+
+ggUInt32 ggClassyApplication::GetVersionPatch() const
+{
+  return mVersionPatch;
 }
 
 
@@ -38,9 +79,15 @@ void ggClassyApplication::SaveDataSet(QIODevice* aDevice)
   // compile the DOM document
   //
   QDomDocument vDomDocument;
-  QDomElement vRootElement = vDomDocument.createElement("ClassyArchitectApplication");
+
+  QDomElement vAppInfoElement = vDomDocument.createElement("ggApplicationInfo");
+  vAppInfoElement.setAttribute("mName", TypeID());
+  vAppInfoElement.setAttribute("mVersion", GetVersion());
+  vAppInfoElement.setAttribute("mSaveDate", QDateTime::currentDateTimeUtc().toString());
+
+  QDomElement vRootElement = GetDataSet()->CreateDomElement(vDomDocument);
+  vRootElement.appendChild(vAppInfoElement);
   vDomDocument.appendChild(vRootElement);
-  vRootElement.appendChild(mDataSet->CreateDomElement(vDomDocument));
 
   //
   // write file

@@ -6,6 +6,8 @@
 #include "ClassyGraphics/ggClassyGraphicsScene.h"
 #include "ClassyMain/ggClassyApplication.h"
 
+#include <QDebug>
+
 
 ggClassyGraphicsView::ggClassyGraphicsView(QWidget* aParent)
  : QGraphicsView(aParent),
@@ -15,8 +17,7 @@ ggClassyGraphicsView::ggClassyGraphicsView(QWidget* aParent)
   // suppress automatic scene centering
   setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
   setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-  QRectF vRect(-10000.0f, -10000.0f, 20000.0f, 20000.0f);
-  setSceneRect(vRect);
+  setSceneRect(QRectF(-10000.0f, -10000.0f, 20000.0f, 20000.0f));
 
   // make some objects (for development and testing)
   ggClassyDataSet* vDataSet = ggClassyApplication::GetInstance().GetDataSet();
