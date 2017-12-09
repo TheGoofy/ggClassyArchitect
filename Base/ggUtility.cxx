@@ -56,7 +56,7 @@ ggFloat ggUtility::RoundTo125(ggFloat aValue, cRoundType aRoundType)
 }
 
 
-ggFloat ggUtility::RoundMagnitude(ggFloat aValue, ggUInt16 aMagnitude)
+ggFloat ggUtility::RoundToOMG(ggFloat aValue, ggUInt16 aOrderOfMagnitude)
 {
   // nothing to do, if value is 0
   if (aValue == 0.0f) return aValue;
@@ -66,7 +66,7 @@ ggFloat ggUtility::RoundMagnitude(ggFloat aValue, ggUInt16 aMagnitude)
   vDecimals = fabs(aValue) < 1.0f ? vDecimals - 1 : vDecimals;
 
   // compute a factor, which is a power of 10
-  ggFloat vFactor = pow(10.0f, vDecimals - aMagnitude + 1);
+  ggFloat vFactor = pow(10.0f, vDecimals - aOrderOfMagnitude + 1);
 
   // divide, round, and multiply
   ggFloat vRoundOffset = (aValue > 0.0f) ? 0.5f : -0.5f;
