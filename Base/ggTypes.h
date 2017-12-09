@@ -1,10 +1,6 @@
 #ifndef GGTYPES_H
 #define GGTYPES_H
 
-#include <QString>
-#include <vector>
-#include <set>
-
 typedef char ggChar;
 typedef __INT8_TYPE__ ggInt8;
 typedef __INT16_TYPE__ ggInt16;
@@ -21,9 +17,5 @@ typedef __SIZE_TYPE__ ggUSize;
 
 typedef float ggFloat;
 typedef double ggDouble;
-
-typedef QString ggString;
-typedef std::vector<ggString> ggStringVec;
-typedef std::set<ggString> ggStringSet;
 
 #endif // GGTYPES_H

@@ -2,6 +2,8 @@
 #define GGSUBJECTT_H
 
 #include "Base/ggSubject.h"
+#include "Base/ggTypes.h"
+#include "Base/ggString.h"
 
 /**
  * This is a subject, which contains the associated data of interest. Any
@@ -68,15 +70,21 @@ private:
 /**
  * Some commonly useful subjects predefined...
  */
-typedef ggSubjectT<char> ggSubjectChar;
-typedef ggSubjectT<unsigned char> ggSubjectUChar;
-typedef ggSubjectT<int> ggSubjectInt;
-typedef ggSubjectT<unsigned int> ggSubjectUInt;
-typedef ggSubjectT<long> ggSubjectLong;
-typedef ggSubjectT<unsigned long> ggSubjectULong;
-typedef ggSubjectT<float> ggSubjectFloat;
-typedef ggSubjectT<double> ggSubjectDouble;
+typedef ggSubjectT<ggChar> ggSubjectChar;
+typedef ggSubjectT<ggInt8> ggSubjectInt8;
+typedef ggSubjectT<ggInt16> ggSubjectInt16;
+typedef ggSubjectT<ggInt32> ggSubjectInt32;
+typedef ggSubjectT<ggInt64> ggSubjectInt64;
+typedef ggSubjectT<ggSize> ggSubjectSize;
+typedef ggSubjectT<ggUChar> ggSubjectUChar;
+typedef ggSubjectT<ggUInt8> ggSubjectUInt8;
+typedef ggSubjectT<ggUInt16> ggSubjectUInt16;
+typedef ggSubjectT<ggUInt32> ggSubjectUInt32;
+typedef ggSubjectT<ggUInt64> ggSubjectUInt64;
+typedef ggSubjectT<ggUSize> ggSubjectUSize;
+typedef ggSubjectT<ggFloat> ggSubjectFloat;
+typedef ggSubjectT<ggDouble> ggSubjectDouble;
+typedef ggSubjectT<QString> ggSubjectString;
 typedef ggSubjectT<bool> ggSubjectBool;
-typedef ggSubjectT<std::string> ggSubjectString;
 
 #endif // GGSUBJECTT_H

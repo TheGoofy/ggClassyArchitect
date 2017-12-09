@@ -92,7 +92,8 @@ HEADERS += \
     ClassyGraphics/ggClassyGraphicsView.h \
     ClassyMain/ggClassyApplication.h \
     ClassyMain/ggClassyMainWindow.h \
-    ClassyData/ggClassyDescription.h
+    ClassyData/ggClassyDescription.h \
+    Base/QString.h
 
 FORMS += \
     ClassyMain/ggClassyMainWindow.ui

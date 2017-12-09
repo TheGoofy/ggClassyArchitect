@@ -1,16 +1,8 @@
 #include "ggClassyGraphicsView.h"
 
-#include <QObject>
-#include <QWheelEvent>
-#include <QTextEdit>
-#include <QScrollBar>
-#include <map>
-#include <algorithm>
-
 #include "Base/ggUtility.h"
 #include "ClassyData/ggClassyDataSet.h"
 #include "ClassyGraphics/ggClassyGraphicsBoxItem.h"
-#include "ClassyGraphics/ggClassyGraphicsBoxItems.h"
 #include "ClassyGraphics/ggClassyGraphicsScene.h"
 #include "ClassyMain/ggClassyApplication.h"
 

@@ -3,7 +3,7 @@
 
 #include <QDomElement>
 
-#include "Base/ggTypes.h"
+#include "Base/ggString.h"
 #include "Base/ggSubject.h"
 #include "ClassyData/ggClassyClassMember.h"
 #include "ClassyData/ggClassyDescription.h"
@@ -34,7 +34,7 @@ public:
 
   typedef std::vector<ggClassyClassMember> tMembers;
 
-  ggString mName;
+  QString mName;
   ggStringSet mBaseClassNames;
   tMembers mMembers;
   ggClassyDescription mDescription;
