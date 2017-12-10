@@ -36,6 +36,8 @@ public:
   tPointsSet GetClassPointsLeftRight(const QString& aClassName) const;
   tPointsSet GetClassPointsMembers(const QString& aClassName, ggUSize aMemberIndex) const;
 
+  void Clear();
+
 private:
 
   tBoxItemsSet mBoxItems;

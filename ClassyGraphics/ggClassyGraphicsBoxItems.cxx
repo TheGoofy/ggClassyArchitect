@@ -77,3 +77,10 @@ ggClassyGraphicsBoxItems::tPointsSet ggClassyGraphicsBoxItems::GetClassPointsLef
   }
   return vPoints;
 }
+
+
+void ggClassyGraphicsBoxItems::Clear()
+{
+  mBoxItems.clear();
+  mBoxItemsMap.clear();
+}

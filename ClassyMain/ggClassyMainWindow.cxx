@@ -9,6 +9,7 @@
 #include <QDebug>
 
 // 2) include own project-related (sort by component dependency)
+#include "ClassyDataSet/ggClassyDataSet.h"
 #include "ClassyMain/ggClassyApplication.h"
 #include "ClassyGraphics/ggClassyGraphicsScene.h"
 
@@ -33,11 +34,9 @@ ggClassyMainWindow::ggClassyMainWindow(QWidget *parent) :
   // make some objects (for development and testing)
   ggClassyDataSet* vDataSet = ggClassyApplication::GetInstance().GetDataSet();
 
-  // add these objects to the scene (for development and testing)
+  // create a classy scene and link it with dataset
   ggClassyGraphicsScene* vScene = new ggClassyGraphicsScene(this);
-  vScene->AddClassBoxItems(vDataSet);
-  vScene->AddLineItems();
-  vScene->AddTestConnections();
+  vScene->SetDataSet(vDataSet);
   ui->mGraphicsView->setScene(vScene);
 
   // this connects automatically: connect(ui->mZoomComboBox, SIGNAL(currentIndexChanged(int)), this, SLOT(on_mZoomComboBox_currentIndexChanged(int)));
@@ -115,15 +114,9 @@ void ggClassyMainWindow::on_mZoomResetPushButton_clicked()
 
 void ggClassyMainWindow::on_mAddClassPushButton_clicked()
 {
-  static ggSubject::cExecutorLazy* vExecutorLazy = nullptr;
-  if (vExecutorLazy == nullptr) {
-    vExecutorLazy = new ggSubject::cExecutorLazy(ui->mGraphicsView->GetSubjectZoom());
-  }
-  else {
-    delete vExecutorLazy;
-    vExecutorLazy = nullptr;
-  }
-  qDebug() << __PRETTY_FUNCTION__ << "- IsLazy() =" << ui->mGraphicsView->GetSubjectZoom()->IsLazy();
+  ggClassyClassBox* vClassBox = new ggClassyClassBox("ggClassA");
+  vClassBox->mPosition = QPointF(0, -400);
+  ggClassyApplication::GetInstance().GetDataSet()->AddClassBox(vClassBox);
 }
 
 

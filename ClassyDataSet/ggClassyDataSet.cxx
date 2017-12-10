@@ -63,9 +63,16 @@ ggClassyClass* ggClassyDataSet::AddClass(ggClassyClass* aClass)
   if (mClasses.find(aClass) == mClasses.end()) {
     mClasses.insert(aClass);
     aClass->mDataSet = this;
+    Notify();
     return aClass;
   }
   return nullptr;
+}
+
+
+ggClassyClass* ggClassyDataSet::FindClass(const QString& aClassName)
+{
+  return mClasses.FindClass(aClassName);
 }
 
 
@@ -110,8 +117,10 @@ bool ggClassyDataSet::RenameClass(const QString& aOldClassName,
   while (vClassBoxesWalker) {
     // get the class box pointer
     ggClassyClassBox* vClassBox = *vClassBoxesWalker;
-    vClassBox->mClassName = aNewClassName;
-    vClassBox->Notify();
+    if (vClassBox->mClassName == aOldClassName) {
+      vClassBox->mClassName = aNewClassName;
+      vClassBox->Notify();
+    }
   }
 
   // Since "aOldClassName" is passed as a reference, we have to change the actual
@@ -136,9 +145,22 @@ bool ggClassyDataSet::RenameClass(const QString& aOldClassName,
 }
 
 
+ggClassyClassBox* ggClassyDataSet::AddClassBox(ggClassyClassBox* aClassBox)
+{
+  if (aClassBox != nullptr) {
+    mClassBoxes.push_back(aClassBox);
+    Notify();
+  }
+  return aClassBox;
+}
+
+
 ggClassyDataSet* ggClassyDataSet::GenerateTestData()
 {
   ggClassyDataSet* vDataSet = new ggClassyDataSet();
+
+  // delay notification(s)
+  ggSubject::cExecutorLazy vLazy(vDataSet);
 
   ggClassyClass* vClassA = vDataSet->AddClass(new ggClassyClass("ggClassA"));
   vClassA->mMembers.push_back(ggClassyClassMember("Ping()", "void"));
@@ -180,12 +202,12 @@ ggClassyDataSet* ggClassyDataSet::GenerateTestData()
   vClassBoxC2->mPosition = QPointF(150, 0);
   vClassBoxC2->mWidth = 250.0f;
 
-  vDataSet->mClassBoxes.push_back(vClassBoxA1);
-  vDataSet->mClassBoxes.push_back(vClassBoxA2);
-  vDataSet->mClassBoxes.push_back(vClassBoxB1);
-  vDataSet->mClassBoxes.push_back(vClassBoxB2);
-  vDataSet->mClassBoxes.push_back(vClassBoxC1);
-  vDataSet->mClassBoxes.push_back(vClassBoxC2);
+  vDataSet->AddClassBox(vClassBoxA1);
+  vDataSet->AddClassBox(vClassBoxA2);
+  vDataSet->AddClassBox(vClassBoxB1);
+  vDataSet->AddClassBox(vClassBoxB2);
+  vDataSet->AddClassBox(vClassBoxC1);
+  vDataSet->AddClassBox(vClassBoxC2);
 
   return vDataSet;
 }

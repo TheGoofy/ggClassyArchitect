@@ -2,16 +2,20 @@
 #include "ggClassyGraphicsScene.h"
 
 // 1) include system or QT
+#include <QGraphicsItem>
+#include <QDebug>
 
 // 2) include own project-related (sort by component dependency)
 #include "Base/ggWalkerT.h"
 #include "BaseGraphics/ggGraphicsAutoConnectPathItem.h"
 #include "BaseGraphics/ggGraphicsConnectionPointItem.h"
+#include "ClassyDataSet/ggClassyDataSet.h"
 #include "ClassyGraphics/ggClassyGraphicsBoxItems.h"
 
 
 ggClassyGraphicsScene::ggClassyGraphicsScene(QObject* aParent) :
   QGraphicsScene(aParent),
+  mDataSet(nullptr),
   mBoxItems(nullptr)
 {
   mBoxItems = new ggClassyGraphicsBoxItems();
@@ -24,30 +28,88 @@ ggClassyGraphicsScene::~ggClassyGraphicsScene()
 }
 
 
-void ggClassyGraphicsScene::addItem(ggClassyGraphicsBoxItem* aBoxItem)
+void ggClassyGraphicsScene::Update(const ggSubject* aSubject)
+{
+  if (aSubject == mDataSet) {
+    ClearAll();
+    UpdateBoxItems();
+    UpdateLineItems();
+  }
+}
+
+
+void ggClassyGraphicsScene::AddItem(ggClassyGraphicsBoxItem* aBoxItem)
 {
   mBoxItems->AddItem(aBoxItem);
   QGraphicsScene::addItem(aBoxItem);
 }
 
 
-void ggClassyGraphicsScene::AddClassBoxItems(ggClassyDataSet* aDataSet)
+void ggClassyGraphicsScene::SetDataSet(ggClassyDataSet* aDataSet)
 {
-  // only notify box items change, when all boxes are added
-  ggBehaviorLazy::cExecutor vLazy(mBoxItems);
+  // (re)connect subject
+  Detach(mDataSet);
+  mDataSet = aDataSet;
+  Attach(mDataSet);
 
-  // loop over box items
-  typedef std::vector<ggClassyClassBox*> tClassBoxes;
-  ggWalkerT<tClassBoxes::iterator> vClassBoxesIterator(aDataSet->mClassBoxes);
-  while (vClassBoxesIterator) {
-    ggClassyClassBox* vClassBox = *vClassBoxesIterator;
-    ggClassyClass* vClass = aDataSet->mClasses.FindClass(vClassBox->mClassName);
-    addItem(new ggClassyGraphicsBoxItem(vClass, vClassBox));
+  // update all items
+  ClearAll();
+  UpdateBoxItems();
+  UpdateLineItems();
+
+  // goofy: development & testing ...
+  AddTestConnections();
+}
+
+
+void ggClassyGraphicsScene::ClearAll()
+{
+  // collect items for removal (don't change the list of items, while iterating over it)
+  std::vector<QGraphicsItem*> vItemsToRemove;
+  ggWalkerT<QList<QGraphicsItem*>::const_iterator> vItemsWalker(items());
+  while (vItemsWalker) {
+    QGraphicsItem* vItem = *vItemsWalker;
+    if (dynamic_cast<ggClassyGraphicsBoxItem*>(vItem) != nullptr ||
+        dynamic_cast<ggGraphicsAutoConnectPathItem*>(vItem) != nullptr) {
+      vItemsToRemove.push_back(vItem);
+    }
+  }
+
+  // now remove and delete them
+  ggWalkerT<std::vector<QGraphicsItem*>::iterator> vItemsToRemoveWalker(vItemsToRemove);
+  while (vItemsToRemoveWalker) {
+    QGraphicsItem* vItem = *vItemsToRemoveWalker;
+    removeItem(vItem);
+    if (vItem->parentItem() != nullptr) qDebug() << __PRETTY_FUNCTION__ << "parent item detected" << vItem;
+    if (vItem->parentObject() != nullptr) qDebug() << __PRETTY_FUNCTION__ << "parent object detected" << vItem;
+    delete vItem;
+  }
+
+  // clear the box-items map
+  mBoxItems->Clear();
+}
+
+
+void ggClassyGraphicsScene::UpdateBoxItems()
+{
+  if (mDataSet != nullptr) {
+
+    // only notify box items change, when all boxes are added
+    ggBehaviorLazy::cExecutor vLazy(mBoxItems);
+
+    // loop over box items
+    typedef std::vector<ggClassyClassBox*> tClassBoxes;
+    ggWalkerT<tClassBoxes::iterator> vClassBoxesIterator(mDataSet->mClassBoxes);
+    while (vClassBoxesIterator) {
+      ggClassyClassBox* vClassBox = *vClassBoxesIterator;
+      ggClassyClass* vClass = mDataSet->FindClass(vClassBox->mClassName);
+      AddItem(new ggClassyGraphicsBoxItem(vClass, vClassBox));
+    }
   }
 }
 
 
-void ggClassyGraphicsScene::AddLineItems()
+void ggClassyGraphicsScene::UpdateLineItems()
 {
   // loop over class box items
   typedef ggClassyGraphicsBoxItems::tBoxItemsSet tBoxItemsSet;

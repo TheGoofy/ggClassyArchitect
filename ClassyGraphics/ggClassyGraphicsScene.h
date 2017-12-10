@@ -5,6 +5,7 @@
 #include <QGraphicsScene>
 
 // 2) include own project-related (sort by component dependency)
+#include "Base/ggObserver.h"
 
 // 3) forward declarations
 class ggClassyGraphicsBoxItem;
@@ -16,7 +17,8 @@ class ggClassyClass;
  * @brief The ggClassyGraphicsScene class
  */
 class ggClassyGraphicsScene :
-  public QGraphicsScene
+  public QGraphicsScene,
+  public ggObserver
 {
 
 public:
@@ -24,15 +26,24 @@ public:
   ggClassyGraphicsScene(QObject* aParent = nullptr);
   virtual ~ggClassyGraphicsScene();
 
-  void addItem(ggClassyGraphicsBoxItem* aBoxItem);
+  void AddItem(ggClassyGraphicsBoxItem* aBoxItem);
 
-  void AddClassBoxItems(ggClassyDataSet* aDataSet);
-  void AddLineItems();
+  void SetDataSet(ggClassyDataSet* aDataSet);
 
-  void AddTestConnections();
+protected:
+
+  virtual void Update(const ggSubject* aSubject) override;
 
 private:
 
+  void ClearAll();
+
+  void UpdateBoxItems();
+  void UpdateLineItems();
+
+  void AddTestConnections();
+
+  ggClassyDataSet* mDataSet;
   ggClassyGraphicsBoxItems* mBoxItems;
 
 };

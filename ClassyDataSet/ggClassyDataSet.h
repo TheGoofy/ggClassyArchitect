@@ -30,9 +30,11 @@ public:
   QDomElement CreateDomElement(QDomDocument& aDocument) const;
 
   ggClassyClass* AddClass(ggClassyClass* aClass);
-
+  ggClassyClass* FindClass(const QString& aClassName);
   bool RenameClass(const QString& aOldClassName,
                    const QString& aNewClassName);
+
+  ggClassyClassBox* AddClassBox(ggClassyClassBox* aClassBox);
 
   static ggClassyDataSet* GenerateTestData();
 
