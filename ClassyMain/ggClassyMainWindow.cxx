@@ -35,14 +35,14 @@ ggClassyMainWindow::ggClassyMainWindow(QWidget *parent) :
   vScene->AddClassBoxItems(vDataSet);
   vScene->AddLineItems();
   vScene->AddTestConnections();
-  ui->mClassyGraphicsView->setScene(vScene);
+  ui->mGraphicsView->setScene(vScene);
 
   // this connects automatically: connect(ui->mZoomComboBox, SIGNAL(currentIndexChanged(int)), this, SLOT(on_mZoomComboBox_currentIndexChanged(int)));
   connect(ui->mZoomComboBox->lineEdit(), SIGNAL(editingFinished()), this, SLOT(on_mZoomComboBox_editingFinished()));
   connect(ui->mSaveAsPushButton, SIGNAL(clicked()), this, SLOT(SaveDataSetAs()));
 
   // register subject(s)
-  Attach(ui->mClassyGraphicsView->GetSubjectZoom());
+  Attach(ui->mGraphicsView->GetSubjectZoom());
 
   UpdateUI();
 }
@@ -56,13 +56,13 @@ ggClassyMainWindow::~ggClassyMainWindow()
 
 void ggClassyMainWindow::UpdateUI()
 {
-  ui->mZoomComboBox->lineEdit()->setText(ZoomToString(ui->mClassyGraphicsView->GetSubjectZoom()->GetValue()));
+  ui->mZoomComboBox->lineEdit()->setText(ZoomToString(ui->mGraphicsView->GetSubjectZoom()->GetValue()));
 }
 
 
 void ggClassyMainWindow::Update(const ggSubject* aSubject)
 {
-  if (aSubject == ui->mClassyGraphicsView->GetSubjectZoom()) {
+  if (aSubject == ui->mGraphicsView->GetSubjectZoom()) {
     UpdateUI();
   }
 }
@@ -85,28 +85,28 @@ float ggClassyMainWindow::StringToZoom(const QString& aZoomString) const
 void ggClassyMainWindow::on_mZoomComboBox_activated(int aIndex)
 {
   float vZoomFloat = StringToZoom(ui->mZoomComboBox->itemText(aIndex));
-  ui->mClassyGraphicsView->GetSubjectZoom()->SetValue(vZoomFloat);
-  ui->mClassyGraphicsView->GetSubjectZoom()->Notify();
+  ui->mGraphicsView->GetSubjectZoom()->SetValue(vZoomFloat);
+  ui->mGraphicsView->GetSubjectZoom()->Notify();
 }
 
 
 void ggClassyMainWindow::on_mZoomComboBox_editingFinished()
 {
   float vZoomFloat = StringToZoom(ui->mZoomComboBox->lineEdit()->text());
-  if (vZoomFloat > 0.0f) ui->mClassyGraphicsView->GetSubjectZoom()->SetValue(vZoomFloat);
-  ui->mClassyGraphicsView->GetSubjectZoom()->Notify();
+  if (vZoomFloat > 0.0f) ui->mGraphicsView->GetSubjectZoom()->SetValue(vZoomFloat);
+  ui->mGraphicsView->GetSubjectZoom()->Notify();
 }
 
 
 void ggClassyMainWindow::on_mZoomFitPushButton_clicked()
 {
-  ui->mClassyGraphicsView->SetZoomFit();
+  ui->mGraphicsView->SetZoomFit();
 }
 
 
 void ggClassyMainWindow::on_mZoomResetPushButton_clicked()
 {
-  ui->mClassyGraphicsView->SetZoomReset();
+  ui->mGraphicsView->SetZoomReset();
 }
 
 
@@ -114,13 +114,13 @@ void ggClassyMainWindow::on_mAddClassPushButton_clicked()
 {
   static ggSubject::cExecutorLazy* vExecutorLazy = nullptr;
   if (vExecutorLazy == nullptr) {
-    vExecutorLazy = new ggSubject::cExecutorLazy(ui->mClassyGraphicsView->GetSubjectZoom());
+    vExecutorLazy = new ggSubject::cExecutorLazy(ui->mGraphicsView->GetSubjectZoom());
   }
   else {
     delete vExecutorLazy;
     vExecutorLazy = nullptr;
   }
-  qDebug() << __PRETTY_FUNCTION__ << "- IsLazy() =" << ui->mClassyGraphicsView->GetSubjectZoom()->IsLazy();
+  qDebug() << __PRETTY_FUNCTION__ << "- IsLazy() =" << ui->mGraphicsView->GetSubjectZoom()->IsLazy();
 }
 
 

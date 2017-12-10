@@ -65,9 +65,9 @@ HEADERS += \
     ClassyGraphics/ggClassyGraphicsBoxItem.h \
     ClassyGraphics/ggClassyGraphicsBoxItems.h \
     ClassyGraphics/ggClassyGraphicsScene.h \
-    ClassyGraphics/ggClassyGraphicsView.h \
     ClassyMain/ggClassyApplication.h \
-    ClassyMain/ggClassyMainWindow.h
+    ClassyMain/ggClassyMainWindow.h \
+    ClassyGraphics/ggGraphicsView.h
 
 SOURCES += \
     Base/ggItemLinked.cxx \
@@ -95,8 +95,8 @@ SOURCES += \
     ClassyGraphics/ggClassyGraphicsBoxItem.cxx \
     ClassyGraphics/ggClassyGraphicsBoxItems.cxx \
     ClassyGraphics/ggClassyGraphicsScene.cxx \
-    ClassyGraphics/ggClassyGraphicsView.cxx \
     ClassyMain/ggClassyApplication.cxx \
     ClassyMain/ggClassyMainWindow.cxx \
-    ClassyMain/main.cxx
+    ClassyMain/main.cxx \
+    ClassyGraphics/ggGraphicsView.cxx
 

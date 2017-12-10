@@ -16,7 +16,7 @@
   <widget class="QWidget" name="centralWidget">
    <layout class="QHBoxLayout" name="horizontalLayout">
     <item>
-     <widget class="ggClassyGraphicsView" name="mClassyGraphicsView">
+     <widget class="ggGraphicsView" name="mGraphicsView">
       <property name="renderHints">
        <set>QPainter::Antialiasing|QPainter::TextAntialiasing</set>
       </property>
@@ -186,9 +186,9 @@
  <layoutdefault spacing="6" margin="11"/>
  <customwidgets>
   <customwidget>
-   <class>ggClassyGraphicsView</class>
+   <class>ggGraphicsView</class>
    <extends>QGraphicsView</extends>
-   <header location="global">ClassyGraphics/ggClassyGraphicsView.h</header>
+   <header location="global">ClassyGraphics/ggGraphicsView.h</header>
    <slots>
     <slot>SetZoom100()</slot>
     <slot>SetZoomFit()</slot>

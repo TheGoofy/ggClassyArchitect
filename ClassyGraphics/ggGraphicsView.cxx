@@ -1,11 +1,11 @@
-#include "ggClassyGraphicsView.h"
+#include "ggGraphicsView.h"
 
 #include <QMouseEvent>
 
 #include "Base/ggUtility.h"
 
 
-ggClassyGraphicsView::ggClassyGraphicsView(QWidget* aParent)
+ggGraphicsView::ggGraphicsView(QWidget* aParent)
  : QGraphicsView(aParent),
    mMouseDrag(false),
    mZoomResetOnResize(false)
@@ -20,20 +20,20 @@ ggClassyGraphicsView::ggClassyGraphicsView(QWidget* aParent)
 }
 
 
-void ggClassyGraphicsView::NotifyZoom()
+void ggGraphicsView::NotifyZoom()
 {
   mSubjectZoom.SetValue(GetSceneScale());
   mSubjectZoom.Notify(this);
 }
 
 
-ggSubjectFloat* ggClassyGraphicsView::GetSubjectZoom()
+ggSubjectFloat* ggGraphicsView::GetSubjectZoom()
 {
   return &mSubjectZoom;
 }
 
 
-void ggClassyGraphicsView::SetZoomReset()
+void ggGraphicsView::SetZoomReset()
 {
   resetTransform();
   if (scene() != nullptr) {
@@ -43,7 +43,7 @@ void ggClassyGraphicsView::SetZoomReset()
 }
 
 
-void ggClassyGraphicsView::SetZoomFit()
+void ggGraphicsView::SetZoomFit()
 {
   if (scene() != nullptr) {
     fitInView(scene()->itemsBoundingRect(), Qt::KeepAspectRatio);
@@ -52,20 +52,20 @@ void ggClassyGraphicsView::SetZoomFit()
 }
 
 
-float ggClassyGraphicsView::GetSceneScale() const
+float ggGraphicsView::GetSceneScale() const
 {
   return transform().mapRect(QRectF(0.0f,0.0f,1.0f,1.0f)).width();
 }
 
 
-void ggClassyGraphicsView::SetSceneScale(float aSceneScale)
+void ggGraphicsView::SetSceneScale(float aSceneScale)
 {
   float vScale = aSceneScale / GetSceneScale();
   setTransform(transform().scale(vScale, vScale));
 }
 
 
-void ggClassyGraphicsView::Update(const ggSubject* aSubject)
+void ggGraphicsView::Update(const ggSubject* aSubject)
 {
   if (aSubject == &mSubjectZoom) {
     SetSceneScale(mSubjectZoom.GetValue());
@@ -73,7 +73,7 @@ void ggClassyGraphicsView::Update(const ggSubject* aSubject)
 }
 
 
-void ggClassyGraphicsView::mousePressEvent(QMouseEvent* aEvent)
+void ggGraphicsView::mousePressEvent(QMouseEvent* aEvent)
 {
   if (aEvent->buttons() & Qt::RightButton) {
     mMouseDrag = true;
@@ -84,7 +84,7 @@ void ggClassyGraphicsView::mousePressEvent(QMouseEvent* aEvent)
 }
 
 
-void ggClassyGraphicsView::mouseMoveEvent(QMouseEvent* aEvent)
+void ggGraphicsView::mouseMoveEvent(QMouseEvent* aEvent)
 {
   if (aEvent->buttons() & Qt::RightButton && mMouseDrag) {
     QPointF vDeltaPos = mapToScene(aEvent->pos()) - mapToScene(mMouseDragStartPos);
@@ -95,7 +95,7 @@ void ggClassyGraphicsView::mouseMoveEvent(QMouseEvent* aEvent)
 }
 
 
-void ggClassyGraphicsView::mouseReleaseEvent(QMouseEvent* aEvent)
+void ggGraphicsView::mouseReleaseEvent(QMouseEvent* aEvent)
 {
   if (aEvent->buttons() & Qt::RightButton) {
     mMouseDrag = false;
@@ -104,7 +104,7 @@ void ggClassyGraphicsView::mouseReleaseEvent(QMouseEvent* aEvent)
 }
 
 
-void ggClassyGraphicsView::wheelEvent(QWheelEvent* aWheelEvent)
+void ggGraphicsView::wheelEvent(QWheelEvent* aWheelEvent)
 {
   if (aWheelEvent->delta() != 0) {
 
@@ -140,7 +140,7 @@ void ggClassyGraphicsView::wheelEvent(QWheelEvent* aWheelEvent)
 }
 
 
-void ggClassyGraphicsView::setScene(QGraphicsScene* aScene)
+void ggGraphicsView::setScene(QGraphicsScene* aScene)
 {
   mZoomResetOnResize = true;
   QGraphicsView::setScene(aScene);
@@ -148,13 +148,13 @@ void ggClassyGraphicsView::setScene(QGraphicsScene* aScene)
 }
 
 
-QPoint ggClassyGraphicsView::ToPoint(const QSize& aSize) const
+QPoint ggGraphicsView::ToPoint(const QSize& aSize) const
 {
   return QPoint(aSize.width(), aSize.height());
 }
 
 
-void ggClassyGraphicsView::resizeEvent(QResizeEvent* aEvent)
+void ggGraphicsView::resizeEvent(QResizeEvent* aEvent)
 {
   // fix the center
   QPointF vCenterDelta = mapToScene(ToPoint(aEvent->size())) - mapToScene(ToPoint(aEvent->oldSize()));

@@ -6,7 +6,7 @@
 #include "Base/ggSubjectT.h"
 #include "Base/ggObserver.h"
 
-class ggClassyGraphicsView :
+class ggGraphicsView :
   public QGraphicsView,
   public ggObserver
 {
@@ -14,7 +14,7 @@ class ggClassyGraphicsView :
 
 public:
 
-  explicit ggClassyGraphicsView(QWidget* aParent = nullptr);
+  explicit ggGraphicsView(QWidget* aParent = nullptr);
 
   ggSubjectFloat* GetSubjectZoom();
   void SetZoomReset();
