@@ -114,9 +114,14 @@ void ggClassyMainWindow::on_mZoomResetPushButton_clicked()
 
 void ggClassyMainWindow::on_mAddClassPushButton_clicked()
 {
-  ggClassyClassBox* vClassBox = new ggClassyClassBox("ggClassA");
+  ggClassyClass* vClass = new ggClassyClass("ggClassD");
+  vClass->mMembers.push_back(ggClassyClassMember("Goofy()", "ggClassA"));
+  vClass->mMembers.push_back(ggClassyClassMember("Is()", "ggClassB"));
+  vClass->mMembers.push_back(ggClassyClassMember("Here()", "ggClassC"));
+  ggClassyClassBox* vClassBox = new ggClassyClassBox("ggClassD");
   vClassBox->mPosition = QPointF(0, -400);
   ggClassyApplication::GetInstance().GetDataSet()->AddClassBox(vClassBox);
+  ggClassyApplication::GetInstance().GetDataSet()->AddClass(vClass);
 }
 
 

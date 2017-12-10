@@ -16,10 +16,11 @@
 /**
  * @brief The ggClassyDataSet class
  */
-class ggClassyDataSet :
-  public ggSubject
+class ggClassyDataSet
 {
 public:
+
+  static ggClassyDataSet* CreateTestDataSet();
 
   ggClassyDataSet();
 
@@ -36,7 +37,9 @@ public:
 
   ggClassyClassBox* AddClassBox(ggClassyClassBox* aClassBox);
 
-  static ggClassyDataSet* GenerateTestData();
+  const ggSubject* GetSubjectClasses() const;
+  const ggSubject* GetSubjectClassBoxes() const;
+  const ggSubject* GetSubjectConnections() const;
 
   ggClassyCollectionContainer mCollections;
   ggClassyClassContainer mClasses;
@@ -44,6 +47,10 @@ public:
   std::vector<ggClassyFrame*> mFrames;
 
 private:
+
+  ggSubject mSubjectClasses;
+  ggSubject mSubjectClassBoxes;
+  ggSubject mSubjectConnections;
 
   const ggUInt32 mFormatVersionMajor;
   const ggUInt32 mFormatVersionMinor;

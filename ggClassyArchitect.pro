@@ -63,11 +63,11 @@ HEADERS += \
     ClassyDataSet/ggClassyDescription.h \
     ClassyDataSet/ggClassyFrame.h \
     ClassyGraphics/ggClassyGraphicsBoxItem.h \
-    ClassyGraphics/ggClassyGraphicsBoxItems.h \
     ClassyGraphics/ggClassyGraphicsScene.h \
     ClassyMain/ggClassyApplication.h \
     ClassyMain/ggClassyMainWindow.h \
-    BaseGraphics/ggGraphicsView.h
+    BaseGraphics/ggGraphicsView.h \
+    ClassyGraphics/ggClassyClassBoxPoints.h
 
 SOURCES += \
     Base/ggItemLinked.cxx \
@@ -93,10 +93,10 @@ SOURCES += \
     ClassyDataSet/ggClassyDescription.cxx \
     ClassyDataSet/ggClassyFrame.cxx \
     ClassyGraphics/ggClassyGraphicsBoxItem.cxx \
-    ClassyGraphics/ggClassyGraphicsBoxItems.cxx \
     ClassyGraphics/ggClassyGraphicsScene.cxx \
     ClassyMain/ggClassyApplication.cxx \
     ClassyMain/ggClassyMainWindow.cxx \
     ClassyMain/main.cxx \
-    BaseGraphics/ggGraphicsView.cxx
+    BaseGraphics/ggGraphicsView.cxx \
+    ClassyGraphics/ggClassyClassBoxPoints.cxx
 

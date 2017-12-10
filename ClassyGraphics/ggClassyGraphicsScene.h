@@ -9,7 +9,7 @@
 
 // 3) forward declarations
 class ggClassyGraphicsBoxItem;
-class ggClassyGraphicsBoxItems;
+class ggClassyClassBoxPoints;
 class ggClassyDataSet;
 class ggClassyClass;
 
@@ -26,8 +26,6 @@ public:
   ggClassyGraphicsScene(QObject* aParent = nullptr);
   virtual ~ggClassyGraphicsScene();
 
-  void AddItem(ggClassyGraphicsBoxItem* aBoxItem);
-
   void SetDataSet(ggClassyDataSet* aDataSet);
 
 protected:
@@ -36,15 +34,18 @@ protected:
 
 private:
 
-  void ClearAll();
+  void DeleteItems(const std::vector<QGraphicsItem*>& aItems);
+  void DeleteClassBoxItems();
+  void DeleteConnectionItems();
 
-  void UpdateBoxItems();
-  void UpdateLineItems();
+  void CreateClassBoxItems();
+  void CreateConnectionItems();
 
   void AddTestConnections();
 
   ggClassyDataSet* mDataSet;
-  ggClassyGraphicsBoxItems* mBoxItems;
+
+  ggClassyClassBoxPoints* mBoxPoints;
 
 };
 

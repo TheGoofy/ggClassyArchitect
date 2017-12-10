@@ -18,7 +18,7 @@ ggClassyApplication::ggClassyApplication(int &argc, char **argv) :
   mVersionPatch(1),
   mDataSet(nullptr)
 {
-  mDataSet = ggClassyDataSet::GenerateTestData();
+  mDataSet = ggClassyDataSet::CreateTestDataSet();
 }
 
 

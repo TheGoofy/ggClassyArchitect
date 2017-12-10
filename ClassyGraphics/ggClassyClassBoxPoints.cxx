@@ -1,5 +1,5 @@
 // 0) include own header
-#include "ggClassyGraphicsBoxItems.h"
+#include "ggClassyClassBoxPoints.h"
 
 // 1) include system or QT
 
@@ -7,30 +7,29 @@
 #include "Base/ggWalkerT.h"
 
 
-ggClassyGraphicsBoxItems::ggClassyGraphicsBoxItems()
+ggClassyClassBoxPoints::ggClassyClassBoxPoints()
 {
 }
 
 
-void ggClassyGraphicsBoxItems::AddItem(ggClassyGraphicsBoxItem* aBoxItem)
+void ggClassyClassBoxPoints::AddBoxItem(const ggClassyGraphicsBoxItem* aBoxItem)
 {
   if (aBoxItem != nullptr) {
     mBoxItems.insert(aBoxItem);
     if (aBoxItem->GetClass() != nullptr) {
       mBoxItemsMap[aBoxItem->GetClass()->GetName()].push_back(aBoxItem);
     }
-    Notify();
   }
 }
 
 
-const ggClassyGraphicsBoxItems::tBoxItemsSet& ggClassyGraphicsBoxItems::GetBoxItems() const
+const ggClassyClassBoxPoints::tBoxItemsSet& ggClassyClassBoxPoints::GetBoxItems() const
 {
   return mBoxItems;
 }
 
 
-const ggClassyGraphicsBoxItems::tBoxItemsVec& ggClassyGraphicsBoxItems::GetBoxItems(const QString& aClassName) const
+const ggClassyClassBoxPoints::tBoxItemsVec& ggClassyClassBoxPoints::GetBoxItems(const QString& aClassName) const
 {
   static tBoxItemsVec vNoBoxItems;
   tBoxItemsMap::const_iterator vBoxItemsIterator = mBoxItemsMap.find(aClassName);
@@ -39,7 +38,7 @@ const ggClassyGraphicsBoxItems::tBoxItemsVec& ggClassyGraphicsBoxItems::GetBoxIt
 }
 
 
-ggClassyGraphicsBoxItems::tPointsSet ggClassyGraphicsBoxItems::GetClassPointsTop(const QString& aClassName) const
+ggClassyClassBoxPoints::tPointsSet ggClassyClassBoxPoints::GetClassPointsTop(const QString& aClassName) const
 {
   tPointsSet vPoints;
   const tBoxItemsVec& vBoxItems(GetBoxItems(aClassName));
@@ -52,7 +51,7 @@ ggClassyGraphicsBoxItems::tPointsSet ggClassyGraphicsBoxItems::GetClassPointsTop
 }
 
 
-ggClassyGraphicsBoxItems::tPointsSet ggClassyGraphicsBoxItems::GetClassPointsBottom(const QString& aClassName) const
+ggClassyClassBoxPoints::tPointsSet ggClassyClassBoxPoints::GetClassPointsBottom(const QString& aClassName) const
 {
   tPointsSet vPoints;
   const tBoxItemsVec& vBoxItems(GetBoxItems(aClassName));
@@ -65,7 +64,7 @@ ggClassyGraphicsBoxItems::tPointsSet ggClassyGraphicsBoxItems::GetClassPointsBot
 }
 
 
-ggClassyGraphicsBoxItems::tPointsSet ggClassyGraphicsBoxItems::GetClassPointsLeftRight(const QString& aClassName) const
+ggClassyClassBoxPoints::tPointsSet ggClassyClassBoxPoints::GetClassPointsLeftRight(const QString& aClassName) const
 {
   tPointsSet vPoints;
   const tBoxItemsVec& vBoxItems(GetBoxItems(aClassName));
@@ -79,8 +78,25 @@ ggClassyGraphicsBoxItems::tPointsSet ggClassyGraphicsBoxItems::GetClassPointsLef
 }
 
 
-void ggClassyGraphicsBoxItems::Clear()
+void ggClassyClassBoxPoints::Clear()
 {
   mBoxItems.clear();
   mBoxItemsMap.clear();
+}
+
+
+void ggClassyClassBoxPoints::Refresh()
+{
+  // copy the registered box-items
+  tBoxItemsSet vBoxItems(mBoxItems);
+
+  // clear all
+  mBoxItems.clear();
+  mBoxItemsMap.clear();
+
+  // re-add box-items
+  ggWalkerT<tBoxItemsSet::iterator> vBoxItemsWalker(vBoxItems);
+  while (vBoxItemsWalker) {
+    AddBoxItem(*vBoxItemsWalker);
+  }
 }

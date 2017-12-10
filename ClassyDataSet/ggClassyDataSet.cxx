@@ -57,13 +57,33 @@ QDomElement ggClassyDataSet::CreateDomElement(QDomDocument& aDocument) const
 }
 
 
+const ggSubject* ggClassyDataSet::GetSubjectClasses() const
+{
+  return &mSubjectClasses;
+}
+
+
+const ggSubject* ggClassyDataSet::GetSubjectClassBoxes() const
+{
+  return &mSubjectClassBoxes;
+}
+
+
+const ggSubject* ggClassyDataSet::GetSubjectConnections() const
+{
+  return &mSubjectConnections;
+}
+
+
 ggClassyClass* ggClassyDataSet::AddClass(ggClassyClass* aClass)
 {
   // only add, if name is unique
   if (mClasses.find(aClass) == mClasses.end()) {
     mClasses.insert(aClass);
     aClass->mDataSet = this;
-    Notify();
+    mSubjectClasses.Notify();
+    mSubjectClassBoxes.Notify();
+    mSubjectConnections.Notify();
     return aClass;
   }
   return nullptr;
@@ -137,8 +157,8 @@ bool ggClassyDataSet::RenameClass(const QString& aOldClassName,
   // notify the change
   vClass->Notify();
 
-  // content container changed
-  mClasses.Notify();
+  // re-link classes
+  mSubjectConnections.Notify();
 
   // done (success)
   return true;
@@ -149,18 +169,16 @@ ggClassyClassBox* ggClassyDataSet::AddClassBox(ggClassyClassBox* aClassBox)
 {
   if (aClassBox != nullptr) {
     mClassBoxes.push_back(aClassBox);
-    Notify();
+    mSubjectClassBoxes.Notify();
+    mSubjectConnections.Notify();
   }
   return aClassBox;
 }
 
 
-ggClassyDataSet* ggClassyDataSet::GenerateTestData()
+ggClassyDataSet* ggClassyDataSet::CreateTestDataSet()
 {
   ggClassyDataSet* vDataSet = new ggClassyDataSet();
-
-  // delay notification(s)
-  ggSubject::cExecutorLazy vLazy(vDataSet);
 
   ggClassyClass* vClassA = vDataSet->AddClass(new ggClassyClass("ggClassA"));
   vClassA->mMembers.push_back(ggClassyClassMember("Ping()", "void"));

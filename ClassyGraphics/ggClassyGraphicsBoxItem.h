@@ -11,7 +11,7 @@
 // 3) forward declarations
 class ggGraphicsTextItem;
 class ggGraphicsCheckBoxItem;
-class ggClassyGraphicsBoxItems;
+class ggClassyClassBoxPoints;
 class ggClassyClassBox;
 class ggClassyClass;
 

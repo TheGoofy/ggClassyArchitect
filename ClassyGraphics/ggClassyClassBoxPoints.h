@@ -12,21 +12,20 @@
 /**
  * @brief The ggClassyGraphicsBoxItems class
  */
-class ggClassyGraphicsBoxItems :
-  public ggSubject
+class ggClassyClassBoxPoints
 
 {
 
 public:
 
-  ggClassyGraphicsBoxItems();
+  ggClassyClassBoxPoints();
 
   typedef std::vector<const ggClassyGraphicsBoxItem*> tBoxItemsVec;
   typedef std::set<const ggClassyGraphicsBoxItem*> tBoxItemsSet;
   typedef std::vector<const ggSubjectConnectionPoint*> tPointsVec;
   typedef std::set<const ggSubjectConnectionPoint*> tPointsSet;
 
-  void AddItem(ggClassyGraphicsBoxItem* aBoxItem);
+  void AddBoxItem(const ggClassyGraphicsBoxItem* aBoxItem);
 
   const tBoxItemsSet& GetBoxItems() const;
   const tBoxItemsVec& GetBoxItems(const QString& aClassName) const;
@@ -37,6 +36,7 @@ public:
   tPointsSet GetClassPointsMembers(const QString& aClassName, ggUSize aMemberIndex) const;
 
   void Clear();
+  void Refresh();
 
 private:
 
