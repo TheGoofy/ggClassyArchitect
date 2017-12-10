@@ -10,3 +10,4 @@ QT project heavily using QGraphicsItem.
 
 ## Development: Components Dependencies
 ![](Classy%20Architect%20Components.svg)
+https://docs.google.com/drawings/d/1QtExo6Zlpknl1kIhxFEQ5TYR7_OOUjRvJf9V4tQW1Qc
