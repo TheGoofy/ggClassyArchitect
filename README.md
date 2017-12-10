@@ -7,3 +7,5 @@ Development goal:
 - As simple and powerful as Google Drawings
 - With fully automatic connection lines between classes and members
 - Collections of classes with same color-style
+
+(Classy Architect Components.png)
