@@ -27,9 +27,6 @@ public:
 
   static ggClassyApplication& GetInstance();
 
-  ggSubjectFloat& Zoom();
-  const ggSubjectFloat& Zoom() const;
-
   ggClassyDataSet* GetDataSet();
   const ggClassyDataSet* GetDataSet() const;
   void SaveDataSet(QIODevice* aDevice);
@@ -41,8 +38,6 @@ private:
   const ggUInt32 mVersionPatch;
 
   ggClassyDataSet* mDataSet;
-
-  ggSubjectFloat mZoom;
 
 };
 

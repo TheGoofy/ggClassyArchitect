@@ -1,12 +1,8 @@
 #include "ggClassyGraphicsView.h"
 
-#include "Base/ggUtility.h"
-#include "ClassyDataSet/ggClassyDataSet.h"
-#include "ClassyGraphics/ggClassyGraphicsBoxItem.h"
-#include "ClassyGraphics/ggClassyGraphicsScene.h"
-#include "ClassyMain/ggClassyApplication.h"
+#include <QMouseEvent>
 
-#include <QDebug>
+#include "Base/ggUtility.h"
 
 
 ggClassyGraphicsView::ggClassyGraphicsView(QWidget* aParent)
@@ -19,28 +15,21 @@ ggClassyGraphicsView::ggClassyGraphicsView(QWidget* aParent)
   setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
   setSceneRect(QRectF(-10000.0f, -10000.0f, 20000.0f, 20000.0f));
 
-  // make some objects (for development and testing)
-  ggClassyDataSet* vDataSet = ggClassyApplication::GetInstance().GetDataSet();
-  ggClassyGraphicsBoxItem* vClassBoxItem = new ggClassyGraphicsBoxItem(QRectF(0, 150, 200, 200));
-
-  // add these objects to the scene (for development and testing)
-  ggClassyGraphicsScene* vScene = new ggClassyGraphicsScene(this);
-  vScene->addItem(vClassBoxItem);
-  vScene->AddClassBoxItems(vDataSet);
-  vScene->AddLineItems();
-  vScene->AddTestConnections();
-  setScene(vScene);
-
-  // register subject zoom
-  ggClassyApplication::GetInstance().Zoom().SetValue(GetSceneScale());
-  Attach(&ggClassyApplication::GetInstance().Zoom());
+  // attach subject(s)
+  Attach(&mSubjectZoom);
 }
 
 
 void ggClassyGraphicsView::NotifyZoom()
 {
-  ggClassyApplication::GetInstance().Zoom().SetValue(GetSceneScale());
-  ggClassyApplication::GetInstance().Zoom().Notify(this);
+  mSubjectZoom.SetValue(GetSceneScale());
+  mSubjectZoom.Notify(this);
+}
+
+
+ggSubjectFloat* ggClassyGraphicsView::GetSubjectZoom()
+{
+  return &mSubjectZoom;
 }
 
 
@@ -78,8 +67,8 @@ void ggClassyGraphicsView::SetSceneScale(float aSceneScale)
 
 void ggClassyGraphicsView::Update(const ggSubject* aSubject)
 {
-  if (aSubject == &ggClassyApplication::GetInstance().Zoom()) {
-    SetSceneScale(ggClassyApplication::GetInstance().Zoom().GetValue());
+  if (aSubject == &mSubjectZoom) {
+    SetSceneScale(mSubjectZoom.GetValue());
   }
 }
 
@@ -155,6 +144,7 @@ void ggClassyGraphicsView::setScene(QGraphicsScene* aScene)
 {
   mZoomResetOnResize = true;
   QGraphicsView::setScene(aScene);
+  SetZoomReset();
 }
 
 

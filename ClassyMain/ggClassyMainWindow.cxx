@@ -7,6 +7,7 @@
 #include <QDebug>
 
 #include "ClassyMain/ggClassyApplication.h"
+#include "ClassyGraphics/ggClassyGraphicsScene.h"
 
 
 ggClassyMainWindow::ggClassyMainWindow(QWidget *parent) :
@@ -26,11 +27,22 @@ ggClassyMainWindow::ggClassyMainWindow(QWidget *parent) :
   ui->mZoomComboBox->setCompleter(0);
   ui->mZoomComboBox->setFocusPolicy(Qt::ClickFocus);
 
+  // make some objects (for development and testing)
+  ggClassyDataSet* vDataSet = ggClassyApplication::GetInstance().GetDataSet();
+
+  // add these objects to the scene (for development and testing)
+  ggClassyGraphicsScene* vScene = new ggClassyGraphicsScene(this);
+  vScene->AddClassBoxItems(vDataSet);
+  vScene->AddLineItems();
+  vScene->AddTestConnections();
+  ui->mClassyGraphicsView->setScene(vScene);
+
   // this connects automatically: connect(ui->mZoomComboBox, SIGNAL(currentIndexChanged(int)), this, SLOT(on_mZoomComboBox_currentIndexChanged(int)));
   connect(ui->mZoomComboBox->lineEdit(), SIGNAL(editingFinished()), this, SLOT(on_mZoomComboBox_editingFinished()));
   connect(ui->mSaveAsPushButton, SIGNAL(clicked()), this, SLOT(SaveDataSetAs()));
 
-  Attach(&ggClassyApplication::GetInstance().Zoom());
+  // register subject(s)
+  Attach(ui->mClassyGraphicsView->GetSubjectZoom());
 
   UpdateUI();
 }
@@ -44,13 +56,13 @@ ggClassyMainWindow::~ggClassyMainWindow()
 
 void ggClassyMainWindow::UpdateUI()
 {
-  ui->mZoomComboBox->lineEdit()->setText(ZoomToString(ggClassyApplication::GetInstance().Zoom().GetValue()));
+  ui->mZoomComboBox->lineEdit()->setText(ZoomToString(ui->mClassyGraphicsView->GetSubjectZoom()->GetValue()));
 }
 
 
 void ggClassyMainWindow::Update(const ggSubject* aSubject)
 {
-  if (aSubject == &ggClassyApplication::GetInstance().Zoom()) {
+  if (aSubject == ui->mClassyGraphicsView->GetSubjectZoom()) {
     UpdateUI();
   }
 }
@@ -73,16 +85,16 @@ float ggClassyMainWindow::StringToZoom(const QString& aZoomString) const
 void ggClassyMainWindow::on_mZoomComboBox_activated(int aIndex)
 {
   float vZoomFloat = StringToZoom(ui->mZoomComboBox->itemText(aIndex));
-  ggClassyApplication::GetInstance().Zoom().SetValue(vZoomFloat);
-  ggClassyApplication::GetInstance().Zoom().Notify();
+  ui->mClassyGraphicsView->GetSubjectZoom()->SetValue(vZoomFloat);
+  ui->mClassyGraphicsView->GetSubjectZoom()->Notify();
 }
 
 
 void ggClassyMainWindow::on_mZoomComboBox_editingFinished()
 {
   float vZoomFloat = StringToZoom(ui->mZoomComboBox->lineEdit()->text());
-  if (vZoomFloat > 0.0f) ggClassyApplication::GetInstance().Zoom().SetValue(vZoomFloat);
-  ggClassyApplication::GetInstance().Zoom().Notify();
+  if (vZoomFloat > 0.0f) ui->mClassyGraphicsView->GetSubjectZoom()->SetValue(vZoomFloat);
+  ui->mClassyGraphicsView->GetSubjectZoom()->Notify();
 }
 
 
@@ -102,13 +114,13 @@ void ggClassyMainWindow::on_mAddClassPushButton_clicked()
 {
   static ggSubject::cExecutorLazy* vExecutorLazy = nullptr;
   if (vExecutorLazy == nullptr) {
-    vExecutorLazy = new ggSubject::cExecutorLazy(&ggClassyApplication::GetInstance().Zoom());
+    vExecutorLazy = new ggSubject::cExecutorLazy(ui->mClassyGraphicsView->GetSubjectZoom());
   }
   else {
     delete vExecutorLazy;
     vExecutorLazy = nullptr;
   }
-  qDebug() << __PRETTY_FUNCTION__ << "- IsLazy() =" << ggClassyApplication::GetInstance().Zoom().IsLazy();
+  qDebug() << __PRETTY_FUNCTION__ << "- IsLazy() =" << ui->mClassyGraphicsView->GetSubjectZoom()->IsLazy();
 }
 
 

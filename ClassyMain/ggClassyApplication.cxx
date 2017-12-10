@@ -98,18 +98,6 @@ void ggClassyApplication::SaveDataSet(QIODevice* aDevice)
 }
 
 
-ggSubjectFloat& ggClassyApplication::Zoom()
-{
-  return mZoom;
-}
-
-
-const ggSubjectFloat& ggClassyApplication::Zoom() const
-{
-  return mZoom;
-}
-
-
 ggClassyApplication& ggClassyApplication::GetInstance()
 {
   return dynamic_cast<ggClassyApplication&>(*instance());

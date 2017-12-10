@@ -2,8 +2,8 @@
 #define GGCLASSYGRAPHICSVIEW_H
 
 #include <QGraphicsView>
-#include <QInputMethodEvent>
 
+#include "Base/ggSubjectT.h"
 #include "Base/ggObserver.h"
 
 class ggClassyGraphicsView :
@@ -16,6 +16,7 @@ public:
 
   explicit ggClassyGraphicsView(QWidget* aParent = nullptr);
 
+  ggSubjectFloat* GetSubjectZoom();
   void SetZoomReset();
   void SetZoomFit();
 
@@ -37,6 +38,8 @@ private:
   float GetSceneScale() const;
   void SetSceneScale(float aSceneScale);
   QPoint ToPoint(const QSize& aSize) const;
+
+  ggSubjectFloat mSubjectZoom;
 
   bool mMouseDrag;
   QPoint mMouseDragStartPos;
