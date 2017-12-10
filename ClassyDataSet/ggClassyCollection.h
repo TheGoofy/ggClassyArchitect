@@ -6,7 +6,8 @@
 
 #include "Base/ggSubject.h"
 
-class ggClassyCollection : public ggSubject
+class ggClassyCollection :
+  public ggSubject
 {
 public:
 

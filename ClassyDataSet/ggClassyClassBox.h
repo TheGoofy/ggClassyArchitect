@@ -6,7 +6,8 @@
 
 #include "Base/ggSubject.h"
 
-class ggClassyClassBox : public ggSubject
+class ggClassyClassBox :
+  public ggSubject
 {
 public:
 

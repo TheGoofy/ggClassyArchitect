@@ -19,7 +19,7 @@ public:
     TBaseItem::setFlag(TBaseItem::ItemSendsGeometryChanges);
     TBaseItem::setFlag(TBaseItem::ItemIgnoresTransformations);
     TBaseItem::setAcceptHoverEvents(true);
-    TBaseItem::setCursor(Qt::DragMoveCursor);
+    TBaseItem::setCursor(Qt::SizeAllCursor);
     TBaseItem::setToolTip("Click and drag for changing the size.");
     TBaseItem::setZValue(1.0f);
     TBaseItem::setPen(Qt::NoPen);

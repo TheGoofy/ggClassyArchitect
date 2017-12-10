@@ -23,7 +23,7 @@ public:
     TBaseItem(aRect, aParent)
   {
     TBaseItem::setFlag(TBaseItem::ItemIsMovable);
-    TBaseItem::setCursor(Qt::DragMoveCursor);
+    TBaseItem::setCursor(Qt::SizeAllCursor);
     TBaseItem::setAcceptHoverEvents(true);
     TBaseItem::setFlag(TBaseItem::ItemSendsGeometryChanges);
 

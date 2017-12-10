@@ -213,7 +213,7 @@ void ggGraphicsTextItem::SetEditable(bool aEditable)
   else {
     mSubjectEditingFinished->Notify();
     setTextInteractionFlags(Qt::NoTextInteraction);
-    setCursor(Qt::CrossCursor);
+    unsetCursor();
   }
 }
 
