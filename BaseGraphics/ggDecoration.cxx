@@ -1,4 +1,9 @@
-#include "BaseGraphics/ggDecoration.h"
+// 0) include own header
+#include "ggDecoration.h"
+
+// 1) include system or QT
+
+// 2) include own project-related (sort by component dependency)
 
 
 ggDecoration::ggDecoration() :

@@ -1,7 +1,10 @@
-#include "ClassyDataSet/ggClassyDataSet.h"
+// 0) include own header
+#include "ggClassyDataSet.h"
 
+// 1) include system or QT
 #include <QDebug>
 
+// 2) include own project-related (sort by component dependency)
 #include "Base/ggWalkerT.h"
 
 

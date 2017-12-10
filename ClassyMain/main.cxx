@@ -1,3 +1,4 @@
+// include main classes
 #include "ClassyMain/ggClassyMainWindow.h"
 #include "ClassyMain/ggClassyApplication.h"
 

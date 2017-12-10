@@ -1,9 +1,17 @@
 #ifndef GGCONNECTIONPOINT_H
 #define GGCONNECTIONPOINT_H
 
+// 1) include system or QT
 #include <QPointF>
 #include <QVector2D>
 
+// 2) include own project-related (sort by component dependency)
+
+// 3) forward declarations
+
+/**
+ * @brief The ggConnectionPoint class
+ */
 class ggConnectionPoint
 {
 public:

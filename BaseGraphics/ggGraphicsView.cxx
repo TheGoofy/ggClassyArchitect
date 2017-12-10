@@ -1,7 +1,10 @@
+// 0) include own header
 #include "ggGraphicsView.h"
 
+// 1) include system or QT
 #include <QMouseEvent>
 
+// 2) include own project-related (sort by component dependency)
 #include "Base/ggUtility.h"
 
 

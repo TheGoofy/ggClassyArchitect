@@ -188,7 +188,7 @@
   <customwidget>
    <class>ggGraphicsView</class>
    <extends>QGraphicsView</extends>
-   <header location="global">ClassyGraphics/ggGraphicsView.h</header>
+   <header location="global">BaseGraphics/ggGraphicsView.h</header>
    <slots>
     <slot>SetZoom100()</slot>
     <slot>SetZoomFit()</slot>

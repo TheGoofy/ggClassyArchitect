@@ -1,11 +1,18 @@
 #ifndef GGGRAPHICSMANIPULATORHANDLEITEM_H
 #define GGGRAPHICSMANIPULATORHANDLEITEM_H
 
+// 1) include system or QT
 #include <QGraphicsEllipseItem>
 #include <QGraphicsRectItem>
 
+// 2) include own project-related (sort by component dependency)
 #include "Base/ggSubject.h"
 
+// 3) forward declarations
+
+/**
+ *
+ */
 template <class TBaseItem>
 class ggGraphicsHandleItemT : public TBaseItem
 {

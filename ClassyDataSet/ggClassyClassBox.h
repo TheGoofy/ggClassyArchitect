@@ -1,11 +1,18 @@
 #ifndef GGCLASSYCLASSBOX_H
 #define GGCLASSYCLASSBOX_H
 
+// 1) include system or QT
 #include <QDomElement>
 #include <QPointF>
 
+// 2) include own project-related (sort by component dependency)
 #include "Base/ggSubject.h"
 
+// 3) forward declarations
+
+/**
+ * @brief The ggClassyClassBox class
+ */
 class ggClassyClassBox :
   public ggSubject
 {

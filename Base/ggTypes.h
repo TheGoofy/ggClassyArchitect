@@ -1,6 +1,10 @@
 #ifndef GGTYPES_H
 #define GGTYPES_H
 
+// 1) include system
+// 2) include own project-related (sort by component dependency)
+// 3) forward declarations
+
 typedef char ggChar;
 typedef __INT8_TYPE__ ggInt8;
 typedef __INT16_TYPE__ ggInt16;

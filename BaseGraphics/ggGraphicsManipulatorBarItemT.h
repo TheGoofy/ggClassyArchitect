@@ -1,13 +1,20 @@
 #ifndef GGGRAPHICSMANIPULATORBART_H
 #define GGGRAPHICSMANIPULATORBART_H
 
+// 1) include system or QT
 #include <QGraphicsRectItem>
 #include <QCursor>
 #include <QBrush>
 
+// 2) include own project-related (sort by component dependency)
 #include "Base/ggObserver.h"
 #include "BaseGraphics/ggGraphicsHandleItemT.h"
 
+// 3) forward declarations
+
+/**
+ *
+ */
 template <typename TBaseItem = QGraphicsRectItem,
           typename THandleItem = ggGraphicsHandleItemEllipse>
 class ggGraphicsManipulatorBarItemT :

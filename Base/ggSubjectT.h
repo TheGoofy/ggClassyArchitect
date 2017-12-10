@@ -1,9 +1,14 @@
 #ifndef GGSUBJECTT_H
 #define GGSUBJECTT_H
 
+// 1) include system
+
+// 2) include own project-related (sort by component dependency)
 #include "Base/ggSubject.h"
 #include "Base/ggTypes.h"
 #include "Base/ggString.h"
+
+// 3) forward declarations
 
 /**
  * This is a subject, which contains the associated data of interest. Any

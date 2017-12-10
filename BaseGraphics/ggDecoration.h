@@ -1,8 +1,15 @@
 #ifndef GGDECORATION_H
 #define GGDECORATION_H
 
+// 1) include system or QT
 #include <vector>
 
+// 2) include own project-related (sort by component dependency)
+// 3) forward declarations
+
+/**
+ * @brief The ggDecoration class
+ */
 class ggDecoration
 {
 public:

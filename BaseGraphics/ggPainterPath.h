@@ -1,12 +1,18 @@
 #ifndef GGPAINTERPATH_H
 #define GGPAINTERPATH_H
 
+// 1) include system or QT
 #include <QPainterPath>
 
+// 2) include own project-related (sort by component dependency)
 #include "BaseGraphics/ggDecoration.h"
 
+// 3) forward declarations
 class QVector2D;
 
+/**
+ * @brief The ggPainterPath class
+ */
 class ggPainterPath :
   public QPainterPath
 {

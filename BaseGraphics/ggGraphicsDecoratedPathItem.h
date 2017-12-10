@@ -1,11 +1,18 @@
 #ifndef GGGRAPHICSDECORATEDPATHITEM_H
 #define GGGRAPHICSDECORATEDPATHITEM_H
 
+// 1) include system or QT
 #include <QGraphicsPathItem>
 
+// 2) include own project-related (sort by component dependency)
 #include "BaseGraphics/ggConnectionPoint.h"
 #include "BaseGraphics/ggDecoration.h"
 
+// 3) forward declarations
+
+/**
+ * @brief The ggGraphicsDecoratedPathItem class
+ */
 class ggGraphicsDecoratedPathItem :
   public QGraphicsPathItem
 {

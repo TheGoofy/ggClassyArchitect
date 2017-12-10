@@ -1,15 +1,21 @@
 #ifndef GGCLASSYCLASS_H
 #define GGCLASSYCLASS_H
 
+// 1) include system or QT
 #include <QDomElement>
 
+// 2) include own project-related (sort by component dependency)
 #include "Base/ggString.h"
 #include "Base/ggSubject.h"
 #include "ClassyDataSet/ggClassyClassMember.h"
 #include "ClassyDataSet/ggClassyDescription.h"
 
+// 3) forward declarations
 class ggClassyDataSet;
 
+/**
+ * @brief The ggClassyClass class
+ */
 class ggClassyClass :
   public ggSubject
 {

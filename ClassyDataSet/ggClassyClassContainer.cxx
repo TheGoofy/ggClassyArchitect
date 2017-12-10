@@ -1,8 +1,9 @@
+// 0) include own header
 #include "ggClassyClassContainer.h"
 
-#include <QDebug>
+// 1) include system or QT
 
-#include "Base/ggWalkerT.h"
+// 2) include own project-related (sort by component dependency)
 
 
 const QString& ggClassyClassContainer::TypeID()

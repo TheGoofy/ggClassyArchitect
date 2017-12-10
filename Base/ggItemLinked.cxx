@@ -1,5 +1,9 @@
-#include "Base/ggItemLinked.h"
+// 0) include own header
+#include "ggItemLinked.h"
 
+// 1) include system
+
+// 2) include own project-related (sort by component dependency)
 #include "Base/ggWalkerT.h"
 
 

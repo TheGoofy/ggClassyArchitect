@@ -1,13 +1,19 @@
 #ifndef GGCLASSYAPPLICATION_H
 #define GGCLASSYAPPLICATION_H
 
+// 1) include system or QT
 #include <QApplication>
 
+// 2) include own project-related (sort by component dependency)
 #include "Base/ggSubjectT.h"
 
+// 3) forward declarations
 class ggClassyDataSet;
 class QIODevice;
 
+/**
+ * @brief The ggClassyApplication class
+ */
 class ggClassyApplication : public QApplication
 {
   Q_OBJECT

@@ -1,5 +1,7 @@
-#include "BaseGraphics/ggGraphicsTextItem.h"
+// 0) include own header
+#include "ggGraphicsTextItem.h"
 
+// 1) include system or QT
 #include <QMimeData>
 #include <QClipboard>
 #include <QFont>
@@ -10,7 +12,10 @@
 #include <QPainter>
 #include <QGraphicsSceneDragDropEvent>
 
-#include "ClassyMain/ggClassyApplication.h" // goofy: need clipboard in order to re-format mime-data
+// 2) include own project-related (sort by component dependency)
+
+// goofy: eliminate that include (need clipboard in order to re-format mime-data)
+#include "ClassyMain/ggClassyApplication.h"
 
 
 ggGraphicsTextItem::ggGraphicsTextItem(QGraphicsItem* aParent) :

@@ -1,8 +1,15 @@
 #ifndef GGCLASSYCLASSMEMBER_H
 #define GGCLASSYCLASSMEMBER_H
 
+// 1) include system or QT
 #include <QDomElement>
 
+// 2) include own project-related (sort by component dependency)
+// 3) forward declarations
+
+/**
+ * @brief The ggClassyClassMember class
+ */
 class ggClassyClassMember
 {
 public:

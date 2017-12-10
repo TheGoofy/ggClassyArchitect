@@ -1,8 +1,12 @@
-#include "BaseGraphics/ggGraphicsCheckBoxItem.h"
+// 0) include own header
+#include "ggGraphicsCheckBoxItem.h"
 
+// 1) include system or QT
 #include <QCursor>
 #include <QPen>
 #include <QGraphicsSceneMouseEvent>
+
+// 2) include own project-related (sort by component dependency)
 
 
 ggGraphicsCheckBoxItem::ggGraphicsCheckBoxItem(QGraphicsItem* aParent) :

@@ -1,5 +1,9 @@
+// 0) include own header
 #include "ggClassyGraphicsBoxItems.h"
 
+// 1) include system or QT
+
+// 2) include own project-related (sort by component dependency)
 #include "Base/ggWalkerT.h"
 
 

@@ -1,11 +1,18 @@
 #ifndef GGCLASSYGRAPHICSVIEW_H
 #define GGCLASSYGRAPHICSVIEW_H
 
+// 1) include system or QT
 #include <QGraphicsView>
 
+// 2) include own project-related (sort by component dependency)
 #include "Base/ggSubjectT.h"
 #include "Base/ggObserver.h"
 
+// 3) forward declarations
+
+/**
+ * @brief The ggGraphicsView class
+ */
 class ggGraphicsView :
   public QGraphicsView,
   public ggObserver

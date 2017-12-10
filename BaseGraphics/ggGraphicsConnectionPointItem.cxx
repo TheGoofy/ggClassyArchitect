@@ -1,8 +1,12 @@
-#include "BaseGraphics/ggGraphicsConnectionPointItem.h"
+// 0) include own header
+#include "ggGraphicsConnectionPointItem.h"
 
+// 1) include system or QT
 #include <QCursor>
 #include <QPen>
 #include <QGraphicsSceneWheelEvent>
+
+// 2) include own project-related (sort by component dependency)
 
 
 ggGraphicsConnectionPointItem::ggGraphicsConnectionPointItem(float aSize,

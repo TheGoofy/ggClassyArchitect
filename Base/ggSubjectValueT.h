@@ -1,8 +1,16 @@
 #ifndef GGSUBJECTVALUET_H
 #define GGSUBJECTVALUET_H
 
+// 1) include system
+
+// 2) include own project-related (sort by component dependency)
 #include "Base/ggSubject.h"
 
+// 3) forward declarations
+
+/**
+ * Subject derived from a template class
+ */
 template <class TValue>
 
 class ggSubjectValueT :

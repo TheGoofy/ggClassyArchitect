@@ -1,6 +1,10 @@
-#include "BaseGraphics/ggConnectionPoint.h"
+// 0) include own header
+#include "ggConnectionPoint.h"
 
+// 1) include system or QT
 #include <math.h>
+
+// 2) include own project-related (sort by component dependency)
 
 
 ggConnectionPoint::ggConnectionPoint() :

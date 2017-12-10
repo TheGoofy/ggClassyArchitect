@@ -1,11 +1,14 @@
+// 0) include own header
 #include "ggClassyGraphicsBoxItem.h"
 
+// 1) include system or QT
 #include <QGraphicsLineItem>
 #include <QGraphicsSceneMouseEvent>
 #include <QFontMetrics>
 #include <QMessageBox>
 #include <QDebug>
 
+// 2) include own project-related (sort by component dependency)
 #include "Base/ggWalkerT.h"
 #include "BaseGraphics/ggGraphicsTextItem.h"
 #include "BaseGraphics/ggGraphicsCheckBoxItem.h"

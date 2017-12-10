@@ -1,8 +1,11 @@
-#include "Base/ggUtility.h"
+// 0) include own header
+#include "ggUtility.h"
 
+// 1) include system
 #include <math.h>
 #include <vector>
 
+// 2) include own project-related (sort by component dependency)
 #include <Base/ggWalkerT.h>
 
 

@@ -1,6 +1,10 @@
 #ifndef GGBEHAVIORT_H
 #define GGBEHAVIORT_H
 
+// 1) include system
+// 2) include own project-related (sort by component dependency)
+// 3) forward declarations
+
 /**
  * A class, which can behave (or not behave) in a certain way.
  *

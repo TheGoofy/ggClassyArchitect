@@ -1,11 +1,14 @@
-#include "ClassyMain/ggClassyMainWindow.h"
+// 0) include own header
+#include "ggClassyMainWindow.h"
 #include "ui_ggClassyMainWindow.h"
 
+// 1) include system or QT
 #include <QLineEdit>
 #include <QFileDialog>
 #include <QMessageBox>
 #include <QDebug>
 
+// 2) include own project-related (sort by component dependency)
 #include "ClassyMain/ggClassyApplication.h"
 #include "ClassyGraphics/ggClassyGraphicsScene.h"
 

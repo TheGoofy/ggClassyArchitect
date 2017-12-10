@@ -1,11 +1,18 @@
 #ifndef GGGRAPHICSCONNECTIONPOINTITEM_H
 #define GGGRAPHICSCONNECTIONPOINTITEM_H
 
+// 1) include system or QT
 #include <QGraphicsEllipseItem>
 
+// 2) include own project-related (sort by component dependency)
 #include "Base/ggObserver.h"
 #include "BaseGraphics/ggSubjectConnectionPoint.h"
 
+// 3) forward declarations
+
+/**
+ * @brief The ggGraphicsConnectionPointItem class
+ */
 class ggGraphicsConnectionPointItem :
   public QGraphicsEllipseItem,
   private ggObserver

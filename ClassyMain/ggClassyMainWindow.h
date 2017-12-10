@@ -1,14 +1,20 @@
 #ifndef GGCLASSYMAINWINDOW_H
 #define GGCLASSYMAINWINDOW_H
 
+// 1) include system or QT
 #include <QMainWindow>
 
+// 2) include own project-related (sort by component dependency)
 #include "Base/ggObserver.h"
 
+// 3) forward declarations
 namespace Ui {
   class ggClassyMainWindow;
 }
 
+/**
+ * @brief The ggClassyMainWindow class
+ */
 class ggClassyMainWindow :
   public QMainWindow,
   public ggObserver

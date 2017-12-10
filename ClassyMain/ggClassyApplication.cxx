@@ -1,11 +1,14 @@
-#include "ClassyMain/ggClassyApplication.h"
+// 0) include own header
+#include "ggClassyApplication.h"
 
+// 1) include system or QT
 #include <QDomDocument>
 #include <QTextStream>
 #include <QDateTime>
 
-#include "ClassyDataSet/ggClassyDataSet.h"
+// 2) include own project-related (sort by component dependency)
 #include "Base/ggWalkerT.h"
+#include "ClassyDataSet/ggClassyDataSet.h"
 
 
 ggClassyApplication::ggClassyApplication(int &argc, char **argv) :

@@ -1,6 +1,10 @@
-#include "BaseGraphics/ggPainterPath.h"
+// 0) include own header
+#include "ggPainterPath.h"
 
+// 1) include system or QT
 #include <QVector2D>
+
+// 2) include own project-related (sort by component dependency)
 
 
 ggPainterPath::ggPainterPath() :

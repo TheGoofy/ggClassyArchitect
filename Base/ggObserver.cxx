@@ -1,5 +1,9 @@
-#include "Base/ggObserver.h"
+// 0) include own header
+#include "ggObserver.h"
 
+// 1) include system
+
+// 2) include own project-related (sort by component dependency)
 #include "Base/ggSubject.h"
 #include "Base/ggWalkerT.h"
 

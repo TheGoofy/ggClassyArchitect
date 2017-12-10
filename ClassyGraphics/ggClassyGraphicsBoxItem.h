@@ -1,16 +1,23 @@
 #ifndef GGCLASSYBOX_H
 #define GGCLASSYBOX_H
 
+// 1) include system or QT
+
+// 2) include own project-related (sort by component dependency)
 #include "Base/ggTypes.h"
 #include "BaseGraphics/ggGraphicsManipulatorBarItemT.h"
 #include "BaseGraphics/ggSubjectConnectionPoint.h"
 
+// 3) forward declarations
 class ggGraphicsTextItem;
 class ggGraphicsCheckBoxItem;
 class ggClassyGraphicsBoxItems;
 class ggClassyClassBox;
 class ggClassyClass;
 
+/**
+ * @brief The ggClassyGraphicsBoxItem class
+ */
 class ggClassyGraphicsBoxItem :
   public ggGraphicsManipulatorBarItemT<>
 {

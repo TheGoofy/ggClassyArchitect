@@ -1,6 +1,10 @@
 #ifndef GGWALKER_H
 #define GGWALKER_H
 
+// 1) include system
+// 2) include own project-related (sort by component dependency)
+// 3) forward declarations
+
 /**
  * This class allows a compact way to build a loop using
  * iterators. It also helps to not forget calling "++" of the

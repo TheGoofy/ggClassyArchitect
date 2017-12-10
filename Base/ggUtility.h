@@ -1,8 +1,16 @@
 #ifndef GGUTILITIES_H
 #define GGUTILITIES_H
 
+// 1) include system
+
+// 3) forward declarations
 #include "Base/ggTypes.h"
 
+// 3) forward declarations
+
+/**
+ * collection of general, simple utilities
+ */
 namespace ggUtility {
 
   enum class cNumberType {

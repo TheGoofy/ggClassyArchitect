@@ -1,13 +1,20 @@
 #ifndef GGGRAPHICSITEMTEXT_H
 #define GGGRAPHICSITEMTEXT_H
 
+// 1) include system or QT
 #include <QGraphicsTextItem>
 #include <QBrush>
 #include <QPen>
 
+// 2) include own project-related (sort by component dependency)
+
+// 3) forward declarations
 class QMimeData;
 class ggSubject;
 
+/**
+ * @brief The ggGraphicsTextItem class
+ */
 class ggGraphicsTextItem :
   public QGraphicsTextItem
 {

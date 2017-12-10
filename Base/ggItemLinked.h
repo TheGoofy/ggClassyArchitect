@@ -1,7 +1,11 @@
 #ifndef GGITEMLINKED_H
 #define GGITEMLINKED_H
 
+// 1) include system
 #include <set>
+
+// 2) include own project-related (sort by component dependency)
+// 3) forward declarations
 
 /**
  * Allows to link (attach, detach) objects with other objects. It's a

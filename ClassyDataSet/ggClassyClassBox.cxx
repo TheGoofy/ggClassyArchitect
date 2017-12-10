@@ -1,4 +1,9 @@
-#include "ClassyDataSet/ggClassyClassBox.h"
+// 0) include own header
+#include "ggClassyClassBox.h"
+
+// 1) include system or QT
+
+// 2) include own project-related (sort by component dependency)
 
 
 ggClassyClassBox::ggClassyClassBox(const QString& aClassName) :

@@ -1,11 +1,18 @@
 #ifndef GGGRAPHICSDECORATEDSHORTESTPATHITEM_H
 #define GGGRAPHICSDECORATEDSHORTESTPATHITEM_H
 
+// 1) include system or QT
+
+// 2) include own project-related (sort by component dependency)
 #include "Base/ggObserver.h"
 #include "BaseGraphics/ggGraphicsDecoratedPathItem.h"
 
+// 3) forward declarations
 class ggSubjectConnectionPoint;
 
+/**
+ * @brief The ggGraphicsAutoConnectPathItem class
+ */
 class ggGraphicsAutoConnectPathItem :
   public ggGraphicsDecoratedPathItem,
   private ggObserver
