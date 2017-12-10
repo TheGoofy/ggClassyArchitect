@@ -67,9 +67,6 @@ void ggClassyGraphicsScene::SetDataSet(ggClassyDataSet* aDataSet)
   DeleteClassBoxItems();
   CreateClassBoxItems();
   CreateConnectionItems();
-
-  // goofy: development & testing ...
-  AddTestConnections();
 }
 
 
