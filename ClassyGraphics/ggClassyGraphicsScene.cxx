@@ -87,9 +87,7 @@ void ggClassyGraphicsScene::DeleteClassBoxItems()
 {
   // collect items for removal (don't change the list of items, while iterating over it)
   std::vector<QGraphicsItem*> vItemsToDelete;
-  ggWalkerT<QList<QGraphicsItem*>::const_iterator> vItemsWalker(items());
-  while (vItemsWalker) {
-    QGraphicsItem* vItem = *vItemsWalker;
+  foreach (QGraphicsItem* vItem, items()) {
     // if box-items are deleted, the connection-items need to be deleted too
     if (dynamic_cast<ggClassyGraphicsBoxItem*>(vItem) != nullptr ||
         dynamic_cast<ggGraphicsAutoConnectPathItem*>(vItem) != nullptr) {
@@ -109,9 +107,7 @@ void ggClassyGraphicsScene::DeleteConnectionItems()
 {
   // collect items for removal (don't change the list of items, while iterating over it)
   std::vector<QGraphicsItem*> vItemsToDelete;
-  ggWalkerT<QList<QGraphicsItem*>::const_iterator> vItemsWalker(items());
-  while (vItemsWalker) {
-    QGraphicsItem* vItem = *vItemsWalker;
+  foreach (QGraphicsItem* vItem, items()) {
     if (dynamic_cast<ggGraphicsAutoConnectPathItem*>(vItem) != nullptr) {
       vItemsToDelete.push_back(vItem);
     }
