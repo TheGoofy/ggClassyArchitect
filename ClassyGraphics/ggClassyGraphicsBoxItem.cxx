@@ -156,13 +156,13 @@ const ggSubject* ggClassyGraphicsBoxItem::GetSubjectSize() const
 
 QPointF ggClassyGraphicsBoxItem::GetClassPositionTop() const
 {
-  return GetPosition() + QPointF(rect().width()/2.0f, 0.0f);
+  return GetPosition() + QPointF(rect().width() / 2.0f, -pen().widthF() / 2.0f);
 }
 
 
 QPointF ggClassyGraphicsBoxItem::GetClassPositionBottom() const
 {
-  return GetPosition() + QPointF(rect().width()/2.0f, rect().height());
+  return GetPosition() + QPointF(rect().width() / 2.0f, rect().height() + pen().widthF() / 2.0f);
 }
 
 
@@ -170,6 +170,7 @@ QPointF ggClassyGraphicsBoxItem::GetClassPositionLeft() const
 {
   // offset from upper left corner
   QPointF vPosition = GetPosition();
+  vPosition.rx() -= pen().widthF() / 2.0f;
   vPosition.ry() += mClassNameText->boundingRect().height() / 2.0f;
   return vPosition;
 }
@@ -179,7 +180,7 @@ QPointF ggClassyGraphicsBoxItem::GetClassPositionRight() const
 {
   // same as left, just displaced by the box width
   QPointF vPosition = GetClassPositionLeft();
-  vPosition.rx() += GetWidth();
+  vPosition.rx() += GetWidth() + pen().widthF();
   return vPosition;
 }
 
@@ -195,6 +196,7 @@ QPointF ggClassyGraphicsBoxItem::GetMemberPositionLeft(ggUSize aMemberIndex) con
 
   // offset from upper left corner
   QPointF vPosition = GetPosition();
+  vPosition.rx() -= pen().widthF() / 2.0f;
   vPosition.ry() += mClassNameText->boundingRect().height() + vIndentY;
   vPosition.ry() += aMemberIndex * vMemberHeight + vMemberHeight / 2.0f;
 
@@ -207,7 +209,7 @@ QPointF ggClassyGraphicsBoxItem::GetMemberPositionRight(ggUSize aMemberIndex) co
 {
   // same as left, just displaced by the box width
   QPointF vPosition = GetMemberPositionLeft(aMemberIndex);
-  vPosition.rx() += GetWidth();
+  vPosition.rx() += GetWidth() + pen().widthF();
   return vPosition;
 }
 

@@ -27,6 +27,7 @@ ggGraphicsTextItem::ggGraphicsTextItem(QGraphicsItem* aParent) :
   mLastMousePressPos(0.0f, 0.0f),
   mBrush(Qt::NoBrush)
 {
+  document()->setDocumentMargin(3.0f);
   setToolTip("Click twice in order to edit the text.");
   SetEditable(false);
   connect(document(), SIGNAL(contentsChanged()),
