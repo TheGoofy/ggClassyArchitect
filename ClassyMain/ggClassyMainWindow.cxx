@@ -42,6 +42,7 @@ ggClassyMainWindow::ggClassyMainWindow(QWidget *parent) :
   // this connects automatically: connect(ui->mZoomComboBox, SIGNAL(currentIndexChanged(int)), this, SLOT(on_mZoomComboBox_currentIndexChanged(int)));
   connect(ui->mZoomComboBox->lineEdit(), SIGNAL(editingFinished()), this, SLOT(on_mZoomComboBox_editingFinished()));
   connect(ui->mSaveAsPushButton, SIGNAL(clicked()), this, SLOT(SaveDataSetAs()));
+  connect(ui->mTopPushButton, SIGNAL(clicked()), this, SLOT(MoveSelectedItemsToTop()));
 
   // register subject(s)
   Attach(ui->mGraphicsView->GetSubjectZoom());
@@ -139,4 +140,17 @@ void ggClassyMainWindow::SaveDataSetAs()
   }
 
   ggClassyApplication::GetInstance().SaveDataSet(&vFile);
+}
+
+
+void ggClassyMainWindow::MoveSelectedItemsToTop()
+{
+  if (ui->mGraphicsView->scene() != nullptr) {
+    QGraphicsScene* vScene = ui->mGraphicsView->scene();
+    QList<QGraphicsItem*> vSelectedItems = vScene->selectedItems();
+    foreach (QGraphicsItem* vItem, vSelectedItems) {
+      vScene->removeItem(vItem);
+      vScene->addItem(vItem);
+    }
+  }
 }

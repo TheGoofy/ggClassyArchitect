@@ -62,7 +62,7 @@ ggClassyGraphicsBoxItem::ggClassyGraphicsBoxItem(ggClassyClass* aClass,
 
 void ggClassyGraphicsBoxItem::Construct()
 {
-  // setFlag(ItemIsSelectable); // size-handle don't work when item is selected
+  setFlag(ItemIsSelectable); // size-handle don't work when item is selected
   setBrush(QColor(255, 255, 255, 255));
   QPen vPen(QColor(0, 0, 0, 50), 2.0f);
   vPen.setCapStyle(Qt::FlatCap);

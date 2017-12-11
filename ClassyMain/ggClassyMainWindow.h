@@ -32,6 +32,7 @@ protected slots:
   void on_mZoomFitPushButton_clicked();
   void on_mZoomResetPushButton_clicked();
   void on_mAddClassPushButton_clicked();
+  void MoveSelectedItemsToTop();
   void SaveDataSetAs();
 
 protected:
