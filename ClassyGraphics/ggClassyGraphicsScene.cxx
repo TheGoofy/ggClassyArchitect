@@ -146,7 +146,7 @@ void ggClassyGraphicsScene::CreateConnectionItems()
     if (vClass != nullptr) {
 
       // loop over base classes
-      ggWalkerT<ggStringSet::const_iterator> vBaseClassNamesWalker(vClass->mBaseClassNames);
+      ggWalkerT<ggStringSet::const_iterator> vBaseClassNamesWalker(vClass->GetBaseClassNames());
       while (vBaseClassNamesWalker) {
 
         // lines between derived class and base class
@@ -160,7 +160,7 @@ void ggClassyGraphicsScene::CreateConnectionItems()
       }
 
       // loop over members
-      const ggClassyClass::tMembers& vMembers = vClass->mMembers;
+      const ggClassyClass::tMembers& vMembers = vClass->GetMembers();
       for (ggUSize vMemberIndex = 0; vMemberIndex < vMembers.size(); vMemberIndex++) {
 
         // connect member with class

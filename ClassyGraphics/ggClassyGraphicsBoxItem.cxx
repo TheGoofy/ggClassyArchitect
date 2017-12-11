@@ -189,7 +189,7 @@ QPointF ggClassyGraphicsBoxItem::GetMemberPositionLeft(ggUSize aMemberIndex) con
 {
   // calculate the height of a single member  
   ggUSize vNumberOfMembers = 1;
-  if (GetClass() != nullptr) vNumberOfMembers = GetClass()->mMembers.size();
+  if (GetClass() != nullptr) vNumberOfMembers = GetClass()->GetMembers().size();
   if (vNumberOfMembers < 1) vNumberOfMembers = 1;
   float vIndentY = 3.0f;
   float vMemberHeight = (mMembersText->boundingRect().height() - 2.0f* vIndentY) / vNumberOfMembers;
@@ -343,7 +343,7 @@ void ggClassyGraphicsBoxItem::UpdateClassRead()
   if (GetClass() != nullptr) {
     mClassNameText->SetText(GetClass()->GetName());
     mMembersText->SetText(GetClass()->GetMembersText());
-    mDescriptionText->SetText(GetClass()->mDescription);
+    mDescriptionText->SetText(GetClass()->GetDescription());
   }
 }
 
@@ -351,7 +351,10 @@ void ggClassyGraphicsBoxItem::UpdateClassRead()
 void ggClassyGraphicsBoxItem::UpdateClassWrite()
 {
   if (GetClass() != nullptr) {
+    // no need to send notifications to myself
     cExecutorBlocking vBlock(this, GetClass());
+    // collect notifications and only send one to al other observers
+    cExecutorLazy vLazy(GetClass());
     // renaming fails, if there is another class with the same name
     if (!GetClass()->SetName(mClassNameText->GetText())) {
       QMessageBox::information(nullptr, "Can't change class name",
@@ -361,7 +364,7 @@ void ggClassyGraphicsBoxItem::UpdateClassWrite()
       mClassNameText->SetText(GetClass()->GetName());
     }
     GetClass()->SetMembersText(mMembersText->GetText());
-    GetClass()->mDescription = mDescriptionText->GetText();
+    GetClass()->SetDescription(mDescriptionText->GetText());
   }
 }
 
@@ -487,7 +490,7 @@ void ggClassyGraphicsBoxItem::UpdateConnectionPoints()
   mClassConnectionLeft.SetPosition(GetClassPositionLeft());
   mClassConnectionRight.SetPosition(GetClassPositionRight());
   if (GetClass() != nullptr) {
-    const ggClassyClass::tMembers& vMembers = GetClass()->mMembers;
+    const ggClassyClass::tMembers& vMembers = GetClass()->GetMembers();
     mMembersConnectionLeft.resize(vMembers.size());
     mMembersConnectionRight.resize(vMembers.size());
     for (ggUSize vIndex = 0; vIndex < vMembers.size(); vIndex++) {

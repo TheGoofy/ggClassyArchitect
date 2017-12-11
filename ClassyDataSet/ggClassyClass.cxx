@@ -96,16 +96,52 @@ const QString& ggClassyClass::GetName() const
   return mName;
 }
 
-
+#include <QDebug>
 bool ggClassyClass::SetName(const QString& aName)
 {
+  if (aName == mName) return true;
   if (mDataSet != nullptr) {
+    // renames also dependent members from other classes (and notifies the changes)
     return mDataSet->RenameClass(mName, aName);
   }
   else {
     mName = aName;
+    Notify();
     return true;
   }
+}
+
+
+const ggStringSet& ggClassyClass::GetBaseClassNames() const
+{
+  return mBaseClassNames;
+}
+
+
+void ggClassyClass::AddBaseClassName(const QString& aBaseClassName)
+{
+  if (mBaseClassNames.insert(aBaseClassName).second) Notify();
+}
+
+
+void ggClassyClass::RemoveBaseClassName(const QString& aBaseClassName)
+{
+  if (mBaseClassNames.erase(aBaseClassName)) Notify();
+}
+
+
+void ggClassyClass::RemoveAllBaseClassNames()
+{
+  if (!mBaseClassNames.empty()) {
+    mBaseClassNames.clear();
+    Notify();
+  }
+}
+
+
+const ggClassyClass::tMembers& ggClassyClass::GetMembers() const
+{
+  return mMembers;
 }
 
 
@@ -127,16 +163,32 @@ QString ggClassyClass::GetMembersText() const
 
 void ggClassyClass::SetMembersText(const QString& aText)
 {
-  mMembers.clear();
-  QStringList vMembersText = aText.split("\n");
-  ggWalkerT<QStringList::iterator> vMembersTextWalker(vMembersText);
-  while (vMembersTextWalker) {
-    const QString& vMemberText = *vMembersTextWalker;
-    QStringList vMemberNameAndClass = vMemberText.split("\t", QString::SkipEmptyParts);
-    QString vMemberName("");
-    QString vMemberClassName("");
-    if (vMemberNameAndClass.size() >= 1) vMemberName = vMemberNameAndClass.at(0).simplified();
-    if (vMemberNameAndClass.size() >= 2) vMemberClassName = vMemberNameAndClass.at(1).simplified();
-    mMembers.push_back(ggClassyClassMember(vMemberName, vMemberClassName));
+  if (aText != GetMembersText()) {
+    mMembers.clear();
+    QStringList vMembersText = aText.split("\n");
+    ggWalkerT<QStringList::iterator> vMembersTextWalker(vMembersText);
+    while (vMembersTextWalker) {
+      const QString& vMemberText = *vMembersTextWalker;
+      QStringList vMemberNameAndClass = vMemberText.split("\t", QString::SkipEmptyParts);
+      QString vMemberName("");
+      QString vMemberClassName("");
+      if (vMemberNameAndClass.size() >= 1) vMemberName = vMemberNameAndClass.at(0).simplified();
+      if (vMemberNameAndClass.size() >= 2) vMemberClassName = vMemberNameAndClass.at(1).simplified();
+      mMembers.push_back(ggClassyClassMember(vMemberName, vMemberClassName));
+    }
+    Notify();
   }
+}
+
+
+const QString& ggClassyClass::GetDescription() const
+{
+  return mDescription;
+}
+
+
+void ggClassyClass::SetDescription(const QString& aDescription)
+{
+  mDescription = aDescription;
+  Notify();
 }
