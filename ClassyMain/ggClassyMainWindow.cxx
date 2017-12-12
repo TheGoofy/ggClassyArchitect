@@ -42,7 +42,10 @@ ggClassyMainWindow::ggClassyMainWindow(QWidget *parent) :
   // this connects automatically: connect(ui->mZoomComboBox, SIGNAL(currentIndexChanged(int)), this, SLOT(on_mZoomComboBox_currentIndexChanged(int)));
   connect(ui->mZoomComboBox->lineEdit(), SIGNAL(editingFinished()), this, SLOT(on_mZoomComboBox_editingFinished()));
   connect(ui->mSaveAsPushButton, SIGNAL(clicked()), this, SLOT(SaveDataSetAs()));
-  connect(ui->mTopPushButton, SIGNAL(clicked()), this, SLOT(MoveSelectedItemsToTop()));
+  connect(ui->mMoveTopPushButton, SIGNAL(clicked()), this, SLOT(MoveSelectedItemsToTop()));
+  connect(ui->mMoveUpPushButton, SIGNAL(clicked()), this, SLOT(MoveSelectedItemsUp()));
+  connect(ui->mMoveDownPushButton, SIGNAL(clicked()), this, SLOT(MoveSelectedItemsDown()));
+  connect(ui->mMoveBottomPushButton, SIGNAL(clicked()), this, SLOT(MoveSelectedItemsToBottom()));
 
   // register subject(s)
   Attach(ui->mGraphicsView->GetSubjectZoom());
@@ -152,5 +155,35 @@ void ggClassyMainWindow::MoveSelectedItemsToTop()
       vScene->removeItem(vItem);
       vScene->addItem(vItem);
     }
+  }
+}
+
+
+void ggClassyMainWindow::MoveSelectedItemsToBottom()
+{
+  if (ui->mGraphicsView->scene() != nullptr) {
+    QGraphicsScene* vScene = ui->mGraphicsView->scene();
+    QList<QGraphicsItem*> vSelectedItems = vScene->selectedItems();
+    // todo
+  }
+}
+
+
+void ggClassyMainWindow::MoveSelectedItemsUp()
+{
+  if (ui->mGraphicsView->scene() != nullptr) {
+    QGraphicsScene* vScene = ui->mGraphicsView->scene();
+    QList<QGraphicsItem*> vSelectedItems = vScene->selectedItems();
+    // todo
+  }
+}
+
+
+void ggClassyMainWindow::MoveSelectedItemsDown()
+{
+  if (ui->mGraphicsView->scene() != nullptr) {
+    QGraphicsScene* vScene = ui->mGraphicsView->scene();
+    QList<QGraphicsItem*> vSelectedItems = vScene->selectedItems();
+    // todo
   }
 }

@@ -48,9 +48,37 @@
        </widget>
       </item>
       <item>
-       <widget class="QPushButton" name="mTopPushButton">
+       <widget class="Line" name="line">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="mMoveTopPushButton">
         <property name="text">
          <string>Top</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="mMoveUpPushButton">
+        <property name="text">
+         <string>Up</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="mMoveDownPushButton">
+        <property name="text">
+         <string>Down</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="mMoveBottomPushButton">
+        <property name="text">
+         <string>Bottom</string>
         </property>
        </widget>
       </item>
