@@ -378,10 +378,10 @@ void ggClassyGraphicsBoxItem::NotifyClassChange()
 void ggClassyGraphicsBoxItem::UpdateClassBoxRead()
 {
   if (GetClassBox() != nullptr) {
-    SetPosition(GetClassBox()->mPosition);
-    SetWidth(GetClassBox()->mWidth);
-    mMembersCheckBox->SetChecked(GetClassBox()->mMembersVisible);
-    mDescriptionCheckBox->SetChecked(GetClassBox()->mDescriptionVisible);
+    SetPosition(GetClassBox()->GetPosition());
+    SetWidth(GetClassBox()->GetWidth());
+    mMembersCheckBox->SetChecked(GetClassBox()->GetMembersVisible());
+    mDescriptionCheckBox->SetChecked(GetClassBox()->GetDescriptionVisible());
   }
 }
 
@@ -389,10 +389,12 @@ void ggClassyGraphicsBoxItem::UpdateClassBoxRead()
 void ggClassyGraphicsBoxItem::UpdateClassBoxWrite()
 {
   if (GetClassBox() != nullptr) {
-    GetClassBox()->mPosition = GetPosition();
-    GetClassBox()->mWidth = GetWidth();
-    GetClassBox()->mMembersVisible = mMembersCheckBox->GetChecked();
-    GetClassBox()->mDescriptionVisible = mDescriptionCheckBox->GetChecked();
+    ggObserver::cExecutorBlocking vBlock(this, GetClassBox());
+    ggSubject::cExecutorLazy vLazy(GetClassBox());
+    GetClassBox()->SetPosition(GetPosition());
+    GetClassBox()->SetWidth(GetWidth());
+    GetClassBox()->SetMembersVisible(mMembersCheckBox->GetChecked());
+    GetClassBox()->SetDescriptionVisible(mDescriptionCheckBox->GetChecked());
   }
 }
 

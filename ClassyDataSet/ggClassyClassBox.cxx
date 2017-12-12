@@ -41,3 +41,77 @@ QDomElement ggClassyClassBox::CreateDomElement(QDomDocument& aDocument) const
   return vElement;
 }
 
+
+const QString& ggClassyClassBox::GetClassName() const
+{
+  return mClassName;
+}
+
+
+void ggClassyClassBox::SetClassName(const QString& aClassName)
+{
+  if (aClassName != mClassName) {
+    mClassName = aClassName;
+    Notify();
+  }
+}
+
+
+const QPointF& ggClassyClassBox::GetPosition() const
+{
+  return mPosition;
+}
+
+
+void ggClassyClassBox::SetPosition(const QPointF& aPosition)
+{
+  if (aPosition != mPosition) {
+    mPosition = aPosition;
+    Notify();
+  }
+}
+
+
+float ggClassyClassBox::GetWidth() const
+{
+  return mWidth;
+}
+
+
+void ggClassyClassBox::SetWidth(float aWidth)
+{
+  if (aWidth != mWidth) {
+    mWidth = aWidth;
+    Notify();
+  }
+}
+
+
+bool ggClassyClassBox::GetMembersVisible() const
+{
+  return mMembersVisible;
+}
+
+
+void ggClassyClassBox::SetMembersVisible(bool aVisible)
+{
+  if (aVisible != mMembersVisible) {
+    mMembersVisible = aVisible;
+    Notify();
+  }
+}
+
+
+bool ggClassyClassBox::GetDescriptionVisible() const
+{
+  return mDescriptionVisible;
+}
+
+
+void ggClassyClassBox::SetDescriptionVisible(bool aVisible)
+{
+  if (aVisible != mDescriptionVisible) {
+    mDescriptionVisible = aVisible;
+    Notify();
+  }
+}

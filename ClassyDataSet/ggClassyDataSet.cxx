@@ -137,9 +137,8 @@ bool ggClassyDataSet::RenameClass(const QString& aOldClassName,
   while (vClassBoxesWalker) {
     // get the class box pointer
     ggClassyClassBox* vClassBox = *vClassBoxesWalker;
-    if (vClassBox->mClassName == aOldClassName) {
-      vClassBox->mClassName = aNewClassName;
-      vClassBox->Notify();
+    if (vClassBox->GetClassName() == aOldClassName) {
+      vClassBox->SetClassName(aNewClassName);
     }
   }
 
@@ -201,24 +200,24 @@ ggClassyDataSet* ggClassyDataSet::CreateTestDataSet()
   vClassC->mDescription = "This is a very useful description ot the class!";
 
   ggClassyClassBox* vClassBoxA1 = new ggClassyClassBox(vClassA->GetName());
-  vClassBoxA1->mPosition = QPointF(-300, -300);
+  vClassBoxA1->SetPosition(QPointF(-300, -300));
 
   ggClassyClassBox* vClassBoxA2 = new ggClassyClassBox(vClassA->GetName());
-  vClassBoxA2->mPosition = QPointF(100, -300);
+  vClassBoxA2->SetPosition(QPointF(100, -300));
 
   ggClassyClassBox* vClassBoxB1 = new ggClassyClassBox(vClassB->GetName());
-  vClassBoxB1->mPosition = QPointF(-100, -100);
+  vClassBoxB1->SetPosition(QPointF(-100, -100));
 
   ggClassyClassBox* vClassBoxB2 = new ggClassyClassBox(vClassB->GetName());
-  vClassBoxB2->mPosition = QPointF(300, -100);
+  vClassBoxB2->SetPosition(QPointF(300, -100));
 
   ggClassyClassBox* vClassBoxC1 = new ggClassyClassBox(vClassC->GetName());
-  vClassBoxC1->mPosition = QPointF(-250, 0);
-  vClassBoxC1->mWidth = 250.0f;
+  vClassBoxC1->SetPosition(QPointF(-250, 0));
+  vClassBoxC1->SetWidth(250.0f);
 
   ggClassyClassBox* vClassBoxC2 = new ggClassyClassBox(vClassC->GetName());
-  vClassBoxC2->mPosition = QPointF(150, 0);
-  vClassBoxC2->mWidth = 250.0f;
+  vClassBoxC2->SetPosition(QPointF(150, 0));
+  vClassBoxC2->SetWidth(250.0f);
 
   vDataSet->AddClassBox(vClassBoxA1);
   vDataSet->AddClassBox(vClassBoxA2);

@@ -126,7 +126,7 @@ void ggClassyGraphicsScene::CreateClassBoxItems()
     ggWalkerT<tClassBoxes::iterator> vClassBoxesIterator(mDataSet->mClassBoxes);
     while (vClassBoxesIterator) {
       ggClassyClassBox* vClassBox = *vClassBoxesIterator;
-      ggClassyClass* vClass = mDataSet->FindClass(vClassBox->mClassName);
+      ggClassyClass* vClass = mDataSet->FindClass(vClassBox->GetClassName());
       ggClassyGraphicsBoxItem* vBoxItem = new ggClassyGraphicsBoxItem(vClass, vClassBox);
       mBoxPoints->AddBoxItem(vBoxItem);
       QGraphicsScene::addItem(vBoxItem);

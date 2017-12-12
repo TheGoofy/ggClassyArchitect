@@ -121,7 +121,7 @@ void ggClassyMainWindow::on_mAddClassPushButton_clicked()
   ggClassyClass* vClass = new ggClassyClass("ggClassD");
   vClass->SetMembersText("Goofy()\tggClassA\nIs()\tggClassB\nHere()\tggClassC");
   ggClassyClassBox* vClassBox = new ggClassyClassBox("ggClassD");
-  vClassBox->mPosition = QPointF(0, -400);
+  vClassBox->SetPosition(QPointF(0, -400));
   ggClassyApplication::GetInstance().GetDataSet()->AddClassBox(vClassBox);
   ggClassyApplication::GetInstance().GetDataSet()->AddClass(vClass);
 }
