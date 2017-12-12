@@ -84,10 +84,12 @@ QDomElement ggClassyClass::CreateDomElement(QDomDocument& aDocument) const
 bool ggClassyClass::operator() (const ggClassyClass* aClassA,
                                 const ggClassyClass* aClassB) const
 {
-  if (aClassA == nullptr || aClassB == nullptr)
+  if (aClassA == nullptr || aClassB == nullptr) {
     return aClassA < aClassB;
-  else
+  }
+  else {
     return aClassA->mName < aClassB->mName;
+  }
 }
 
 

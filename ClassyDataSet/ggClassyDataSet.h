@@ -8,7 +8,7 @@
 #include "Base/ggTypes.h"
 #include "ClassyDataSet/ggClassyClassContainer.h"
 #include "ClassyDataSet/ggClassyCollectionContainer.h"
-#include "ClassyDataSet/ggClassyClassBox.h"
+#include "ClassyDataSet/ggClassyClassBoxContainer.h"
 #include "ClassyDataSet/ggClassyFrame.h"
 
 // 3) forward declarations
@@ -37,16 +37,28 @@ public:
 
   ggClassyClassBox* AddClassBox(ggClassyClassBox* aClassBox);
 
+  typedef std::set<const ggClassyClassBox*> tClassBoxes;
+  void MoveClassBoxesUp(const tClassBoxes& aClassBoxes);
+  void MoveClassBoxesDown(const tClassBoxes& aClassBoxes);
+  void MoveClassBoxesTop(const tClassBoxes& aClassBoxes);
+  void MoveClassBoxesBottom(const tClassBoxes& aClassBoxes);
+
   const ggSubject* GetSubjectClasses() const;
   const ggSubject* GetSubjectClassBoxes() const;
   const ggSubject* GetSubjectConnections() const;
 
-  ggClassyCollectionContainer mCollections;
-  ggClassyClassContainer mClasses;
-  std::vector<ggClassyClassBox*> mClassBoxes;
-  std::vector<ggClassyFrame*> mFrames;
+  const ggClassyClassContainer& GetClasses() const;
+  const ggClassyClassBoxContainer& GetClassBoxes() const;
 
 private:
+
+  bool Find(const tClassBoxes& aClassBoxes,
+            const ggClassyClassBox* aClassBox) const;
+
+  ggClassyCollectionContainer mCollections;
+  ggClassyClassContainer mClasses;
+  ggClassyClassBoxContainer mClassBoxes;
+  std::vector<ggClassyFrame*> mFrames;
 
   ggSubject mSubjectClasses;
   ggSubject mSubjectClassBoxes;

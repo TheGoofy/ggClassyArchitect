@@ -11,7 +11,8 @@ ggClassyClassBox::ggClassyClassBox(const QString& aClassName) :
   mPosition(0.0f, 0.0f),
   mWidth(150.0f),
   mMembersVisible(true),
-  mDescriptionVisible(true)
+  mDescriptionVisible(true),
+  mIndexZ(0)
 {
 }
 
@@ -38,6 +39,7 @@ QDomElement ggClassyClassBox::CreateDomElement(QDomDocument& aDocument) const
   vElement.setAttribute("mWidth", mWidth);
   vElement.setAttribute("mMembersVisible", mMembersVisible);
   vElement.setAttribute("mDescriptionVisible", mDescriptionVisible);
+  vElement.setAttribute("mIndexZ", mIndexZ);
   return vElement;
 }
 
@@ -114,4 +116,16 @@ void ggClassyClassBox::SetDescriptionVisible(bool aVisible)
     mDescriptionVisible = aVisible;
     Notify();
   }
+}
+
+
+int ggClassyClassBox::GetIndexZ() const
+{
+  return mIndexZ;
+}
+
+
+void ggClassyClassBox::SetIndexZ(int aIndexZ)
+{
+  mIndexZ = aIndexZ;
 }

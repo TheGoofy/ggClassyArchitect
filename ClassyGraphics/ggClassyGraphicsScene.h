@@ -8,6 +8,7 @@
 #include "Base/ggObserver.h"
 
 // 3) forward declarations
+class ggClassyClassBox;
 class ggClassyGraphicsBoxItem;
 class ggClassyClassBoxPoints;
 class ggClassyDataSet;
@@ -28,11 +29,20 @@ public:
 
   void SetDataSet(ggClassyDataSet* aDataSet);
 
+  void MoveSelectedClassBoxesUp();
+  void MoveSelectedClassBoxesDown();
+  void MoveSelectedClassBoxesTop();
+  void MoveSelectedClassBoxesBottom();
+
 protected:
 
   virtual void Update(const ggSubject* aSubject) override;
 
 private:
+
+  typedef std::set<const ggClassyClassBox*> tClassBoxes;
+  tClassBoxes GetSelectedClassBoxes() const;
+  void SelectClassBoxes(const tClassBoxes& aClassBoxes);
 
   void DeleteItems(const std::vector<QGraphicsItem*>& aItems);
   void DeleteClassBoxItems();

@@ -70,6 +70,73 @@ void ggClassyGraphicsScene::SetDataSet(ggClassyDataSet* aDataSet)
 }
 
 
+ggClassyGraphicsScene::tClassBoxes ggClassyGraphicsScene::GetSelectedClassBoxes() const
+{
+  tClassBoxes vSelectedClassBoxes;
+  foreach (QGraphicsItem* vItem, selectedItems()) {
+    ggClassyGraphicsBoxItem* vClassBoxItem = dynamic_cast<ggClassyGraphicsBoxItem*>(vItem);
+    if (vClassBoxItem != nullptr) {
+      vSelectedClassBoxes.insert(vClassBoxItem->GetClassBox());
+    }
+  }
+  return vSelectedClassBoxes;
+}
+
+
+void ggClassyGraphicsScene::SelectClassBoxes(const tClassBoxes& aClassBoxes)
+{
+  foreach (QGraphicsItem* vItem, items()) {
+    ggClassyGraphicsBoxItem* vClassBoxItem = dynamic_cast<ggClassyGraphicsBoxItem*>(vItem);
+    if (vClassBoxItem != nullptr) {
+      const ggClassyClassBox* vClassBox = vClassBoxItem->GetClassBox();
+      if (aClassBoxes.find(vClassBox) != aClassBoxes.end()) {
+        vClassBoxItem->setSelected(true);
+      }
+    }
+  }
+}
+
+
+void ggClassyGraphicsScene::MoveSelectedClassBoxesUp()
+{
+  if (mDataSet != nullptr) {
+    const tClassBoxes& vClassBoxes = GetSelectedClassBoxes();
+    mDataSet->MoveClassBoxesUp(vClassBoxes);
+    SelectClassBoxes(vClassBoxes);
+  }
+}
+
+
+void ggClassyGraphicsScene::MoveSelectedClassBoxesDown()
+{
+  if (mDataSet != nullptr) {
+    const tClassBoxes& vClassBoxes = GetSelectedClassBoxes();
+    mDataSet->MoveClassBoxesDown(vClassBoxes);
+    SelectClassBoxes(vClassBoxes);
+  }
+}
+
+
+void ggClassyGraphicsScene::MoveSelectedClassBoxesTop()
+{
+  if (mDataSet != nullptr) {
+    const tClassBoxes& vClassBoxes = GetSelectedClassBoxes();
+    mDataSet->MoveClassBoxesTop(vClassBoxes);
+    SelectClassBoxes(vClassBoxes);
+  }
+}
+
+
+void ggClassyGraphicsScene::MoveSelectedClassBoxesBottom()
+{
+  if (mDataSet != nullptr) {
+    const tClassBoxes& vClassBoxes = GetSelectedClassBoxes();
+    mDataSet->MoveClassBoxesBottom(vClassBoxes);
+    SelectClassBoxes(vClassBoxes);
+  }
+}
+
+
 void ggClassyGraphicsScene::DeleteItems(const std::vector<QGraphicsItem*>& aItems)
 {
   ggWalkerT<std::vector<QGraphicsItem*>::const_iterator> vItemsWalker(aItems);
@@ -122,8 +189,7 @@ void ggClassyGraphicsScene::CreateClassBoxItems()
 {
   // loop over box items
   if (mDataSet != nullptr) {
-    typedef std::vector<ggClassyClassBox*> tClassBoxes;
-    ggWalkerT<tClassBoxes::iterator> vClassBoxesIterator(mDataSet->mClassBoxes);
+    ggWalkerT<ggClassyClassBoxContainer::const_iterator> vClassBoxesIterator(mDataSet->GetClassBoxes());
     while (vClassBoxesIterator) {
       ggClassyClassBox* vClassBox = *vClassBoxesIterator;
       ggClassyClass* vClass = mDataSet->FindClass(vClassBox->GetClassName());

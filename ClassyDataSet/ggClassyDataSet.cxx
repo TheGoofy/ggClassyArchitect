@@ -47,8 +47,7 @@ QDomElement ggClassyDataSet::CreateDomElement(QDomDocument& aDocument) const
   }
 
   // class boxes
-  typedef std::vector<ggClassyClassBox*> tClassBoxes;
-  ggWalkerT<tClassBoxes::const_iterator> vClassBoxesWalker(mClassBoxes);
+  ggWalkerT<ggClassyClassBoxContainer::const_iterator> vClassBoxesWalker(mClassBoxes);
   while (vClassBoxesWalker) {
     vElement.appendChild((*vClassBoxesWalker)->CreateDomElement(aDocument));
   }
@@ -167,11 +166,81 @@ bool ggClassyDataSet::RenameClass(const QString& aOldClassName,
 ggClassyClassBox* ggClassyDataSet::AddClassBox(ggClassyClassBox* aClassBox)
 {
   if (aClassBox != nullptr) {
+    aClassBox->SetIndexZ(mClassBoxes.size());
     mClassBoxes.push_back(aClassBox);
     mSubjectClassBoxes.Notify();
     mSubjectConnections.Notify();
   }
   return aClassBox;
+}
+
+
+bool ggClassyDataSet::Find(const tClassBoxes& aClassBoxes,
+                           const ggClassyClassBox* aClassBox) const
+{
+  return aClassBoxes.find(aClassBox) != aClassBoxes.end();
+}
+
+
+void ggClassyDataSet::MoveClassBoxesUp(const tClassBoxes& aClassBoxes)
+{
+  qDebug() << __PRETTY_FUNCTION__ << "goofy todo";
+}
+
+
+void ggClassyDataSet::MoveClassBoxesDown(const tClassBoxes& aClassBoxes)
+{
+  qDebug() << __PRETTY_FUNCTION__ << "goofy todo";
+}
+
+
+void ggClassyDataSet::MoveClassBoxesTop(const tClassBoxes& aClassBoxes)
+{
+  if (aClassBoxes.empty()) return;
+  std::vector<ggClassyClassBox*> vClassBoxesA;
+  std::vector<ggClassyClassBox*> vClassBoxesB;
+  ggWalkerT<ggClassyClassBoxContainer::iterator> vClassBoxesWalker(mClassBoxes);
+  while (vClassBoxesWalker) {
+    ggClassyClassBox* vClassBox = *vClassBoxesWalker;
+    if (Find(aClassBoxes, vClassBox)) vClassBoxesA.push_back(vClassBox);
+    else vClassBoxesB.push_back(vClassBox);
+  }
+  mClassBoxes.clear();
+  mClassBoxes.insert(mClassBoxes.end(), vClassBoxesB.begin(), vClassBoxesB.end());
+  mClassBoxes.insert(mClassBoxes.end(), vClassBoxesA.begin(), vClassBoxesA.end());
+  qDebug() << __PRETTY_FUNCTION__ << "goofy todo: adjust mIndexZ";
+  mSubjectClassBoxes.Notify();
+}
+
+
+void ggClassyDataSet::MoveClassBoxesBottom(const tClassBoxes& aClassBoxes)
+{
+  if (aClassBoxes.empty()) return;
+  std::vector<ggClassyClassBox*> vClassBoxesA;
+  std::vector<ggClassyClassBox*> vClassBoxesB;
+  ggWalkerT<ggClassyClassBoxContainer::iterator> vClassBoxesWalker(mClassBoxes);
+  while (vClassBoxesWalker) {
+    ggClassyClassBox* vClassBox = *vClassBoxesWalker;
+    if (Find(aClassBoxes, vClassBox)) vClassBoxesA.push_back(vClassBox);
+    else vClassBoxesB.push_back(vClassBox);
+  }
+  mClassBoxes.clear();
+  mClassBoxes.insert(mClassBoxes.end(), vClassBoxesA.begin(), vClassBoxesA.end());
+  mClassBoxes.insert(mClassBoxes.end(), vClassBoxesB.begin(), vClassBoxesB.end());
+  qDebug() << __PRETTY_FUNCTION__ << "goofy todo: adjust mIndexZ";
+  mSubjectClassBoxes.Notify();
+}
+
+
+const ggClassyClassContainer& ggClassyDataSet::GetClasses() const
+{
+  return mClasses;
+}
+
+
+const ggClassyClassBoxContainer& ggClassyDataSet::GetClassBoxes() const
+{
+  return mClassBoxes;
 }
 
 

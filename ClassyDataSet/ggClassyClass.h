@@ -34,17 +34,14 @@ public:
 
   const QString& GetName() const;
   bool SetName(const QString& aName);
-
   const ggStringSet& GetBaseClassNames() const;
   void AddBaseClassName(const QString& aBaseClassName);
   void RemoveBaseClassName(const QString& aBaseClassName);
   void RemoveAllBaseClassNames();
-
   typedef std::vector<ggClassyClassMember> tMembers;
   const tMembers& GetMembers() const;
   QString GetMembersText() const;
   void SetMembersText(const QString& aText);
-
   const QString& GetDescription() const;
   void SetDescription(const QString& aDescription);
 

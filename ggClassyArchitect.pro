@@ -67,7 +67,8 @@ HEADERS += \
     ClassyMain/ggClassyApplication.h \
     ClassyMain/ggClassyMainWindow.h \
     BaseGraphics/ggGraphicsView.h \
-    ClassyGraphics/ggClassyClassBoxPoints.h
+    ClassyGraphics/ggClassyClassBoxPoints.h \
+    ClassyDataSet/ggClassyClassBoxContainer.h
 
 SOURCES += \
     Base/ggItemLinked.cxx \
@@ -98,5 +99,6 @@ SOURCES += \
     ClassyMain/ggClassyMainWindow.cxx \
     ClassyMain/main.cxx \
     BaseGraphics/ggGraphicsView.cxx \
-    ClassyGraphics/ggClassyClassBoxPoints.cxx
+    ClassyGraphics/ggClassyClassBoxPoints.cxx \
+    ClassyDataSet/ggClassyClassBoxContainer.cxx
 

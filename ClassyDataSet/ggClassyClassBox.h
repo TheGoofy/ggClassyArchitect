@@ -33,9 +33,10 @@ public:
   void SetMembersVisible(bool aVisible);
   bool GetDescriptionVisible() const;
   void SetDescriptionVisible(bool aVisible);
+  int GetIndexZ() const;
+  void SetIndexZ(int aIndexZ);
 
   QDomElement CreateDomElement(QDomDocument& aDocument) const;
-
 
 private:
 
@@ -44,6 +45,7 @@ private:
   float mWidth;
   bool mMembersVisible;
   bool mDescriptionVisible;
+  int mIndexZ;
 
 };
 

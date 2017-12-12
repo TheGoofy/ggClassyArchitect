@@ -42,10 +42,10 @@ ggClassyMainWindow::ggClassyMainWindow(QWidget *parent) :
   // this connects automatically: connect(ui->mZoomComboBox, SIGNAL(currentIndexChanged(int)), this, SLOT(on_mZoomComboBox_currentIndexChanged(int)));
   connect(ui->mZoomComboBox->lineEdit(), SIGNAL(editingFinished()), this, SLOT(on_mZoomComboBox_editingFinished()));
   connect(ui->mSaveAsPushButton, SIGNAL(clicked()), this, SLOT(SaveDataSetAs()));
-  connect(ui->mMoveTopPushButton, SIGNAL(clicked()), this, SLOT(MoveSelectedItemsToTop()));
+  connect(ui->mMoveTopPushButton, SIGNAL(clicked()), this, SLOT(MoveSelectedItemsTop()));
   connect(ui->mMoveUpPushButton, SIGNAL(clicked()), this, SLOT(MoveSelectedItemsUp()));
   connect(ui->mMoveDownPushButton, SIGNAL(clicked()), this, SLOT(MoveSelectedItemsDown()));
-  connect(ui->mMoveBottomPushButton, SIGNAL(clicked()), this, SLOT(MoveSelectedItemsToBottom()));
+  connect(ui->mMoveBottomPushButton, SIGNAL(clicked()), this, SLOT(MoveSelectedItemsBottom()));
 
   // register subject(s)
   Attach(ui->mGraphicsView->GetSubjectZoom());
@@ -146,44 +146,29 @@ void ggClassyMainWindow::SaveDataSetAs()
 }
 
 
-void ggClassyMainWindow::MoveSelectedItemsToTop()
+void ggClassyMainWindow::MoveSelectedItemsTop()
 {
-  if (ui->mGraphicsView->scene() != nullptr) {
-    QGraphicsScene* vScene = ui->mGraphicsView->scene();
-    QList<QGraphicsItem*> vSelectedItems = vScene->selectedItems();
-    foreach (QGraphicsItem* vItem, vSelectedItems) {
-      vScene->removeItem(vItem);
-      vScene->addItem(vItem);
-    }
-  }
+  ggClassyGraphicsScene* vScene = dynamic_cast<ggClassyGraphicsScene*>(ui->mGraphicsView->scene());
+  if (vScene != nullptr) vScene->MoveSelectedClassBoxesTop();
 }
 
 
-void ggClassyMainWindow::MoveSelectedItemsToBottom()
+void ggClassyMainWindow::MoveSelectedItemsBottom()
 {
-  if (ui->mGraphicsView->scene() != nullptr) {
-    QGraphicsScene* vScene = ui->mGraphicsView->scene();
-    QList<QGraphicsItem*> vSelectedItems = vScene->selectedItems();
-    // todo
-  }
+  ggClassyGraphicsScene* vScene = dynamic_cast<ggClassyGraphicsScene*>(ui->mGraphicsView->scene());
+  if (vScene != nullptr) vScene->MoveSelectedClassBoxesBottom();
 }
 
 
 void ggClassyMainWindow::MoveSelectedItemsUp()
 {
-  if (ui->mGraphicsView->scene() != nullptr) {
-    QGraphicsScene* vScene = ui->mGraphicsView->scene();
-    QList<QGraphicsItem*> vSelectedItems = vScene->selectedItems();
-    // todo
-  }
+  ggClassyGraphicsScene* vScene = dynamic_cast<ggClassyGraphicsScene*>(ui->mGraphicsView->scene());
+  if (vScene != nullptr) vScene->MoveSelectedClassBoxesUp();
 }
 
 
 void ggClassyMainWindow::MoveSelectedItemsDown()
 {
-  if (ui->mGraphicsView->scene() != nullptr) {
-    QGraphicsScene* vScene = ui->mGraphicsView->scene();
-    QList<QGraphicsItem*> vSelectedItems = vScene->selectedItems();
-    // todo
-  }
+  ggClassyGraphicsScene* vScene = dynamic_cast<ggClassyGraphicsScene*>(ui->mGraphicsView->scene());
+  if (vScene != nullptr) vScene->MoveSelectedClassBoxesDown();
 }

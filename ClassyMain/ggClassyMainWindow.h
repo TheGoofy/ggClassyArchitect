@@ -32,10 +32,10 @@ protected slots:
   void on_mZoomFitPushButton_clicked();
   void on_mZoomResetPushButton_clicked();
   void on_mAddClassPushButton_clicked();
-  void MoveSelectedItemsToTop();
+  void MoveSelectedItemsTop();
   void MoveSelectedItemsUp();
   void MoveSelectedItemsDown();
-  void MoveSelectedItemsToBottom();
+  void MoveSelectedItemsBottom();
   void SaveDataSetAs();
 
 protected:
