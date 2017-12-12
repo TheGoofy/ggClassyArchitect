@@ -4,6 +4,7 @@
 // 1) include system or QT
 #include <QGraphicsEllipseItem>
 #include <QGraphicsRectItem>
+#include <QGraphicsScene>
 
 // 2) include own project-related (sort by component dependency)
 #include "Base/ggSubject.h"
@@ -32,18 +33,6 @@ public:
     TBaseItem::setPen(Qt::NoPen);
   }
 
-  QVariant itemChange(typename TBaseItem::GraphicsItemChange aChange,
-                      const QVariant& aValue) override {
-    // notify position change
-    if (aChange == TBaseItem::ItemPositionHasChanged) {
-      foreach (QGraphicsItem* vItem, mLinkedItemsX) vItem->setX(aValue.toPointF().x());
-      foreach (QGraphicsItem* vItem, mLinkedItemsY) vItem->setY(aValue.toPointF().y());
-      mSubjectPosition.Notify();
-    }
-    // execute base item change
-    return TBaseItem::itemChange(aChange, aValue);
-  }
-
   const ggSubject* GetSubjectPosition() const {
     return &mSubjectPosition;
   }
@@ -56,6 +45,33 @@ public:
   void LinkY(ggGraphicsHandleItemT* aItem) {
     mLinkedItemsY << aItem;
     aItem->mLinkedItemsY << this;
+  }
+
+protected:
+
+  QVariant itemChange(typename TBaseItem::GraphicsItemChange aChange,
+                      const QVariant& aValue) override {
+    // notify position change
+    if (aChange == TBaseItem::ItemPositionHasChanged) {
+      foreach (QGraphicsItem* vItem, mLinkedItemsX) vItem->setX(aValue.toPointF().x());
+      foreach (QGraphicsItem* vItem, mLinkedItemsY) vItem->setY(aValue.toPointF().y());
+      mSubjectPosition.Notify();
+    }
+    // execute base item change
+    return TBaseItem::itemChange(aChange, aValue);
+  }
+
+  virtual void mousePressEvent(QGraphicsSceneMouseEvent* aEvent) override {
+
+    // handle is clicked (for dragging): if the scene selection is not cleared,
+    // all the selected items will be moved. alternatively this HandleItem could have
+    // its selectable-flag set, but that looks ugly.
+    if (TBaseItem::scene() != nullptr) {
+      TBaseItem::scene()->clearSelection();
+    }
+
+    // do inherited event handling
+    TBaseItem::mousePressEvent(aEvent);
   }
 
 private:

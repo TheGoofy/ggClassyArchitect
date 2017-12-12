@@ -18,6 +18,9 @@ ggGraphicsView::ggGraphicsView(QWidget* aParent)
   setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
   setSceneRect(QRectF(-10000.0f, -10000.0f, 20000.0f, 20000.0f));
 
+  // enable box-selection, and dragging multiple items
+  setDragMode(RubberBandDrag);
+
   // attach subject(s)
   Attach(&mSubjectZoom);
 }
