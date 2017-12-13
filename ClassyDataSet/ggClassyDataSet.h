@@ -43,8 +43,6 @@ public:
   void MoveClassBoxesTop(const tClassBoxes& aClassBoxes);
   void MoveClassBoxesBottom(const tClassBoxes& aClassBoxes);
 
-  const ggSubject* GetSubjectClasses() const;
-  const ggSubject* GetSubjectClassBoxes() const;
   const ggSubject* GetSubjectConnections() const;
 
   const ggClassyClassContainer& GetClasses() const;
@@ -60,8 +58,6 @@ private:
   ggClassyClassBoxContainer mClassBoxes;
   std::vector<ggClassyFrame*> mFrames;
 
-  ggSubject mSubjectClasses;
-  ggSubject mSubjectClassBoxes;
   ggSubject mSubjectConnections;
 
   const ggUInt32 mFormatVersionMajor;

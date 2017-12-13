@@ -56,18 +56,6 @@ QDomElement ggClassyDataSet::CreateDomElement(QDomDocument& aDocument) const
 }
 
 
-const ggSubject* ggClassyDataSet::GetSubjectClasses() const
-{
-  return &mSubjectClasses;
-}
-
-
-const ggSubject* ggClassyDataSet::GetSubjectClassBoxes() const
-{
-  return &mSubjectClassBoxes;
-}
-
-
 const ggSubject* ggClassyDataSet::GetSubjectConnections() const
 {
   return &mSubjectConnections;
@@ -80,8 +68,8 @@ ggClassyClass* ggClassyDataSet::AddClass(ggClassyClass* aClass)
   if (mClasses.find(aClass) == mClasses.end()) {
     mClasses.insert(aClass);
     aClass->mDataSet = this;
-    mSubjectClasses.Notify();
-    mSubjectClassBoxes.Notify();
+    mClasses.Notify();
+    mClassBoxes.Notify();
     mSubjectConnections.Notify();
     return aClass;
   }
@@ -168,7 +156,7 @@ ggClassyClassBox* ggClassyDataSet::AddClassBox(ggClassyClassBox* aClassBox)
   if (aClassBox != nullptr) {
     aClassBox->SetIndexZ(mClassBoxes.size());
     mClassBoxes.push_back(aClassBox);
-    mSubjectClassBoxes.Notify();
+    mClassBoxes.Notify();
     mSubjectConnections.Notify();
   }
   return aClassBox;
@@ -209,7 +197,7 @@ void ggClassyDataSet::MoveClassBoxesTop(const tClassBoxes& aClassBoxes)
   mClassBoxes.insert(mClassBoxes.end(), vClassBoxesB.begin(), vClassBoxesB.end());
   mClassBoxes.insert(mClassBoxes.end(), vClassBoxesA.begin(), vClassBoxesA.end());
   qDebug() << __PRETTY_FUNCTION__ << "goofy todo: adjust mIndexZ";
-  mSubjectClassBoxes.Notify();
+  mClassBoxes.Notify();
 }
 
 
@@ -228,7 +216,7 @@ void ggClassyDataSet::MoveClassBoxesBottom(const tClassBoxes& aClassBoxes)
   mClassBoxes.insert(mClassBoxes.end(), vClassBoxesA.begin(), vClassBoxesA.end());
   mClassBoxes.insert(mClassBoxes.end(), vClassBoxesB.begin(), vClassBoxesB.end());
   qDebug() << __PRETTY_FUNCTION__ << "goofy todo: adjust mIndexZ";
-  mSubjectClassBoxes.Notify();
+  mClassBoxes.Notify();
 }
 
 

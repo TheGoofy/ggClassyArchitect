@@ -33,7 +33,7 @@ void ggClassyGraphicsScene::Update(const ggSubject* aSubject)
   // nothing to do, if there is no dataset
   if (mDataSet == nullptr) return;
 
-  if (aSubject == mDataSet->GetSubjectClassBoxes()) {
+  if (aSubject == &mDataSet->GetClassBoxes()) {
     DeleteClassBoxItems();
     CreateClassBoxItems();
     CreateConnectionItems();
@@ -54,12 +54,12 @@ void ggClassyGraphicsScene::SetDataSet(ggClassyDataSet* aDataSet)
 
   // (re)connect subject
   if (mDataSet != nullptr) {
-    Detach(mDataSet->GetSubjectClassBoxes());
+    Detach(&mDataSet->GetClassBoxes());
     Detach(mDataSet->GetSubjectConnections());
   }
   mDataSet = aDataSet;
   if (mDataSet != nullptr) {
-    Attach(mDataSet->GetSubjectClassBoxes());
+    Attach(&mDataSet->GetClassBoxes());
     Attach(mDataSet->GetSubjectConnections());
   }
 

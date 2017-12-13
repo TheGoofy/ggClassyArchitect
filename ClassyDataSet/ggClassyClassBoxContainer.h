@@ -14,7 +14,8 @@
  * @brief The ggClassyClassContainer class
  */
 class ggClassyClassBoxContainer :
-  public std::vector<ggClassyClassBox*>
+  public std::vector<ggClassyClassBox*>,
+  public ggSubject
 {
 public:
 

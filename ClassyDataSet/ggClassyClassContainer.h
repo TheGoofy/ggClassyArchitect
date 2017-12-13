@@ -13,7 +13,8 @@
  * @brief The ggClassyClassContainer class
  */
 class ggClassyClassContainer :
-  public std::set<ggClassyClass*, ggClassyClass>
+  public std::set<ggClassyClass*, ggClassyClass>,
+  public ggSubject
 {
 public:
 
