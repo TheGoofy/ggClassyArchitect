@@ -101,7 +101,7 @@ void ggClassyGraphicsScene::MoveSelectedClassBoxesUp()
 {
   if (mDataSet != nullptr) {
     const tClassBoxes& vClassBoxes = GetSelectedClassBoxes();
-    mDataSet->MoveClassBoxesUp(vClassBoxes);
+    mDataSet->GetClassBoxes().MoveClassBoxesUp(vClassBoxes);
     SelectClassBoxes(vClassBoxes);
   }
 }
@@ -111,7 +111,7 @@ void ggClassyGraphicsScene::MoveSelectedClassBoxesDown()
 {
   if (mDataSet != nullptr) {
     const tClassBoxes& vClassBoxes = GetSelectedClassBoxes();
-    mDataSet->MoveClassBoxesDown(vClassBoxes);
+    mDataSet->GetClassBoxes().MoveClassBoxesDown(vClassBoxes);
     SelectClassBoxes(vClassBoxes);
   }
 }
@@ -121,7 +121,7 @@ void ggClassyGraphicsScene::MoveSelectedClassBoxesTop()
 {
   if (mDataSet != nullptr) {
     const tClassBoxes& vClassBoxes = GetSelectedClassBoxes();
-    mDataSet->MoveClassBoxesTop(vClassBoxes);
+    mDataSet->GetClassBoxes().MoveClassBoxesTop(vClassBoxes);
     SelectClassBoxes(vClassBoxes);
   }
 }
@@ -131,7 +131,7 @@ void ggClassyGraphicsScene::MoveSelectedClassBoxesBottom()
 {
   if (mDataSet != nullptr) {
     const tClassBoxes& vClassBoxes = GetSelectedClassBoxes();
-    mDataSet->MoveClassBoxesBottom(vClassBoxes);
+    mDataSet->GetClassBoxes().MoveClassBoxesBottom(vClassBoxes);
     SelectClassBoxes(vClassBoxes);
   }
 }
@@ -189,7 +189,7 @@ void ggClassyGraphicsScene::CreateClassBoxItems()
 {
   // loop over box items
   if (mDataSet != nullptr) {
-    ggWalkerT<ggClassyClassBoxContainer::const_iterator> vClassBoxesIterator(mDataSet->GetClassBoxes());
+    ggWalkerT<ggClassyClassBoxContainer::iterator> vClassBoxesIterator(mDataSet->GetClassBoxes());
     while (vClassBoxesIterator) {
       ggClassyClassBox* vClassBox = *vClassBoxesIterator;
       ggClassyClass* vClass = mDataSet->FindClass(vClassBox->GetClassName());

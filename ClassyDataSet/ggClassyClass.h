@@ -32,18 +32,27 @@ public:
   bool operator() (const ggClassyClass* aClassA,
                    const ggClassyClass* aClassB) const;
 
-  const QString& GetName() const;
+  // assigns a new name. if the class is part of a dataset, all items pointing to this class are adjusted too
   bool SetName(const QString& aName);
+  const QString& GetName() const;
+
+  // other members ...
   const ggStringSet& GetBaseClassNames() const;
   void AddBaseClassName(const QString& aBaseClassName);
   void RemoveBaseClassName(const QString& aBaseClassName);
   void RemoveAllBaseClassNames();
+  void AddMember(const QString& aName, const QString& aClassName);
   typedef std::vector<ggClassyClassMember> tMembers;
   const tMembers& GetMembers() const;
   QString GetMembersText() const;
   void SetMembersText(const QString& aText);
   const QString& GetDescription() const;
   void SetDescription(const QString& aDescription);
+  const ggClassyDataSet* GetDataSet() const;
+  void SetDataSet(ggClassyDataSet* aDataSet);
+
+  // renames the class, and classes of all the members (ignores the dataset)
+  bool RenameClass(const QString& aOldClassName, const QString& aNewClassName);
 
   QDomElement CreateDomElement(QDomDocument& aDocument) const;
 
@@ -53,15 +62,13 @@ private:
   QDomElement CreateBaseClassDomElement(QDomDocument& aDocument,
                                         const QString& aBaseClassName) const;
 
-  // exceptional access for dataset
-  friend class ggClassyDataSet;
-  ggClassyDataSet* mDataSet;
-
   QString mName;
   ggStringSet mBaseClassNames;
   tMembers mMembers;
   ggClassyDescription mDescription;
   QString mCollectionName;
+
+  ggClassyDataSet* mDataSet;
 
 };
 

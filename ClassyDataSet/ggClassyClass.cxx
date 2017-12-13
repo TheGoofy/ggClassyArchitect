@@ -17,8 +17,8 @@ ggClassyClass::ggClassyClass(ggClassyDataSet* aDataSet) :
 
 ggClassyClass::ggClassyClass(const QString& aName,
                              ggClassyDataSet* aDataSet) :
-  mDataSet(aDataSet),
-  mName(aName)
+  mName(aName),
+  mDataSet(aDataSet)
 {
 }
 
@@ -98,7 +98,7 @@ const QString& ggClassyClass::GetName() const
   return mName;
 }
 
-#include <QDebug>
+
 bool ggClassyClass::SetName(const QString& aName)
 {
   if (aName == mName) return true;
@@ -138,6 +138,13 @@ void ggClassyClass::RemoveAllBaseClassNames()
     mBaseClassNames.clear();
     Notify();
   }
+}
+
+
+void ggClassyClass::AddMember(const QString& aName, const QString& aClassName)
+{
+  mMembers.push_back(ggClassyClassMember(aName, aClassName));
+  Notify();
 }
 
 
@@ -191,6 +198,59 @@ const QString& ggClassyClass::GetDescription() const
 
 void ggClassyClass::SetDescription(const QString& aDescription)
 {
-  mDescription = aDescription;
-  Notify();
+  if (aDescription != mDescription) {
+    mDescription = aDescription;
+    Notify();
+  }
+}
+
+
+const ggClassyDataSet* ggClassyClass::GetDataSet() const
+{
+  return mDataSet;
+}
+
+
+void ggClassyClass::SetDataSet(ggClassyDataSet* aDataSet)
+{
+  if (aDataSet != mDataSet) {
+    mDataSet = aDataSet;
+    Notify();
+  }
+}
+
+
+bool ggClassyClass::RenameClass(const QString& aOldClassName,
+                                const QString& aNewClassName)
+{
+  // if the name is unchanged, renaming is obsolete (success)
+  if (aNewClassName == aOldClassName) return true;
+
+  // single collective notification
+  ggSubject::cExecutorLazy vLazy(this);
+
+  // change own name
+  if (mName == aOldClassName) {
+    mName = aNewClassName;
+    Notify();
+  }
+
+  // replace a base class name (if there is)
+  if (mBaseClassNames.erase(aOldClassName)) {
+    mBaseClassNames.insert(aNewClassName);
+    Notify();
+  }
+
+  // replace member class name(s)
+  ggWalkerT<tMembers::iterator> vMembersWalker(mMembers);
+  while (vMembersWalker) {
+    ggClassyClassMember& vMember = *vMembersWalker;
+    if (vMember.GetClassName() == aOldClassName) {
+      vMember.SetClassName(aNewClassName);
+      Notify();
+    }
+  }
+
+  // renam succeeded
+  return true;
 }

@@ -37,21 +37,14 @@ public:
 
   ggClassyClassBox* AddClassBox(ggClassyClassBox* aClassBox);
 
-  typedef std::set<const ggClassyClassBox*> tClassBoxes;
-  void MoveClassBoxesUp(const tClassBoxes& aClassBoxes);
-  void MoveClassBoxesDown(const tClassBoxes& aClassBoxes);
-  void MoveClassBoxesTop(const tClassBoxes& aClassBoxes);
-  void MoveClassBoxesBottom(const tClassBoxes& aClassBoxes);
-
   const ggSubject* GetSubjectConnections() const;
 
   const ggClassyClassContainer& GetClasses() const;
+
+  ggClassyClassBoxContainer& GetClassBoxes();
   const ggClassyClassBoxContainer& GetClassBoxes() const;
 
 private:
-
-  bool Find(const tClassBoxes& aClassBoxes,
-            const ggClassyClassBox* aClassBox) const;
 
   ggClassyCollectionContainer mCollections;
   ggClassyClassContainer mClasses;

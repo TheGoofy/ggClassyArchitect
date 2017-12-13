@@ -13,7 +13,6 @@
  * @brief The ggClassyClassContainer class
  */
 class ggClassyClassContainer :
-  public std::set<ggClassyClass*, ggClassyClass>,
   public ggSubject
 {
 public:
@@ -21,7 +20,24 @@ public:
   static const QString& TypeID();
   virtual const QString& VTypeID() const;
 
-  ggClassyClass* FindClass(const QString& aClassName) const;
+  ggClassyClass* AddClass(ggClassyClass* aClass);
+
+  ggClassyClass* FindClass(const QString& aClassName);
+  const ggClassyClass* FindClass(const QString& aClassName) const;
+
+  bool RenameClass(const QString& aOldClassName, const QString& aNewClassName);
+
+  typedef std::set<ggClassyClass*, ggClassyClass>::iterator iterator;
+  iterator begin();
+  iterator end();
+
+  typedef std::set<ggClassyClass*, ggClassyClass>::const_iterator const_iterator;
+  const_iterator begin() const;
+  const_iterator end() const;
+
+private:
+
+  std::set<ggClassyClass*, ggClassyClass> mClasses;
 
 };
 
