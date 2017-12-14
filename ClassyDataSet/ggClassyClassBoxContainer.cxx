@@ -6,6 +6,8 @@
 
 // 2) include own project-related (sort by component dependency)
 #include "Base/ggWalkerT.h"
+#include "Base/ggTypes.h"
+#include "Base/ggUtility.h"
 
 
 const QString& ggClassyClassBoxContainer::TypeID()
@@ -21,12 +23,6 @@ const QString& ggClassyClassBoxContainer::VTypeID() const
 }
 
 
-ggClassyClassBoxContainer::const_iterator ggClassyClassBoxContainer::end() const
-{
-  return mClassBoxes.end();
-}
-
-
 ggClassyClassBox* ggClassyClassBoxContainer::AddClassBox(ggClassyClassBox* aClassBox)
 {
   if (aClassBox != nullptr) {
@@ -35,13 +31,6 @@ ggClassyClassBox* ggClassyClassBoxContainer::AddClassBox(ggClassyClassBox* aClas
     Notify();
   }
   return aClassBox;
-}
-
-
-bool ggClassyClassBoxContainer::Find(const tClassBoxes& aClassBoxes,
-                                     const ggClassyClassBox* aClassBox) const
-{
-  return aClassBoxes.find(aClassBox) != aClassBoxes.end();
 }
 
 
@@ -63,15 +52,56 @@ ggClassyClassBoxContainer::const_iterator ggClassyClassBoxContainer::begin() con
 }
 
 
+ggClassyClassBoxContainer::const_iterator ggClassyClassBoxContainer::end() const
+{
+  return mClassBoxes.end();
+}
+
+
+bool ggClassyClassBoxContainer::Find(const tClassBoxes& aClassBoxes,
+                                     const ggClassyClassBox* aClassBox) const
+{
+  return aClassBoxes.find(aClassBox) != aClassBoxes.end();
+}
+
+
+void ggClassyClassBoxContainer::UpdateIndicesZ()
+{
+  for (ggUSize vBoxIndex = 0; vBoxIndex < mClassBoxes.size(); vBoxIndex++) {
+    mClassBoxes[vBoxIndex]->SetIndexZ(vBoxIndex);
+  }
+}
+
+
 void ggClassyClassBoxContainer::MoveClassBoxesUp(const tClassBoxes& aClassBoxes)
 {
-  qDebug() << __PRETTY_FUNCTION__ << "goofy todo";
+  if (aClassBoxes.empty()) return;
+  if (mClassBoxes.size() < 2) return;
+  for (ggUSize vBoxIndex = mClassBoxes.size()-1; vBoxIndex > 0; vBoxIndex--) {
+    if (Find(aClassBoxes, mClassBoxes[vBoxIndex-1])) {
+      if (!Find(aClassBoxes, mClassBoxes[vBoxIndex])) {
+        ggUtility::Swap(mClassBoxes[vBoxIndex-1], mClassBoxes[vBoxIndex]);
+      }
+    }
+  }
+  UpdateIndicesZ();
+  Notify();
 }
 
 
 void ggClassyClassBoxContainer::MoveClassBoxesDown(const tClassBoxes& aClassBoxes)
 {
-  qDebug() << __PRETTY_FUNCTION__ << "goofy todo";
+  if (aClassBoxes.empty()) return;
+  if (mClassBoxes.size() < 2) return;
+  for (ggUSize vBoxIndex = 0; vBoxIndex+1 < mClassBoxes.size(); vBoxIndex++) {
+    if (Find(aClassBoxes, mClassBoxes[vBoxIndex+1])) {
+      if (!Find(aClassBoxes, mClassBoxes[vBoxIndex])) {
+        ggUtility::Swap(mClassBoxes[vBoxIndex+1], mClassBoxes[vBoxIndex]);
+      }
+    }
+  }
+  UpdateIndicesZ();
+  Notify();
 }
 
 
@@ -89,7 +119,7 @@ void ggClassyClassBoxContainer::MoveClassBoxesTop(const tClassBoxes& aClassBoxes
   mClassBoxes.clear();
   mClassBoxes.insert(mClassBoxes.end(), vClassBoxesB.begin(), vClassBoxesB.end());
   mClassBoxes.insert(mClassBoxes.end(), vClassBoxesA.begin(), vClassBoxesA.end());
-  qDebug() << __PRETTY_FUNCTION__ << "goofy todo: adjust mIndexZ";
+  UpdateIndicesZ();
   Notify();
 }
 
@@ -108,6 +138,6 @@ void ggClassyClassBoxContainer::MoveClassBoxesBottom(const tClassBoxes& aClassBo
   mClassBoxes.clear();
   mClassBoxes.insert(mClassBoxes.end(), vClassBoxesA.begin(), vClassBoxesA.end());
   mClassBoxes.insert(mClassBoxes.end(), vClassBoxesB.begin(), vClassBoxesB.end());
-  qDebug() << __PRETTY_FUNCTION__ << "goofy todo: adjust mIndexZ";
+  UpdateIndicesZ();
   Notify();
 }

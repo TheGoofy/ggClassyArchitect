@@ -55,6 +55,13 @@ namespace ggUtility {
     return (aValue < aValueMin) ? aValueMin : ((aValue > aValueMax) ? aValueMax : aValue);
   }
 
+  template <typename T>
+  inline void Swap(T& aValueA, T& aValueB) {
+    T vValueT = aValueA;
+    aValueA = aValueB;
+    aValueB = vValueT;
+  }
+
 }
 
 #endif // GGUTILITIES_H
