@@ -31,7 +31,8 @@ protected slots:
   void on_mZoomComboBox_activated(int);
   void on_mZoomFitPushButton_clicked();
   void on_mZoomResetPushButton_clicked();
-  void on_mAddClassPushButton_clicked();
+  void on_mNewClassPushButton_clicked();
+  void on_mNewClassBoxPushButton_clicked();
   void MoveSelectedItemsTop();
   void MoveSelectedItemsUp();
   void MoveSelectedItemsDown();
@@ -42,7 +43,8 @@ protected slots:
 protected:
   virtual void Update(const ggSubject* aSubject) override;
 
-private:
+private: 
+  static QPointF& GetNewPosition();
 
   // the main window form
   Ui::ggClassyMainWindow *ui;

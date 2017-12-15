@@ -34,15 +34,15 @@ public:
   void MoveSelectedClassBoxesTop();
   void MoveSelectedClassBoxesBottom();
 
+  typedef std::set<const ggClassyClassBox*> tClassBoxes;
+  tClassBoxes GetSelectedClassBoxes() const;
+  void SelectClassBoxes(const tClassBoxes& aClassBoxes);
+
 protected:
 
   virtual void Update(const ggSubject* aSubject) override;
 
 private:
-
-  typedef std::set<const ggClassyClassBox*> tClassBoxes;
-  tClassBoxes GetSelectedClassBoxes() const;
-  void SelectClassBoxes(const tClassBoxes& aClassBoxes);
 
   void DeleteItems(const std::vector<QGraphicsItem*>& aItems);
   void DeleteClassBoxItems();

@@ -9,6 +9,7 @@
 #include <QDebug>
 
 // 2) include own project-related (sort by component dependency)
+#include "Base/ggWalkerT.h"
 #include "ClassyDataSet/ggClassyDataSet.h"
 #include "ClassyMain/ggClassyApplication.h"
 #include "ClassyGraphics/ggClassyGraphicsScene.h"
@@ -117,14 +118,71 @@ void ggClassyMainWindow::on_mZoomResetPushButton_clicked()
 }
 
 
-void ggClassyMainWindow::on_mAddClassPushButton_clicked()
+QPointF& ggClassyMainWindow::GetNewPosition()
 {
-  ggClassyClass* vClass = new ggClassyClass("ggClassD");
-  vClass->SetMembersText("Goofy()\tggClassA\nIs()\tggClassB\nHere()\tggClassC");
-  ggClassyClassBox* vClassBox = new ggClassyClassBox("ggClassD");
-  vClassBox->SetPosition(QPointF(0, -400));
+  static QPointF vPosition(-300.0f, -200.0f);
+  vPosition += QPointF(20.0f, 20.0f);
+  if (vPosition.x() > 150.0f) vPosition.setX(-300.0f);
+  if (vPosition.y() > 100.0f) vPosition.setY(-200.0f);
+  return vPosition;
+}
+
+
+void ggClassyMainWindow::on_mNewClassPushButton_clicked()
+{
+  // find a new unused class name
+  QString vClassNameBase = "ggClassyClass";
+  int vClassNameNumber = 0;
+  QString vClassName = vClassNameBase + QString::number(vClassNameNumber++);
+  while (ggClassyApplication::GetInstance().GetDataSet()->FindClass(vClassName) != nullptr) {
+    vClassName = vClassNameBase + QString::number(vClassNameNumber++);
+  }
+
+  // create the new class
+  ggClassyClass* vClass = new ggClassyClass(vClassName);
+  ggClassyClassBox* vClassBox = new ggClassyClassBox(vClassName);
+
+  // place it at somewhere
+  vClassBox->SetPosition(GetNewPosition());
+
+  // add it to the dataset
   ggClassyApplication::GetInstance().GetDataSet()->AddClassBox(vClassBox);
   ggClassyApplication::GetInstance().GetDataSet()->AddClass(vClass);
+
+  // select the new class box
+  ggClassyGraphicsScene* vScene = dynamic_cast<ggClassyGraphicsScene*>(ui->mGraphicsView->scene());
+  if (vScene != nullptr) {
+    ggClassyGraphicsScene::tClassBoxes vSelectedClassBoxes;
+    vSelectedClassBoxes.insert(vClassBox);
+    vScene->SelectClassBoxes(vSelectedClassBoxes);
+  }
+}
+
+
+void ggClassyMainWindow::on_mNewClassBoxPushButton_clicked()
+{
+  ggClassyGraphicsScene* vScene = dynamic_cast<ggClassyGraphicsScene*>(ui->mGraphicsView->scene());
+  if (vScene != nullptr) {
+
+    // get the selected class names
+    const ggClassyGraphicsScene::tClassBoxes& vSelectedClassBoxes = vScene->GetSelectedClassBoxes();
+    ggClassyGraphicsScene::tClassBoxes vNewlassBoxes;
+
+    // loop over all selected class boxes
+    ggWalkerT<ggClassyGraphicsScene::tClassBoxes::const_iterator> vSelectedClassBoxesWalker(vSelectedClassBoxes);
+    while (vSelectedClassBoxesWalker) {
+
+      // add new box for each selected box
+      const ggClassyClassBox* vSelectedClassBox = *vSelectedClassBoxesWalker;
+      ggClassyClassBox* vClassBox = new ggClassyClassBox(*vSelectedClassBox);
+      vClassBox->SetPosition(vClassBox->GetPosition() + QPointF(20.0f, 20.0f));
+      ggClassyApplication::GetInstance().GetDataSet()->AddClassBox(vClassBox);
+      vNewlassBoxes.insert(vClassBox);
+    }
+
+    // select the new class box(es)
+    vScene->SelectClassBoxes(vNewlassBoxes);
+  }
 }
 
 
