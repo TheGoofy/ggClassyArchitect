@@ -233,8 +233,8 @@ QString ggClassyClass::GetMembersText() const
     const ggClassyClassMember& vMember = *vMemberIterator;
     const QString& vMemberName = vMember.GetName();
     const QString& vMemberClassName = vMember.GetClassName();
-    vText += vMemberName;
-    if (vMemberClassName != "") vText += "\t" + vMemberClassName;
+    if (vMemberClassName != "") vText += vMemberClassName + " - " + vMemberName;
+    else vText += vMemberName;
     if (!vMemberIterator.IsLast()) vText += "\n";
   }
   return vText;
@@ -249,11 +249,11 @@ void ggClassyClass::SetMembersText(const QString& aText)
     ggWalkerT<QStringList::iterator> vMembersTextWalker(vMembersText);
     while (vMembersTextWalker) {
       const QString& vMemberText = *vMembersTextWalker;
-      QStringList vMemberNameAndClass = vMemberText.split("\t", QString::SkipEmptyParts);
+      QStringList vMemberNameAndClass = vMemberText.split(" - ", QString::SkipEmptyParts);
       QString vMemberName("");
       QString vMemberClassName("");
-      if (vMemberNameAndClass.size() >= 1) vMemberName = vMemberNameAndClass.at(0).simplified();
-      if (vMemberNameAndClass.size() >= 2) vMemberClassName = vMemberNameAndClass.at(1).simplified();
+      if (vMemberNameAndClass.size() >= 1) vMemberClassName = vMemberNameAndClass.at(0).simplified();
+      if (vMemberNameAndClass.size() >= 2) vMemberName = vMemberNameAndClass.at(1).simplified();
       mMembers.push_back(ggClassyClassMember(vMemberName, vMemberClassName));
     }
     Notify();
