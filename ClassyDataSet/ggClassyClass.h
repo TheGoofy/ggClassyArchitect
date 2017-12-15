@@ -26,6 +26,7 @@ public:
   ggClassyClass(const QString& aName,
                 ggClassyDataSet* aDataSet = nullptr);
 
+  // identification
   static const QString& TypeID();
   virtual const QString& VTypeID() const;
 
@@ -54,13 +55,15 @@ public:
   // renames the class, and classes of all the members (ignores the dataset)
   bool RenameClass(const QString& aOldClassName, const QString& aNewClassName);
 
+  // persist as dom-element
   QDomElement CreateDomElement(QDomDocument& aDocument) const;
+  static ggClassyClass* Create(const QDomElement& aElement, ggClassyDataSet* aDataSet = nullptr);
 
 private:
 
   static const QString& ClassyBaseClassTypeID();
-  QDomElement CreateBaseClassDomElement(QDomDocument& aDocument,
-                                        const QString& aBaseClassName) const;
+  QDomElement CreateBaseClassDomElement(QDomDocument& aDocument, const QString& aBaseClassName) const;
+  static QString CreateBaseClassName(const QDomElement& aElement);
 
   QString mName;
   ggStringSet mBaseClassNames;

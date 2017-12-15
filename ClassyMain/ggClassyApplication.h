@@ -35,7 +35,8 @@ public:
 
   ggClassyDataSet* GetDataSet();
   const ggClassyDataSet* GetDataSet() const;
-  void SaveDataSet(QIODevice* aDevice);
+  void OpenDataSet(QIODevice* aIODevice);
+  void SaveDataSet(QIODevice* aIODevice) const;
 
 private:
 

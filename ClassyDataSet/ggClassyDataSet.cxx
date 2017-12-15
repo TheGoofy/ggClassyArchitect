@@ -37,22 +37,52 @@ QString ggClassyDataSet::GetFormatVersion() const
 
 QDomElement ggClassyDataSet::CreateDomElement(QDomDocument& aDocument) const
 {
+  // create a som-element for the dataset
   QDomElement vElement = aDocument.createElement(TypeID());
   vElement.setAttribute("mFormatVersion", GetFormatVersion());
 
-  // classes
+  // add classes as direct children
   ggWalkerT<ggClassyClassContainer::const_iterator> vClassesWalker(mClasses);
   while (vClassesWalker) {
     vElement.appendChild((*vClassesWalker)->CreateDomElement(aDocument));
   }
 
-  // class boxes
+  // add class boxes as direct children
   ggWalkerT<ggClassyClassBoxContainer::const_iterator> vClassBoxesWalker(mClassBoxes);
   while (vClassBoxesWalker) {
     vElement.appendChild((*vClassBoxesWalker)->CreateDomElement(aDocument));
   }
 
   return vElement;
+}
+
+
+ggClassyDataSet* ggClassyDataSet::Create(const QDomElement& aElement)
+{
+  ggClassyDataSet* vDataSet = nullptr;
+
+  // create a dataset, if the dome-element is a dataset
+  if (aElement.tagName() == TypeID()) {
+    vDataSet = new ggClassyDataSet();
+
+    // loop over children
+    QDomElement vChildElement = aElement.firstChildElement();
+    while (!vChildElement.isNull()) {
+
+      // try to create and add a class
+      ggClassyClass* vClass = ggClassyClass::Create(vChildElement, vDataSet);
+      if (vClass != nullptr) vDataSet->AddClass(vClass);
+
+      // try to create and add a class box
+      ggClassyClassBox* vClassBox = ggClassyClassBox::Create(vChildElement);
+      if (vClassBox != nullptr) vDataSet->AddClassBox(vClassBox);
+
+      // nect child
+      vChildElement = vChildElement.nextSiblingElement();
+    }
+  }
+
+  return vDataSet;
 }
 
 
@@ -119,6 +149,12 @@ ggClassyClassBox* ggClassyDataSet::AddClassBox(ggClassyClassBox* aClassBox)
   mClassBoxes.AddClassBox(aClassBox);
   mSubjectConnections.Notify();
   return aClassBox;
+}
+
+
+ggClassyClassContainer& ggClassyDataSet::GetClasses()
+{
+  return mClasses;
 }
 
 

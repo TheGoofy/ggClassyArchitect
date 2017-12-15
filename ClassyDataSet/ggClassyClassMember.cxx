@@ -6,6 +6,13 @@
 // 2) include own project-related (sort by component dependency)
 
 
+ggClassyClassMember::ggClassyClassMember() :
+  mName(""),
+  mClassName("")
+{
+}
+
+
 ggClassyClassMember::ggClassyClassMember(const QString& aName,
                                          const QString& aClassName) :
   mName(aName),
@@ -51,6 +58,12 @@ const QString& ggClassyClassMember::GetClassName() const
 }
 
 
+bool ggClassyClassMember::Empty() const
+{
+  return (mName == "") && (mClassName == "");
+}
+
+
 bool ggClassyClassMember::operator < (const ggClassyClassMember& aOther) const
 {
   if (mName != aOther.mName)
@@ -67,4 +80,15 @@ QDomElement ggClassyClassMember::CreateDomElement(QDomDocument& aDocument) const
   QDomText vNameText = aDocument.createTextNode(mName);
   vElement.appendChild(vNameText);
   return vElement;
+}
+
+
+ggClassyClassMember ggClassyClassMember::Create(const QDomElement& aElement)
+{
+  ggClassyClassMember vMember;
+  if (aElement.tagName() == TypeID()) {
+    vMember.mClassName = aElement.attribute("mClassName");
+    vMember.mName = aElement.text();
+  }
+  return vMember;
 }

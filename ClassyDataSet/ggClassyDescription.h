@@ -21,10 +21,13 @@ public:
     return *this;
   }
 
+  // identification
   static const QString& TypeID();
   virtual const QString& VTypeID() const;
 
+  // persist as dom-element
   QDomElement CreateDomElement(QDomDocument& aDocument) const;
+  static ggClassyDescription Create(const QDomElement& aElement);
 
 };
 

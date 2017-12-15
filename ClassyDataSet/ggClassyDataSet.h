@@ -24,25 +24,30 @@ public:
 
   ggClassyDataSet();
 
+  // identification
   static const QString& TypeID();
   virtual const QString& VTypeID() const;
   QString GetFormatVersion() const;
 
-  QDomElement CreateDomElement(QDomDocument& aDocument) const;
-
+  // classes
   ggClassyClass* AddClass(ggClassyClass* aClass);
   ggClassyClass* FindClass(const QString& aClassName);
   bool RenameClass(const QString& aOldClassName,
                    const QString& aNewClassName);
-
-  ggClassyClassBox* AddClassBox(ggClassyClassBox* aClassBox);
-
-  const ggSubject* GetSubjectConnections() const;
-
+  ggClassyClassContainer& GetClasses();
   const ggClassyClassContainer& GetClasses() const;
 
+  // class boxes
+  ggClassyClassBox* AddClassBox(ggClassyClassBox* aClassBox);
   ggClassyClassBoxContainer& GetClassBoxes();
   const ggClassyClassBoxContainer& GetClassBoxes() const;
+
+  // other
+  const ggSubject* GetSubjectConnections() const;
+
+  // persist as dom-element
+  QDomElement CreateDomElement(QDomDocument& aDocument) const;
+  static ggClassyDataSet* Create(const QDomElement& aElement);
 
 private:
 

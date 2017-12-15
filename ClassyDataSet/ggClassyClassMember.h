@@ -14,21 +14,27 @@ class ggClassyClassMember
 {
 public:
 
+  ggClassyClassMember();
   ggClassyClassMember(const QString& aName,
                       const QString& aClassName);
 
+  // identification
   static const QString& TypeID();
   virtual const QString& VTypeID() const;
 
+  // main members
   void SetName(const QString& aName);
   const QString& GetName() const;
-
   void SetClassName(const QString& aClassName);
   const QString& GetClassName() const;
 
+  // check or compare content
+  bool Empty() const;
   bool operator < (const ggClassyClassMember& aOther) const;
 
+  // persist as dom-element
   QDomElement CreateDomElement(QDomDocument& aDocument) const;
+  static ggClassyClassMember Create(const QDomElement& aElement);
 
 private:
 

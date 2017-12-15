@@ -20,9 +20,11 @@ public:
 
   ggClassyClassBox(const QString& aClassName);
 
+  // identification
   static const QString& TypeID();
   virtual const QString& VTypeID() const;
 
+  // main members
   const QString& GetClassName() const;
   void SetClassName(const QString& aClassName);
   const QPointF& GetPosition() const;
@@ -36,7 +38,9 @@ public:
   int GetIndexZ() const;
   void SetIndexZ(int aIndexZ);
 
+  // persist as dom-element
   QDomElement CreateDomElement(QDomDocument& aDocument) const;
+  static ggClassyClassBox* Create(const QDomElement& aElement);
 
 private:
 

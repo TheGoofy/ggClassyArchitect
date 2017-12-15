@@ -26,10 +26,13 @@ ggClassyMainWindow::ggClassyMainWindow(QWidget *parent) :
   ui->statusBar->addPermanentWidget(ui->mZoomComboBox);
   ui->statusBar->addPermanentWidget(ui->mZoomFitPushButton);
   ui->statusBar->addPermanentWidget(ui->mZoomResetPushButton);
-  ui->centralWidget->layout()->setMargin(2);
-  ui->centralWidget->layout()->setSpacing(2);
+  ui->centralWidget->layout()->setMargin(0);
+  ui->centralWidget->layout()->setSpacing(0);
   ui->mZoomComboBox->setCompleter(0);
   ui->mZoomComboBox->setFocusPolicy(Qt::ClickFocus);
+
+  // load...
+  OpenDataSet();
 
   // make some objects (for development and testing)
   ggClassyDataSet* vDataSet = ggClassyApplication::GetInstance().GetDataSet();
@@ -41,6 +44,7 @@ ggClassyMainWindow::ggClassyMainWindow(QWidget *parent) :
 
   // this connects automatically: connect(ui->mZoomComboBox, SIGNAL(currentIndexChanged(int)), this, SLOT(on_mZoomComboBox_currentIndexChanged(int)));
   connect(ui->mZoomComboBox->lineEdit(), SIGNAL(editingFinished()), this, SLOT(on_mZoomComboBox_editingFinished()));
+  connect(ui->mOpenPushButton, SIGNAL(clicked()), this, SLOT(OpenDataSet()));
   connect(ui->mSaveAsPushButton, SIGNAL(clicked()), this, SLOT(SaveDataSetAs()));
   connect(ui->mMoveTopPushButton, SIGNAL(clicked()), this, SLOT(MoveSelectedItemsTop()));
   connect(ui->mMoveUpPushButton, SIGNAL(clicked()), this, SLOT(MoveSelectedItemsUp()));
@@ -127,10 +131,29 @@ void ggClassyMainWindow::on_mAddClassPushButton_clicked()
 }
 
 
+void ggClassyMainWindow::OpenDataSet()
+{
+  QString vFileName = QFileDialog::getOpenFileName(this, tr("Open Classy Architect File"),
+                                                   QDir::currentPath(),
+                                                   tr("Classy Architect Files (*.cax *.xml)"));
+  if (vFileName.isEmpty()) return;
+
+  QFile vFile(vFileName);
+  if (!vFile.open(QFile::ReadOnly | QFile::Text)) {
+    QMessageBox::warning(this, tr("Classy Architect File"),
+                         tr("Cannot read file %1:\n%2.")
+                         .arg(vFileName).arg(vFile.errorString()));
+    return;
+  }
+
+  ggClassyApplication::GetInstance().OpenDataSet(&vFile);
+}
+
+
 void ggClassyMainWindow::SaveDataSetAs()
 {
   QString vFileName = QFileDialog::getSaveFileName(this, tr("Save Classy Architect File"),
-                                                   "",//QDir::currentPath(),
+                                                   QDir::currentPath(),
                                                    tr("Classy Architect Files (*.cax *.xml)"));
   if (vFileName.isEmpty()) return;
 

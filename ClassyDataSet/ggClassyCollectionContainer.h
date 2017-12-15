@@ -15,6 +15,7 @@ class ggClassyCollectionContainer :
   public std::set<ggClassyCollection*>
 {
 
+  // identification
   static const QString& TypeID();
   virtual const QString& VTypeID() const;
 

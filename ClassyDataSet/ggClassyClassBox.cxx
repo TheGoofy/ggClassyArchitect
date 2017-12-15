@@ -44,6 +44,22 @@ QDomElement ggClassyClassBox::CreateDomElement(QDomDocument& aDocument) const
 }
 
 
+ggClassyClassBox* ggClassyClassBox::Create(const QDomElement& aElement)
+{
+  ggClassyClassBox* vClassBox = nullptr;
+  if (aElement.tagName() == TypeID()) {
+    vClassBox = new ggClassyClassBox(aElement.attribute("mClassName"));
+    vClassBox->mPosition.setX(aElement.attribute("mPosition.x").toFloat());
+    vClassBox->mPosition.setY(aElement.attribute("mPosition.y").toFloat());
+    vClassBox->mWidth = aElement.attribute("mWidth").toFloat();
+    vClassBox->mMembersVisible = aElement.attribute("mMembersVisible").toInt();
+    vClassBox->mDescriptionVisible = aElement.attribute("mDescriptionVisible").toInt();
+    vClassBox->mIndexZ = aElement.attribute("mIndexZ").toInt();
+  }
+  return vClassBox;
+}
+
+
 const QString& ggClassyClassBox::GetClassName() const
 {
   return mClassName;

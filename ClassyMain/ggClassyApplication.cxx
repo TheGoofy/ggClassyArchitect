@@ -5,6 +5,7 @@
 #include <QDomDocument>
 #include <QTextStream>
 #include <QDateTime>
+#include <QDebug>
 
 // 2) include own project-related (sort by component dependency)
 #include "Base/ggWalkerT.h"
@@ -76,7 +77,7 @@ const ggClassyDataSet* ggClassyApplication::GetDataSet() const
 }
 
 
-void ggClassyApplication::SaveDataSet(QIODevice* aDevice)
+void ggClassyApplication::SaveDataSet(QIODevice* aIODevice) const
 {
   //
   // compile the DOM document
@@ -96,8 +97,30 @@ void ggClassyApplication::SaveDataSet(QIODevice* aDevice)
   // write file
   //
   const int vIndentSize = 2;
-  QTextStream vTextStream(aDevice);
+  QTextStream vTextStream(aIODevice);
   vDomDocument.save(vTextStream, vIndentSize);
+}
+
+
+void ggClassyApplication::OpenDataSet(QIODevice* aIODevice)
+{
+  //
+  // read the file
+  //
+  QDomDocument vDomDocument;
+  if (vDomDocument.setContent(aIODevice, true)) {
+
+    //
+    // parse the dom-elements
+    //
+    QDomElement vRootElement = vDomDocument.firstChildElement();
+    ggClassyDataSet* vDataSet = ggClassyDataSet::Create(vRootElement);
+
+    if (vDataSet != nullptr) {
+      // goofy: delete old viewers, dataset, notify scene, ...
+      mDataSet = vDataSet;
+    }
+  }
 }
 
 

@@ -26,3 +26,13 @@ QDomElement ggClassyDescription::CreateDomElement(QDomDocument& aDocument) const
   vElement.appendChild(vDescriptionText);
   return vElement;
 }
+
+
+ggClassyDescription ggClassyDescription::Create(const QDomElement& aElement)
+{
+  ggClassyDescription vDescription;
+  if (aElement.tagName() == TypeID()) {
+    vDescription = aElement.text();
+  }
+  return vDescription;
+}

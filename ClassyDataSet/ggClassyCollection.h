@@ -18,6 +18,7 @@ class ggClassyCollection :
 {
 public:
 
+  // identification
   static const QString& TypeID();
   virtual const QString& VTypeID() const;
 

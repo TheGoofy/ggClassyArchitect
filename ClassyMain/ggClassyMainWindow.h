@@ -36,6 +36,7 @@ protected slots:
   void MoveSelectedItemsUp();
   void MoveSelectedItemsDown();
   void MoveSelectedItemsBottom();
+  void OpenDataSet();
   void SaveDataSetAs();
 
 protected:

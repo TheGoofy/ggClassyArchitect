@@ -52,6 +52,16 @@ QDomElement ggClassyClass::CreateBaseClassDomElement(QDomDocument& aDocument,
 }
 
 
+QString ggClassyClass::CreateBaseClassName(const QDomElement& aElement)
+{
+  QString vBaseClassName = "";
+  if (aElement.tagName() == ClassyBaseClassTypeID()) {
+    vBaseClassName = aElement.attribute("mClassName");
+  }
+  return vBaseClassName;
+}
+
+
 QDomElement ggClassyClass::CreateDomElement(QDomDocument& aDocument) const
 {
   // main node
@@ -78,6 +88,39 @@ QDomElement ggClassyClass::CreateDomElement(QDomDocument& aDocument) const
 
   // return dom node
   return vElement;
+}
+
+
+ggClassyClass* ggClassyClass::Create(const QDomElement& aElement, ggClassyDataSet* aDataSet)
+{
+  ggClassyClass* vClass = nullptr;
+  if (aElement.tagName() == TypeID()) {
+
+    // class name and collection
+    vClass = new ggClassyClass(aElement.attribute("mName"), aDataSet);
+    vClass->mCollectionName = aElement.attribute("mCollectionName");
+
+    // parse children
+    QDomElement vChildElement = aElement.firstChildElement();
+    while (!vChildElement.isNull()) {
+
+      // base classes
+      QString vBaseClassName = CreateBaseClassName(vChildElement);
+      if (vBaseClassName != "") vClass->mBaseClassNames.insert(vBaseClassName);
+
+      // members
+      ggClassyClassMember vMember = ggClassyClassMember::Create(vChildElement);
+      if (!vMember.Empty()) vClass->mMembers.push_back(vMember);
+
+      // description
+      ggClassyDescription vDescription = ggClassyDescription::Create(vChildElement);
+      if (vDescription != "") vClass->mDescription = vDescription;
+
+      // next child
+      vChildElement = vChildElement.nextSiblingElement();
+    }
+  }
+  return vClass;
 }
 
 
