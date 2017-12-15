@@ -25,7 +25,7 @@ ggClassyClassBoxContainer::ggClassyClassBoxContainer(const ggClassyClassBoxConta
 
 ggClassyClassBoxContainer::~ggClassyClassBoxContainer()
 {
-  Clear();
+  DeleteAllClassBoxes();
 }
 
 
@@ -59,7 +59,7 @@ ggClassyClassBoxContainer& ggClassyClassBoxContainer::operator = (const ggClassy
   ggSubject::cExecutorLazy vLazy(this);
 
   // delete all classes
-  Clear();
+  DeleteAllClassBoxes();
 
   // add (and notify) copies
   ggWalkerT<ggClassyClassBoxContainer::const_iterator> vOtherClassBoxesWalker(aOther.mClassBoxes);
@@ -71,7 +71,42 @@ ggClassyClassBoxContainer& ggClassyClassBoxContainer::operator = (const ggClassy
 }
 
 
-void ggClassyClassBoxContainer::Clear()
+void ggClassyClassBoxContainer::DeleteClassBox(const ggClassyClassBox* aClassBox)
+{
+  ggClassyClassBoxContainer::iterator vClassBoxesIterator = mClassBoxes.begin();
+  while (vClassBoxesIterator != mClassBoxes.end()) {
+    ggClassyClassBox* vClassBox = *vClassBoxesIterator;
+    if (vClassBox == aClassBox) {
+      mClassBoxes.erase(vClassBoxesIterator);
+      delete vClassBox;
+      Notify();
+      return;
+    }
+    ++vClassBoxesIterator;
+  }
+}
+
+
+void ggClassyClassBoxContainer::DeleteClassBoxes(const QString& aClassName)
+{
+  // make a copy of all boxes
+  std::vector<ggClassyClassBox*> vClassBoxes = mClassBoxes;
+  mClassBoxes.clear();
+
+  // re-add the class-boxes, unless a class-box needs to be deleted
+  ggWalkerT<std::vector<ggClassyClassBox*>::iterator> vClassBoxesWalker(vClassBoxes);
+  while (vClassBoxesWalker) {
+    ggClassyClassBox* vClassBox = *vClassBoxesWalker;
+    if (vClassBox->GetClassName() == aClassName) delete vClassBox;
+    else mClassBoxes.push_back(vClassBox);
+  }
+
+  // maybe there was nothing deleted? notify only, if there was a change
+  if (mClassBoxes.size() != vClassBoxes.size()) Notify();
+}
+
+
+void ggClassyClassBoxContainer::DeleteAllClassBoxes()
 {
   ggWalkerT<ggClassyClassBoxContainer::iterator> vClassBoxesWalker(mClassBoxes);
   while (vClassBoxesWalker) {

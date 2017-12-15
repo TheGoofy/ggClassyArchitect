@@ -21,7 +21,7 @@ ggClassyClassContainer::ggClassyClassContainer(const ggClassyClassContainer& aOt
 
 ggClassyClassContainer::~ggClassyClassContainer()
 {
-  Clear();
+  DeleteAllClasses();
 }
 
 
@@ -109,7 +109,7 @@ ggClassyClassContainer& ggClassyClassContainer::operator = (const ggClassyClassC
   ggSubject::cExecutorLazy vLazy(this);
 
   // delete all classes
-  Clear();
+  DeleteAllClasses();
 
   // add (and notify) copies
   ggWalkerT<ggClassyClassContainer::const_iterator> vOtherClassesWalker(aOther.mClasses);
@@ -121,7 +121,20 @@ ggClassyClassContainer& ggClassyClassContainer::operator = (const ggClassyClassC
 }
 
 
-void ggClassyClassContainer::Clear()
+void ggClassyClassContainer::DeleteClass(const QString& aClassName)
+{
+  ggClassyClass vClassToFind(aClassName);
+  std::set<ggClassyClass*, ggClassyClass>::iterator vClassesIterator = mClasses.find(&vClassToFind);
+  if (vClassesIterator != mClasses.end()) {
+    ggClassyClass* vClassToDelete = *vClassesIterator;
+    mClasses.erase(vClassToDelete);
+    delete vClassToDelete;
+    Notify();
+  }
+}
+
+
+void ggClassyClassContainer::DeleteAllClasses()
 {
   ggWalkerT<ggClassyClassContainer::iterator> vClassesWalker(mClasses);
   while (vClassesWalker) {

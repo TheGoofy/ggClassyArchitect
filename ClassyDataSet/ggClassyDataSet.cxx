@@ -190,6 +190,13 @@ bool ggClassyDataSet::RenameClass(const QString& aOldClassName,
 }
 
 
+void ggClassyDataSet::DeleteClass(const QString& aClassName)
+{
+  mClasses.DeleteClass(aClassName);
+  mClassBoxes.DeleteClassBoxes(aClassName);
+}
+
+
 ggClassyClassBox* ggClassyDataSet::AddClassBox(ggClassyClassBox* aClassBox)
 {
   mClassBoxes.AddClassBox(aClassBox);
@@ -230,8 +237,8 @@ void ggClassyDataSet::Clear()
 
   // clear the containers
   mCollections.clear();
-  mClasses.Clear();
-  mClassBoxes.Clear();
+  mClasses.DeleteAllClasses();
+  mClassBoxes.DeleteAllClassBoxes();
   
   ggWalkerT<std::vector<ggClassyFrame*>::iterator> vFramesWalker(mFrames);
   while (vFramesWalker) delete *vFramesWalker;

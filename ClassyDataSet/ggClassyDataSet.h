@@ -40,6 +40,7 @@ public:
   ggClassyClass* FindClass(const QString& aClassName);
   bool RenameClass(const QString& aOldClassName,
                    const QString& aNewClassName);
+  void DeleteClass(const QString& aClassName);
   ggClassyClassContainer& GetClasses();
   const ggClassyClassContainer& GetClasses() const;
 

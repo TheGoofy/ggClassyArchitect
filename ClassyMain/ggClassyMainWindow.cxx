@@ -164,7 +164,7 @@ void ggClassyMainWindow::on_mNewClassBoxPushButton_clicked()
   ggClassyGraphicsScene* vScene = dynamic_cast<ggClassyGraphicsScene*>(ui->mGraphicsView->scene());
   if (vScene != nullptr) {
 
-    // get the selected class names
+    // get the selected class boxes
     const ggClassyGraphicsScene::tClassBoxes& vSelectedClassBoxes = vScene->GetSelectedClassBoxes();
     ggClassyGraphicsScene::tClassBoxes vNewlassBoxes;
 
@@ -182,6 +182,51 @@ void ggClassyMainWindow::on_mNewClassBoxPushButton_clicked()
 
     // select the new class box(es)
     vScene->SelectClassBoxes(vNewlassBoxes);
+  }
+}
+
+
+void ggClassyMainWindow::on_mDeleteClassPushButton_clicked()
+{
+  ggClassyGraphicsScene* vScene = dynamic_cast<ggClassyGraphicsScene*>(ui->mGraphicsView->scene());
+  if (vScene != nullptr) {
+
+    // get the selected class boxes and the dataset
+    const ggClassyGraphicsScene::tClassBoxes& vSelectedClassBoxes = vScene->GetSelectedClassBoxes();
+    ggClassyDataSet* vDataSet = ggClassyApplication::GetInstance().GetDataSet();
+
+    // loop over all selected class boxes
+    ggSubject::cExecutorLazy vLazyClassBoxes(&vDataSet->GetClassBoxes());
+    ggWalkerT<ggClassyGraphicsScene::tClassBoxes::const_iterator> vSelectedClassBoxesWalker(vSelectedClassBoxes);
+    while (vSelectedClassBoxesWalker) {
+
+      // delete the class
+      const ggClassyClassBox* vSelectedClassBox = *vSelectedClassBoxesWalker;
+      QString vSelectedClassName = vSelectedClassBox->GetClassName();
+      vDataSet->DeleteClass(vSelectedClassName);
+    }
+  }
+}
+
+
+void ggClassyMainWindow::on_mDeleteClassBoxPushButton_clicked()
+{
+  ggClassyGraphicsScene* vScene = dynamic_cast<ggClassyGraphicsScene*>(ui->mGraphicsView->scene());
+  if (vScene != nullptr) {
+
+    // get the selected class boxes and the dataset
+    const ggClassyGraphicsScene::tClassBoxes& vSelectedClassBoxes = vScene->GetSelectedClassBoxes();
+    ggClassyDataSet* vDataSet = ggClassyApplication::GetInstance().GetDataSet();
+
+    // loop over all selected class boxes
+    ggSubject::cExecutorLazy vLazyClassBoxes(&vDataSet->GetClassBoxes());
+    ggWalkerT<ggClassyGraphicsScene::tClassBoxes::const_iterator> vSelectedClassBoxesWalker(vSelectedClassBoxes);
+    while (vSelectedClassBoxesWalker) {
+
+      // delete the box
+      const ggClassyClassBox* vSelectedClassBox = *vSelectedClassBoxesWalker;
+      vDataSet->GetClassBoxes().DeleteClassBox(vSelectedClassBox);
+    }
   }
 }
 

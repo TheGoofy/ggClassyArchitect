@@ -33,7 +33,8 @@ public:
   ggClassyClass* FindClass(const QString& aClassName);
   const ggClassyClass* FindClass(const QString& aClassName) const;
   bool RenameClass(const QString& aOldClassName, const QString& aNewClassName);
-  void Clear();
+  void DeleteClass(const QString& aClassName);
+  void DeleteAllClasses();
 
   typedef std::set<ggClassyClass*, ggClassyClass>::iterator iterator;
   iterator begin();

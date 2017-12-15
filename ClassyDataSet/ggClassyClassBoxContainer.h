@@ -31,7 +31,9 @@ public:
   ggClassyClassBoxContainer& operator = (const ggClassyClassBoxContainer& aOther);
 
   ggClassyClassBox* AddClassBox(ggClassyClassBox* aClassBox);
-  void Clear();
+  void DeleteClassBox(const ggClassyClassBox* aClassBox);
+  void DeleteClassBoxes(const QString& aClassName);
+  void DeleteAllClassBoxes();
 
   typedef std::set<const ggClassyClassBox*> tClassBoxes;
   void MoveClassBoxesUp(const tClassBoxes& aClassBoxes);

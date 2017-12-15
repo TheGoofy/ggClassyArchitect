@@ -28,6 +28,27 @@
     <item>
      <layout class="QVBoxLayout" name="verticalLayout_3">
       <item>
+       <widget class="QPushButton" name="mOpenPushButton">
+        <property name="text">
+         <string>Open...</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="mSaveAsPushButton">
+        <property name="text">
+         <string>Save As...</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="Line" name="line_2">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+       </widget>
+      </item>
+      <item>
        <widget class="QPushButton" name="mNewClassPushButton">
         <property name="sizePolicy">
          <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
@@ -48,16 +69,16 @@
        </widget>
       </item>
       <item>
-       <widget class="QPushButton" name="mOpenPushButton">
+       <widget class="QPushButton" name="mDeleteClassPushButton">
         <property name="text">
-         <string>Open...</string>
+         <string>Del Class</string>
         </property>
        </widget>
       </item>
       <item>
-       <widget class="QPushButton" name="mSaveAsPushButton">
+       <widget class="QPushButton" name="mDeleteClassBoxPushButton">
         <property name="text">
-         <string>Save As...</string>
+         <string>Del Box</string>
         </property>
        </widget>
       </item>
