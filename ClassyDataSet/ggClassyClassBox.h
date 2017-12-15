@@ -18,6 +18,7 @@ class ggClassyClassBox :
 {
 public:
 
+  // construction / destruction
   ggClassyClassBox(const QString& aClassName);
 
   // identification

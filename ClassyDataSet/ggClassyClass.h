@@ -21,17 +21,23 @@ class ggClassyClass :
 {
 public:
 
+  // construction / destruction
   ggClassyClass(ggClassyDataSet* aDataSet = nullptr);
-
   ggClassyClass(const QString& aName,
                 ggClassyDataSet* aDataSet = nullptr);
+  ggClassyClass(const ggClassyClass& aOther);
+  virtual ~ggClassyClass();
 
   // identification
   static const QString& TypeID();
   virtual const QString& VTypeID() const;
 
+  // compares two pointers by comparing their "mName"
   bool operator() (const ggClassyClass* aClassA,
                    const ggClassyClass* aClassB) const;
+
+  // assignment operator
+  ggClassyClass& operator = (const ggClassyClass& aOther);
 
   // assigns a new name. if the class is part of a dataset, all items pointing to this class are adjusted too
   bool SetName(const QString& aName);

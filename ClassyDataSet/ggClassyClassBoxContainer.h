@@ -18,11 +18,20 @@ class ggClassyClassBoxContainer :
 {
 public:
 
+  // construction / destruction
+  ggClassyClassBoxContainer();
+  ggClassyClassBoxContainer(const ggClassyClassBoxContainer& aOther);
+  virtual ~ggClassyClassBoxContainer();
+
   // identification
   static const QString& TypeID();
   virtual const QString& VTypeID() const;
 
+  // assignment operator
+  ggClassyClassBoxContainer& operator = (const ggClassyClassBoxContainer& aOther);
+
   ggClassyClassBox* AddClassBox(ggClassyClassBox* aClassBox);
+  void Clear();
 
   typedef std::set<const ggClassyClassBox*> tClassBoxes;
   void MoveClassBoxesUp(const tClassBoxes& aClassBoxes);

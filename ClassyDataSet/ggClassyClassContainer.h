@@ -17,16 +17,23 @@ class ggClassyClassContainer :
 {
 public:
 
+  // construction / destruction
+  ggClassyClassContainer();
+  ggClassyClassContainer(const ggClassyClassContainer& aOther);
+  virtual ~ggClassyClassContainer();
+
   // identification
   static const QString& TypeID();
   virtual const QString& VTypeID() const;
 
-  ggClassyClass* AddClass(ggClassyClass* aClass);
+  // assignment operator
+  ggClassyClassContainer& operator = (const ggClassyClassContainer& aOther);
 
+  ggClassyClass* AddClass(ggClassyClass* aClass);
   ggClassyClass* FindClass(const QString& aClassName);
   const ggClassyClass* FindClass(const QString& aClassName) const;
-
   bool RenameClass(const QString& aOldClassName, const QString& aNewClassName);
+  void Clear();
 
   typedef std::set<ggClassyClass*, ggClassyClass>::iterator iterator;
   iterator begin();

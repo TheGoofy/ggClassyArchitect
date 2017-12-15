@@ -25,6 +25,7 @@ ggClassyApplication::ggClassyApplication(int &argc, char **argv) :
 
 ggClassyApplication::~ggClassyApplication()
 {
+  delete mDataSet;
 }
 
 
@@ -102,7 +103,7 @@ void ggClassyApplication::SaveDataSet(QIODevice* aIODevice) const
 }
 
 
-void ggClassyApplication::OpenDataSet(QIODevice* aIODevice)
+bool ggClassyApplication::OpenDataSet(QIODevice* aIODevice)
 {
   //
   // read the file
@@ -117,10 +118,17 @@ void ggClassyApplication::OpenDataSet(QIODevice* aIODevice)
     ggClassyDataSet* vDataSet = ggClassyDataSet::Create(vRootElement);
 
     if (vDataSet != nullptr) {
-      // goofy: delete old viewers, dataset, notify scene, ...
-      mDataSet = vDataSet;
+      // copy contents (will notify all observers)
+      *mDataSet = *vDataSet;
+      // new dataset is no longer needed
+      delete vDataSet;
+      // the new dataset was successfully loaded
+      return true;
     }
   }
+
+  // something went wrong
+  return false;
 }
 
 

@@ -31,9 +31,6 @@ ggClassyMainWindow::ggClassyMainWindow(QWidget *parent) :
   ui->mZoomComboBox->setCompleter(0);
   ui->mZoomComboBox->setFocusPolicy(Qt::ClickFocus);
 
-  // load...
-  OpenDataSet();
-
   // make some objects (for development and testing)
   ggClassyDataSet* vDataSet = ggClassyApplication::GetInstance().GetDataSet();
 
@@ -146,7 +143,8 @@ void ggClassyMainWindow::OpenDataSet()
     return;
   }
 
-  ggClassyApplication::GetInstance().OpenDataSet(&vFile);
+  bool vOpened = ggClassyApplication::GetInstance().OpenDataSet(&vFile);
+  if (vOpened) ui->mGraphicsView->SetZoomReset();
 }
 
 

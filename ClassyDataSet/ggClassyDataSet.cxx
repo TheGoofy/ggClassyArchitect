@@ -8,11 +8,31 @@
 #include "Base/ggWalkerT.h"
 
 
+#define GG_FORMAT_VERSION_MAJOR 0
+#define GG_FORMAT_VERSION_MINOR 0
+#define GG_FORMAT_VERSION_PATCH 1
+
+
 ggClassyDataSet::ggClassyDataSet() :
-  mFormatVersionMajor(0),
-  mFormatVersionMinor(0),
-  mFormatVersionPatch(1)
+  mFormatVersionMajor(GG_FORMAT_VERSION_MAJOR),
+  mFormatVersionMinor(GG_FORMAT_VERSION_MINOR),
+  mFormatVersionPatch(GG_FORMAT_VERSION_PATCH)
 {
+}
+
+
+ggClassyDataSet::ggClassyDataSet(const ggClassyDataSet& aOther):
+  mFormatVersionMajor(GG_FORMAT_VERSION_MAJOR),
+  mFormatVersionMinor(GG_FORMAT_VERSION_MINOR),
+  mFormatVersionPatch(GG_FORMAT_VERSION_PATCH)
+{
+  *this = aOther;
+}
+
+
+ggClassyDataSet::~ggClassyDataSet()
+{
+  Clear();
 }
 
 
@@ -83,6 +103,32 @@ ggClassyDataSet* ggClassyDataSet::Create(const QDomElement& aElement)
   }
 
   return vDataSet;
+}
+
+
+ggClassyDataSet& ggClassyDataSet::operator = (const ggClassyDataSet& aOther)
+{
+  // only notify when all members of ggDataSet are re-assigned
+  ggSubject::cExecutorLazy vClassesLazy(&mClasses);
+  ggSubject::cExecutorLazy vClassBoxesLazy(&mClassBoxes);
+
+  // delete all members
+  Clear();
+
+  // re-assign the members
+  mCollections = aOther.mCollections;
+  mClasses = aOther.mClasses;
+  mClassBoxes = aOther.mClassBoxes;
+  mFrames = aOther.mFrames;
+
+  // tell all classes that I'm the "master"
+  ggWalkerT<ggClassyClassContainer::iterator> vClassesWalker(mClasses);
+  while (vClassesWalker) {
+    ggClassyClass* vClass = *vClassesWalker;
+    vClass->SetDataSet(this);
+  }
+
+  return *this;
 }
 
 
@@ -173,6 +219,23 @@ ggClassyClassBoxContainer& ggClassyDataSet::GetClassBoxes()
 const ggClassyClassBoxContainer& ggClassyDataSet::GetClassBoxes() const
 {
   return mClassBoxes;
+}
+
+
+void ggClassyDataSet::Clear()
+{
+  // only notify when all members of ggDataSet are cleared
+  ggSubject::cExecutorLazy vClassesLazy(&mClasses);
+  ggSubject::cExecutorLazy vClassBoxesLazy(&mClassBoxes);
+
+  // clear the containers
+  mCollections.clear();
+  mClasses.Clear();
+  mClassBoxes.Clear();
+  
+  ggWalkerT<std::vector<ggClassyFrame*>::iterator> vFramesWalker(mFrames);
+  while (vFramesWalker) delete *vFramesWalker;
+  mFrames.clear();
 }
 
 

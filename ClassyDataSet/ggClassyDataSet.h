@@ -22,12 +22,18 @@ public:
 
   static ggClassyDataSet* CreateTestDataSet();
 
+  // construction / destruction
   ggClassyDataSet();
+  ggClassyDataSet(const ggClassyDataSet& aOther);
+  virtual ~ggClassyDataSet();
 
   // identification
   static const QString& TypeID();
   virtual const QString& VTypeID() const;
   QString GetFormatVersion() const;
+
+  // assignment operator
+  ggClassyDataSet& operator = (const ggClassyDataSet& aOther);
 
   // classes
   ggClassyClass* AddClass(ggClassyClass* aClass);
@@ -44,6 +50,7 @@ public:
 
   // other
   const ggSubject* GetSubjectConnections() const;
+  void Clear();
 
   // persist as dom-element
   QDomElement CreateDomElement(QDomDocument& aDocument) const;

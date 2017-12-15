@@ -8,6 +8,23 @@
 #include "Base/ggWalkerT.h"
 
 
+ggClassyClassContainer::ggClassyClassContainer()
+{
+}
+
+
+ggClassyClassContainer::ggClassyClassContainer(const ggClassyClassContainer& aOther)
+{
+  *this = aOther;
+}
+
+
+ggClassyClassContainer::~ggClassyClassContainer()
+{
+  Clear();
+}
+
+
 const QString& ggClassyClassContainer::TypeID()
 {
   static const QString vTypeID("ggClassyClassContainer");
@@ -56,8 +73,6 @@ const ggClassyClass* ggClassyClassContainer::FindClass(const QString& aClassName
 bool ggClassyClassContainer::RenameClass(const QString& aOldClassName,
                                          const QString& aNewClassName)
 {
-  qDebug() << __PRETTY_FUNCTION__ << aOldClassName << "=>" << aNewClassName;
-
   // if the name is unchanged, renaming is obsolete (success)
   if (aNewClassName == aOldClassName) return true;
   // can't rename, if there is no class with the "old" name (fail)
@@ -85,6 +100,35 @@ bool ggClassyClassContainer::RenameClass(const QString& aOldClassName,
   // done (success)
   Notify();
   return true;
+}
+
+
+ggClassyClassContainer& ggClassyClassContainer::operator = (const ggClassyClassContainer& aOther)
+{
+  // one collective notification (and not each individual class)
+  ggSubject::cExecutorLazy vLazy(this);
+
+  // delete all classes
+  Clear();
+
+  // add (and notify) copies
+  ggWalkerT<ggClassyClassContainer::const_iterator> vOtherClassesWalker(aOther.mClasses);
+  while (vOtherClassesWalker) {
+    AddClass(new ggClassyClass(**vOtherClassesWalker));
+  }
+
+  return *this;
+}
+
+
+void ggClassyClassContainer::Clear()
+{
+  ggWalkerT<ggClassyClassContainer::iterator> vClassesWalker(mClasses);
+  while (vClassesWalker) {
+    delete *vClassesWalker;
+  }
+  mClasses.clear();
+  Notify();
 }
 
 

@@ -10,6 +10,25 @@
 #include "Base/ggUtility.h"
 
 
+ggClassyClassBoxContainer::ggClassyClassBoxContainer()
+{
+}
+
+
+ggClassyClassBoxContainer::ggClassyClassBoxContainer(const ggClassyClassBoxContainer& aOther)
+{
+  // copy contents from other
+  *this = aOther;
+}
+
+
+
+ggClassyClassBoxContainer::~ggClassyClassBoxContainer()
+{
+  Clear();
+}
+
+
 const QString& ggClassyClassBoxContainer::TypeID()
 {
   static QString vTypeID("ggClassyClassBoxContainer");
@@ -31,6 +50,35 @@ ggClassyClassBox* ggClassyClassBoxContainer::AddClassBox(ggClassyClassBox* aClas
     Notify();
   }
   return aClassBox;
+}
+
+
+ggClassyClassBoxContainer& ggClassyClassBoxContainer::operator = (const ggClassyClassBoxContainer& aOther)
+{
+  // one collective notification (and not each individual class)
+  ggSubject::cExecutorLazy vLazy(this);
+
+  // delete all classes
+  Clear();
+
+  // add (and notify) copies
+  ggWalkerT<ggClassyClassBoxContainer::const_iterator> vOtherClassBoxesWalker(aOther.mClassBoxes);
+  while (vOtherClassBoxesWalker) {
+    AddClassBox(new ggClassyClassBox(**vOtherClassBoxesWalker));
+  }
+
+  return *this;
+}
+
+
+void ggClassyClassBoxContainer::Clear()
+{
+  ggWalkerT<ggClassyClassBoxContainer::iterator> vClassBoxesWalker(mClassBoxes);
+  while (vClassBoxesWalker) {
+    delete *vClassBoxesWalker;
+  }
+  mClassBoxes.clear();
+  Notify();
 }
 
 

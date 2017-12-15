@@ -23,6 +23,22 @@ ggClassyClass::ggClassyClass(const QString& aName,
 }
 
 
+ggClassyClass::ggClassyClass(const ggClassyClass& aOther) :
+  mName(aOther.mName),
+  mBaseClassNames(aOther.mBaseClassNames),
+  mMembers(aOther.mMembers),
+  mDescription(aOther.mDescription),
+  mCollectionName(aOther.mCollectionName),
+  mDataSet(nullptr)
+{
+}
+
+
+ggClassyClass::~ggClassyClass()
+{
+}
+
+
 const QString& ggClassyClass::TypeID()
 {
   static const QString vTypeID("ggClassyClass");
@@ -121,6 +137,18 @@ ggClassyClass* ggClassyClass::Create(const QDomElement& aElement, ggClassyDataSe
     }
   }
   return vClass;
+}
+
+
+ggClassyClass& ggClassyClass::operator = (const ggClassyClass& aOther)
+{
+  // copy all except "mDataSet"
+  mName = aOther.mName;
+  mBaseClassNames = aOther.mBaseClassNames;
+  mMembers = aOther.mMembers;
+  mDescription = aOther.mDescription;
+  mCollectionName = aOther.mCollectionName;
+  return *this;
 }
 
 
