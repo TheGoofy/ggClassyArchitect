@@ -12,16 +12,19 @@ The user can enter a list of **classes**, base-classes, class-members, and class
 - Collections of classes with same color-style
 
 ## Development: Next Steps ToDo
-- Interactive delete Class-Box (just the box and not the class, "x" on top right)
 - Docking Tool-Bar (list classes, add/delete classes, add/delete class-boxes)
 - Class-Box: edit members, and member-class-names
+- Edit base-classes (interactive, with rubber-band-path)
+- Hilight class-boxes which display the same class, depending on selection
+- Interactive delete Class-Box (just the box and not the class, "x" on top right)
 - Docking Tool-Bar (collections, edit colors and fonts, line-styles)
+- Multiple views (different sets of class-boxes)
 - Frames (rectangular free-hand boxes for visually grouping class-boxes)
 - Docking Tool-Bar (frames color properties)
 - Menu with default preferences (for new class-boxes, or frames)
-- Menu with recenr file list
+- Remember recent window position, file-dialog folder
+- Menu with recent file list
 - Menu with undo/redo
-- Multiple views (different sets of class-boxes)
 - etc.
 
 ## Development: Components Dependency
