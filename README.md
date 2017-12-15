@@ -12,7 +12,6 @@ The user can enter a list of **classes**, base-classes, class-members, and class
 - Collections of classes with same color-style
 
 ## Development: Next Steps ToDo
-- Load Data Set (from file)
 - Interactive delete Class-Box (just the box and not the class, "x" on top right)
 - Docking Tool-Bar (list classes, add/delete classes, add/delete class-boxes)
 - Class-Box: edit members, and member-class-names
