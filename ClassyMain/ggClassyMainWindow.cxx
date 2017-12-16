@@ -17,7 +17,9 @@
 
 ggClassyMainWindow::ggClassyMainWindow(QWidget *parent) :
   QMainWindow(parent),
-  ui(new Ui::ggClassyMainWindow)
+  ui(new Ui::ggClassyMainWindow),
+  mDataBrowser(new ggClassyDataBrowserDockWidget(this)),
+  mDataProperties(new ggClassyDataPropertiesDockWidget(this))
 {
   ui->setupUi(this);
 
@@ -48,6 +50,9 @@ ggClassyMainWindow::ggClassyMainWindow(QWidget *parent) :
   connect(ui->mMoveUpPushButton, SIGNAL(clicked()), this, SLOT(MoveSelectedItemsUp()));
   connect(ui->mMoveDownPushButton, SIGNAL(clicked()), this, SLOT(MoveSelectedItemsDown()));
   connect(ui->mMoveBottomPushButton, SIGNAL(clicked()), this, SLOT(MoveSelectedItemsBottom()));
+
+  addDockWidget(Qt::LeftDockWidgetArea, mDataBrowser);
+  addDockWidget(Qt::LeftDockWidgetArea, mDataProperties);
 
   // register subject(s)
   Attach(ui->mGraphicsView->GetSubjectZoom());

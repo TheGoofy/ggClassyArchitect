@@ -6,6 +6,8 @@
 
 // 2) include own project-related (sort by component dependency)
 #include "Base/ggObserver.h"
+#include "ClassyMain/ggClassyDataBrowserDockWidget.h"
+#include "ClassyMain/ggClassyDataPropertiesDockWidget.h"
 
 // 3) forward declarations
 namespace Ui {
@@ -46,11 +48,15 @@ protected:
   virtual void Update(const ggSubject* aSubject) override;
 
 private: 
-  static QPointF& GetNewPosition();
 
   // the main window form
-  Ui::ggClassyMainWindow *ui;
+  Ui::ggClassyMainWindow* ui;
 
+  // other user interfaces
+  ggClassyDataBrowserDockWidget* mDataBrowser;
+  ggClassyDataPropertiesDockWidget* mDataProperties;
+
+  static QPointF& GetNewPosition();
   QString ZoomToString(float aZoomFloat) const;
   float StringToZoom(const QString& aZoomString) const;
 

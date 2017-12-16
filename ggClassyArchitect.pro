@@ -23,7 +23,9 @@ DEFINES += QT_DEPRECATED_WARNINGS
 DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 FORMS += \
-    ClassyMain/ggClassyMainWindow.ui
+    ClassyMain/ggClassyMainWindow.ui \
+    ClassyMain/ggClassyDataBrowserDockWidget.ui \
+    ClassyMain/ggClassyDataPropertiesDockWidget.ui
 
 DISTFILES += \
     README.md
@@ -68,7 +70,9 @@ HEADERS += \
     ClassyMain/ggClassyMainWindow.h \
     BaseGraphics/ggGraphicsView.h \
     ClassyGraphics/ggClassyClassBoxPoints.h \
-    ClassyDataSet/ggClassyClassBoxContainer.h
+    ClassyDataSet/ggClassyClassBoxContainer.h \
+    ClassyMain/ggClassyDataBrowserDockWidget.h \
+    ClassyMain/ggClassyDataPropertiesDockWidget.h
 
 SOURCES += \
     Base/ggItemLinked.cxx \
@@ -100,5 +104,7 @@ SOURCES += \
     ClassyMain/main.cxx \
     BaseGraphics/ggGraphicsView.cxx \
     ClassyGraphics/ggClassyClassBoxPoints.cxx \
-    ClassyDataSet/ggClassyClassBoxContainer.cxx
+    ClassyDataSet/ggClassyClassBoxContainer.cxx \
+    ClassyMain/ggClassyDataBrowserDockWidget.cxx \
+    ClassyMain/ggClassyDataPropertiesDockWidget.cxx
 
