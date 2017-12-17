@@ -13,10 +13,22 @@
   <property name="windowTitle">
    <string>Classy Architect</string>
   </property>
+  <property name="dockOptions">
+   <set>QMainWindow::AllowNestedDocks|QMainWindow::AllowTabbedDocks|QMainWindow::AnimatedDocks</set>
+  </property>
+  <property name="unifiedTitleAndToolBarOnMac">
+   <bool>false</bool>
+  </property>
   <widget class="QWidget" name="centralWidget">
    <layout class="QHBoxLayout" name="horizontalLayout">
     <item>
      <widget class="ggGraphicsView" name="mGraphicsView">
+      <property name="frameShape">
+       <enum>QFrame::NoFrame</enum>
+      </property>
+      <property name="frameShadow">
+       <enum>QFrame::Plain</enum>
+      </property>
       <property name="renderHints">
        <set>QPainter::Antialiasing|QPainter::TextAntialiasing</set>
       </property>
@@ -114,6 +126,16 @@
        <widget class="QPushButton" name="mMoveBottomPushButton">
         <property name="text">
          <string>Bottom</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="ggColorWheelWidget" name="mColorWheelWidget" native="true">
+        <property name="minimumSize">
+         <size>
+          <width>120</width>
+          <height>120</height>
+         </size>
         </property>
        </widget>
       </item>
@@ -234,11 +256,17 @@
   <customwidget>
    <class>ggGraphicsView</class>
    <extends>QGraphicsView</extends>
-   <header location="global">BaseGraphics/ggGraphicsView.h</header>
+   <header>BaseGraphics/ggGraphicsView.h</header>
    <slots>
     <slot>SetZoom100()</slot>
     <slot>SetZoomFit()</slot>
    </slots>
+  </customwidget>
+  <customwidget>
+   <class>ggColorWheelWidget</class>
+   <extends>QWidget</extends>
+   <header>BaseWidgets/ggColorWheelWidget.h</header>
+   <container>1</container>
   </customwidget>
  </customwidgets>
  <resources/>
