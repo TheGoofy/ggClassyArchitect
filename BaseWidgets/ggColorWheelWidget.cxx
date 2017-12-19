@@ -253,6 +253,7 @@ void ggColorWheelWidget::mousePressEvent(QMouseEvent* aEvent)
     setCursor(Qt::BlankCursor);
     mColorSaturized = GetColorSaturized(aEvent->pos());
     mColorPosition = GetPosition(mColorSaturized);
+    emit ColorChanged(GetColor());
     update();
   }
 
@@ -286,6 +287,7 @@ void ggColorWheelWidget::mouseMoveEvent(QMouseEvent* aEvent)
   if (aEvent->buttons() & Qt::LeftButton) {
     mColorSaturized = GetColorSaturized(aEvent->pos());
     mColorPosition = GetPosition(mColorSaturized);
+    emit ColorChanged(GetColor());
     update();
   }
 

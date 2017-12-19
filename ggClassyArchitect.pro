@@ -73,7 +73,8 @@ HEADERS += \
     ClassyDataSet/ggClassyClassBoxContainer.h \
     ClassyMain/ggClassyDataBrowserDockWidget.h \
     ClassyMain/ggClassyDataPropertiesDockWidget.h \
-    BaseWidgets/ggColorWheelWidget.h
+    BaseWidgets/ggColorWheelWidget.h \
+    BaseWidgets/ggColorBrightnessWidget.h
 
 SOURCES += \
     Base/ggItemLinked.cxx \
@@ -108,5 +109,6 @@ SOURCES += \
     ClassyDataSet/ggClassyClassBoxContainer.cxx \
     ClassyMain/ggClassyDataBrowserDockWidget.cxx \
     ClassyMain/ggClassyDataPropertiesDockWidget.cxx \
-    BaseWidgets/ggColorWheelWidget.cxx
+    BaseWidgets/ggColorWheelWidget.cxx \
+    BaseWidgets/ggColorBrightnessWidget.cxx
 

@@ -18,10 +18,17 @@ public:
 
   explicit ggColorWheelWidget(QWidget* aParent = nullptr);
 
-  void SetColor(const QColor& aColor);
   QColor GetColor() const;
-  void SetAdaptBrightness(bool aAdapt);
   bool GetAdaptBrightness() const;
+
+signals:
+
+  void ColorChanged(const QColor& aColor);
+
+public slots:
+
+  void SetColor(const QColor& aColor);
+  void SetAdaptBrightness(bool aAdapt);
 
 protected:
 

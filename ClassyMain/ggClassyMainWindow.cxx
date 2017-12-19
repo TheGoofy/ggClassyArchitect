@@ -50,6 +50,7 @@ ggClassyMainWindow::ggClassyMainWindow(QWidget *parent) :
   connect(ui->mMoveUpPushButton, SIGNAL(clicked()), this, SLOT(MoveSelectedItemsUp()));
   connect(ui->mMoveDownPushButton, SIGNAL(clicked()), this, SLOT(MoveSelectedItemsDown()));
   connect(ui->mMoveBottomPushButton, SIGNAL(clicked()), this, SLOT(MoveSelectedItemsBottom()));
+  connect(ui->mColorWheelWidget, SIGNAL(ColorChanged(QColor)), ui->mColorBrightnessWidget, SLOT(SetColor(QColor)));
 
   addDockWidget(Qt::LeftDockWidgetArea, mDataBrowser);
   addDockWidget(Qt::LeftDockWidgetArea, mDataProperties);
