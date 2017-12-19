@@ -246,6 +246,9 @@ void ggColorWheelWidget::mouseMoveEvent(QMouseEvent* aEvent)
   if (!mMouseDragging) {
     setCursor(IsInside(aEvent->pos()) ? Qt::CrossCursor : Qt::ArrowCursor);
   }
+  else {
+    setCursor(IsInside(aEvent->pos()) ? Qt::BlankCursor : Qt::CrossCursor);
+  }
 
   // change selected color
   if (aEvent->buttons() & Qt::LeftButton) {
