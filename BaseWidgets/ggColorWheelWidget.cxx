@@ -4,9 +4,7 @@
 // 1) include system or QT
 #include <math.h>
 #include <QPainter>
-#include <QPaintEvent>
-#include <QDebug>
-#include <QLayout>
+#include <QMouseEvent>
 
 // 2) include own project-related (sort by component dependency)
 #include "Base/ggUtility.h"
