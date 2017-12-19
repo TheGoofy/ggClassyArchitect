@@ -19,13 +19,14 @@ public:
   explicit ggColorWheelWidget(QWidget* aParent = nullptr);
 
   void SetColor(const QColor& aColor);
-  QColor GetColorFromWheel() const;
+  QColor GetColor() const;
   void SetAdaptBrightness(bool aAdapt);
   bool GetAdaptBrightness() const;
 
 protected:
 
   virtual void mousePressEvent(QMouseEvent* aEvent) override;
+  virtual void mouseReleaseEvent(QMouseEvent* aEvent) override;
   virtual void mouseMoveEvent(QMouseEvent* aEvent) override;
   virtual void resizeEvent(QResizeEvent* aEvent) override;
   virtual void paintEvent(QPaintEvent* aEvent) override;
@@ -33,11 +34,12 @@ protected:
 private:
 
   // helper methods
-  void UpdateColors();
+  void UpdateCornerColors();
   QPointF GetPosition(const QColor& aColor) const;
   QPointF ClampPosition(const QPointF& aPosition) const;
   QColor GetColorSaturized(const QPointF& aPosition) const;
   QColor GetColorFromWheel(const QPointF& aPosition) const;
+  bool IsInside(const QPointF& aPosition) const;
 
   // the selected color
   QColor mColorSaturized;
@@ -66,6 +68,9 @@ private:
   QVector2D mDirC; // cyan corner
   QVector2D mDirB; // blue corner
   QVector2D mDirM; // magenta corner
+
+  // some mouse button is pressed
+  bool mMouseDragging;
 
 };
 

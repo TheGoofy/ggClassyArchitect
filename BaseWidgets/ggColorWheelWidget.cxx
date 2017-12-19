@@ -16,11 +16,12 @@ ggColorWheelWidget::ggColorWheelWidget(QWidget* aParent) :
   QWidget(aParent),
   mAdaptBrightness(false),
   mColorBrightness(0.0f),
-  mSelectorRadius(3.0f)
+  mSelectorRadius(3.0f),
+  mMouseDragging(false)
 {
   setMouseTracking(true);
-  SetColor(QColor(120, 60, 90, 150));
-  UpdateColors();
+  SetColor(QColor(200, 150, 50, 255));
+  UpdateCornerColors();
 }
 
 
@@ -49,13 +50,13 @@ void ggColorWheelWidget::SetColor(const QColor& aColor)
     mColorSaturized = vColorSaturized;
     mColorBrightness = vColorBrightness;
     mColorPosition = GetPosition(mColorSaturized);
-    UpdateColors();
+    UpdateCornerColors();
     update(); // trigger repaint
   }
 }
 
 
-QColor ggColorWheelWidget::GetColorFromWheel() const
+QColor ggColorWheelWidget::GetColor() const
 {
   return QColor::fromRgbF(mColorBrightness * mColorSaturized.redF(),
                           mColorBrightness * mColorSaturized.greenF(),
@@ -68,7 +69,7 @@ void ggColorWheelWidget::SetAdaptBrightness(bool aAdapt)
 {
   if (mAdaptBrightness != aAdapt) {
     mAdaptBrightness = aAdapt;
-    UpdateColors();
+    UpdateCornerColors();
     update(); // trigger repaint
   }
 }
@@ -98,7 +99,7 @@ QColor ContrastColor(const QColor& aColor)
 }
 
 
-void ggColorWheelWidget::UpdateColors()
+void ggColorWheelWidget::UpdateCornerColors()
 {
   float vVal = mAdaptBrightness ? mColorBrightness : 1.0f;
   mColorR = QColor::fromRgbF(vVal, 0.0f, 0.0f); // red
@@ -233,10 +234,25 @@ QColor ggColorWheelWidget::GetColorFromWheel(const QPointF& aPosition) const
 }
 
 
+bool ggColorWheelWidget::IsInside(const QPointF& aPosition) const
+{
+  bool vIsInside = true;
+  vIsInside = vIsInside && SignFromLine(mPosCenter, mDirR, mDirY, aPosition) <= 0.0f;
+  vIsInside = vIsInside && SignFromLine(mPosCenter, mDirY, mDirG, aPosition) <= 0.0f;
+  vIsInside = vIsInside && SignFromLine(mPosCenter, mDirG, mDirC, aPosition) <= 0.0f;
+  vIsInside = vIsInside && SignFromLine(mPosCenter, mDirC, mDirB, aPosition) <= 0.0f;
+  vIsInside = vIsInside && SignFromLine(mPosCenter, mDirB, mDirM, aPosition) <= 0.0f;
+  vIsInside = vIsInside && SignFromLine(mPosCenter, mDirM, mDirR, aPosition) <= 0.0f;
+  return vIsInside;
+}
+
+
 void ggColorWheelWidget::mousePressEvent(QMouseEvent* aEvent)
 {
   // change selected color
-  if (aEvent->buttons() == Qt::LeftButton) {
+  if (aEvent->button() == Qt::LeftButton) {
+    mMouseDragging = true;
+    setCursor(Qt::BlankCursor);
     mColorSaturized = GetColorSaturized(aEvent->pos());
     mColorPosition = GetPosition(mColorSaturized);
     update();
@@ -247,20 +263,29 @@ void ggColorWheelWidget::mousePressEvent(QMouseEvent* aEvent)
 }
 
 
+void ggColorWheelWidget::mouseReleaseEvent(QMouseEvent* aEvent)
+{
+  // change selected color
+  if (aEvent->button() == Qt::LeftButton) {
+    mMouseDragging = false;
+    setCursor(IsInside(aEvent->pos()) ? Qt::CrossCursor : Qt::ArrowCursor);
+    update();
+  }
+
+  // call base method
+  QWidget::mouseReleaseEvent(aEvent);
+}
+
+
 void ggColorWheelWidget::mouseMoveEvent(QMouseEvent* aEvent)
 {
   // adjust mouse pointer, if it is inside of the color-wheel
-  bool vIsInside = true;
-  vIsInside = vIsInside && SignFromLine(mPosCenter, mDirR, mDirY, aEvent->pos()) < 0.0f;
-  vIsInside = vIsInside && SignFromLine(mPosCenter, mDirY, mDirG, aEvent->pos()) < 0.0f;
-  vIsInside = vIsInside && SignFromLine(mPosCenter, mDirG, mDirC, aEvent->pos()) < 0.0f;
-  vIsInside = vIsInside && SignFromLine(mPosCenter, mDirC, mDirB, aEvent->pos()) < 0.0f;
-  vIsInside = vIsInside && SignFromLine(mPosCenter, mDirB, mDirM, aEvent->pos()) < 0.0f;
-  vIsInside = vIsInside && SignFromLine(mPosCenter, mDirM, mDirR, aEvent->pos()) < 0.0f;
-  setCursor(vIsInside ? Qt::CrossCursor : Qt::ArrowCursor);
+  if (!mMouseDragging) {
+    setCursor(IsInside(aEvent->pos()) ? Qt::CrossCursor : Qt::ArrowCursor);
+  }
 
   // change selected color
-  if (aEvent->buttons() == Qt::LeftButton) {
+  if (aEvent->buttons() & Qt::LeftButton) {
     mColorSaturized = GetColorSaturized(aEvent->pos());
     mColorPosition = GetPosition(mColorSaturized);
     update();
@@ -421,19 +446,22 @@ void ggColorWheelWidget::paintEvent(QPaintEvent* aEvent)
   vPainter.setBrush(Qt::NoBrush);
   DrawPolygon(vPainter, mPosCenter, mDirR, mDirY, mDirG, mDirC, mDirB, mDirM);
 
+  // indicator of selected color
+  const float vSelectorRadiusLarge = 9.0f;
+  const float vRadius = mMouseDragging ? vSelectorRadiusLarge : mSelectorRadius;
+  vPainter.setPen(QPen(Qt::white, 1.5f));
+  vPainter.drawEllipse(mColorPosition, vRadius + 1.0f, vRadius + 1.0f);
+  vPainter.setPen(Qt::black);
+  vPainter.setBrush(GetColor());
+  vPainter.drawEllipse(mColorPosition, vRadius, vRadius);
+
   // center crosshair
   vPainter.setPen(ContrastColor(GetColorFromWheel(mPosCenter)));
   float vOffset = mSelectorRadius;
-  float vLength = 3.5f;
+  float vLength = vSelectorRadiusLarge - mSelectorRadius - 2.5f;
   DrawLine(vPainter, mPosCenter, mDirR, vOffset, vLength);
   DrawLine(vPainter, mPosCenter, mDirG, vOffset, vLength);
   DrawLine(vPainter, mPosCenter, mDirB, vOffset, vLength);
-
-  // indicator of selected color
-  vPainter.setPen(QPen(Qt::white, 1.5f));
-  vPainter.drawEllipse(mColorPosition, mSelectorRadius+1.0f, mSelectorRadius+1.0f);
-  vPainter.setPen(Qt::black);
-  vPainter.drawEllipse(mColorPosition, mSelectorRadius, mSelectorRadius);
 
   // maybe the parent wants to draw as well...
   QWidget::paintEvent(aEvent);
