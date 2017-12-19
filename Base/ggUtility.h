@@ -3,7 +3,7 @@
 
 // 1) include system
 
-// 3) forward declarations
+// 2) include own project-related (sort by component dependency)
 #include "Base/ggTypes.h"
 
 // 3) forward declarations
@@ -49,11 +49,6 @@ namespace ggUtility {
 
   // round to Order of MaGnitude: 5321.215 => 5320.0 ... 0.08716813 => 0.0872 ... 2.575612 => 2.58
   ggFloat RoundToOMG(ggFloat aValue, ggUInt16 aOrderOfMagnitude = 3);
-
-  // the lightness (perceptually relevant) of a RGB color
-  inline ggFloat ColorLightness(ggFloat aR, ggFloat aG, ggFloat aB) {
-    return 0.299f*aR + 0.587f*aG + 0.114f*aB;
-  }
 
   template <typename T>
   inline const T& Clamp(const T& aValue, const T& aValueMin, const T& aValueMax) {

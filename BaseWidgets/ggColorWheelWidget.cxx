@@ -8,6 +8,7 @@
 
 // 2) include own project-related (sort by component dependency)
 #include "Base/ggUtility.h"
+#include "BaseWidgets//ggUtilityQt.h"
 
 
 ggColorWheelWidget::ggColorWheelWidget(QWidget* aParent) :
@@ -23,24 +24,11 @@ ggColorWheelWidget::ggColorWheelWidget(QWidget* aParent) :
 }
 
 
-float ColorMaxF(const QColor& aColor)
-{
-  return ggUtility::Max(aColor.redF(), aColor.greenF(), aColor.blueF());
-}
-
-
 void ggColorWheelWidget::SetColor(const QColor& aColor)
 {
   // calculate saturized color and brightness
-  float vColorBrightness = ColorMaxF(aColor);
-  QColor vColorSaturized = aColor;
-  if (vColorBrightness != 0.0f) {
-    float vScale = 1.0f / vColorBrightness;
-    vColorSaturized = QColor::fromRgbF(vScale * aColor.redF(),
-                                       vScale * aColor.greenF(),
-                                       vScale * aColor.blueF(),
-                                       aColor.alphaF());
-  }
+  float vColorBrightness = ggUtilityQt::GetColorBrightness(aColor);
+  QColor vColorSaturized = ggUtilityQt::GetColorSaturized(aColor);
 
   // update colors, if changed
   if (vColorBrightness != mColorBrightness ||
@@ -56,10 +44,7 @@ void ggColorWheelWidget::SetColor(const QColor& aColor)
 
 QColor ggColorWheelWidget::GetColor() const
 {
-  return QColor::fromRgbF(mColorBrightness * mColorSaturized.redF(),
-                          mColorBrightness * mColorSaturized.greenF(),
-                          mColorBrightness * mColorSaturized.blueF(),
-                          mColorSaturized.alphaF());
+  return ggUtilityQt::GetColorScaled(mColorSaturized, mColorBrightness);
 }
 
 
@@ -76,24 +61,6 @@ void ggColorWheelWidget::SetAdaptBrightness(bool aAdapt)
 bool ggColorWheelWidget::GetAdaptBrightness() const
 {
   return mAdaptBrightness;
-}
-
-
-int ColorMax(const QColor& aColor)
-{
-  return ggUtility::Max(aColor.red(), aColor.green(), aColor.blue());
-}
-
-
-float Lightness(const QColor& aColor)
-{
-  return ggUtility::ColorLightness(aColor.redF(), aColor.greenF(), aColor.redF());
-}
-
-
-QColor ContrastColor(const QColor& aColor)
-{
-  return (Lightness(aColor) < 0.5f) ? QColor(Qt::white) : QColor(Qt::black);
 }
 
 
@@ -128,13 +95,13 @@ QPointF GetPosition(float aScale, float aColorA, float aColorB,
 
 QPointF ggColorWheelWidget::GetPosition(const QColor& aColor) const
 {
-  if (ColorMax(aColor) == aColor.red()) {
+  if (ggUtilityQt::GetColorMax(aColor) == aColor.red()) {
     return ::GetPosition(aColor.redF(), aColor.greenF(), aColor.blueF(), mPosCenter, mDirG, mDirB);
   }
-  if (ColorMax(aColor) == aColor.green()) {
+  if (ggUtilityQt::GetColorMax(aColor) == aColor.green()) {
     return ::GetPosition(aColor.greenF(), aColor.blueF(), aColor.redF(), mPosCenter, mDirB, mDirR);
   }
-  if (ColorMax(aColor) == aColor.blue()) {
+  if (ggUtilityQt::GetColorMax(aColor) == aColor.blue()) {
     return ::GetPosition(aColor.blueF(), aColor.redF(), aColor.greenF(), mPosCenter, mDirR, mDirG);
   }
   return QPointF(mPosCenter);
@@ -225,10 +192,7 @@ QColor ggColorWheelWidget::GetColorFromWheel(const QPointF& aPosition) const
 {
   QColor vColor = GetColorSaturized(aPosition);
   if (!mAdaptBrightness) return vColor;
-  return QColor::fromRgbF(mColorBrightness * vColor.redF(),
-                          mColorBrightness * vColor.greenF(),
-                          mColorBrightness * vColor.blueF(),
-                          vColor.alphaF());
+  return ggUtilityQt::GetColorScaled(vColor, mColorBrightness);
 }
 
 
@@ -456,7 +420,7 @@ void ggColorWheelWidget::paintEvent(QPaintEvent* aEvent)
   vPainter.drawEllipse(mColorPosition, vRadius, vRadius);
 
   // center crosshair
-  vPainter.setPen(ContrastColor(GetColorFromWheel(mPosCenter)));
+  vPainter.setPen(ggUtilityQt::GetContrastColor(GetColorFromWheel(mPosCenter)));
   float vOffset = mSelectorRadius;
   float vLength = vSelectorRadiusLarge - mSelectorRadius - 2.5f;
   DrawLine(vPainter, mPosCenter, mDirR, vOffset, vLength);

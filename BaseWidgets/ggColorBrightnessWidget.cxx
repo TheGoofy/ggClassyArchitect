@@ -7,21 +7,36 @@
 
 // 2) include own project-related (sort by component dependency)
 #include "Base/ggUtility.h"
+#include "BaseWidgets//ggUtilityQt.h"
 
 
 ggColorBrightnessWidget::ggColorBrightnessWidget(QWidget* aParent) :
-  QWidget(aParent),
-  mColor(255, 150, 0, 255)
+  QWidget(aParent)
 {
+  setMouseTracking(true);
+  SetColor(QColor(200, 150, 0, 255));
 }
 
 
 void ggColorBrightnessWidget::SetColor(const QColor& aColor)
 {
-  if (mColor != aColor) {
-    mColor = aColor;
-    update();
+  // calculate saturized color and brightness
+  float vColorBrightness = ggUtilityQt::GetColorBrightness(aColor);
+  QColor vColorSaturized = ggUtilityQt::GetColorSaturized(aColor);
+
+  // update colors, if changed
+  if (vColorBrightness != mColorBrightness ||
+      vColorSaturized != mColorSaturized) {
+    mColorSaturized = vColorSaturized;
+    mColorBrightness = vColorBrightness;
+    update(); // trigger repaint
   }
+}
+
+
+QColor ggColorBrightnessWidget::GetColor() const
+{
+  return ggUtilityQt::GetColorScaled(mColorSaturized, mColorBrightness);
 }
 
 
@@ -54,7 +69,7 @@ void ggColorBrightnessWidget::paintEvent(QPaintEvent* aEvent)
   QPainter vPainter(this);
   vPainter.setRenderHint(QPainter::Antialiasing, true);
   vPainter.setPen(Qt::NoPen);
-  vPainter.setBrush(mColor);
+  vPainter.setBrush(mColorSaturized);
   vPainter.drawRoundedRect(rect(), 5.0f, 5.0f);
   QWidget::paintEvent(aEvent);
 }

@@ -16,6 +16,8 @@ public:
 
   explicit ggColorBrightnessWidget(QWidget* aParent = nullptr);
 
+  QColor GetColor() const;
+
 public slots:
 
   void SetColor(const QColor& aColor);
@@ -30,7 +32,8 @@ protected:
 
 private:
 
-  QColor mColor;
+  QColor mColorSaturized;
+  float mColorBrightness;
 
 };
 
