@@ -243,11 +243,11 @@ void ggColorWheelWidget::mouseReleaseEvent(QMouseEvent* aEvent)
 void ggColorWheelWidget::mouseMoveEvent(QMouseEvent* aEvent)
 {
   // adjust mouse pointer, if it is inside of the color-wheel
-  if (!mMouseDragging) {
-    setCursor(IsInside(aEvent->pos()) ? Qt::CrossCursor : Qt::ArrowCursor);
+  if (mMouseDragging) {
+    setCursor(IsInside(aEvent->pos()) ? Qt::BlankCursor : Qt::CrossCursor);
   }
   else {
-    setCursor(IsInside(aEvent->pos()) ? Qt::BlankCursor : Qt::CrossCursor);
+    setCursor(IsInside(aEvent->pos()) ? Qt::CrossCursor : Qt::ArrowCursor);
   }
 
   // change selected color
@@ -331,11 +331,11 @@ void DrawRhomb(QPainter& aPainter,
 }
 
 
-QBrush GradientBrush(const QPointF& aPosition,
-                     const QVector2D& aDirectionA,
-                     const QVector2D& aDirectionB,
-                     const QColor& aColorA,
-                     const QColor& aColorB)
+QBrush GetGradientBrush(const QPointF& aPosition,
+                        const QVector2D& aDirectionA,
+                        const QVector2D& aDirectionB,
+                        const QColor& aColorA,
+                        const QColor& aColorB)
 {
   // perpendicular direction (normal)
   QVector2D vDirectionAN(-aDirectionA.y(), aDirectionA.x());
@@ -369,12 +369,12 @@ void DrawGradientRhomb(QPainter& aPainter,
 
   // paint rhomb  with default mode (paints background)
   aPainter.setCompositionMode(QPainter::CompositionMode_SourceOver);
-  aPainter.setBrush(GradientBrush(aPosition, aDirectionA, aDirectionB, aColorA, aColorC));
+  aPainter.setBrush(GetGradientBrush(aPosition, aDirectionA, aDirectionB, aColorA, aColorC));
   DrawRhomb(aPainter, aPosition, aDirectionA, aDirectionB);
 
   // paint rhomb and use brighter color component (on top of background)
   aPainter.setCompositionMode(QPainter::CompositionMode_Lighten);
-  aPainter.setBrush(GradientBrush(aPosition, aDirectionB, aDirectionA, aColorB, aColorC));
+  aPainter.setBrush(GetGradientBrush(aPosition, aDirectionB, aDirectionA, aColorB, aColorC));
   DrawRhomb(aPainter, aPosition, aDirectionB, aDirectionA);
 
   // restore painter settings

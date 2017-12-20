@@ -18,6 +18,10 @@ public:
 
   QColor GetColor() const;
 
+signals:
+
+  void ColorChanged(const QColor& aColor);
+
 public slots:
 
   void SetColor(const QColor& aColor);
@@ -32,8 +36,29 @@ protected:
 
 private:
 
+  QPointF GetPosition(const float aBrightness) const;
+  QPointF ClampPosition(const QPointF& aPosition) const;
+  float GetBrightness(const QPointF& aPosition) const;
+  bool IsInside(const QPointF& aPosition) const;
+  QBrush GetGradientBrush() const;
+  QRectF GetSelectorRect(float aSize) const;
+
+  // THE color
   QColor mColorSaturized;
   float mColorBrightness;
+
+  // selector / indicator
+  QPointF mColorPosition;
+  float mSelectorRadius;
+  bool mMouseDragging;
+
+  // geometry / laout
+  enum class cLayout {
+    eHorizontal,
+    eVertical
+  };
+  cLayout mLayout;
+  QRectF mColorBar;
 
 };
 

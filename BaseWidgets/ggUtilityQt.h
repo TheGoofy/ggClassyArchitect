@@ -3,6 +3,7 @@
 
 // 1) include system (or QT)
 #include <QColor>
+#include <QRect>
 
 // 2) include own project-related (sort by component dependency)
 #include "Base/ggUtility.h"
@@ -22,6 +23,7 @@ namespace ggUtilityQt
   QColor GetColorSaturized(const QColor& aColor);
   QColor GetColorScaled(const QColor& aColor, float aBrightness);
   QColor GetContrastColor(const QColor& aColor);
+  QRectF GetRectInflated(const QRectF& aRect, float aDelta);
 
 }
 

@@ -2,6 +2,7 @@
 #include "ggUtilityQt.h"
 
 // 1) include system
+#include <QDebug>
 
 // 2) include own project-related (sort by component dependency)
 
@@ -35,15 +36,18 @@ float ggUtilityQt::GetColorBrightness(const QColor& aColor)
 QColor ggUtilityQt::GetColorSaturized(const QColor& aColor)
 {
   float vColorBrightness = ggUtilityQt::GetColorMaxF(aColor);
-  QColor vColorSaturized = aColor;
   if (vColorBrightness != 0.0f) {
     float vScale = 1.0f / vColorBrightness;
-    vColorSaturized = QColor::fromRgbF(vScale * aColor.redF(),
-                                       vScale * aColor.greenF(),
-                                       vScale * aColor.blueF(),
-                                       aColor.alphaF());
+    return QColor::fromRgbF(ggUtility::Clamp<float>(vScale * aColor.redF(), 0.0f, 1.0f),
+                            ggUtility::Clamp<float>(vScale * aColor.greenF(), 0.0f, 1.0f),
+                            ggUtility::Clamp<float>(vScale * aColor.blueF(), 0.0f, 1.0f),
+                            aColor.alphaF());
   }
-  return vColorSaturized;
+  else {
+    QColor vColor(Qt::white);
+    vColor.setAlphaF(aColor.alphaF());
+    return vColor;
+  }
 }
 
 
@@ -59,4 +63,13 @@ QColor ggUtilityQt::GetColorScaled(const QColor& aColor, float aBrightness)
 QColor ggUtilityQt::GetContrastColor(const QColor& aColor)
 {
   return (GetColorLightness(aColor) < 0.5f) ? QColor(Qt::white) : QColor(Qt::black);
+}
+
+
+QRectF ggUtilityQt::GetRectInflated(const QRectF& aRect, float aDelta)
+{
+  return QRect(aRect.x() - aDelta,
+               aRect.y() - aDelta,
+               aRect.width() + 2.0f * aDelta,
+               aRect.height() + 2.0f * aDelta).normalized();
 }
