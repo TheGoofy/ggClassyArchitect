@@ -60,9 +60,15 @@ QColor ggUtilityQt::GetColorScaled(const QColor& aColor, float aBrightness)
 }
 
 
-QColor ggUtilityQt::GetContrastColor(const QColor& aColor)
+QColor ggUtilityQt::GetColorContrast(const QColor& aColor)
 {
   return (GetColorLightness(aColor) < 0.5f) ? QColor(Qt::white) : QColor(Qt::black);
+}
+
+
+QColor ggUtilityQt::GetColorAlpha(const QColor& aColor, float aAlpha)
+{
+  return QColor::fromRgbF(aColor.redF(), aColor.greenF(), aColor.blueF(), aAlpha);
 }
 
 

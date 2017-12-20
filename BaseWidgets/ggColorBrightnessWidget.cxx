@@ -174,10 +174,12 @@ QBrush GradientBrush(const QPointF& aPositionA,
 QBrush ggColorBrightnessWidget::GetGradientBrush() const
 {
   if (mLayout == cLayout::eHorizontal) {
-    return ::GradientBrush(mColorBar.topLeft(), mColorBar.topRight(), Qt::black, mColorSaturized);
+    return ::GradientBrush(mColorBar.topLeft(), mColorBar.topRight(),
+                           Qt::black, ggUtilityQt::GetColorAlpha(mColorSaturized, 1.0f));
   }
   if (mLayout == cLayout::eVertical) {
-    return ::GradientBrush(mColorBar.bottomLeft(), mColorBar.topLeft(), Qt::black, mColorSaturized);
+    return ::GradientBrush(mColorBar.bottomLeft(), mColorBar.topLeft(),
+                           Qt::black, ggUtilityQt::GetColorAlpha(mColorSaturized, 1.0f));
   }
   return QBrush(mColorSaturized);
 }

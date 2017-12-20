@@ -423,7 +423,7 @@ void ggColorWheelWidget::paintEvent(QPaintEvent* aEvent)
   vPainter.drawEllipse(mColorPosition, vRadius, vRadius);
 
   // center crosshair
-  vPainter.setPen(ggUtilityQt::GetContrastColor(GetColorFromWheel(mPosCenter)));
+  vPainter.setPen(ggUtilityQt::GetColorContrast(GetColorFromWheel(mPosCenter)));
   float vOffset = mSelectorRadius;
   float vLength = vSelectorRadiusLarge - mSelectorRadius - 2.5f;
   DrawLine(vPainter, mPosCenter, mDirR, vOffset, vLength);
