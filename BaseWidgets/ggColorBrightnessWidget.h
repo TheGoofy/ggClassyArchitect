@@ -50,6 +50,7 @@ private:
   // selector / indicator
   QPointF mColorPosition;
   float mSelectorRadius;
+  float mSelectorRadiusLarge;
   bool mMouseDragging;
 
   // geometry / laout

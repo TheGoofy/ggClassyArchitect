@@ -14,6 +14,7 @@
 ggColorBrightnessWidget::ggColorBrightnessWidget(QWidget* aParent) :
   QWidget(aParent),
   mSelectorRadius(3.0f),
+  mSelectorRadiusLarge(9.0f),
   mMouseDragging(false),
   mLayout(cLayout::eHorizontal)
 {
@@ -207,22 +208,15 @@ void ggColorBrightnessWidget::paintEvent(QPaintEvent* aEvent)
   // draw the bar
   vPainter.setPen(Qt::NoPen);
   vPainter.setBrush(GetGradientBrush());
-  vPainter.drawRoundedRect(mColorBar, mSelectorRadius, mSelectorRadius);
+  vPainter.drawRoundedRect(mColorBar, 2.0f * mSelectorRadius, 2.0f * mSelectorRadius);
 
   // indicator of selected color
-  if (mMouseDragging) {
-    vPainter.setBrush(GetColor());
-    vPainter.setPen(ggUtilityQt::GetContrastColor(GetColor()));
-    vPainter.drawRoundedRect(GetSelectorRect(15.0f), mSelectorRadius, mSelectorRadius);
-  }
-  else {
-    const float vRadius = mSelectorRadius;
-    vPainter.setPen(QPen(Qt::white, 1.5f));
-    vPainter.drawEllipse(mColorPosition, vRadius + 1.0f, vRadius + 1.0f);
-    vPainter.setPen(Qt::black);
-    vPainter.setBrush(GetColor());
-    vPainter.drawEllipse(mColorPosition, vRadius, vRadius);
-  }
+  float vRadius = mMouseDragging ? mSelectorRadiusLarge : mSelectorRadius;
+  vPainter.setPen(QPen(Qt::white, 1.5f));
+  vPainter.drawEllipse(mColorPosition, vRadius + 1.0f, vRadius + 1.0f);
+  vPainter.setPen(Qt::black);
+  vPainter.setBrush(GetColor());
+  vPainter.drawEllipse(mColorPosition, vRadius, vRadius);
 
   // base paint event
   QWidget::paintEvent(aEvent);

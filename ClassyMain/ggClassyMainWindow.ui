@@ -39,6 +39,9 @@
     </item>
     <item>
      <layout class="QVBoxLayout" name="verticalLayout_3">
+      <property name="spacing">
+       <number>3</number>
+      </property>
       <item>
        <widget class="QPushButton" name="mOpenPushButton">
         <property name="text">
@@ -134,7 +137,7 @@
         <property name="minimumSize">
          <size>
           <width>120</width>
-          <height>120</height>
+          <height>100</height>
          </size>
         </property>
        </widget>
@@ -144,7 +147,7 @@
         <property name="minimumSize">
          <size>
           <width>16</width>
-          <height>20</height>
+          <height>18</height>
          </size>
         </property>
        </widget>
