@@ -13,8 +13,8 @@
 
 ggColorWheelWidget::ggColorWheelWidget(QWidget* aParent) :
   QWidget(aParent),
-  mColorBrightness(0.0f),
-  mAdaptBrightness(false),
+  mColorValue(0.0f),
+  mAdaptToValue(false),
   mSelectorRadius(3.0f),
   mMouseDragging(false)
 {
@@ -27,14 +27,14 @@ ggColorWheelWidget::ggColorWheelWidget(QWidget* aParent) :
 void ggColorWheelWidget::SetColor(const QColor& aColor)
 {
   // calculate saturized color and brightness
-  float vColorBrightness = ggUtilityQt::GetColorValue(aColor);
+  float vColorValue = aColor.valueF();
   QColor vColorSaturized = ggUtilityQt::GetColorSaturized(aColor);
 
   // update colors, if changed
-  if (vColorBrightness != mColorBrightness ||
+  if (vColorValue != mColorValue ||
       vColorSaturized != mColorSaturized) {
     mColorSaturized = vColorSaturized;
-    mColorBrightness = vColorBrightness;
+    mColorValue = vColorValue;
     mColorPosition = GetPosition(mColorSaturized);
     UpdateCornerColors();
     update(); // trigger repaint
@@ -44,29 +44,29 @@ void ggColorWheelWidget::SetColor(const QColor& aColor)
 
 QColor ggColorWheelWidget::GetColor() const
 {
-  return ggUtilityQt::GetColorScaled(mColorSaturized, mColorBrightness);
+  return ggUtilityQt::GetColorScaled(mColorSaturized, mColorValue);
 }
 
 
-void ggColorWheelWidget::SetAdaptBrightness(bool aAdapt)
+void ggColorWheelWidget::SetAdaptToValue(bool aAdapt)
 {
-  if (mAdaptBrightness != aAdapt) {
-    mAdaptBrightness = aAdapt;
+  if (mAdaptToValue != aAdapt) {
+    mAdaptToValue = aAdapt;
     UpdateCornerColors();
     update(); // trigger repaint
   }
 }
 
 
-bool ggColorWheelWidget::GetAdaptBrightness() const
+bool ggColorWheelWidget::GetAdaptToValue() const
 {
-  return mAdaptBrightness;
+  return mAdaptToValue;
 }
 
 
 void ggColorWheelWidget::UpdateCornerColors()
 {
-  float vVal = mAdaptBrightness ? mColorBrightness : 1.0f;
+  float vVal = mAdaptToValue ? mColorValue : 1.0f;
   mColorR = QColor::fromRgbF(vVal, 0.0f, 0.0f); // red
   mColorY = QColor::fromRgbF(vVal, vVal, 0.0f); // yellow
   mColorG = QColor::fromRgbF(0.0f, vVal, 0.0f); // green
@@ -191,8 +191,8 @@ QColor ggColorWheelWidget::GetColorSaturized(const QPointF& aPosition) const
 QColor ggColorWheelWidget::GetColorFromWheel(const QPointF& aPosition) const
 {
   QColor vColor = GetColorSaturized(aPosition);
-  if (!mAdaptBrightness) return vColor;
-  return ggUtilityQt::GetColorScaled(vColor, mColorBrightness);
+  if (!mAdaptToValue) return vColor;
+  return ggUtilityQt::GetColorScaled(vColor, mColorValue);
 }
 
 
@@ -447,7 +447,7 @@ void ggColorWheelWidget::paintEvent(QPaintEvent* aEvent)
   if (!isEnabled()) {
     vPainter.setPen(Qt::NoPen);
     const QColor& vColor = palette().color(QPalette::Disabled, QPalette::Window);
-    vPainter.setBrush(ggUtilityQt::GetColorAlpha(vColor, 0.75f));
+    vPainter.setBrush(ggUtilityQt::GetColorWithAlpha(vColor, 0.75f));
     vPainter.drawRect(rect());
   }
 

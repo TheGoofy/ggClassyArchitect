@@ -124,8 +124,8 @@ QColor ggColorChannelWidget::GetColorMax() const
     case cChannel::eRed: return QColor(Qt::red);
     case cChannel::eGreen: return QColor(Qt::green);
     case cChannel::eBlue: return QColor(Qt::blue);
-    case cChannel::eAlpha: return ggUtilityQt::GetColorAlpha(mColor, 1.0f);
-    case cChannel::eValue: return ggUtilityQt::GetColorAlpha(ggUtilityQt::GetColorSaturized(mColor), 1.0f);
+    case cChannel::eAlpha: return ggUtilityQt::GetColorWithAlpha(mColor, 1.0f);
+    case cChannel::eValue: return ggUtilityQt::GetColorWithAlpha(ggUtilityQt::GetColorSaturized(mColor), 1.0f);
     case cChannel::eLightness: return QColor(Qt::white);
     default: return mColor;
   }
@@ -151,7 +151,7 @@ QColor ggColorChannelWidget::GetColorMin() const
     case cChannel::eRed: return QColor(Qt::black);
     case cChannel::eGreen: return QColor(Qt::black);
     case cChannel::eBlue: return QColor(Qt::black);
-    case cChannel::eAlpha: return ggUtilityQt::GetColorAlpha(mColor, 0.0f);
+    case cChannel::eAlpha: return ggUtilityQt::GetColorWithAlpha(mColor, 0.0f);
     case cChannel::eValue: return QColor(Qt::black);
     case cChannel::eLightness: return QColor(Qt::black);
     default: return QColor(Qt::black);
@@ -399,7 +399,7 @@ void ggColorChannelWidget::paintEvent(QPaintEvent* aEvent)
   if (!isEnabled()) {
     vPainter.setPen(Qt::NoPen);
     const QColor& vColor = palette().color(QPalette::Disabled, QPalette::Window);
-    vPainter.setBrush(ggUtilityQt::GetColorAlpha(vColor, 0.75f));
+    vPainter.setBrush(ggUtilityQt::GetColorWithAlpha(vColor, 0.75f));
     vPainter.drawRect(rect());
   }
 

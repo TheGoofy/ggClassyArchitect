@@ -19,7 +19,7 @@ public:
   explicit ggColorWheelWidget(QWidget* aParent = nullptr);
 
   QColor GetColor() const;
-  bool GetAdaptBrightness() const;
+  bool GetAdaptToValue() const;
 
 signals:
 
@@ -28,7 +28,7 @@ signals:
 public slots:
 
   void SetColor(const QColor& aColor);
-  void SetAdaptBrightness(bool aAdapt);
+  void SetAdaptToValue(bool aAdapt);
 
 protected:
 
@@ -52,10 +52,10 @@ private:
 
   // the selected color
   QColor mColorSaturized;
-  float mColorBrightness;
+  float mColorValue;
 
   // adjust brightness of the wheel according to the color
-  bool mAdaptBrightness;
+  bool mAdaptToValue;
 
   // selector / indicator
   QPointF mColorPosition;

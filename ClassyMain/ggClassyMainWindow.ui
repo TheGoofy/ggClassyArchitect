@@ -133,6 +133,13 @@
        </widget>
       </item>
       <item>
+       <widget class="Line" name="line_3">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+       </widget>
+      </item>
+      <item>
        <widget class="ggColorWheelWidget" name="mColorWheelWidget" native="true">
         <property name="minimumSize">
          <size>
@@ -163,6 +170,13 @@
        </widget>
       </item>
       <item>
+       <widget class="Line" name="line_4">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+       </widget>
+      </item>
+      <item>
        <widget class="ggColorChannelWidget" name="mColorChannelWidgetR" native="true">
         <property name="minimumSize">
          <size>
@@ -189,6 +203,13 @@
           <width>16</width>
           <height>16</height>
          </size>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="Line" name="line_5">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
         </property>
        </widget>
       </item>

@@ -19,17 +19,11 @@ float ggUtilityQt::GetColorMaxF(const QColor& aColor)
 }
 
 
-float ggUtilityQt::GetColorLightness(const QColor& aColor)
+float ggUtilityQt::GetColorLuma(const QColor& aColor)
 {
   return 0.299f * aColor.redF() +
          0.587f * aColor.greenF() +
          0.114f * aColor.blueF();
-}
-
-
-float ggUtilityQt::GetColorValue(const QColor& aColor)
-{
-  return aColor.valueF();
 }
 
 
@@ -88,11 +82,11 @@ QColor ggUtilityQt::GetColorWithLightness(const QColor& aColor, float aLightness
 
 QColor ggUtilityQt::GetColorContrast(const QColor& aColor)
 {
-  return (GetColorLightness(aColor) < 0.5f) ? QColor(Qt::white) : QColor(Qt::black);
+  return (GetColorLuma(aColor) < 0.5f) ? QColor(Qt::white) : QColor(Qt::black);
 }
 
 
-QColor ggUtilityQt::GetColorAlpha(const QColor& aColor, float aAlpha)
+QColor ggUtilityQt::GetColorWithAlpha(const QColor& aColor, float aAlpha)
 {
   return QColor::fromRgbF(aColor.redF(), aColor.greenF(), aColor.blueF(), aAlpha);
 }
