@@ -6,6 +6,7 @@
 #include <QDebug>
 #include <QMouseEvent>
 #include <QBitmap>
+#include <QLayout>
 
 // 2) include own project-related (sort by component dependency)
 #include "Base/ggUtility.h"
@@ -18,10 +19,11 @@ ggColorChannelWidget::ggColorChannelWidget(QWidget* aParent) :
   mSelectorRadius(3.0f),
   mSelectorRadiusLarge(9.0f),
   mMouseDragging(false),
-  mLayout(cLayout::eHorizontal)
+  mLayout(cLayout::eVertical)
 {
   setMouseTracking(true);
-  SetColor(QColor(200, 150, 0, 255));
+  SetHorizontal();
+  SetColor(QColor(200, 150, 50, 255));
 }
 
 
@@ -51,6 +53,38 @@ void ggColorChannelWidget::SetChannel(cChannel aChannel)
 ggColorChannelWidget::cChannel ggColorChannelWidget::GetChannel() const
 {
   return mChannel;
+}
+
+
+void ggColorChannelWidget::SetHorizontal()
+{
+  if (mLayout != cLayout::eHorizontal) {
+    mLayout = cLayout::eHorizontal;
+    setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Minimum);
+    update(); // trigger repaint
+  }
+}
+
+
+void ggColorChannelWidget::SetVertical()
+{
+  if (mLayout != cLayout::eVertical) {
+    mLayout = cLayout::eVertical;
+    setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Preferred);
+    update(); // trigger repaint
+  }
+}
+
+
+bool ggColorChannelWidget::IsHorizontal() const
+{
+  return mLayout == cLayout::eHorizontal;
+}
+
+
+bool ggColorChannelWidget::IsVertical() const
+{
+  return mLayout == cLayout::eVertical;
 }
 
 
@@ -144,6 +178,17 @@ bool ggColorChannelWidget::IsInside(const QPointF& aPosition) const
 }
 
 
+QSize ggColorChannelWidget::sizeHint() const
+{
+  int vSize = 2.0f * mSelectorRadiusLarge;
+  QSize vSizeHint(vSize, vSize);
+  if (IsHorizontal()) vSizeHint += QSize(vSize, 0);
+  if (IsVertical()) vSizeHint += QSize(0, vSize);
+  qDebug() << __PRETTY_FUNCTION__ << vSizeHint;
+  return vSizeHint;
+}
+
+
 void ggColorChannelWidget::mousePressEvent(QMouseEvent* aEvent)
 {
   // change selected color
@@ -200,9 +245,6 @@ void ggColorChannelWidget::mouseMoveEvent(QMouseEvent* aEvent)
 
 void ggColorChannelWidget::resizeEvent(QResizeEvent* aEvent)
 {
-  // layout
-  mLayout = aEvent->size().width() > aEvent->size().height() ? cLayout::eHorizontal : cLayout::eVertical;
-
   // color bar corners
   mColorBar = QRectF(mSelectorRadius, mSelectorRadius,
                      aEvent->size().width() - 2.0f * mSelectorRadius,
@@ -286,10 +328,12 @@ void ggColorChannelWidget::paintEvent(QPaintEvent* aEvent)
 
   // draw the bar
   vPainter.setPen(Qt::NoPen);
-  vPainter.setBrush(QColor(100,100,100,255));
-  vPainter.drawRoundedRect(mColorBar, 2.0f * mSelectorRadius, 2.0f * mSelectorRadius);
-  vPainter.setBrush(CheckerBoardBrush(mColorBar.height()/3, QColor(150,150,150,255)));
-  vPainter.drawRoundedRect(mColorBar, 2.0f * mSelectorRadius, 2.0f * mSelectorRadius);
+  if (mChannel == cChannel::eAlpha) {
+    vPainter.setBrush(QColor(100,100,100,255));
+    vPainter.drawRoundedRect(mColorBar, 2.0f * mSelectorRadius, 2.0f * mSelectorRadius);
+    vPainter.setBrush(CheckerBoardBrush(1.5f * mSelectorRadius, QColor(150,150,150,255)));
+    vPainter.drawRoundedRect(mColorBar, 2.0f * mSelectorRadius, 2.0f * mSelectorRadius);
+  }
   vPainter.setBrush(GetGradientBrush());
   vPainter.drawRoundedRect(mColorBar, 2.0f * mSelectorRadius, 2.0f * mSelectorRadius);
 

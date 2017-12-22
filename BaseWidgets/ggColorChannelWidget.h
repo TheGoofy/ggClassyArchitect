@@ -29,6 +29,11 @@ public:
   void SetChannel(cChannel aChannel);
   cChannel GetChannel() const;
 
+  void SetHorizontal();
+  void SetVertical();
+  bool IsHorizontal() const;
+  bool IsVertical() const;
+
 signals:
 
   void ColorChanged(const QColor& aColor);
@@ -39,6 +44,7 @@ public slots:
 
 protected:
 
+  virtual QSize sizeHint() const override;
   virtual void mousePressEvent(QMouseEvent* aEvent) override;
   virtual void mouseReleaseEvent(QMouseEvent* aEvent) override;
   virtual void mouseMoveEvent(QMouseEvent* aEvent) override;
@@ -74,6 +80,8 @@ private:
     eVertical
   };
   cLayout mLayout;
+
+  // area for color channel
   QRectF mColorBar;
 
 };
