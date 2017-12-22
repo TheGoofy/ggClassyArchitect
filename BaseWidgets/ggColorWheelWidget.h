@@ -32,6 +32,8 @@ public slots:
 
 protected:
 
+  virtual bool hasHeightForWidth() const override;
+  virtual int heightForWidth(int aWidth) const override;
   virtual void mousePressEvent(QMouseEvent* aEvent) override;
   virtual void mouseReleaseEvent(QMouseEvent* aEvent) override;
   virtual void mouseMoveEvent(QMouseEvent* aEvent) override;

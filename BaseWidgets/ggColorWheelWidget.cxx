@@ -209,6 +209,19 @@ bool ggColorWheelWidget::IsInside(const QPointF& aPosition) const
 }
 
 
+bool ggColorWheelWidget::hasHeightForWidth() const
+{
+  return true;
+}
+
+
+int ggColorWheelWidget::heightForWidth(int aWidth) const
+{
+  const float vRatio = sqrt(3.0f) / 2.0f;
+  return vRatio * aWidth;
+}
+
+
 void ggColorWheelWidget::mousePressEvent(QMouseEvent* aEvent)
 {
   // change selected color
@@ -276,7 +289,7 @@ void ggColorWheelWidget::resizeEvent(QResizeEvent* aEvent)
   vSizeYH -= mSelectorRadius;
 
   // fix aspect ratio with the height of an equilateral triangle
-  float vRatio = sqrt(3.0f) / 2.0f;
+  const float vRatio = sqrt(3.0f) / 2.0f;
   vSizeXH = vSizeYH / vRatio < vSizeXH ? vSizeYH / vRatio : vSizeXH;
   vSizeYH = vSizeXH * vRatio < vSizeYH ? vSizeXH * vRatio : vSizeYH;
 
