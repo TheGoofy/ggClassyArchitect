@@ -27,7 +27,7 @@ ggColorWheelWidget::ggColorWheelWidget(QWidget* aParent) :
 void ggColorWheelWidget::SetColor(const QColor& aColor)
 {
   // calculate saturized color and brightness
-  float vColorBrightness = ggUtilityQt::GetColorBrightness(aColor);
+  float vColorBrightness = ggUtilityQt::GetColorValue(aColor);
   QColor vColorSaturized = ggUtilityQt::GetColorSaturized(aColor);
 
   // update colors, if changed

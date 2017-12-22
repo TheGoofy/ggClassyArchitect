@@ -19,7 +19,7 @@ namespace ggUtilityQt
   int GetColorMax(const QColor& aColor);
   float GetColorMaxF(const QColor& aColor);
   float GetColorLightness(const QColor& aColor);
-  float GetColorBrightness(const QColor& aColor);
+  float GetColorValue(const QColor& aColor);
   QColor GetColorSaturized(const QColor& aColor);
   QColor GetColorScaled(const QColor& aColor, float aBrightness);
   QColor GetColorContrast(const QColor& aColor);

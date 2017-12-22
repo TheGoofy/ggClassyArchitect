@@ -10,9 +10,9 @@
 #include "ClassyMain/ggClassyDataPropertiesDockWidget.h"
 
 // 3) forward declarations
-namespace Ui {
-  class ggClassyMainWindow;
-}
+namespace Ui { class ggClassyMainWindow; }
+class ggColorWheelWidget;
+class ggColorChannelWidget;
 
 /**
  * @brief The ggClassyMainWindow class
@@ -59,6 +59,10 @@ private:
   static QPointF& GetNewPosition();
   QString ZoomToString(float aZoomFloat) const;
   float StringToZoom(const QString& aZoomString) const;
+  void ConnectColor(ggColorWheelWidget* aColorWheelWidgetA, ggColorWheelWidget* aColorWheelWidgetB) const;
+  void ConnectColor(ggColorWheelWidget* aColorWheelWidget, ggColorChannelWidget* aColorChannelWidget) const;
+  void ConnectColor(ggColorChannelWidget* aColorChannelWidget, ggColorWheelWidget* aColorWheelWidget) const;
+  void ConnectColor(ggColorChannelWidget* aColorChannelWidgetA, ggColorChannelWidget* aColorChannelWidgetB) const;
 
 };
 

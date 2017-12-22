@@ -27,9 +27,9 @@ float ggUtilityQt::GetColorLightness(const QColor& aColor)
 }
 
 
-float ggUtilityQt::GetColorBrightness(const QColor& aColor)
+float ggUtilityQt::GetColorValue(const QColor& aColor)
 {
-  return ggUtility::Max(aColor.redF(), aColor.greenF(), aColor.blueF());
+  return aColor.valueF();
 }
 
 

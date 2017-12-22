@@ -23,7 +23,7 @@ public:
     eGreen,
     eBlue,
     eAlpha,
-    eBrightness
+    eValue
   };
 
   void SetChannel(cChannel aChannel);
