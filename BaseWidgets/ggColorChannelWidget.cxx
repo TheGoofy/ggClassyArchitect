@@ -95,7 +95,8 @@ float ggColorChannelWidget::GetChannelValue(const QColor& aColor) const
     case cChannel::eGreen: return aColor.greenF();
     case cChannel::eBlue: return aColor.blueF();
     case cChannel::eAlpha: return aColor.alphaF();
-    case cChannel::eValue: return ggUtilityQt::GetColorValue(aColor);
+    case cChannel::eValue: return aColor.valueF();
+    case cChannel::eLightness: return aColor.lightnessF();
     default: return 0.0f;
   }
 }
@@ -103,14 +104,17 @@ float ggColorChannelWidget::GetChannelValue(const QColor& aColor) const
 
 QColor ggColorChannelWidget::GetColor() const
 {
+  QColor vColor(mColor);
   switch (mChannel) {
-    case cChannel::eRed: return QColor::fromRgbF(mChannelValue, mColor.greenF(), mColor.blueF(), mColor.alphaF());
-    case cChannel::eGreen: return QColor::fromRgbF(mColor.redF(), mChannelValue, mColor.blueF(), mColor.alphaF());
-    case cChannel::eBlue: return QColor::fromRgbF(mColor.redF(), mColor.greenF(), mChannelValue, mColor.alphaF());
-    case cChannel::eAlpha: return QColor::fromRgbF(mColor.redF(), mColor.greenF(), mColor.blueF(), mChannelValue);
-    case cChannel::eValue: return ggUtilityQt::GetColorScaled(ggUtilityQt::GetColorSaturized(mColor), mChannelValue);
-    default: return mColor;
+    case cChannel::eRed: vColor.setRedF(mChannelValue); break;
+    case cChannel::eGreen: vColor.setGreenF(mChannelValue); break;
+    case cChannel::eBlue: vColor.setBlueF(mChannelValue); break;
+    case cChannel::eAlpha: vColor.setAlphaF(mChannelValue); break;
+    case cChannel::eValue: vColor = ggUtilityQt::GetColorWithValue(mColor, mChannelValue); break;
+    case cChannel::eLightness: vColor = ggUtilityQt::GetColorWithLightness(vColor, mChannelValue); break;
+    default: break;
   }
+  return vColor;
 }
 
 
@@ -122,7 +126,21 @@ QColor ggColorChannelWidget::GetColorMax() const
     case cChannel::eBlue: return QColor(Qt::blue);
     case cChannel::eAlpha: return ggUtilityQt::GetColorAlpha(mColor, 1.0f);
     case cChannel::eValue: return ggUtilityQt::GetColorAlpha(ggUtilityQt::GetColorSaturized(mColor), 1.0f);
+    case cChannel::eLightness: return QColor(Qt::white);
     default: return mColor;
+  }
+}
+
+
+QColor ggColorChannelWidget::GetColorMid() const
+{
+  if (mChannel == cChannel::eLightness) {
+    QColor vColor = ggUtilityQt::GetColorWithLightness(mColor, 0.5f);
+    vColor.setAlphaF(1.0f);
+    return vColor;
+  }
+  else {
+    return ggUtilityQt::GetColorInterpolated(GetColorMin(), GetColorMax(), 0.5f);
   }
 }
 
@@ -135,6 +153,7 @@ QColor ggColorChannelWidget::GetColorMin() const
     case cChannel::eBlue: return QColor(Qt::black);
     case cChannel::eAlpha: return ggUtilityQt::GetColorAlpha(mColor, 0.0f);
     case cChannel::eValue: return QColor(Qt::black);
+    case cChannel::eLightness: return QColor(Qt::black);
     default: return QColor(Qt::black);
   }
 }
@@ -289,15 +308,32 @@ QBrush GradientBrush(const QPointF& aPositionA,
 }
 
 
+QBrush GradientBrush(const QPointF& aPositionA,
+                     const QPointF& aPositionB,
+                     const QColor& aColorA,
+                     const QColor& aColorB,
+                     const QColor& aColorC)
+{
+  // setup gradient
+  QLinearGradient vGradient(aPositionA, aPositionB);
+  vGradient.setColorAt(0.0f, aColorA);
+  vGradient.setColorAt(0.5f, aColorB);
+  vGradient.setColorAt(1.0f, aColorC);
+
+  // return the gratent brush
+  return QBrush(vGradient);
+}
+
+
 QBrush ggColorChannelWidget::GetGradientBrush() const
 {
   if (mLayout == cLayout::eHorizontal) {
     return ::GradientBrush(mColorBar.topLeft(), mColorBar.topRight(),
-                           GetColorMin(), GetColorMax());
+                           GetColorMin(), GetColorMid(), GetColorMax());
   }
   if (mLayout == cLayout::eVertical) {
     return ::GradientBrush(mColorBar.bottomLeft(), mColorBar.topLeft(),
-                           GetColorMin(), GetColorMax());
+                           GetColorMin(), GetColorMid(), GetColorMax());
   }
   return QBrush(mColor);
 }
@@ -345,6 +381,20 @@ void ggColorChannelWidget::paintEvent(QPaintEvent* aEvent)
   vPainter.setBrush(GetColor());
   vPainter.drawEllipse(mColorPosition, vRadius, vRadius);
 
+  // center indicator
+  vPainter.setPen(Qt::black);
+  float vOffset = mSelectorRadius;
+  float vLength = mSelectorRadiusLarge - mSelectorRadius - 2.5f;
+  const QPointF& vCenter = mColorBar.center();
+  if (IsHorizontal()) {
+    vPainter.drawLine(vCenter.x(), vCenter.y() - vOffset, vCenter.x(), vCenter.y() - vOffset - vLength);
+    vPainter.drawLine(vCenter.x(), vCenter.y() + vOffset, vCenter.x(), vCenter.y() + vOffset + vLength);
+  }
+  if (IsVertical()) {
+    vPainter.drawLine(vCenter.x() - vOffset, vCenter.y(), vCenter.x() - vOffset - vLength, vCenter.y());
+    vPainter.drawLine(vCenter.x() + vOffset, vCenter.y(), vCenter.x() + vOffset + vLength, vCenter.y());
+  }
+
   // grey out, if disabled
   if (!isEnabled()) {
     vPainter.setPen(Qt::NoPen);
@@ -356,7 +406,3 @@ void ggColorChannelWidget::paintEvent(QPaintEvent* aEvent)
   // base paint event
   QWidget::paintEvent(aEvent);
 }
-
-
-
-

@@ -59,7 +59,7 @@ ggClassyMainWindow::ggClassyMainWindow(QWidget *parent) :
   ui->mColorChannelWidgetB->SetColor(ui->mColorWheelWidget->GetColor());
   ui->mColorChannelWidgetA->SetChannel(ggColorChannelWidget::cChannel::eAlpha);
   ui->mColorChannelWidgetA->SetColor(ui->mColorWheelWidget->GetColor());
-  ui->mColorChannelWidgetV->SetChannel(ggColorChannelWidget::cChannel::eValue);
+  ui->mColorChannelWidgetV->SetChannel(ggColorChannelWidget::cChannel::eLightness);
   ui->mColorChannelWidgetV->SetColor(ui->mColorWheelWidget->GetColor());
 
   ConnectColor(ui->mColorWheelWidget, ui->mColorChannelWidgetR);

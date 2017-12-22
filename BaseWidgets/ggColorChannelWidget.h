@@ -23,7 +23,8 @@ public:
     eGreen,
     eBlue,
     eAlpha,
-    eValue
+    eValue,
+    eLightness
   };
 
   void SetChannel(cChannel aChannel);
@@ -53,8 +54,9 @@ protected:
 
 private:
 
-  QColor GetColorMax() const;
   QColor GetColorMin() const;
+  QColor GetColorMid() const;
+  QColor GetColorMax() const;
   QPointF GetPosition(const float aChannelValue) const;
   QPointF ClampPosition(const QPointF& aPosition) const;
   float GetChannelValue(const QPointF& aPosition) const;

@@ -21,9 +21,12 @@ namespace ggUtilityQt
   float GetColorLightness(const QColor& aColor);
   float GetColorValue(const QColor& aColor);
   QColor GetColorSaturized(const QColor& aColor);
-  QColor GetColorScaled(const QColor& aColor, float aBrightness);
+  QColor GetColorScaled(const QColor& aColor, float aScale);
+  QColor GetColorInterpolated(const QColor& aColorA, const QColor& aColorB, float aWeightA);
   QColor GetColorContrast(const QColor& aColor);
   QColor GetColorAlpha(const QColor& aColor, float aAlpha);
+  QColor GetColorWithValue(const QColor& aColor, float aValue);
+  QColor GetColorWithLightness(const QColor& aColor, float aLightness);
   QRectF GetRectInflated(const QRectF& aRect, float aDelta);
 
 }

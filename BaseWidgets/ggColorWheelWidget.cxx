@@ -13,8 +13,8 @@
 
 ggColorWheelWidget::ggColorWheelWidget(QWidget* aParent) :
   QWidget(aParent),
-  mAdaptBrightness(false),
   mColorBrightness(0.0f),
+  mAdaptBrightness(false),
   mSelectorRadius(3.0f),
   mMouseDragging(false)
 {

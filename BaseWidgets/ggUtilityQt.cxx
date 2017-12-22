@@ -51,12 +51,38 @@ QColor ggUtilityQt::GetColorSaturized(const QColor& aColor)
 }
 
 
-QColor ggUtilityQt::GetColorScaled(const QColor& aColor, float aBrightness)
+QColor ggUtilityQt::GetColorScaled(const QColor& aColor, float aScale)
 {
-  return QColor::fromRgbF(ggUtility::Clamp<float>(aBrightness * aColor.redF(), 0.0f, 1.0f),
-                          ggUtility::Clamp<float>(aBrightness * aColor.greenF(), 0.0f, 1.0f),
-                          ggUtility::Clamp<float>(aBrightness * aColor.blueF(), 0.0f, 1.0f),
+  return QColor::fromRgbF(ggUtility::Clamp<float>(aScale * aColor.redF(), 0.0f, 1.0f),
+                          ggUtility::Clamp<float>(aScale * aColor.greenF(), 0.0f, 1.0f),
+                          ggUtility::Clamp<float>(aScale * aColor.blueF(), 0.0f, 1.0f),
                           aColor.alphaF());
+}
+
+
+QColor ggUtilityQt::GetColorInterpolated(const QColor& aColorA, const QColor& aColorB, float aWeightA)
+{
+  const float vWeightB = 1.0f - aWeightA;
+  return QColor::fromRgbF(ggUtility::Clamp<float>(aWeightA * aColorA.redF() + vWeightB * aColorB.redF(), 0.0f, 1.0f),
+                          ggUtility::Clamp<float>(aWeightA * aColorA.greenF() + vWeightB * aColorB.greenF(), 0.0f, 1.0f),
+                          ggUtility::Clamp<float>(aWeightA * aColorA.blueF() + vWeightB * aColorB.blueF(), 0.0f, 1.0f),
+                          ggUtility::Clamp<float>(aWeightA * aColorA.alphaF() + vWeightB * aColorB.alphaF(), 0.0f, 1.0f));
+}
+
+
+QColor ggUtilityQt::GetColorWithValue(const QColor& aColor, float aValue)
+{
+  qreal vH, vS, vV, vA;
+  aColor.getHsvF(&vH, &vS, &vV, &vA);
+  return QColor::fromHsvF(vH, vS, aValue, vA);
+}
+
+
+QColor ggUtilityQt::GetColorWithLightness(const QColor& aColor, float aLightness)
+{
+  qreal vH, vS, vL, vA;
+  aColor.getHslF(&vH, &vS, &vL, &vA);
+  return QColor::fromHslF(vH, vS, aLightness, vA);
 }
 
 

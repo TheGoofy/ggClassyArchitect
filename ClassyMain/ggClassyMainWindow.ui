@@ -143,6 +143,26 @@
        </widget>
       </item>
       <item>
+       <widget class="ggColorChannelWidget" name="mColorChannelWidgetV" native="true">
+        <property name="minimumSize">
+         <size>
+          <width>16</width>
+          <height>16</height>
+         </size>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="ggColorChannelWidget" name="mColorChannelWidgetA" native="true">
+        <property name="minimumSize">
+         <size>
+          <width>16</width>
+          <height>16</height>
+         </size>
+        </property>
+       </widget>
+      </item>
+      <item>
        <widget class="ggColorChannelWidget" name="mColorChannelWidgetR" native="true">
         <property name="minimumSize">
          <size>
@@ -164,26 +184,6 @@
       </item>
       <item>
        <widget class="ggColorChannelWidget" name="mColorChannelWidgetB" native="true">
-        <property name="minimumSize">
-         <size>
-          <width>16</width>
-          <height>16</height>
-         </size>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="ggColorChannelWidget" name="mColorChannelWidgetA" native="true">
-        <property name="minimumSize">
-         <size>
-          <width>16</width>
-          <height>16</height>
-         </size>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="ggColorChannelWidget" name="mColorChannelWidgetV" native="true">
         <property name="minimumSize">
          <size>
           <width>16</width>
