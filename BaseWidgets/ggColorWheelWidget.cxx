@@ -443,6 +443,14 @@ void ggColorWheelWidget::paintEvent(QPaintEvent* aEvent)
   DrawLine(vPainter, mPosCenter, mDirG, vOffset, vLength);
   DrawLine(vPainter, mPosCenter, mDirB, vOffset, vLength);
 
+  // grey out, if disabled
+  if (!isEnabled()) {
+    vPainter.setPen(Qt::NoPen);
+    const QColor& vColor = palette().color(QPalette::Disabled, QPalette::Window);
+    vPainter.setBrush(ggUtilityQt::GetColorAlpha(vColor, 0.75f));
+    vPainter.drawRect(rect());
+  }
+
   // maybe the parent wants to draw as well...
   QWidget::paintEvent(aEvent);
 }

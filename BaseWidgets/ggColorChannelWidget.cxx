@@ -184,7 +184,6 @@ QSize ggColorChannelWidget::sizeHint() const
   QSize vSizeHint(vSize, vSize);
   if (IsHorizontal()) vSizeHint += QSize(vSize, 0);
   if (IsVertical()) vSizeHint += QSize(0, vSize);
-  qDebug() << __PRETTY_FUNCTION__ << vSizeHint;
   return vSizeHint;
 }
 
@@ -345,6 +344,14 @@ void ggColorChannelWidget::paintEvent(QPaintEvent* aEvent)
   vPainter.setPen(Qt::black);
   vPainter.setBrush(GetColor());
   vPainter.drawEllipse(mColorPosition, vRadius, vRadius);
+
+  // grey out, if disabled
+  if (!isEnabled()) {
+    vPainter.setPen(Qt::NoPen);
+    const QColor& vColor = palette().color(QPalette::Disabled, QPalette::Window);
+    vPainter.setBrush(ggUtilityQt::GetColorAlpha(vColor, 0.75f));
+    vPainter.drawRect(rect());
+  }
 
   // base paint event
   QWidget::paintEvent(aEvent);
