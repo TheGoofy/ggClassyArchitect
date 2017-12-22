@@ -18,6 +18,17 @@ public:
 
   QColor GetColor() const;
 
+  enum class cChannel {
+    eRed,
+    eGreen,
+    eBlue,
+    eAlpha,
+    eBrightness
+  };
+
+  void SetChannel(cChannel aChannel);
+  cChannel GetChannel() const;
+
 signals:
 
   void ColorChanged(const QColor& aColor);
@@ -36,16 +47,20 @@ protected:
 
 private:
 
-  QPointF GetPosition(const float aBrightness) const;
+  QColor GetColorMax() const;
+  QColor GetColorMin() const;
+  QPointF GetPosition(const float aChannelValue) const;
   QPointF ClampPosition(const QPointF& aPosition) const;
-  float GetBrightness(const QPointF& aPosition) const;
+  float GetChannelValue(const QPointF& aPosition) const;
+  float GetChannelValue(const QColor& aColor) const;
   bool IsInside(const QPointF& aPosition) const;
   QBrush GetGradientBrush() const;
   QRectF GetSelectorRect(float aSize) const;
 
   // THE color
-  QColor mColorSaturized;
-  float mColorBrightness;
+  QColor mColor;
+  float mChannelValue;
+  cChannel mChannel;
 
   // selector / indicator
   QPointF mColorPosition;

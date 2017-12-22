@@ -5,6 +5,7 @@
 #include <QPainter>
 #include <QDebug>
 #include <QMouseEvent>
+#include <QBitmap>
 
 // 2) include own project-related (sort by component dependency)
 #include "Base/ggUtility.h"
@@ -13,6 +14,7 @@
 
 ggColorBrightnessWidget::ggColorBrightnessWidget(QWidget* aParent) :
   QWidget(aParent),
+  mChannel(cChannel::eAlpha),
   mSelectorRadius(3.0f),
   mSelectorRadiusLarge(9.0f),
   mMouseDragging(false),
@@ -25,24 +27,65 @@ ggColorBrightnessWidget::ggColorBrightnessWidget(QWidget* aParent) :
 
 void ggColorBrightnessWidget::SetColor(const QColor& aColor)
 {
-  // calculate saturized color and brightness
-  float vColorBrightness = ggUtilityQt::GetColorBrightness(aColor);
-  QColor vColorSaturized = ggUtilityQt::GetColorSaturized(aColor);
-
   // update colors, if changed
-  if (vColorBrightness != mColorBrightness ||
-      vColorSaturized != mColorSaturized) {
-    mColorSaturized = vColorSaturized;
-    mColorBrightness = vColorBrightness;
-    mColorPosition = GetPosition(mColorBrightness);
+  if (aColor != mColor) {
+    mColor = aColor;
+    mChannelValue = GetChannelValue(mColor);
+    mColorPosition = GetPosition(mChannelValue);
     update(); // trigger repaint
+  }
+}
+
+
+float ggColorBrightnessWidget::GetChannelValue(const QColor& aColor) const
+{
+  switch (mChannel) {
+    case cChannel::eRed: return aColor.redF();
+    case cChannel::eGreen: return aColor.greenF();
+    case cChannel::eBlue: return aColor.blueF();
+    case cChannel::eAlpha: return aColor.alphaF();
+    case cChannel::eBrightness: return ggUtilityQt::GetColorBrightness(aColor);
+    default: return 0.0f;
   }
 }
 
 
 QColor ggColorBrightnessWidget::GetColor() const
 {
-  return ggUtilityQt::GetColorScaled(mColorSaturized, mColorBrightness);
+  switch (mChannel) {
+    case cChannel::eRed: return QColor::fromRgbF(mChannelValue, mColor.greenF(), mColor.blueF(), mColor.alphaF());
+    case cChannel::eGreen: return QColor::fromRgbF(mColor.redF(), mChannelValue, mColor.blueF(), mColor.alphaF());
+    case cChannel::eBlue: return QColor::fromRgbF(mColor.redF(), mColor.greenF(), mChannelValue, mColor.alphaF());
+    case cChannel::eAlpha: return QColor::fromRgbF(mColor.redF(), mColor.greenF(), mColor.blueF(), mChannelValue);
+    case cChannel::eBrightness: return ggUtilityQt::GetColorScaled(ggUtilityQt::GetColorSaturized(mColor), mChannelValue);
+    default: return mColor;
+  }
+}
+
+
+QColor ggColorBrightnessWidget::GetColorMax() const
+{
+  switch (mChannel) {
+    case cChannel::eRed: return QColor(Qt::red);
+    case cChannel::eGreen: return QColor(Qt::green);
+    case cChannel::eBlue: return QColor(Qt::blue);
+    case cChannel::eAlpha: return ggUtilityQt::GetColorAlpha(ggUtilityQt::GetColorSaturized(mColor), 1.0f);
+    case cChannel::eBrightness: return ggUtilityQt::GetColorAlpha(ggUtilityQt::GetColorSaturized(mColor), 1.0f);
+    default: return mColor;
+  }
+}
+
+
+QColor ggColorBrightnessWidget::GetColorMin() const
+{
+  switch (mChannel) {
+    case cChannel::eRed: return QColor(Qt::black);
+    case cChannel::eGreen: return QColor(Qt::black);
+    case cChannel::eBlue: return QColor(Qt::black);
+    case cChannel::eAlpha: return ggUtilityQt::GetColorAlpha(ggUtilityQt::GetColorSaturized(mColor), 0.0f);
+    case cChannel::eBrightness: return QColor(Qt::black);
+    default: return QColor(Qt::black);
+  }
 }
 
 
@@ -53,19 +96,19 @@ QPointF ggColorBrightnessWidget::ClampPosition(const QPointF& aPosition) const
 }
 
 
-QPointF ggColorBrightnessWidget::GetPosition(const float aBrightness) const
+QPointF ggColorBrightnessWidget::GetPosition(const float aChannelValue) const
 {
   if (mLayout == cLayout::eHorizontal) {
-    return QPointF(mColorBar.x() + aBrightness * mColorBar.width(), mColorBar.center().y());
+    return QPointF(mColorBar.x() + aChannelValue * mColorBar.width(), mColorBar.center().y());
   }
   if (mLayout == cLayout::eVertical) {
-    return QPointF(mColorBar.center().x(), mColorBar.bottom() - aBrightness * mColorBar.height());
+    return QPointF(mColorBar.center().x(), mColorBar.bottom() - aChannelValue * mColorBar.height());
   }
   return mColorBar.center();
 }
 
 
-float ggColorBrightnessWidget::GetBrightness(const QPointF& aPosition) const
+float ggColorBrightnessWidget::GetChannelValue(const QPointF& aPosition) const
 {
   QPointF vPosition = ClampPosition(aPosition);
   if (mLayout == cLayout::eHorizontal) {
@@ -90,8 +133,8 @@ void ggColorBrightnessWidget::mousePressEvent(QMouseEvent* aEvent)
   if (aEvent->button() == Qt::LeftButton) {
     mMouseDragging = true;
     setCursor(Qt::BlankCursor);
-    mColorBrightness = GetBrightness(aEvent->pos());
-    mColorPosition = GetPosition(mColorBrightness);
+    mChannelValue = GetChannelValue(aEvent->pos());
+    mColorPosition = GetPosition(mChannelValue);
     emit ColorChanged(GetColor());
     update();
   }
@@ -127,8 +170,8 @@ void ggColorBrightnessWidget::mouseMoveEvent(QMouseEvent* aEvent)
 
   // change selected color
   if (aEvent->buttons() & Qt::LeftButton) {
-    mColorBrightness = GetBrightness(aEvent->pos());
-    mColorPosition = GetPosition(mColorBrightness);
+    mChannelValue = GetChannelValue(aEvent->pos());
+    mColorPosition = GetPosition(mChannelValue);
     emit ColorChanged(GetColor());
     update();
   }
@@ -149,10 +192,27 @@ void ggColorBrightnessWidget::resizeEvent(QResizeEvent* aEvent)
                      aEvent->size().height() - 2.0f * mSelectorRadius);
 
   // position of the selected color
-  mColorPosition = GetPosition(mColorBrightness);
+  mColorPosition = GetPosition(mChannelValue);
 
   // base method
   QWidget::resizeEvent(aEvent);
+}
+
+
+QBrush CheckerBoardBrush(int aSize, const QColor& aColor)
+{
+  QBitmap vBitmap(2*aSize, 2*aSize);
+  QPainter vBitmapPainter(&vBitmap);
+  vBitmapPainter.setPen(Qt::NoPen);
+  vBitmapPainter.setBrush(Qt::black);
+  vBitmapPainter.drawRect(    0,     0, aSize, aSize);
+  vBitmapPainter.drawRect(aSize, aSize, aSize, aSize);
+  vBitmapPainter.setBrush(Qt::white);
+  vBitmapPainter.drawRect(aSize,     0, aSize, aSize);
+  vBitmapPainter.drawRect(    0, aSize, aSize, aSize);
+  QBrush vBrush(vBitmap);
+  vBrush.setColor(aColor);
+  return vBrush;
 }
 
 
@@ -175,13 +235,13 @@ QBrush ggColorBrightnessWidget::GetGradientBrush() const
 {
   if (mLayout == cLayout::eHorizontal) {
     return ::GradientBrush(mColorBar.topLeft(), mColorBar.topRight(),
-                           Qt::black, ggUtilityQt::GetColorAlpha(mColorSaturized, 1.0f));
+                           GetColorMin(), GetColorMax());
   }
   if (mLayout == cLayout::eVertical) {
     return ::GradientBrush(mColorBar.bottomLeft(), mColorBar.topLeft(),
-                           Qt::black, ggUtilityQt::GetColorAlpha(mColorSaturized, 1.0f));
+                           GetColorMin(), GetColorMax());
   }
-  return QBrush(mColorSaturized);
+  return QBrush(mColor);
 }
 
 
@@ -209,7 +269,12 @@ void ggColorBrightnessWidget::paintEvent(QPaintEvent* aEvent)
 
   // draw the bar
   vPainter.setPen(Qt::NoPen);
+  vPainter.setBrush(QColor(100,100,100,255));
+  vPainter.drawRoundedRect(mColorBar, 2.0f * mSelectorRadius, 2.0f * mSelectorRadius);
+  vPainter.setBrush(CheckerBoardBrush(mColorBar.height()/3, QColor(150,150,150,255)));
+  vPainter.drawRoundedRect(mColorBar, 2.0f * mSelectorRadius, 2.0f * mSelectorRadius);
   vPainter.setBrush(GetGradientBrush());
+  vPainter.drawRoundedRect(mColorBar, 2.0f * mSelectorRadius, 2.0f * mSelectorRadius);
   vPainter.drawRoundedRect(mColorBar, 2.0f * mSelectorRadius, 2.0f * mSelectorRadius);
 
   // indicator of selected color
