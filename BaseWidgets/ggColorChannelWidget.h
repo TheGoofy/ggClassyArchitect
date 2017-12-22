@@ -8,13 +8,13 @@
 
 // 3) forward declarations
 
-class ggColorBrightnessWidget :
+class ggColorChannelWidget :
   public QWidget
 {
   Q_OBJECT
 public:
 
-  explicit ggColorBrightnessWidget(QWidget* aParent = nullptr);
+  explicit ggColorChannelWidget(QWidget* aParent = nullptr);
 
   QColor GetColor() const;
 

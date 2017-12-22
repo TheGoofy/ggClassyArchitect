@@ -1,5 +1,5 @@
 // 0) include own header
-#include "ggColorBrightnessWidget.h"
+#include "ggColorChannelWidget.h"
 
 // 1) include system or QT
 #include <QPainter>
@@ -12,9 +12,9 @@
 #include "BaseWidgets//ggUtilityQt.h"
 
 
-ggColorBrightnessWidget::ggColorBrightnessWidget(QWidget* aParent) :
+ggColorChannelWidget::ggColorChannelWidget(QWidget* aParent) :
   QWidget(aParent),
-  mChannel(cChannel::eAlpha),
+  mChannel(cChannel::eBrightness),
   mSelectorRadius(3.0f),
   mSelectorRadiusLarge(9.0f),
   mMouseDragging(false),
@@ -25,7 +25,7 @@ ggColorBrightnessWidget::ggColorBrightnessWidget(QWidget* aParent) :
 }
 
 
-void ggColorBrightnessWidget::SetColor(const QColor& aColor)
+void ggColorChannelWidget::SetColor(const QColor& aColor)
 {
   // update colors, if changed
   if (aColor != mColor) {
@@ -37,7 +37,24 @@ void ggColorBrightnessWidget::SetColor(const QColor& aColor)
 }
 
 
-float ggColorBrightnessWidget::GetChannelValue(const QColor& aColor) const
+void ggColorChannelWidget::SetChannel(cChannel aChannel)
+{
+  if (aChannel != mChannel) {
+    mChannel = aChannel;
+    mChannelValue = GetChannelValue(mColor);
+    mColorPosition = GetPosition(mChannelValue);
+    update(); // trigger repaint
+  }
+}
+
+
+ggColorChannelWidget::cChannel ggColorChannelWidget::GetChannel() const
+{
+  return mChannel;
+}
+
+
+float ggColorChannelWidget::GetChannelValue(const QColor& aColor) const
 {
   switch (mChannel) {
     case cChannel::eRed: return aColor.redF();
@@ -50,7 +67,7 @@ float ggColorBrightnessWidget::GetChannelValue(const QColor& aColor) const
 }
 
 
-QColor ggColorBrightnessWidget::GetColor() const
+QColor ggColorChannelWidget::GetColor() const
 {
   switch (mChannel) {
     case cChannel::eRed: return QColor::fromRgbF(mChannelValue, mColor.greenF(), mColor.blueF(), mColor.alphaF());
@@ -63,7 +80,7 @@ QColor ggColorBrightnessWidget::GetColor() const
 }
 
 
-QColor ggColorBrightnessWidget::GetColorMax() const
+QColor ggColorChannelWidget::GetColorMax() const
 {
   switch (mChannel) {
     case cChannel::eRed: return QColor(Qt::red);
@@ -76,7 +93,7 @@ QColor ggColorBrightnessWidget::GetColorMax() const
 }
 
 
-QColor ggColorBrightnessWidget::GetColorMin() const
+QColor ggColorChannelWidget::GetColorMin() const
 {
   switch (mChannel) {
     case cChannel::eRed: return QColor(Qt::black);
@@ -89,14 +106,14 @@ QColor ggColorBrightnessWidget::GetColorMin() const
 }
 
 
-QPointF ggColorBrightnessWidget::ClampPosition(const QPointF& aPosition) const
+QPointF ggColorChannelWidget::ClampPosition(const QPointF& aPosition) const
 {
   return QPointF(ggUtility::Clamp(aPosition.x(), mColorBar.x(), mColorBar.right()),
                  ggUtility::Clamp(aPosition.y(), mColorBar.y(), mColorBar.bottom()));
 }
 
 
-QPointF ggColorBrightnessWidget::GetPosition(const float aChannelValue) const
+QPointF ggColorChannelWidget::GetPosition(const float aChannelValue) const
 {
   if (mLayout == cLayout::eHorizontal) {
     return QPointF(mColorBar.x() + aChannelValue * mColorBar.width(), mColorBar.center().y());
@@ -108,7 +125,7 @@ QPointF ggColorBrightnessWidget::GetPosition(const float aChannelValue) const
 }
 
 
-float ggColorBrightnessWidget::GetChannelValue(const QPointF& aPosition) const
+float ggColorChannelWidget::GetChannelValue(const QPointF& aPosition) const
 {
   QPointF vPosition = ClampPosition(aPosition);
   if (mLayout == cLayout::eHorizontal) {
@@ -121,13 +138,13 @@ float ggColorBrightnessWidget::GetChannelValue(const QPointF& aPosition) const
 }
 
 
-bool ggColorBrightnessWidget::IsInside(const QPointF& aPosition) const
+bool ggColorChannelWidget::IsInside(const QPointF& aPosition) const
 {
   return mColorBar.contains(aPosition);
 }
 
 
-void ggColorBrightnessWidget::mousePressEvent(QMouseEvent* aEvent)
+void ggColorChannelWidget::mousePressEvent(QMouseEvent* aEvent)
 {
   // change selected color
   if (aEvent->button() == Qt::LeftButton) {
@@ -144,7 +161,7 @@ void ggColorBrightnessWidget::mousePressEvent(QMouseEvent* aEvent)
 }
 
 
-void ggColorBrightnessWidget::mouseReleaseEvent(QMouseEvent* aEvent)
+void ggColorChannelWidget::mouseReleaseEvent(QMouseEvent* aEvent)
 {
   // change selected color
   if (aEvent->button() == Qt::LeftButton) {
@@ -158,7 +175,7 @@ void ggColorBrightnessWidget::mouseReleaseEvent(QMouseEvent* aEvent)
 }
 
 
-void ggColorBrightnessWidget::mouseMoveEvent(QMouseEvent* aEvent)
+void ggColorChannelWidget::mouseMoveEvent(QMouseEvent* aEvent)
 {
   // adjust mouse pointer, if it is inside of the color-wheel
   if (mMouseDragging) {
@@ -181,7 +198,7 @@ void ggColorBrightnessWidget::mouseMoveEvent(QMouseEvent* aEvent)
 }
 
 
-void ggColorBrightnessWidget::resizeEvent(QResizeEvent* aEvent)
+void ggColorChannelWidget::resizeEvent(QResizeEvent* aEvent)
 {
   // layout
   mLayout = aEvent->size().width() > aEvent->size().height() ? cLayout::eHorizontal : cLayout::eVertical;
@@ -231,7 +248,7 @@ QBrush GradientBrush(const QPointF& aPositionA,
 }
 
 
-QBrush ggColorBrightnessWidget::GetGradientBrush() const
+QBrush ggColorChannelWidget::GetGradientBrush() const
 {
   if (mLayout == cLayout::eHorizontal) {
     return ::GradientBrush(mColorBar.topLeft(), mColorBar.topRight(),
@@ -245,7 +262,7 @@ QBrush ggColorBrightnessWidget::GetGradientBrush() const
 }
 
 
-QRectF ggColorBrightnessWidget::GetSelectorRect(float aSize) const
+QRectF ggColorChannelWidget::GetSelectorRect(float aSize) const
 {
   float vSize2 = aSize / 2.0f;
   if (mLayout == cLayout::eHorizontal) {
@@ -261,7 +278,7 @@ QRectF ggColorBrightnessWidget::GetSelectorRect(float aSize) const
 }
 
 
-void ggColorBrightnessWidget::paintEvent(QPaintEvent* aEvent)
+void ggColorChannelWidget::paintEvent(QPaintEvent* aEvent)
 {
   // the friendly painter
   QPainter vPainter(this);
