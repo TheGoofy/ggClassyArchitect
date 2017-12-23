@@ -364,9 +364,9 @@ void ggColorChannelWidget::paintEvent(QPaintEvent* aEvent)
   // draw the bar
   vPainter.setPen(Qt::NoPen);
   if (mChannel == cChannel::eAlpha) {
-    vPainter.setBrush(QColor(100,100,100,255));
+    vPainter.setBrush(QColor(130,130,130,255));
     vPainter.drawRoundedRect(mColorBar, 2.0f * mSelectorRadius, 2.0f * mSelectorRadius);
-    vPainter.setBrush(CheckerBoardBrush(1.5f * mSelectorRadius, QColor(150,150,150,255)));
+    vPainter.setBrush(CheckerBoardBrush(1.5f * mSelectorRadius, QColor(170,170,170,255)));
     vPainter.drawRoundedRect(mColorBar, 2.0f * mSelectorRadius, 2.0f * mSelectorRadius);
   }
   vPainter.setBrush(GetGradientBrush());
