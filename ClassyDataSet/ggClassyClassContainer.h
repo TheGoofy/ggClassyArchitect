@@ -5,6 +5,7 @@
 #include <QDomElement>
 
 // 2) include own project-related (sort by component dependency)
+#include "Base/ggTypes.h"
 #include "ClassyDataSet/ggClassyClass.h"
 
 // 3) forward declarations
@@ -35,6 +36,10 @@ public:
   bool RenameClass(const QString& aOldClassName, const QString& aNewClassName);
   void DeleteClass(const QString& aClassName);
   void DeleteAllClasses();
+
+  ggUSize GetSize() const;
+  ggClassyClass* SearchClass(ggUSize aIndex) const;
+  ggUSize SearchIndex(const ggClassyClass* aClass) const;
 
   typedef std::set<ggClassyClass*, ggClassyClass>::iterator iterator;
   iterator begin();

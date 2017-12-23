@@ -145,6 +145,35 @@ void ggClassyClassContainer::DeleteAllClasses()
 }
 
 
+ggUSize ggClassyClassContainer::GetSize() const
+{
+  return mClasses.size();
+}
+
+
+ggClassyClass* ggClassyClassContainer::SearchClass(ggUSize aIndex) const
+{
+  // goofy: this might be slow
+  if (aIndex >= mClasses.size()) return nullptr;
+  ggClassyClassContainer::const_iterator vClassesIterator = mClasses.begin();
+  for (ggUSize vIndex = 0; vIndex < aIndex; vIndex++) vClassesIterator++;
+  return *vClassesIterator;
+}
+
+
+ggUSize ggClassyClassContainer::SearchIndex(const ggClassyClass* aClass) const
+{
+  // goofy: this might be slow
+  ggSize vIndex = 0;
+  ggWalkerT<ggClassyClassContainer::const_iterator> vClassesWalker(mClasses);
+  while (vClassesWalker) {
+    if (*vClassesWalker == aClass) break;
+    vIndex++;
+  }
+  return vIndex;
+}
+
+
 ggClassyClassContainer::iterator ggClassyClassContainer::begin()
 {
   return mClasses.begin();
