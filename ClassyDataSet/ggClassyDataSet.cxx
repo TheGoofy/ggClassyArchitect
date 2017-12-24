@@ -283,7 +283,7 @@ void ggClassyDataSet::Clear()
   ggSubject::cExecutorLazy vClassBoxesLazy(&mClassBoxes);
 
   // clear the containers
-  mCollections.clear();
+  mCollections.DeleteAllCollections();
   mClasses.DeleteAllClasses();
   mClassBoxes.DeleteAllClassBoxes();
   

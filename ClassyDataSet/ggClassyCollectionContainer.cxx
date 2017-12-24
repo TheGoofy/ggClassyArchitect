@@ -28,7 +28,7 @@ ggClassyCollection* ggClassyCollectionContainer::AddCollection(ggClassyCollectio
     const ggClassyCollection* vCollection = FindCollection(aCollection->mName);
     // another collection with the same name does not yet exist
     if (vCollection == nullptr) {
-      insert(aCollection);
+      mCollections.insert(aCollection);
       Notify();
       return aCollection;
     }
@@ -44,7 +44,7 @@ ggClassyCollection* ggClassyCollectionContainer::AddCollection(ggClassyCollectio
 ggClassyCollection* ggClassyCollectionContainer::RemoveCollection(const QString& aName)
 {
   ggClassyCollection* vCollection = FindCollection(aName);
-  erase(vCollection);
+  mCollections.erase(vCollection);
   return vCollection;
 }
 
@@ -52,8 +52,8 @@ ggClassyCollection* ggClassyCollectionContainer::RemoveCollection(const QString&
 ggClassyCollection* ggClassyCollectionContainer::FindCollection(const QString& aName)
 {
   ggClassyCollection vCollection(aName);
-  iterator vCollectionsIterator = find(&vCollection);
-  if (vCollectionsIterator != end()) return *vCollectionsIterator;
+  tCollections::iterator vCollectionsIterator = mCollections.find(&vCollection);
+  if (vCollectionsIterator != mCollections.end()) return *vCollectionsIterator;
   else return nullptr;
 }
 
@@ -61,23 +61,30 @@ ggClassyCollection* ggClassyCollectionContainer::FindCollection(const QString& a
 const ggClassyCollection* ggClassyCollectionContainer::FindCollection(const QString& aName) const
 {
   ggClassyCollection vCollection(aName);
-  iterator vCollectionsIterator = find(&vCollection);
-  if (vCollectionsIterator != end()) return *vCollectionsIterator;
+  tCollections::iterator vCollectionsIterator = mCollections.find(&vCollection);
+  if (vCollectionsIterator != mCollections.end()) return *vCollectionsIterator;
   else return nullptr;
+}
+
+
+void ggClassyCollectionContainer::DeleteAllCollections()
+{
+  ggWalkerT<tCollections::iterator> vCollectionsWalker(mCollections);
+  while (vCollectionsWalker) {
+    delete *vCollectionsWalker;
+  }
+  mCollections.clear();
+  Notify();
 }
 
 
 ggUSize ggClassyCollectionContainer::GetSize() const
 {
-  return size();
+  return mCollections.size();
 }
 
 
-const ggClassyCollection* ggClassyCollectionContainer::SearchCollection(ggUSize aIndex) const
+const ggClassyCollection* ggClassyCollectionContainer::GetCollection(ggUSize aIndex) const
 {
-  // goofy: this might be slow
-  if (aIndex >= size()) return nullptr;
-  ggClassyCollectionContainer::const_iterator vCollectionsIterator = begin();
-  for (ggUSize vIndex = 0; vIndex < aIndex; vIndex++) vCollectionsIterator++;
-  return *vCollectionsIterator;
+  return mCollections[aIndex];
 }

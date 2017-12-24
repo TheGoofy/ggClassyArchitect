@@ -156,7 +156,7 @@ public:
       int vNumberOfCollections = vDataSet->GetCollections().GetSize();
       if (aRow < vNumberOfCollections) {
         int vCollectionIndex = aRow;
-        return CreateIndex(aRow, aColumn, vDataSet->GetCollections().SearchCollection(vCollectionIndex));
+        return CreateIndex(aRow, aColumn, vDataSet->GetCollections().GetCollection(vCollectionIndex));
       }
       else {
         int vClassIndex = aRow - vNumberOfCollections;
@@ -274,7 +274,7 @@ public:
     return "goofy";
   }
 
-  Qt::ItemFlags flags(const QModelIndex& aIndex) const
+  Qt::ItemFlags flags(const QModelIndex& aIndex) const override
   {
     //qDebug() << __PRETTY_FUNCTION__ << aIndex;
     if (!aIndex.isValid()) return 0;

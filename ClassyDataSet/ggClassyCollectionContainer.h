@@ -4,8 +4,9 @@
 // 1) include system or QT
 
 // 2) include own project-related (sort by component dependency)
-#include "ClassyDataSet/ggClassyCollection.h"
 #include "Base/ggTypes.h"
+#include "Base/ggVectorSetT.h"
+#include "ClassyDataSet/ggClassyCollection.h"
 
 // 3) forward declarations
 
@@ -13,7 +14,6 @@
  * @brief The ggClassyCollectionContainer class
  */
 class ggClassyCollectionContainer :
-  public std::set<ggClassyCollection*, ggClassyCollection>,
   public ggSubject
 {
 public:
@@ -26,9 +26,14 @@ public:
   ggClassyCollection* RemoveCollection(const QString& aName);
   ggClassyCollection* FindCollection(const QString& aName);
   const ggClassyCollection* FindCollection(const QString& aName) const;
-
+  const ggClassyCollection* GetCollection(ggUSize aIndex) const;
+  void DeleteAllCollections();
   ggUSize GetSize() const;
-  const ggClassyCollection* SearchCollection(ggUSize aIndex) const;
+
+private:
+
+  typedef ggVectorSet<ggClassyCollection*, ggClassyCollection> tCollections;
+  tCollections mCollections;
 
 };
 

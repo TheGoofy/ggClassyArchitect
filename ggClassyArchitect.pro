@@ -75,7 +75,8 @@ HEADERS += \
     ClassyMain/ggClassyDataPropertiesDockWidget.h \
     BaseWidgets/ggColorWheelWidget.h \
     BaseWidgets/ggUtilityQt.h \
-    BaseWidgets/ggColorChannelWidget.h
+    BaseWidgets/ggColorChannelWidget.h \
+    Base/ggVectorSetT.h
 
 SOURCES += \
     Base/ggItemLinked.cxx \
