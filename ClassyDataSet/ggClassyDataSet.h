@@ -35,6 +35,12 @@ public:
   // assignment operator
   ggClassyDataSet& operator = (const ggClassyDataSet& aOther);
 
+  // collections (of classes)
+  ggClassyCollection* AddCollection(ggClassyCollection* aCollection);
+  ggClassyCollection* RemoveCollection(const QString& aName);
+  ggClassyCollectionContainer& GetCollections();
+  const ggClassyCollectionContainer& GetCollections() const;
+
   // classes
   ggClassyClass* AddClass(ggClassyClass* aClass);
   ggClassyClass* FindClass(const QString& aClassName);

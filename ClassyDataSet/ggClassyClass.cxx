@@ -276,6 +276,21 @@ void ggClassyClass::SetDescription(const QString& aDescription)
 }
 
 
+const QString& ggClassyClass::GetCollectionName() const
+{
+  return mCollectionName;
+}
+
+
+void ggClassyClass::SetCollectionName(const QString& aName)
+{
+  if (aName != mCollectionName) {
+    mCollectionName = aName;
+    Notify();
+  }
+}
+
+
 const ggClassyDataSet* ggClassyClass::GetDataSet() const
 {
   return mDataSet;

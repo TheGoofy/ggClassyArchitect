@@ -9,6 +9,7 @@
 #include "Base/ggSubject.h"
 
 // 3) forward declarations
+class ggClassyDataSet;
 
 /**
  * @brief The ggClassyCollection class
@@ -18,12 +19,25 @@ class ggClassyCollection :
 {
 public:
 
+  ggClassyCollection();
+  ggClassyCollection(const QString& aName);
+  virtual ~ggClassyCollection();
+
   // identification
   static const QString& TypeID();
   virtual const QString& VTypeID() const;
 
+  // compares two pointers by comparing their "mName"
+  bool operator() (const ggClassyCollection* aCollectionA,
+                   const ggClassyCollection* aCollectionB) const;
+
+  void SetDataSet(ggClassyDataSet* aDataSet);
+  ggClassyDataSet* GetDataSet() const;
+
   // name
   QString mName;
+
+  /*
   // box frame and connections
   QPen mBoxBorder;
   QPen mConnectionLines;
@@ -39,6 +53,9 @@ public:
   QFont mDescriptionFont;
   QColor mDescriptionColor;
   QBrush mDescriptionBackground;
+  */
+
+  ggClassyDataSet* mDataSet;
 
 };
 

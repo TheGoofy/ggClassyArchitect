@@ -138,6 +138,53 @@ const ggSubject* ggClassyDataSet::GetSubjectConnections() const
 }
 
 
+ggClassyCollection* ggClassyDataSet::AddCollection(ggClassyCollection* aCollection)
+{
+  // don't add nothing
+  if (aCollection != nullptr) {
+    // only need to change something, if the dataset is different
+    if (aCollection->GetDataSet() != this) {
+      // add collection to own dataset
+      if (mCollections.AddCollection(aCollection) == aCollection) {
+        // remove it from the other dataset (collection can only be subscribed to one dataset)
+        if (aCollection->GetDataSet() != nullptr) {
+          aCollection->GetDataSet()->RemoveCollection(aCollection->mName);
+        }
+        // register own dataset
+        aCollection->SetDataSet(this);
+        mClassBoxes.Notify();
+        return aCollection;
+      }
+    }
+  }
+  // obviously it was not possible to add the collection
+  return nullptr;
+}
+
+
+ggClassyCollection* ggClassyDataSet::RemoveCollection(const QString& aName)
+{
+  ggClassyCollection* vCollection = mCollections.RemoveCollection(aName);
+  if (vCollection != nullptr) {
+    vCollection->SetDataSet(nullptr);
+    mClassBoxes.Notify();
+  }
+  return vCollection;
+}
+
+
+ggClassyCollectionContainer& ggClassyDataSet::GetCollections()
+{
+  return mCollections;
+}
+
+
+const ggClassyCollectionContainer& ggClassyDataSet::GetCollections() const
+{
+  return mCollections;
+}
+
+
 ggClassyClass* ggClassyDataSet::AddClass(ggClassyClass* aClass)
 {
   if (mClasses.AddClass(aClass) != nullptr) {
@@ -250,18 +297,24 @@ ggClassyDataSet* ggClassyDataSet::CreateTestDataSet()
 {
   ggClassyDataSet* vDataSet = new ggClassyDataSet();
 
+  ggClassyCollection* vCollectionA = vDataSet->AddCollection(new ggClassyCollection("ggCollectionA"));
+  ggClassyCollection* vCollectionB = vDataSet->AddCollection(new ggClassyCollection("ggCollectionB"));
+  ggClassyCollection* vCollectionC = vDataSet->AddCollection(new ggClassyCollection("ggCollectionC"));
+
   ggClassyClass* vClassA = vDataSet->AddClass(new ggClassyClass("ggClassA"));
   vClassA->AddMember("Ping()", "void");
   vClassA->AddMember("Pong()", "void");
   vClassA->AddMember("GetB1()", "ggClassB");
   vClassA->AddMember("GetB2()", "ggClassB");
   vClassA->SetDescription("The answer to life the universe and everything.");
+  vClassA->SetCollectionName(vCollectionA->mName);
 
   ggClassyClass* vClassB = vDataSet->AddClass(new ggClassyClass("ggClassB"));
   vClassB->AddBaseClassName("ggClassA");
   vClassB->AddMember("Blubb()", "QString");
   vClassB->AddMember("GetA()", "ggClassA");
   vClassB->SetDescription("One fish, two fish, red fish, blue fish.");
+  vClassB->SetCollectionName(vCollectionA->mName);
 
   ggClassyClass* vClassC = vDataSet->AddClass(new ggClassyClass("ggClassC"));
   vClassC->AddBaseClassName("ggClassA");
@@ -269,6 +322,13 @@ ggClassyDataSet* ggClassyDataSet::CreateTestDataSet()
   vClassC->AddMember("GetName()", "QString");
   vClassC->AddMember("SayHello()", "QString");
   vClassC->SetDescription("This is a very useful description ot the class!");
+  vClassC->SetCollectionName(vCollectionC->mName);
+
+  ggClassyClass* vClassD = vDataSet->AddClass(new ggClassyClass("ggClassD"));
+  vClassD->AddMember("YouWannaDance()", "QString");
+  vClassD->AddMember("DamnImLookingGood()", "QString");
+  vClassD->SetDescription("Lorem ipsum dolor sit amet, consectetur adipiscing elit, "
+                          "sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.");
 
   ggClassyClassBox* vClassBoxA1 = new ggClassyClassBox(vClassA->GetName());
   vClassBoxA1->SetPosition(QPointF(-300, -300));

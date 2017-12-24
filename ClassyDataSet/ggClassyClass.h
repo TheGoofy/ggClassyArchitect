@@ -55,6 +55,8 @@ public:
   void SetMembersText(const QString& aText);
   const QString& GetDescription() const;
   void SetDescription(const QString& aDescription);
+  const QString& GetCollectionName() const;
+  void SetCollectionName(const QString& aName);
   const ggClassyDataSet* GetDataSet() const;
   void SetDataSet(ggClassyDataSet* aDataSet);
 

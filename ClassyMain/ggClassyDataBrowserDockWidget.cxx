@@ -46,6 +46,9 @@ public:
     const ggClassyDataSet* GetDataSet() const {
       return (mType == cType::eDataSet) ? static_cast<const ggClassyDataSet*>(mData) : nullptr;
     }
+    const ggClassyCollection* GetCollection() const {
+      return (mType == cType::eCollection) ? static_cast<const ggClassyCollection*>(mData) : nullptr;
+    }
     const ggClassyClass* GetClass() const {
       return (mType == cType::eClass) ? static_cast<const ggClassyClass*>(mData) : nullptr;
     }
@@ -56,6 +59,9 @@ public:
     cItem(const ggClassyDataSet* aDataSet) :
       mType(cType::eDataSet), mData(aDataSet) {
     }
+    cItem(const ggClassyCollection* aCollection) :
+      mType(cType::eCollection), mData(aCollection) {
+    }
     cItem(const ggClassyClass* aClass) :
       mType(cType::eClass), mData(aClass) {
     }
@@ -65,6 +71,7 @@ public:
     enum class cType {
       eUnknown,
       eDataSet,
+      eCollection,
       eClass,
       eMember
     };
@@ -83,6 +90,12 @@ public:
     return static_cast<cItem*>(aIndex.internalPointer())->GetDataSet();
   }
 
+  const ggClassyCollection* GetCollection(const QModelIndex& aIndex) const
+  {
+    if (aIndex.internalPointer() == nullptr) return nullptr;
+    return static_cast<cItem*>(aIndex.internalPointer())->GetCollection();
+  }
+
   const ggClassyClass* GetClass(const QModelIndex& aIndex) const
   {
     if (aIndex.internalPointer() == nullptr) return nullptr;
@@ -99,6 +112,14 @@ public:
   {
     //qDebug() << __PRETTY_FUNCTION__ << aRow << aColumn;
     cItem* vItem = cItem::GetItem(aDataSet);
+    mItems.insert(vItem);
+    return createIndex(aRow, aColumn, vItem);
+  }
+
+  QModelIndex CreateIndex(int aRow, int aColumn, const ggClassyCollection* aCollection) const
+  {
+    //qDebug() << __PRETTY_FUNCTION__ << aRow << aColumn;
+    cItem* vItem = cItem::GetItem(aCollection);
     mItems.insert(vItem);
     return createIndex(aRow, aColumn, vItem);
   }
@@ -132,7 +153,20 @@ public:
     const ggClassyDataSet* vDataSet = GetDataSet(aParent);
     if (vDataSet != nullptr) {
       //qDebug() << __PRETTY_FUNCTION__ << aRow << aColumn << aParent << "create \"class\" index";
-      return CreateIndex(aRow, aColumn, vDataSet->GetClasses().SearchClass(aRow));
+      int vNumberOfCollections = vDataSet->GetCollections().GetSize();
+      if (aRow < vNumberOfCollections) {
+        int vCollectionIndex = aRow;
+        return CreateIndex(aRow, aColumn, vDataSet->GetCollections().SearchCollection(vCollectionIndex));
+      }
+      else {
+        int vClassIndex = aRow - vNumberOfCollections;
+        return CreateIndex(aRow, aColumn, vDataSet->GetClasses().SearchClass(vClassIndex));
+      }
+    }
+    const ggClassyCollection* vCollection = GetCollection(aParent);
+    if (vCollection != nullptr) {
+      //qDebug() << __PRETTY_FUNCTION__ << aRow << aColumn << aParent << "create no child for collection";
+      return QModelIndex();
     }
     const ggClassyClass* vClass = GetClass(aParent);
     if (vClass != nullptr) {
@@ -160,6 +194,11 @@ public:
       //qDebug() << __PRETTY_FUNCTION__ << aChild << "\"dataset\" has no parent";
       return QModelIndex();
     }
+    const ggClassyCollection* vCollection = GetCollection(aChild);
+    if (vCollection != nullptr) {
+      //qDebug() << __PRETTY_FUNCTION__ << aChild << "parent of \"collection\" is dataset";
+      return CreateIndex(0, 0, mDataSet);
+    }
     const ggClassyClass* vClass = GetClass(aChild);
     if (vClass != nullptr) {
       //qDebug() << __PRETTY_FUNCTION__ << aChild << "parent of \"class\" is dataset";
@@ -176,7 +215,7 @@ public:
           const ggClassyClassMember& vMember2 = *vMembersWalker;
           if (&vMember2 == vMember) {
             //qDebug() << __PRETTY_FUNCTION__ << aChild << "parent of \"member\" is class" << vClassIndex;
-            return CreateIndex(vClassIndex, 0, vClass);
+            return CreateIndex(mDataSet->GetCollections().GetSize() + vClassIndex, 0, vClass);
           }
           vClassIndex++;
         }
@@ -191,8 +230,13 @@ public:
   {
     const ggClassyDataSet* vDataSet = GetDataSet(aParent);
     if (vDataSet != nullptr) {
-      //qDebug() << __PRETTY_FUNCTION__ << aParent << "Dataset ==>" << vDataSet->GetClasses().GetSize() << "children";
-      return vDataSet->GetClasses().GetSize();
+      //qDebug() << __PRETTY_FUNCTION__ << aParent << "Dataset ==>" << vDataSet->GetCollections().GetSize() + vDataSet->GetClasses().GetSize() << "children";
+      return vDataSet->GetCollections().GetSize() + vDataSet->GetClasses().GetSize();
+    }
+    const ggClassyCollection* vCollection = GetCollection(aParent);
+    if (vCollection != nullptr) {
+      //qDebug() << __PRETTY_FUNCTION__ << aParent << "Collection ==>" << 0 << "children";
+      return 0;
     }
     const ggClassyClass* vClass = GetClass(aParent);
     if (vClass != nullptr) {
@@ -204,7 +248,7 @@ public:
       //qDebug() << __PRETTY_FUNCTION__ << aParent << "Member ==>" << 0 << "children";
       return 0;
     }
-    //qDebug() << __PRETTY_FUNCTION__ << aParent << "Root ==>" << 1 << "child";
+    //qDebug() << __PRETTY_FUNCTION__ << aParent << "Root ==>" << 1 << "child (the one and only dataset)";
     return 1;
   }
 
@@ -220,6 +264,8 @@ public:
     if (aRole != Qt::DisplayRole) return QVariant();
     const ggClassyDataSet* vDataSet = GetDataSet(aIndex);
     if (vDataSet != nullptr) return vDataSet->TypeID();
+    const ggClassyCollection* vCollection = GetCollection(aIndex);
+    if (vCollection != nullptr) return vCollection->mName;
     const ggClassyClass* vClass = GetClass(aIndex);
     if (vClass != nullptr) return vClass->GetName();
     const ggClassyClassMember* vMember = GetMember(aIndex);
