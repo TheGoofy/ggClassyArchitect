@@ -32,7 +32,7 @@ public:
 
 private:
 
-  typedef ggVectorSet<ggClassyCollection*, ggClassyCollection> tCollections;
+  typedef ggVectorSetT<ggClassyCollection*, ggClassyCollection> tCollections;
   tCollections mCollections;
 
 };

@@ -15,58 +15,58 @@
 template <class TKey,
           class TCompare = std::less<TKey> >
 
-class ggVectorSet :
+class ggVectorSetT :
   public std::set<TKey, TCompare>
 
 {
 
-  typedef std::set<TKey, TCompare> tBaseSet;
-  typedef std::vector<typename tBaseSet::iterator> tVector;
-  typedef std::map<TKey, typename tBaseSet::size_type, TCompare> tIndices;
+  typedef std::set<TKey, TCompare> tSet;
+  typedef std::vector<const TKey*> tVector;
+  typedef std::map<TKey, typename tSet::size_type, TCompare> tIndices;
 
 public:
 
-  ggVectorSet() :
+  ggVectorSetT() :
     mValid(false) {
   }
 
-  inline std::pair<typename tBaseSet::iterator, bool> insert(const typename tBaseSet::value_type& aValue) {
+  inline std::pair<typename tSet::iterator, bool> insert(const typename tSet::value_type& aValue) {
     mValid = false;
-    return tBaseSet::insert(aValue);
+    return tSet::insert(aValue);
   }
 
   template <class TIterator>
   inline void insert(TIterator aFirst, TIterator aLast) {
     mValid = false;
-    return tBaseSet::insert(aFirst, aLast);
+    return tSet::insert(aFirst, aLast);
   }
 
-  inline typename tBaseSet::iterator erase(typename tBaseSet::iterator aPos) {
+  inline typename tSet::iterator erase(typename tSet::iterator aPos) {
     mValid = false;
-    return tBaseSet::erase(aPos);
+    return tSet::erase(aPos);
   }
 
-  inline typename tBaseSet::size_type erase(const typename tBaseSet::key_type& aKey) {
+  inline typename tSet::size_type erase(const typename tSet::key_type& aKey) {
     mValid = false;
-    return tBaseSet::erase(aKey);
+    return tSet::erase(aKey);
   }
 
   inline void clear() {
     mValid = false;
-    tBaseSet::clear();
+    tSet::clear();
   }
 
-  inline typename tBaseSet::size_type indexOf(const TKey& aKey) const {
+  inline typename tSet::size_type indexOf(const TKey& aKey) const {
     typename tIndices::const_iterator vIndicesIterator = Indices().find(aKey);
     if (vIndicesIterator != Indices().end()) return vIndicesIterator->second;
-    else return tBaseSet::size();
+    else return tSet::size();
   }
 
-  inline typename tBaseSet::reference operator[] (typename tBaseSet::size_type aPos) {
+  inline typename tSet::reference operator[] (typename tSet::size_type aPos) {
     return *(Vector().operator [](aPos));
   }
 
-  inline typename tBaseSet::const_reference operator[] (typename tBaseSet::size_type aPos) const {
+  inline typename tSet::const_reference operator[] (typename tSet::size_type aPos) const {
     return *(Vector().operator [](aPos));
   }
 
@@ -74,12 +74,12 @@ private:
 
   inline void Update() const {
     mValid = true;
-    mVector.resize(tBaseSet::size());
+    mVector.resize(tSet::size());
     mIndices.clear();
-    typename tBaseSet::size_type vIndex = 0;
-    typename tBaseSet::iterator vIterator = tBaseSet::begin();
-    while (vIterator != tBaseSet::end()) {
-      mVector[vIndex] = vIterator;
+    typename tSet::size_type vIndex = 0;
+    typename tSet::iterator vIterator = tSet::begin();
+    while (vIterator != tSet::end()) {
+      mVector[vIndex] = &(*vIterator);
       mIndices[*vIterator] = vIndex;
       ++vIterator;
       ++vIndex;
