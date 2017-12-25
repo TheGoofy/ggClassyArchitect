@@ -162,23 +162,13 @@ bool ggClassyTreeItem::cLess::operator () (const ggClassyTreeItem* aItemA,
                                            const ggClassyTreeItem* aItemB) const
 {
   // first compare the types
-  if (aItemA->mType != aItemB->mType) return (aItemA->mType < aItemB->mType);
+  if (aItemA->mType != aItemB->mType)
+    return (aItemA->mType < aItemB->mType);
+
   // the types are the same: compare the names
-  switch (aItemA->mType) {
-    case cType::eDataSet:
-      return aItemA->mData < aItemB->mData;
-    case cType::eCollection:
-      if (aItemA->GetCollection()->GetName() != aItemB->GetCollection()->GetName())
-        return (aItemA->GetCollection()->GetName() < aItemB->GetCollection()->GetName()); break;
-    case cType::eClass:
-      if (aItemA->GetClass()->GetName() != aItemB->GetClass()->GetName())
-        return (aItemA->GetClass()->GetName() < aItemB->GetClass()->GetName()); break;
-    case cType::eMember:
-      if (aItemA->GetMember()->GetName() != aItemB->GetMember()->GetName())
-        return (aItemA->GetMember()->GetName() < aItemB->GetMember()->GetName()); break;
-    default:
-      break;
-  }
+  if (aItemA->GetName() != aItemB->GetName())
+    return (aItemA->GetName() < aItemB->GetName());
+
   // in case of the same name, let's compare the address (pointer)
   return aItemA->mData < aItemB->mData;
 }
