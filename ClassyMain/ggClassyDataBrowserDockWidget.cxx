@@ -102,7 +102,7 @@ public:
     return vTreeItem->GetNumberOfChildren();
   }
 
-  virtual int columnCount(const QModelIndex& aParent = QModelIndex()) const override
+  virtual int columnCount(const QModelIndex& /*aIndex = QModelIndex()*/) const override
   {
     return 1;
   }
@@ -118,22 +118,12 @@ public:
     return QVariant();
   }
 
-  Qt::ItemFlags flags(const QModelIndex& aIndex) const override
+  /*Qt::ItemFlags flags(const QModelIndex& aIndex) const override
   {
     //qDebug() << __PRETTY_FUNCTION__ << aIndex;
     if (!aIndex.isValid()) return 0;
     return Qt::ItemIsEditable | QAbstractItemModel::flags(aIndex);
-  }
-
-  QVariant headerData(int aSection, Qt::Orientation aOrientation, int aRole = Qt::DisplayRole) const override
-  {
-    //qDebug() << __PRETTY_FUNCTION__ << aSection;
-    if (aRole == Qt::DisplayRole) {
-      if (aSection == 0) return "Name";
-      if (aSection == 1) return "Type";
-    }
-    return QVariant();
-  }
+  }*/
 
   // virtual QModelIndex sibling(int row, int column, const QModelIndex &idx) const override
   // virtual bool hasChildren(const QModelIndex &aParent = QModelIndex()) const override
@@ -157,6 +147,7 @@ ggClassyDataBrowserDockWidget::ggClassyDataBrowserDockWidget(QWidget *parent) :
 
   ggClassyDataModel* vModel = new ggClassyDataModel(this);
   ui->mDataBrowserTreeView->setModel(vModel);
+  //ui->mDataBrowserTreeView->setHeaderHidden(true);
 
 }
 
