@@ -25,7 +25,7 @@ ggClassyCollection* ggClassyCollectionContainer::AddCollection(ggClassyCollectio
   // don't add nothing
   if (aCollection != nullptr) {
     // check if name is unique
-    const ggClassyCollection* vCollection = FindCollection(aCollection->mName);
+    const ggClassyCollection* vCollection = FindCollection(aCollection->GetName());
     // another collection with the same name does not yet exist
     if (vCollection == nullptr) {
       mCollections.insert(aCollection);

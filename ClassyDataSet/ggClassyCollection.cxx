@@ -65,3 +65,17 @@ ggClassyDataSet* ggClassyCollection::GetDataSet() const
 {
   return mDataSet;
 }
+
+
+const QString& ggClassyCollection::GetName() const
+{
+  return mName;
+}
+
+
+void ggClassyCollection::SetName(const QString& aName)
+{
+  if (aName != mName) {
+    mName = aName;
+  }
+}

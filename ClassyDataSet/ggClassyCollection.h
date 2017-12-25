@@ -34,6 +34,11 @@ public:
   void SetDataSet(ggClassyDataSet* aDataSet);
   ggClassyDataSet* GetDataSet() const;
 
+  const QString& GetName() const;
+  void SetName(const QString& aName);
+
+private:
+
   // name
   QString mName;
 

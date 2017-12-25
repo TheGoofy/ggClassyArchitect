@@ -148,7 +148,7 @@ ggClassyCollection* ggClassyDataSet::AddCollection(ggClassyCollection* aCollecti
       if (mCollections.AddCollection(aCollection) == aCollection) {
         // remove it from the other dataset (collection can only be subscribed to one dataset)
         if (aCollection->GetDataSet() != nullptr) {
-          aCollection->GetDataSet()->RemoveCollection(aCollection->mName);
+          aCollection->GetDataSet()->RemoveCollection(aCollection->GetName());
         }
         // register own dataset
         aCollection->SetDataSet(this);
@@ -307,14 +307,14 @@ ggClassyDataSet* ggClassyDataSet::CreateTestDataSet()
   vClassA->AddMember("GetB1()", "ggClassB");
   vClassA->AddMember("GetB2()", "ggClassB");
   vClassA->SetDescription("The answer to life the universe and everything.");
-  vClassA->SetCollectionName(vCollectionA->mName);
+  vClassA->SetCollectionName(vCollectionA->GetName());
 
   ggClassyClass* vClassB = vDataSet->AddClass(new ggClassyClass("ggClassB"));
   vClassB->AddBaseClassName("ggClassA");
   vClassB->AddMember("Blubb()", "QString");
   vClassB->AddMember("GetA()", "ggClassA");
   vClassB->SetDescription("One fish, two fish, red fish, blue fish.");
-  vClassB->SetCollectionName(vCollectionA->mName);
+  vClassB->SetCollectionName(vCollectionA->GetName());
 
   ggClassyClass* vClassC = vDataSet->AddClass(new ggClassyClass("ggClassC"));
   vClassC->AddBaseClassName("ggClassA");
@@ -322,7 +322,7 @@ ggClassyDataSet* ggClassyDataSet::CreateTestDataSet()
   vClassC->AddMember("GetName()", "QString");
   vClassC->AddMember("SayHello()", "QString");
   vClassC->SetDescription("This is a very useful description ot the class!");
-  vClassC->SetCollectionName(vCollectionC->mName);
+  vClassC->SetCollectionName(vCollectionC->GetName());
 
   ggClassyClass* vClassD = vDataSet->AddClass(new ggClassyClass("ggClassD"));
   vClassD->AddMember("YouWannaDance()", "QString");
