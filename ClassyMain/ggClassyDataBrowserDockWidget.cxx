@@ -10,125 +10,8 @@
 #include "Base/ggWalkerT.h"
 #include "Base/ggVectorSetT.h"
 #include "ClassyDataSet/ggClassyDataSet.h"
+#include "ClassyMain/ggClassyTreeItem.h"
 
-
-
-class ggClassyTreeItem {
-public:
-
-  ggClassyTreeItem(const ggClassyDataSet* aDataSet) :
-    mType(cType::eDataSet), mData(aDataSet), mParent(nullptr) {
-  }
-
-  template <typename TClassyType>
-  ggClassyTreeItem* AddChild(const TClassyType* aClassyChildItem) {
-    ggClassyTreeItem* vChildItem = new ggClassyTreeItem(aClassyChildItem);
-    vChildItem->mParent = this;
-    mChildren.insert(vChildItem);
-    return vChildItem;
-  }
-
-  ggUSize GetNumberOfChildren() const {
-    return mChildren.size();
-  }
-
-  ggClassyTreeItem* GetChild(ggUSize aIndex) const {
-    if (aIndex < mChildren.size()) return mChildren[aIndex];
-    else return nullptr;
-  }
-
-  ggClassyTreeItem* GetParent() const {
-    return mParent;
-  }
-
-  ggUSize GetIndex() const {
-    if (mParent != nullptr) {
-      return mParent->mChildren.indexOf(const_cast<ggClassyTreeItem*>(this));
-    }
-    return 0;
-  }
-
-  const QString& GetName() const {
-    switch (mType) {
-      case cType::eDataSet: return GetDataSet()->TypeID();
-      case cType::eCollection: return GetCollection()->GetName();
-      case cType::eClass: return GetClass()->GetName();
-      case cType::eMember: return GetMember()->GetName();
-      default: {static const QString vName("Goofy"); return vName; }
-    }
-  }
-
-private:
-
-  ggClassyTreeItem(const ggClassyCollection* aCollection) :
-    mType(cType::eCollection), mData(aCollection), mParent(nullptr) {
-  }
-
-  ggClassyTreeItem(const ggClassyClass* aClass) :
-    mType(cType::eClass), mData(aClass), mParent(nullptr) {
-  }
-
-  ggClassyTreeItem(const ggClassyClassMember* aMember) :
-    mType(cType::eMember), mData(aMember), mParent(nullptr) {
-  }
-
-  const ggClassyDataSet* GetDataSet() const {
-    return (mType == cType::eDataSet) ? static_cast<const ggClassyDataSet*>(mData) : nullptr;
-  }
-
-  const ggClassyCollection* GetCollection() const {
-    return (mType == cType::eCollection) ? static_cast<const ggClassyCollection*>(mData) : nullptr;
-  }
-
-  const ggClassyClass* GetClass() const {
-    return (mType == cType::eClass) ? static_cast<const ggClassyClass*>(mData) : nullptr;
-  }
-
-  const ggClassyClassMember* GetMember() const {
-    return (mType == cType::eMember) ? static_cast<const ggClassyClassMember*>(mData) : nullptr;
-  }
-
-  enum class cType {
-    eUnknown,
-    eDataSet,
-    eCollection,
-    eClass,
-    eMember
-  };
-
-  struct cLess {
-    bool operator () (const ggClassyTreeItem* aItemA, const ggClassyTreeItem* aItemB) const {
-      // compare the names, if the items have the same type
-      if (aItemA->mType == aItemB->mType) {
-        switch (aItemA->mType) {
-          case cType::eDataSet:
-            return aItemA->mData < aItemB->mData;
-          case cType::eCollection:
-            if (aItemA->GetCollection()->GetName() != aItemB->GetCollection()->GetName())
-              return (aItemA->GetCollection()->GetName() < aItemB->GetCollection()->GetName()); break;
-          case cType::eClass:
-            if (aItemA->GetClass()->GetName() != aItemB->GetClass()->GetName())
-              return (aItemA->GetClass()->GetName() < aItemB->GetClass()->GetName()); break;
-          case cType::eMember:
-            if (aItemA->GetMember()->GetName() != aItemB->GetMember()->GetName())
-              return (aItemA->GetMember()->GetName() < aItemB->GetMember()->GetName()); break;
-          default:
-            break;
-        }
-      }
-      // in case of different types or same name, let's compare the address
-      return aItemA->mData < aItemB->mData;
-    }
-  };
-
-  typedef ggVectorSetT<ggClassyTreeItem*, cLess> tChildren;
-
-  cType mType;
-  const void* mData;
-  ggClassyTreeItem* mParent;
-  tChildren mChildren;
-
-};
 
 
 
@@ -204,7 +87,7 @@ public:
     ggClassyTreeItem* vTreeItemParent = vTreeItem->GetParent();
 
     if (vTreeItemParent == mRootItem) return QModelIndex();
-    else return createIndex(vTreeItemParent->GetIndex(), 0, vTreeItemParent);
+    else return createIndex(vTreeItemParent->GetSiblingIndex(), 0, vTreeItemParent);
   }
 
   virtual int rowCount(const QModelIndex& aIndex = QModelIndex()) const override

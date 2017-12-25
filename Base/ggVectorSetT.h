@@ -21,7 +21,7 @@ class ggVectorSetT :
 {
 
   typedef std::set<TKey, TCompare> tSet;
-  typedef std::vector<const TKey*> tVector;
+  typedef std::vector<TKey*> tVector;
   typedef std::map<TKey, typename tSet::size_type, TCompare> tIndices;
 
 public:
@@ -79,11 +79,16 @@ private:
     typename tSet::size_type vIndex = 0;
     typename tSet::iterator vIterator = tSet::begin();
     while (vIterator != tSet::end()) {
-      mVector[vIndex] = &(*vIterator);
+      mVector[vIndex] = const_cast<TKey*>(&(*vIterator));
       mIndices[*vIterator] = vIndex;
       ++vIterator;
       ++vIndex;
     }
+  }
+
+  inline tVector& Vector() {
+    if (!mValid) Update();
+    return mVector;
   }
 
   inline tVector& Vector() const {
