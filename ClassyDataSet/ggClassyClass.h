@@ -32,10 +32,6 @@ public:
   static const QString& TypeID();
   virtual const QString& VTypeID() const;
 
-  // compares two pointers by comparing their "mName"
-  bool operator() (const ggClassyClass* aClassA,
-                   const ggClassyClass* aClassB) const;
-
   // assignment operator
   ggClassyClass& operator = (const ggClassyClass& aOther);
 

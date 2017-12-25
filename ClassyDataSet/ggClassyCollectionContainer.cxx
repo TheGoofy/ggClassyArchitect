@@ -88,3 +88,15 @@ const ggClassyCollection* ggClassyCollectionContainer::GetCollection(ggUSize aIn
 {
   return mCollections[aIndex];
 }
+
+
+bool ggClassyCollectionContainer::cLess::operator() (const ggClassyCollection* aCollectionA,
+                                                     const ggClassyCollection* aCollectionB) const
+{
+  if (aCollectionA != nullptr && aCollectionB != nullptr) {
+    return aCollectionA->GetName() < aCollectionB->GetName();
+  }
+  else {
+    return aCollectionA < aCollectionB;
+  }
+}

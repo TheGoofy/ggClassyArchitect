@@ -40,23 +40,10 @@ const QString& ggClassyCollection::VTypeID() const
 }
 
 
-bool ggClassyCollection::operator() (const ggClassyCollection* aCollectionA,
-                                     const ggClassyCollection* aCollectionB) const
-{
-  if (aCollectionA == nullptr || aCollectionB == nullptr) {
-    return aCollectionA < aCollectionB;
-  }
-  else {
-    return aCollectionA->mName < aCollectionB->mName;
-  }
-}
-
-
 void ggClassyCollection::SetDataSet(ggClassyDataSet* aDataSet)
 {
   if (aDataSet != mDataSet) {
     mDataSet = aDataSet;
-    Notify();
   }
 }
 

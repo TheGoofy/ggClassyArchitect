@@ -196,3 +196,15 @@ ggClassyClassContainer::const_iterator ggClassyClassContainer::end() const
 {
   return mClasses.end();
 }
+
+
+bool ggClassyClassContainer::cLess::operator() (const ggClassyClass* aClassA,
+                                                const ggClassyClass* aClassB) const
+{
+  if (aClassA != nullptr && aClassB != nullptr) {
+    return aClassA->GetName() < aClassB->GetName();
+  }
+  else {
+    return aClassA < aClassB;
+  }
+}

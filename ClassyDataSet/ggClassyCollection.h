@@ -27,10 +27,6 @@ public:
   static const QString& TypeID();
   virtual const QString& VTypeID() const;
 
-  // compares two pointers by comparing their "mName"
-  bool operator() (const ggClassyCollection* aCollectionA,
-                   const ggClassyCollection* aCollectionB) const;
-
   void SetDataSet(ggClassyDataSet* aDataSet);
   ggClassyDataSet* GetDataSet() const;
 
@@ -60,6 +56,7 @@ private:
   QBrush mDescriptionBackground;
   */
 
+  // owning dataset (needed for checking unique collection name)
   ggClassyDataSet* mDataSet;
 
 };

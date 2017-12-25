@@ -32,7 +32,13 @@ public:
 
 private:
 
-  typedef ggVectorSetT<ggClassyCollection*, ggClassyCollection> tCollections;
+  // compares two pointers by comparing their "mName"
+  struct cLess {
+    bool operator() (const ggClassyCollection* aCollectionA,
+                     const ggClassyCollection* aCollectionB) const;
+  };
+
+  typedef ggVectorSetT<ggClassyCollection*, cLess> tCollections;
   tCollections mCollections;
 
 };

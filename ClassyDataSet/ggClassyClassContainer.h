@@ -51,7 +51,13 @@ public:
 
 private:
 
-  std::set<ggClassyClass*, ggClassyClass> mClasses;
+  // compares two pointers by comparing their classyclass-name
+  struct cLess {
+    bool operator() (const ggClassyClass* aClassA,
+                     const ggClassyClass* aClassB) const;
+  };
+
+  std::set<ggClassyClass*, cLess> mClasses;
 
 };
 

@@ -152,18 +152,6 @@ ggClassyClass& ggClassyClass::operator = (const ggClassyClass& aOther)
 }
 
 
-bool ggClassyClass::operator() (const ggClassyClass* aClassA,
-                                const ggClassyClass* aClassB) const
-{
-  if (aClassA == nullptr || aClassB == nullptr) {
-    return aClassA < aClassB;
-  }
-  else {
-    return aClassA->mName < aClassB->mName;
-  }
-}
-
-
 const QString& ggClassyClass::GetName() const
 {
   return mName;
