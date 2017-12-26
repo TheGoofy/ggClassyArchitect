@@ -18,6 +18,7 @@ ggClassyGraphicsScene::ggClassyGraphicsScene(QObject* aParent) :
   mDataSet(nullptr),
   mBoxPoints(nullptr)
 {
+  setBackgroundBrush(Qt::gray);
   mBoxPoints = new ggClassyClassBoxPoints();
 }
 
