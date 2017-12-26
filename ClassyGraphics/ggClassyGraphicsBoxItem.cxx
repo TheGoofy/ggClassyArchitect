@@ -4,6 +4,7 @@
 // 1) include system or QT
 #include <QGraphicsLineItem>
 #include <QGraphicsSceneMouseEvent>
+#include <QGraphicsDropShadowEffect>
 #include <QFontMetrics>
 #include <QMessageBox>
 #include <QDebug>
@@ -66,6 +67,12 @@ void ggClassyGraphicsBoxItem::Construct()
   setFlag(ItemIsSelectable);
   setBrush(Qt::NoBrush);
   setPen(QPen(Qt::black, 0.0f, Qt::NoPen));
+
+  /* the shadow looks nice, but it's slow, and it crashes, when re-ordering the boxes
+  QGraphicsDropShadowEffect* vEffect = new QGraphicsDropShadowEffect();
+  vEffect->setOffset(4.0f, 4.0f);
+  vEffect->setBlurRadius(15.0f);
+  setGraphicsEffect(vEffect);*/
 
   mBoxBorder = new QGraphicsRectItem(this);
   mBoxBorder->setFlag(ItemStacksBehindParent);
