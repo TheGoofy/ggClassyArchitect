@@ -10,6 +10,7 @@
 
 ggGraphicsDecoratedPathItem::ggGraphicsDecoratedPathItem(QGraphicsItem* aParent) :
   QGraphicsPathItem(aParent),
+  mConnectionValid(false),
   mDecorationItemSrc(nullptr),
   mDecorationItemDst(nullptr)
 {
@@ -29,14 +30,16 @@ void ggGraphicsDecoratedPathItem::ClearConnection()
   delete mDecorationItemDst;
   mDecorationItemSrc = nullptr;
   mDecorationItemDst = nullptr;
+  mConnectionValid = false;
 }
 
 
 void ggGraphicsDecoratedPathItem::SetConnection(const ggConnectionPoint& aPointSrc,
-                                       const ggConnectionPoint& aPointDst)
+                                                const ggConnectionPoint& aPointDst)
 {
   mPointSrc = aPointSrc;
   mPointDst = aPointDst;
+  mConnectionValid = true;
   RebuildPath();
 }
 
@@ -76,7 +79,6 @@ void ggGraphicsDecoratedPathItem::setPen(const QPen& aPen)
   QGraphicsPathItem::setPen(aPen);
   RebuildPath();
 }
-
 
 
 QPainterPath ggGraphicsDecoratedPathItem::GetPath(const ggConnectionPoint& aPointSrc,
@@ -138,6 +140,9 @@ QGraphicsItem* ggGraphicsDecoratedPathItem::CreateDecoration(const ggConnectionP
 
 void ggGraphicsDecoratedPathItem::RebuildPath()
 {
+  // don't do anyting, if the connection is not valid
+  if (!mConnectionValid) return;
+
   // update path
   setPath(GetPath(mPointSrc, mPointDst));
 

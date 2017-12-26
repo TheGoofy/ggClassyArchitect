@@ -25,7 +25,6 @@ public:
                      const ggConnectionPoint& aPointDst);
 
   const ggDecoration& DecorationSrc() const;
-
   const ggDecoration& DecorationDst() const;
 
   void SetDecorationSrc(ggDecoration::cType aType,
@@ -49,6 +48,7 @@ private:
   void RebuildPath();
 
   // the connection points
+  bool mConnectionValid;
   ggConnectionPoint mPointSrc;
   ggConnectionPoint mPointDst;
 
