@@ -190,7 +190,15 @@ const ggClassyCollectionContainer& ggClassyDataSet::GetCollections() const
 }
 
 
-const ggClassyCollection* ggClassyDataSet::FindCollectionOfClass(const QString& aClassName) const
+ggClassyCollection* ggClassyDataSet::FindCollectionFromClass(const QString& aClassName)
+{
+  ggClassyClass* vClass = mClasses.FindClass(aClassName);
+  if (vClass != nullptr) return mCollections.FindCollection(vClass->GetCollectionName());
+  return nullptr;
+}
+
+
+const ggClassyCollection* ggClassyDataSet::FindCollectionFromClass(const QString& aClassName) const
 {
   const ggClassyClass* vClass = mClasses.FindClass(aClassName);
   if (vClass != nullptr) return mCollections.FindCollection(vClass->GetCollectionName());

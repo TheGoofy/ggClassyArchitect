@@ -223,7 +223,7 @@ void ggClassyGraphicsScene::CreateConnectionItems()
         vAutoPath->SetDecorationDst(ggDecoration::cType::eTriangle, 13.0f, ggDecoration::cFill::eSolid);
         vAutoPath->InsertPointSrc(vBoxItem->GetClassConnectionTop());
         vAutoPath->InsertPointsDst(mBoxPoints->GetClassPointsBottom(vBaseClassName));
-        vAutoPath->SetCollection(mDataSet->FindCollectionOfClass(vBaseClassName));
+        vAutoPath->SetCollection(mDataSet->FindCollectionFromClass(vBaseClassName));
         QGraphicsScene::addItem(vAutoPath);
       }
 
@@ -239,7 +239,7 @@ void ggClassyGraphicsScene::CreateConnectionItems()
         vAutoPath->InsertPointSrc(vBoxItem->GetMemberConnectionLeft(vMemberIndex));
         vAutoPath->InsertPointSrc(vBoxItem->GetMemberConnectionRight(vMemberIndex));
         vAutoPath->InsertPointsDst(mBoxPoints->GetClassPointsLeftRight(vMemberClassName));
-        vAutoPath->SetCollection(mDataSet->FindCollectionOfClass(vMemberClassName));
+        vAutoPath->SetCollection(mDataSet->FindCollectionFromClass(vMemberClassName));
         QPen vPen(vAutoPath->pen());
         vPen.setStyle(Qt::DashLine);
         vAutoPath->setPen(vPen);

@@ -388,14 +388,36 @@ void ggClassyMainWindow::MoveSelectedItemsDown()
 
 void ggClassyMainWindow::ChangeColor(const QColor& aColor)
 {
-  ggClassyCollection* vCollection = ggClassyApplication::GetInstance().GetDataSet()->GetCollections().FindCollection("ggCollectionA");
-  if (vCollection != nullptr) {
-    vCollection->mBoxBorder.setColor(ggUtilityQt::GetColorWithAlpha(aColor, 0.35f));
-    vCollection->mConnectionLines.setColor(ggUtilityQt::GetColorWithAlpha(aColor, 1.0f));
-    vCollection->mNameColor = ggUtilityQt::GetColorContrast(aColor);
-    vCollection->mNameBackground.setColor(aColor);
-    vCollection->mMembersBackground.setColor(ggUtilityQt::GetColorWithLightness(aColor, 0.97f));
-    vCollection->mDescriptionBackground.setColor(ggUtilityQt::GetColorWithLightness(aColor, 0.90f));
-    vCollection->Notify();
+  ggClassyGraphicsScene* vScene = dynamic_cast<ggClassyGraphicsScene*>(ui->mGraphicsView->scene());
+  if (vScene != nullptr) {
+
+    // the selected collections (compile them in a set in order to avoid duplicates)
+    std::set<ggClassyCollection*> vCollections;
+
+    // get the selected class boxes and the dataset
+    const ggClassyGraphicsScene::tClassBoxes& vSelectedClassBoxes = vScene->GetSelectedClassBoxes();
+    ggClassyDataSet* vDataSet = ggClassyApplication::GetInstance().GetDataSet();
+
+    // loop over all selected class boxes
+    ggWalkerT<ggClassyGraphicsScene::tClassBoxes::const_iterator> vSelectedClassBoxesWalker(vSelectedClassBoxes);
+    while (vSelectedClassBoxesWalker) {
+      const ggClassyClassBox* vSelectedClassBox = *vSelectedClassBoxesWalker;
+      vCollections.insert(vDataSet->FindCollectionFromClass(vSelectedClassBox->GetClassName()));
+    }
+
+    // modify the collection
+    ggWalkerT<std::set<ggClassyCollection*>::iterator> vCollectionsWalker(vCollections);
+    while (vCollectionsWalker) {
+      ggClassyCollection* vCollection = *vCollectionsWalker;
+      if (vCollection != nullptr) {
+        vCollection->mBoxBorder.setColor(ggUtilityQt::GetColorWithAlpha(aColor, 0.35f));
+        vCollection->mConnectionLines.setColor(ggUtilityQt::GetColorWithAlpha(aColor, 1.0f));
+        vCollection->mNameColor = ggUtilityQt::GetColorContrast(aColor);
+        vCollection->mNameBackground.setColor(aColor);
+        vCollection->mMembersBackground.setColor(ggUtilityQt::GetColorWithLightness(aColor, 0.97f));
+        vCollection->mDescriptionBackground.setColor(ggUtilityQt::GetColorWithLightness(aColor, 0.90f));
+        vCollection->Notify();
+      }
+    }
   }
 }
