@@ -294,6 +294,15 @@ void ggClassyClass::SetDataSet(ggClassyDataSet* aDataSet)
 }
 
 
+const ggClassyCollection* ggClassyClass::GetCollection() const
+{
+  if (mDataSet != nullptr) {
+    return mDataSet->GetCollections().FindCollection(mCollectionName);
+  }
+  return nullptr;
+}
+
+
 bool ggClassyClass::RenameClass(const QString& aOldClassName,
                                 const QString& aNewClassName)
 {

@@ -63,7 +63,7 @@ ggClassyGraphicsBoxItem::ggClassyGraphicsBoxItem(ggClassyClass* aClass,
 void ggClassyGraphicsBoxItem::Construct()
 {
   setFlag(ItemIsSelectable); // size-handle don't work when item is selected
-  setBrush(QColor(255, 255, 255, 255));
+  setBrush(Qt::NoBrush);
   QPen vPen(QColor(0, 0, 0, 50), 2.0f);
   vPen.setCapStyle(Qt::FlatCap);
   vPen.setJoinStyle(Qt::RoundJoin);
@@ -82,7 +82,7 @@ void ggClassyGraphicsBoxItem::Construct()
   mMembersText = new ggGraphicsTextItem(this);
   mMembersText->SetSuppressLineBreaks(false);
   mMembersText->SetEnterKeyFinishesEdit(true);
-  mMembersText->SetBrush(brush());
+  mMembersText->SetBrush(QColor(255, 250, 245, 255));
   mMembersText->SetPen(Qt::NoPen);
 
   mDescriptionText = new ggGraphicsTextItem(this);
@@ -334,6 +334,10 @@ void ggClassyGraphicsBoxItem::Update(const ggSubject* aSubject)
     NotifyConnectionPoints();
   }
 
+  else if (aSubject == GetCollection()) {
+    UpdateCollectionRead();
+  }
+
   ggGraphicsManipulatorBarItemT<>::Update(aSubject);
 }
 
@@ -341,9 +345,11 @@ void ggClassyGraphicsBoxItem::Update(const ggSubject* aSubject)
 void ggClassyGraphicsBoxItem::UpdateClassRead()
 {
   if (GetClass() != nullptr) {
+    Attach(GetCollection());
+    UpdateCollectionRead();
     mClassNameText->SetText(GetClass()->GetName());
     mMembersText->SetText(GetClass()->GetMembersText());
-    mDescriptionText->SetText(GetClass()->GetDescription());
+    mDescriptionText->SetText(GetClass()->GetDescription());    
   }
 }
 
@@ -521,4 +527,19 @@ void ggClassyGraphicsBoxItem::NotifyConnectionPoints()
   while (vConnectionsWalkerLeft) (*vConnectionsWalkerLeft).Notify();
   ggWalkerT<tSubjectConnectionPoints::iterator> vConnectionsWalkerRight(mMembersConnectionRight);
   while (vConnectionsWalkerRight) (*vConnectionsWalkerRight).Notify();
+}
+
+
+const ggClassyCollection* ggClassyGraphicsBoxItem::GetCollection() const
+{
+  if (GetClass() != nullptr) return GetClass()->GetCollection();
+  else return nullptr;
+}
+
+
+void ggClassyGraphicsBoxItem::UpdateCollectionRead()
+{
+  if (GetCollection() != nullptr) {
+    mClassNameText->SetBrush(GetCollection()->GetNameBackground());
+  }
 }

@@ -4,6 +4,7 @@
 // 1) include system or QT
 #include <QPen>
 #include <QFont>
+#include <QDomElement>
 
 // 2) include own project-related (sort by component dependency)
 #include "Base/ggSubject.h"
@@ -33,12 +34,20 @@ public:
   const QString& GetName() const;
   void SetName(const QString& aName);
 
+  const QBrush& GetNameBackground() const;
+  void SetNameBackground(const QBrush& aBrush);
+
+  // persist as dom-element
+  QDomElement CreateDomElement(QDomDocument& aDocument) const;
+  static ggClassyCollection* Create(const QDomElement& aElement, ggClassyDataSet* aDataSet = nullptr);
+
 private:
+
+  void Construct();
 
   // name
   QString mName;
 
-  /*
   // box frame and connections
   QPen mBoxBorder;
   QPen mConnectionLines;
@@ -54,7 +63,6 @@ private:
   QFont mDescriptionFont;
   QColor mDescriptionColor;
   QBrush mDescriptionBackground;
-  */
 
   // owning dataset (needed for checking unique collection name)
   ggClassyDataSet* mDataSet;

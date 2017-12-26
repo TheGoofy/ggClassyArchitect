@@ -14,6 +14,7 @@ class ggGraphicsCheckBoxItem;
 class ggClassyClassBoxPoints;
 class ggClassyClassBox;
 class ggClassyClass;
+class ggClassyCollection;
 
 /**
  * @brief The ggClassyGraphicsBoxItem class
@@ -32,7 +33,7 @@ public:
                    ggClassyClassBox* aClassBox);
 
   ggClassyClass* GetClass() const;
-  ggClassyClassBox* GetClassBox() const;
+  ggClassyClassBox* GetClassBox() const;  
 
   const ggSubject* GetSubjectSize() const;
 
@@ -59,6 +60,7 @@ private:
   QPointF GetClassPositionRight() const;
   QPointF GetMemberPositionLeft(ggUSize aMemberIndex) const;
   QPointF GetMemberPositionRight(ggUSize aMemberIndex) const;
+  const ggClassyCollection* GetCollection() const;
 
   void UpdateLayout();
   void NotifySize();
@@ -73,6 +75,8 @@ private:
 
   void UpdateConnectionPoints();
   void NotifyConnectionPoints();
+
+  void UpdateCollectionRead();
 
   ggGraphicsTextItem* mClassNameText;
   ggGraphicsTextItem* mMembersText;

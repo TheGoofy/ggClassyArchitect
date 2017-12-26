@@ -43,6 +43,7 @@ protected slots:
   void MoveSelectedItemsBottom();
   void OpenDataSet();
   void SaveDataSetAs();
+  void ChangeColor(const QColor& aColor);
 
 protected:
   virtual void Update(const ggSubject* aSubject) override;

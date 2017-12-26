@@ -12,6 +12,7 @@
 
 // 3) forward declarations
 class ggClassyDataSet;
+class ggClassyCollection;
 
 /**
  * @brief The ggClassyClass class
@@ -55,6 +56,7 @@ public:
   void SetCollectionName(const QString& aName);
   const ggClassyDataSet* GetDataSet() const;
   void SetDataSet(ggClassyDataSet* aDataSet);
+  const ggClassyCollection* GetCollection() const;
 
   // renames the class, and classes of all the members (ignores the dataset)
   bool RenameClass(const QString& aOldClassName, const QString& aNewClassName);

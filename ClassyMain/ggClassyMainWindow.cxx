@@ -98,6 +98,13 @@ ggClassyMainWindow::ggClassyMainWindow(QWidget *parent) :
   ConnectColor(ui->mColorChannelWidgetV, ui->mColorChannelWidgetB);
   ConnectColor(ui->mColorChannelWidgetV, ui->mColorChannelWidgetA);
 
+  connect(ui->mColorWheelWidget, SIGNAL(ColorChanged(QColor)), this, SLOT(ChangeColor(QColor)));
+  connect(ui->mColorChannelWidgetR, SIGNAL(ColorChanged(QColor)), this, SLOT(ChangeColor(QColor)));
+  connect(ui->mColorChannelWidgetG, SIGNAL(ColorChanged(QColor)), this, SLOT(ChangeColor(QColor)));
+  connect(ui->mColorChannelWidgetB, SIGNAL(ColorChanged(QColor)), this, SLOT(ChangeColor(QColor)));
+  connect(ui->mColorChannelWidgetA, SIGNAL(ColorChanged(QColor)), this, SLOT(ChangeColor(QColor)));
+  connect(ui->mColorChannelWidgetV, SIGNAL(ColorChanged(QColor)), this, SLOT(ChangeColor(QColor)));
+
   addDockWidget(Qt::LeftDockWidgetArea, mDataBrowser);
   addDockWidget(Qt::LeftDockWidgetArea, mDataProperties);
 
@@ -375,4 +382,15 @@ void ggClassyMainWindow::MoveSelectedItemsDown()
 {
   ggClassyGraphicsScene* vScene = dynamic_cast<ggClassyGraphicsScene*>(ui->mGraphicsView->scene());
   if (vScene != nullptr) vScene->MoveSelectedClassBoxesDown();
+}
+
+
+void ggClassyMainWindow::ChangeColor(const QColor& aColor)
+{
+  ggClassyCollection* vCollection = ggClassyApplication::GetInstance().GetDataSet()->GetCollections().FindCollection("ggCollectionA");
+  if (vCollection != nullptr) {
+    QBrush vBrush = vCollection->GetNameBackground();
+    vBrush.setColor(aColor);
+    vCollection->SetNameBackground(vBrush);
+  }
 }

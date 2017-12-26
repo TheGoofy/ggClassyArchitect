@@ -61,6 +61,11 @@ QDomElement ggClassyDataSet::CreateDomElement(QDomDocument& aDocument) const
   QDomElement vElement = aDocument.createElement(TypeID());
   vElement.setAttribute("mFormatVersion", GetFormatVersion());
 
+  // add collections as direct children
+  for (ggUSize vCollectionIndex = 0; vCollectionIndex < mCollections.GetSize(); vCollectionIndex++) {
+    vElement.appendChild(mCollections.GetCollection(vCollectionIndex)->CreateDomElement(aDocument));
+  }
+
   // add classes as direct children
   ggWalkerT<ggClassyClassContainer::const_iterator> vClassesWalker(mClasses);
   while (vClassesWalker) {
