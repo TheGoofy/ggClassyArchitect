@@ -10,6 +10,7 @@
 
 // 2) include own project-related (sort by component dependency)
 #include "Base/ggWalkerT.h"
+#include "BaseWidgets/ggUtilityQt.h"
 #include "ClassyDataSet/ggClassyDataSet.h"
 #include "ClassyMain/ggClassyApplication.h"
 #include "ClassyGraphics/ggClassyGraphicsScene.h"
@@ -389,8 +390,12 @@ void ggClassyMainWindow::ChangeColor(const QColor& aColor)
 {
   ggClassyCollection* vCollection = ggClassyApplication::GetInstance().GetDataSet()->GetCollections().FindCollection("ggCollectionA");
   if (vCollection != nullptr) {
-    QBrush vBrush = vCollection->GetNameBackground();
-    vBrush.setColor(aColor);
-    vCollection->SetNameBackground(vBrush);
+    vCollection->mBoxBorder.setColor(ggUtilityQt::GetColorWithAlpha(aColor, 0.35f));
+    vCollection->mConnectionLines.setColor(ggUtilityQt::GetColorWithAlpha(aColor, 1.0f));
+    vCollection->mNameColor = ggUtilityQt::GetColorContrast(aColor);
+    vCollection->mNameBackground.setColor(aColor);
+    vCollection->mMembersBackground.setColor(ggUtilityQt::GetColorWithLightness(aColor, 0.97f));
+    vCollection->mDescriptionBackground.setColor(ggUtilityQt::GetColorWithLightness(aColor, 0.90f));
+    vCollection->Notify();
   }
 }

@@ -41,13 +41,6 @@ public:
   QDomElement CreateDomElement(QDomDocument& aDocument) const;
   static ggClassyCollection* Create(const QDomElement& aElement, ggClassyDataSet* aDataSet = nullptr);
 
-private:
-
-  void Construct();
-
-  // name
-  QString mName;
-
   // box frame and connections
   QPen mBoxBorder;
   QPen mConnectionLines;
@@ -63,6 +56,13 @@ private:
   QFont mDescriptionFont;
   QColor mDescriptionColor;
   QBrush mDescriptionBackground;
+
+private:
+
+  void Construct();
+
+  // name
+  QString mName;
 
   // owning dataset (needed for checking unique collection name)
   ggClassyDataSet* mDataSet;

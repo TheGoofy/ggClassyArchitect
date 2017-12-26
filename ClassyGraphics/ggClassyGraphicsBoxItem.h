@@ -48,6 +48,8 @@ protected:
 
   virtual void hoverEnterEvent(QGraphicsSceneHoverEvent* aEvent) override;
   virtual void hoverLeaveEvent(QGraphicsSceneHoverEvent* aEvent) override;
+  virtual QVariant itemChange(GraphicsItemChange aChange, const QVariant& aValue) override;
+
   virtual void Update(const ggSubject* aSubject) override;
 
 private:
@@ -78,6 +80,7 @@ private:
 
   void UpdateCollectionRead();
 
+  QGraphicsRectItem* mBoxBorder;
   ggGraphicsTextItem* mClassNameText;
   ggGraphicsTextItem* mMembersText;
   ggGraphicsTextItem* mDescriptionText;

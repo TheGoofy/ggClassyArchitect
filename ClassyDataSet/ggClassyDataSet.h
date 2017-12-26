@@ -40,6 +40,7 @@ public:
   ggClassyCollection* RemoveCollection(const QString& aName);
   ggClassyCollectionContainer& GetCollections();
   const ggClassyCollectionContainer& GetCollections() const;
+  const ggClassyCollection* FindCollectionOfClass(const QString& aClassName) const;
 
   // classes
   ggClassyClass* AddClass(ggClassyClass* aClass);

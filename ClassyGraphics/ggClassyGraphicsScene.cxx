@@ -7,10 +7,10 @@
 
 // 2) include own project-related (sort by component dependency)
 #include "Base/ggWalkerT.h"
-#include "BaseGraphics/ggGraphicsAutoConnectPathItem.h"
 #include "BaseGraphics/ggGraphicsConnectionPointItem.h"
 #include "ClassyDataSet/ggClassyDataSet.h"
 #include "ClassyGraphics/ggClassyClassBoxPoints.h"
+#include "ClassyGraphics/ggClassyAutoConnectPathItem.h"
 
 
 ggClassyGraphicsScene::ggClassyGraphicsScene(QObject* aParent) :
@@ -157,7 +157,7 @@ void ggClassyGraphicsScene::DeleteClassBoxItems()
   foreach (QGraphicsItem* vItem, items()) {
     // if box-items are deleted, the connection-items need to be deleted too
     if (dynamic_cast<ggClassyGraphicsBoxItem*>(vItem) != nullptr ||
-        dynamic_cast<ggGraphicsAutoConnectPathItem*>(vItem) != nullptr) {
+        dynamic_cast<ggClassyAutoConnectPathItem*>(vItem) != nullptr) {
       vItemsToDelete.push_back(vItem);
     }
   }
@@ -175,7 +175,7 @@ void ggClassyGraphicsScene::DeleteConnectionItems()
   // collect items for removal (don't change the list of items, while iterating over it)
   std::vector<QGraphicsItem*> vItemsToDelete;
   foreach (QGraphicsItem* vItem, items()) {
-    if (dynamic_cast<ggGraphicsAutoConnectPathItem*>(vItem) != nullptr) {
+    if (dynamic_cast<ggClassyAutoConnectPathItem*>(vItem) != nullptr) {
       vItemsToDelete.push_back(vItem);
     }
   }
@@ -217,11 +217,12 @@ void ggClassyGraphicsScene::CreateConnectionItems()
 
         // lines between derived class and base class
         const QString& vBaseClassName = *vBaseClassNamesWalker;
-        ggGraphicsAutoConnectPathItem* vAutoPath = new ggGraphicsAutoConnectPathItem();
+        ggClassyAutoConnectPathItem* vAutoPath = new ggClassyAutoConnectPathItem();
         vAutoPath->SetDecorationSrc(ggDecoration::cType::eLine, 2.0f);
         vAutoPath->SetDecorationDst(ggDecoration::cType::eTriangle, 13.0f, ggDecoration::cFill::eSolid);
         vAutoPath->InsertPointSrc(vBoxItem->GetClassConnectionTop());
         vAutoPath->InsertPointsDst(mBoxPoints->GetClassPointsBottom(vBaseClassName));
+        vAutoPath->SetCollection(mDataSet->FindCollectionOfClass(vBaseClassName));
         QGraphicsScene::addItem(vAutoPath);
       }
 
@@ -231,12 +232,13 @@ void ggClassyGraphicsScene::CreateConnectionItems()
 
         // connect member with class
         const QString& vMemberClassName = vMembers[vMemberIndex].GetClassName();
-        ggGraphicsAutoConnectPathItem* vAutoPath = new ggGraphicsAutoConnectPathItem();
+        ggClassyAutoConnectPathItem* vAutoPath = new ggClassyAutoConnectPathItem();
         vAutoPath->SetDecorationSrc(ggDecoration::cType::eDiamond, 15.0f, ggDecoration::cFill::eEmpty);
         vAutoPath->SetDecorationDst(ggDecoration::cType::eLine, 2.0f);
         vAutoPath->InsertPointSrc(vBoxItem->GetMemberConnectionLeft(vMemberIndex));
         vAutoPath->InsertPointSrc(vBoxItem->GetMemberConnectionRight(vMemberIndex));
         vAutoPath->InsertPointsDst(mBoxPoints->GetClassPointsLeftRight(vMemberClassName));
+        vAutoPath->SetCollection(mDataSet->FindCollectionOfClass(vMemberClassName));
         QPen vPen(vAutoPath->pen());
         vPen.setStyle(Qt::DashLine);
         vAutoPath->setPen(vPen);
@@ -259,7 +261,7 @@ void ggClassyGraphicsScene::AddTestConnections()
     vPointB->SetPointPosition(QPointF(400.0f, vPositionY));
     vPointA->SetPointDirectionRight();
     vPointB->SetPointDirectionLeft();
-    ggGraphicsAutoConnectPathItem* vPath = new ggGraphicsAutoConnectPathItem();
+    ggClassyAutoConnectPathItem* vPath = new ggClassyAutoConnectPathItem();
     vPath->InsertPointSrc(vPointA->GetSubjectConnectionPoint());
     vPath->InsertPointDst(vPointB->GetSubjectConnectionPoint());
     vPath->SetDecorationSrc(vType, 15.0f, ggDecoration::cFill::eEmpty);

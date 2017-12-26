@@ -10,6 +10,7 @@
 
 // 2) include own project-related (sort by component dependency)
 #include "Base/ggWalkerT.h"
+#include "BaseWidgets/ggUtilityQt.h"
 #include "BaseGraphics/ggGraphicsTextItem.h"
 #include "BaseGraphics/ggGraphicsCheckBoxItem.h"
 #include "ClassyDataSet/ggClassyDataSet.h"
@@ -62,33 +63,31 @@ ggClassyGraphicsBoxItem::ggClassyGraphicsBoxItem(ggClassyClass* aClass,
 
 void ggClassyGraphicsBoxItem::Construct()
 {
-  setFlag(ItemIsSelectable); // size-handle don't work when item is selected
+  setFlag(ItemIsSelectable);
   setBrush(Qt::NoBrush);
-  QPen vPen(QColor(0, 0, 0, 50), 2.0f);
-  vPen.setCapStyle(Qt::FlatCap);
-  vPen.setJoinStyle(Qt::RoundJoin);
-  setPen(vPen);
+  setPen(QPen(Qt::black, 0.0f, Qt::NoPen));
+
+  mBoxBorder = new QGraphicsRectItem(this);
+  mBoxBorder->setFlag(ItemStacksBehindParent);
+  mBoxBorder->setBrush(Qt::NoBrush);
 
   mClassNameText = new ggGraphicsTextItem(this);
   mClassNameText->SetSuppressLineBreaks(true);
   mClassNameText->SetEnterKeyFinishesEdit(true);
-  mClassNameText->SetBrush(QColor(120, 60, 0, 255));
-  mClassNameText->SetPen(Qt::NoPen);
   mClassNameText->setDefaultTextColor(Qt::white);
-  QFont vFont(mClassNameText->font());
-  vFont.setBold(true);
-  mClassNameText->setFont(vFont);
+  mClassNameText->SetBrush(QBrush(Qt::black, Qt::SolidPattern));
+  mClassNameText->SetPen(Qt::NoPen);
 
   mMembersText = new ggGraphicsTextItem(this);
   mMembersText->SetSuppressLineBreaks(false);
   mMembersText->SetEnterKeyFinishesEdit(true);
-  mMembersText->SetBrush(QColor(255, 250, 245, 255));
+  mMembersText->SetBrush(QBrush(Qt::white, Qt::SolidPattern));
   mMembersText->SetPen(Qt::NoPen);
 
   mDescriptionText = new ggGraphicsTextItem(this);
   mDescriptionText->SetSuppressLineBreaks(false);
   mDescriptionText->SetEnterKeyFinishesEdit(false);
-  mDescriptionText->SetBrush(QColor(255, 240, 220, 255));
+  mDescriptionText->SetBrush(QBrush(QColor(230, 230, 230, 255), Qt::SolidPattern));
   mDescriptionText->SetPen(Qt::NoPen);
 
   mMembersCheckBox = new ggGraphicsCheckBoxItem(this);
@@ -269,6 +268,23 @@ void ggClassyGraphicsBoxItem::hoverLeaveEvent(QGraphicsSceneHoverEvent* aEvent)
   mMembersCheckBox->SetHighlightOff();
   mDescriptionCheckBox->SetHighlightOff();
   ggGraphicsManipulatorBarItemT<>::hoverLeaveEvent(aEvent);
+}
+
+
+QVariant ggClassyGraphicsBoxItem::itemChange(GraphicsItemChange aChange, const QVariant& aValue)
+{
+  if (aChange == ItemSelectedHasChanged) {
+    QPen vPen(GetCollection() != nullptr ? GetCollection()->mBoxBorder : QPen(Qt::black));
+    if (aValue.toBool()) {
+      vPen.setColor(QColor(255, 150, 0, 150));
+      mBoxBorder->setPen(vPen);
+    }
+    else {
+      mBoxBorder->setPen(vPen);
+    }
+  }
+
+  return ggGraphicsManipulatorBarItemT<>::itemChange(aChange, aValue);
 }
 
 
@@ -482,6 +498,11 @@ void ggClassyGraphicsBoxItem::UpdateLayout()
     vRect.setHeight(vTotalHeight);
     setRect(vRect);
   }
+
+  // border
+  float vBorderWidth2 = mBoxBorder->pen().widthF() / 2.0f;
+  QRectF vBorderRect = ggUtilityQt::GetRectInflated(rect(), vBorderWidth2);
+  mBoxBorder->setRect(vBorderRect);
 }
 
 
@@ -540,6 +561,19 @@ const ggClassyCollection* ggClassyGraphicsBoxItem::GetCollection() const
 void ggClassyGraphicsBoxItem::UpdateCollectionRead()
 {
   if (GetCollection() != nullptr) {
-    mClassNameText->SetBrush(GetCollection()->GetNameBackground());
+    // box border
+    mBoxBorder->setPen(GetCollection()->mBoxBorder);
+    // class name
+    mClassNameText->setFont(GetCollection()->mNameFont);
+    mClassNameText->setDefaultTextColor(GetCollection()->mNameColor);
+    mClassNameText->SetBrush(GetCollection()->mNameBackground);
+    // member functions
+    mMembersText->setFont(GetCollection()->mMembersFont);
+    mMembersText->setDefaultTextColor(GetCollection()->mMembersColor);
+    mMembersText->SetBrush(GetCollection()->mMembersBackground);
+    // description
+    mDescriptionText->setFont(GetCollection()->mDescriptionFont);
+    mDescriptionText->setDefaultTextColor(GetCollection()->mDescriptionColor);
+    mDescriptionText->SetBrush(GetCollection()->mDescriptionBackground);
   }
 }

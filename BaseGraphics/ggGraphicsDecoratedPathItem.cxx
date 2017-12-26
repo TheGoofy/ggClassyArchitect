@@ -16,8 +16,6 @@ ggGraphicsDecoratedPathItem::ggGraphicsDecoratedPathItem(QGraphicsItem* aParent)
   QPen vPen(pen());
   vPen.setCapStyle(Qt::FlatCap);
   vPen.setJoinStyle(Qt::MiterJoin);
-  vPen.setColor(QColor(180, 60, 0));
-  vPen.setWidthF(1.5f);
   setPen(vPen);
   setBrush(Qt::NoBrush);
   setZValue(-1.0f);
@@ -71,6 +69,14 @@ void ggGraphicsDecoratedPathItem::SetDecorationDst(ggDecoration::cType aType,
   mDecorationDst.Set(aType, aLength, aFill);
   RebuildPath();
 }
+
+
+void ggGraphicsDecoratedPathItem::setPen(const QPen& aPen)
+{
+  QGraphicsPathItem::setPen(aPen);
+  RebuildPath();
+}
+
 
 
 QPainterPath ggGraphicsDecoratedPathItem::GetPath(const ggConnectionPoint& aPointSrc,

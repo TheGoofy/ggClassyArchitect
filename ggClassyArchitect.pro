@@ -77,7 +77,8 @@ HEADERS += \
     BaseWidgets/ggUtilityQt.h \
     BaseWidgets/ggColorChannelWidget.h \
     Base/ggVectorSetT.h \
-    ClassyMain/ggClassyTreeItem.h
+    ClassyMain/ggClassyTreeItem.h \
+    ClassyGraphics/ggClassyAutoConnectPathItem.h
 
 SOURCES += \
     Base/ggItemLinked.cxx \
@@ -115,5 +116,6 @@ SOURCES += \
     BaseWidgets/ggColorWheelWidget.cxx \
     BaseWidgets/ggUtilityQt.cxx \
     BaseWidgets/ggColorChannelWidget.cxx \
-    ClassyMain/ggClassyTreeItem.cxx
+    ClassyMain/ggClassyTreeItem.cxx \
+    ClassyGraphics/ggClassyAutoConnectPathItem.cxx
 

@@ -94,8 +94,8 @@ QColor ggUtilityQt::GetColorWithAlpha(const QColor& aColor, float aAlpha)
 
 QRectF ggUtilityQt::GetRectInflated(const QRectF& aRect, float aDelta)
 {
-  return QRect(aRect.x() - aDelta,
-               aRect.y() - aDelta,
-               aRect.width() + 2.0f * aDelta,
-               aRect.height() + 2.0f * aDelta).normalized();
+  return QRectF(aRect.x() - aDelta,
+                aRect.y() - aDelta,
+                aRect.width() + 2.0f * aDelta,
+                aRect.height() + 2.0f * aDelta).normalized();
 }

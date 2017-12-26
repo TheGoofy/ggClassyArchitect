@@ -15,7 +15,7 @@ class ggSubjectConnectionPoint;
  */
 class ggGraphicsAutoConnectPathItem :
   public ggGraphicsDecoratedPathItem,
-  private ggObserver
+  protected ggObserver
 {
 public:
 

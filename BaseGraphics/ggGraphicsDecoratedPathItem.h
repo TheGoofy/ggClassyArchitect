@@ -36,6 +36,8 @@ public:
                         float aLength = 12.0f,
                         ggDecoration::cFill aFill = ggDecoration::cFill::eSolid);
 
+  void setPen(const QPen& aPen);
+
 private:
 
   QPainterPath GetPath(const ggConnectionPoint& aPointSrc,

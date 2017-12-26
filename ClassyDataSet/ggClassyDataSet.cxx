@@ -190,6 +190,14 @@ const ggClassyCollectionContainer& ggClassyDataSet::GetCollections() const
 }
 
 
+const ggClassyCollection* ggClassyDataSet::FindCollectionOfClass(const QString& aClassName) const
+{
+  const ggClassyClass* vClass = mClasses.FindClass(aClassName);
+  if (vClass != nullptr) return mCollections.FindCollection(vClass->GetCollectionName());
+  return nullptr;
+}
+
+
 ggClassyClass* ggClassyDataSet::AddClass(ggClassyClass* aClass)
 {
   if (mClasses.AddClass(aClass) != nullptr) {
@@ -319,7 +327,7 @@ ggClassyDataSet* ggClassyDataSet::CreateTestDataSet()
   vClassB->AddMember("Blubb()", "QString");
   vClassB->AddMember("GetA()", "ggClassA");
   vClassB->SetDescription("One fish, two fish, red fish, blue fish.");
-  vClassB->SetCollectionName(vCollectionA->GetName());
+  vClassB->SetCollectionName(vCollectionC->GetName());
 
   ggClassyClass* vClassC = vDataSet->AddClass(new ggClassyClass("ggClassC"));
   vClassC->AddBaseClassName("ggClassA");

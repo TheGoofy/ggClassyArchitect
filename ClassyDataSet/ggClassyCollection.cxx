@@ -26,7 +26,31 @@ ggClassyCollection::ggClassyCollection(const QString& aName) :
 
 void ggClassyCollection::Construct()
 {
-  mNameBackground = QColor(150, 75, 0, 255);
+  // box border and connection lines
+  mBoxBorder.setCapStyle(Qt::FlatCap);
+  mBoxBorder.setJoinStyle(Qt::RoundJoin);
+  mBoxBorder.setColor(QColor(120, 80, 0, 100));
+  mBoxBorder.setWidthF(1.0f);
+  mConnectionLines.setColor(QColor(120, 80, 0, 255));
+  mConnectionLines.setWidthF(1.5f);
+
+  // class name
+  mNameFont.setBold(true);
+  mNameColor = QColor(255, 255, 255, 255);
+  mNameBackground.setColor(QColor(120, 80, 0, 255));
+  mNameBackground.setStyle(Qt::SolidPattern);
+
+  // member functions
+  mMembersFont.setFamily("Courier");
+  mMembersColor = Qt::black;
+  mMembersBackground.setColor(QColor(250, 240, 230, 255));
+  mMembersBackground.setStyle(Qt::SolidPattern);
+
+  // description
+  mDescriptionFont.setItalic(true);
+  mDescriptionColor = QColor(100, 100, 100, 255);
+  mDescriptionBackground.setColor(QColor(240, 220, 200, 255));
+  mDescriptionBackground.setStyle(Qt::SolidPattern);
 }
 
 
