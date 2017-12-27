@@ -4,7 +4,6 @@
 // 1) include system or QT
 #include <QGraphicsLineItem>
 #include <QGraphicsSceneMouseEvent>
-#include <QGraphicsDropShadowEffect>
 #include <QFontMetrics>
 #include <QMessageBox>
 #include <QDebug>
@@ -14,6 +13,7 @@
 #include "BaseWidgets/ggUtilityQt.h"
 #include "BaseGraphics/ggGraphicsTextItem.h"
 #include "BaseGraphics/ggGraphicsCheckBoxItem.h"
+#include "BaseGraphics/ggGraphicsRectShadowItem.h"
 #include "ClassyDataSet/ggClassyDataSet.h"
 
 
@@ -68,12 +68,12 @@ void ggClassyGraphicsBoxItem::Construct()
   setBrush(Qt::NoBrush);
   setPen(QPen(Qt::black, 0.0f, Qt::NoPen));
 
-  /* the shadow looks nice, but it's slow, and it crashes, when re-ordering the boxes
-  QGraphicsDropShadowEffect* vEffect = new QGraphicsDropShadowEffect();
-  vEffect->setOffset(4.0f, 4.0f);
-  vEffect->setBlurRadius(15.0f);
-  setGraphicsEffect(vEffect);*/
-
+  mShadow = new ggGraphicsRectShadowItem(this);
+  mShadow->setFlag(ItemStacksBehindParent);
+  mShadow->SetRadius(7.0f);
+  mShadow->setPen(Qt::NoPen);
+  mShadow->SetShadowColors(QColor(0, 0, 0, 40));
+  mShadow->setPos(3.0f, 2.0f);
   mBoxBorder = new QGraphicsRectItem(this);
   mBoxBorder->setFlag(ItemStacksBehindParent);
   mBoxBorder->setBrush(Qt::NoBrush);
@@ -281,14 +281,7 @@ void ggClassyGraphicsBoxItem::hoverLeaveEvent(QGraphicsSceneHoverEvent* aEvent)
 QVariant ggClassyGraphicsBoxItem::itemChange(GraphicsItemChange aChange, const QVariant& aValue)
 {
   if (aChange == ItemSelectedHasChanged) {
-    QPen vPen(GetCollection() != nullptr ? GetCollection()->mBoxBorder : QPen(Qt::black));
-    if (aValue.toBool()) {
-      vPen.setColor(QColor(255, 150, 0, 150));
-      mBoxBorder->setPen(vPen);
-    }
-    else {
-      mBoxBorder->setPen(vPen);
-    }
+    mShadow->SetShadowColors(aValue.toBool() ? QColor(255, 255, 0, 255) : QColor(0, 0, 0, 40));
   }
 
   return ggGraphicsManipulatorBarItemT<>::itemChange(aChange, aValue);
@@ -510,6 +503,7 @@ void ggClassyGraphicsBoxItem::UpdateLayout()
   float vBorderWidth2 = mBoxBorder->pen().widthF() / 2.0f;
   QRectF vBorderRect = ggUtilityQt::GetRectInflated(rect(), vBorderWidth2);
   mBoxBorder->setRect(vBorderRect);
+  mShadow->SetInnerRect(vBorderRect);
 }
 
 

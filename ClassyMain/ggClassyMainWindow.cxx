@@ -410,7 +410,7 @@ void ggClassyMainWindow::ChangeColor(const QColor& aColor)
     while (vCollectionsWalker) {
       ggClassyCollection* vCollection = *vCollectionsWalker;
       if (vCollection != nullptr) {
-        vCollection->mBoxBorder.setColor(ggUtilityQt::GetColorWithAlpha(aColor, 0.35f));
+        vCollection->mBoxBorder.setColor(ggUtilityQt::GetColorWithAlpha(aColor, 0.15f));
         vCollection->mConnectionLines.setColor(ggUtilityQt::GetColorWithAlpha(aColor, 1.0f));
         vCollection->mNameColor = ggUtilityQt::GetColorContrast(aColor);
         vCollection->mNameBackground.setColor(aColor);
