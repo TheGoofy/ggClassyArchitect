@@ -54,7 +54,7 @@
        </sizepolicy>
       </property>
       <property name="animated">
-       <bool>true</bool>
+       <bool>false</bool>
       </property>
       <attribute name="headerVisible">
        <bool>false</bool>
