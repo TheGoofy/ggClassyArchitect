@@ -118,6 +118,7 @@ ggClassyDataSet* ggClassyDataSet::Create(const QDomElement& aElement)
 ggClassyDataSet& ggClassyDataSet::operator = (const ggClassyDataSet& aOther)
 {
   // only notify when all members of ggDataSet are re-assigned
+  ggSubject::cExecutorLazy vCollectionsLazy(&mCollections);
   ggSubject::cExecutorLazy vClassesLazy(&mClasses);
   ggSubject::cExecutorLazy vClassBoxesLazy(&mClassBoxes);
 
