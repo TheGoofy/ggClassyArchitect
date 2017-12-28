@@ -11,7 +11,7 @@
 #include "Base/ggVectorSetT.h"
 #include "ClassyDataSet/ggClassyDataSet.h"
 #include "ClassyMain/ggClassyTreeItem.h"
-
+#include "ClassyMain/ggClassyApplication.h"
 
 
 
@@ -23,8 +23,7 @@ public:
   ggClassyDataModel(QObject* aParent = nullptr) :
     QAbstractItemModel(aParent)
   {
-    mDataSet = ggClassyDataSet::CreateTestDataSet();
-
+    mDataSet = ggClassyApplication::GetInstance().GetDataSet();
     mRootItem = new ggClassyTreeItem(mDataSet);
 
     // add the collections
