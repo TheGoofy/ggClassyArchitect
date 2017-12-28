@@ -30,6 +30,12 @@ namespace ggUtilityQt
 
   QRectF GetRectInflated(const QRectF& aRect, float aDelta);
 
+  QString ToString(const QColor& aColor);
+  bool FromString(const QString& aColorARGB, QColor& aColor);
+
+  template <typename T>
+  T FromString(const QString& aString, bool* aOK = nullptr);
+
 }
 
 #endif // GGUTILITYQT_H

@@ -99,3 +99,33 @@ QRectF ggUtilityQt::GetRectInflated(const QRectF& aRect, float aDelta)
                 aRect.width() + 2.0f * aDelta,
                 aRect.height() + 2.0f * aDelta).normalized();
 }
+
+
+QString ggUtilityQt::ToString(const QColor& aColor)
+{
+  return "#" + QString::number(aColor.rgba(), 16);
+}
+
+
+bool ggUtilityQt::FromString(const QString& aColorARGB, QColor& aColor)
+{
+  bool vOK = false;
+  if (aColorARGB.length() == 9) {
+    QRgb vRgb = aColorARGB.right(8).toUInt(&vOK, 16);
+    if (vOK) aColor.setRgba(vRgb);
+  }
+  return vOK;
+}
+
+
+template <typename T>
+T ggUtilityQt::FromString(const QString& aString, bool* aOK)
+{
+  T vValue;
+  bool vOK = FromString(aString, vValue);
+  if (aOK != nullptr) *aOK = vOK;
+  return vValue;
+}
+
+
+template QColor ggUtilityQt::FromString<QColor>(const QString& aString, bool* aOK);
