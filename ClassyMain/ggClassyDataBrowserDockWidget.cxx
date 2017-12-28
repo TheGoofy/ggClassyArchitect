@@ -7,6 +7,7 @@
 #include <QDebug>
 
 // 2) include own project-related (sort by component dependency)
+#include "Base/ggObserver.h"
 #include "Base/ggWalkerT.h"
 #include "Base/ggVectorSetT.h"
 #include "ClassyDataSet/ggClassyDataSet.h"
@@ -16,7 +17,8 @@
 
 
 class ggClassyDataModel :
-  public QAbstractItemModel
+  public QAbstractItemModel,
+  public ggObserver
 {
 public:
 
@@ -24,6 +26,24 @@ public:
     QAbstractItemModel(aParent)
   {
     mDataSet = ggClassyApplication::GetInstance().GetDataSet();
+    Attach(&mDataSet->GetCollections());
+    Attach(&mDataSet->GetClasses());
+    UpdateTree();
+  }
+
+  virtual void Update(const ggSubject* aSubject) override
+  {
+    if (aSubject == &mDataSet->GetCollections() ||
+        aSubject == &mDataSet->GetClasses()) {
+      beginResetModel();
+      UpdateTree();
+      endResetModel();
+    }
+  }
+
+  void UpdateTree()
+  {
+    delete mRootItem;
     mRootItem = new ggClassyTreeItem(mDataSet);
 
     // add the collections
@@ -146,6 +166,7 @@ ggClassyDataBrowserDockWidget::ggClassyDataBrowserDockWidget(QWidget *parent) :
 
   ggClassyDataModel* vModel = new ggClassyDataModel(this);
   ui->mDataBrowserTreeView->setModel(vModel);
+
   //ui->mDataBrowserTreeView->setHeaderHidden(true);
 
 }
