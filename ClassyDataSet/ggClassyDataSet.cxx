@@ -94,6 +94,10 @@ ggClassyDataSet* ggClassyDataSet::Create(const QDomElement& aElement)
     QDomElement vChildElement = aElement.firstChildElement();
     while (!vChildElement.isNull()) {
 
+      // try to create and add a collection
+      ggClassyCollection* vCollection = ggClassyCollection::Create(vChildElement);
+      if (vCollection != nullptr) vDataSet->AddCollection(vCollection);
+
       // try to create and add a class
       ggClassyClass* vClass = ggClassyClass::Create(vChildElement, vDataSet);
       if (vClass != nullptr) vDataSet->AddClass(vClass);
@@ -126,7 +130,13 @@ ggClassyDataSet& ggClassyDataSet::operator = (const ggClassyDataSet& aOther)
   mClassBoxes = aOther.mClassBoxes;
   mFrames = aOther.mFrames;
 
-  // tell all classes that I'm the "master"
+  // tell all collections that "I'm the master"
+  for (ggUSize vCollectionIndex = 0; vCollectionIndex < mCollections.GetSize(); vCollectionIndex++) {
+    ggClassyCollection* vCollection = mCollections.GetCollection(vCollectionIndex);
+    vCollection->SetDataSet(this);
+  }
+
+  // tell all classes that "I'm the master"
   ggWalkerT<ggClassyClassContainer::iterator> vClassesWalker(mClasses);
   while (vClassesWalker) {
     ggClassyClass* vClass = *vClassesWalker;

@@ -20,8 +20,8 @@ class ggClassyCollection :
 {
 public:
 
-  ggClassyCollection();
   ggClassyCollection(const QString& aName);
+  ggClassyCollection(const ggClassyCollection& aOther);
   virtual ~ggClassyCollection();
 
   // identification
@@ -39,7 +39,7 @@ public:
 
   // persist as dom-element
   QDomElement CreateDomElement(QDomDocument& aDocument) const;
-  static ggClassyCollection* Create(const QDomElement& aElement, ggClassyDataSet* aDataSet = nullptr);
+  static ggClassyCollection* Create(const QDomElement& aElement);
 
   // box frame and connections
   QPen mBoxBorder;
