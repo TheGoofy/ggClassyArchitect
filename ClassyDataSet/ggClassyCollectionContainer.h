@@ -18,14 +18,20 @@ class ggClassyCollectionContainer :
 {
 public:
 
+  ggClassyCollectionContainer();
+  ggClassyCollectionContainer(const ggClassyCollectionContainer& aOther);
+
   // identification
   static const QString& TypeID();
   virtual const QString& VTypeID() const;
+
+  ggClassyCollectionContainer& operator = (const ggClassyCollectionContainer& aOther);
 
   ggClassyCollection* AddCollection(ggClassyCollection* aCollection);
   ggClassyCollection* RemoveCollection(const QString& aName);
   ggClassyCollection* FindCollection(const QString& aName);
   const ggClassyCollection* FindCollection(const QString& aName) const;
+  ggClassyCollection* GetCollection(ggUSize aIndex);
   const ggClassyCollection* GetCollection(ggUSize aIndex) const;
   void DeleteAllCollections();
   ggUSize GetSize() const;

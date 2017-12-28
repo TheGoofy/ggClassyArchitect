@@ -7,6 +7,17 @@
 #include "Base/ggWalkerT.h"
 
 
+ggClassyCollectionContainer::ggClassyCollectionContainer()
+{
+}
+
+
+ggClassyCollectionContainer::ggClassyCollectionContainer(const ggClassyCollectionContainer& aOther)
+{
+  *this = aOther;
+}
+
+
 const QString& ggClassyCollectionContainer::TypeID()
 {
   static const QString vTypeID("ggClassyCollectionContainer");
@@ -17,6 +28,24 @@ const QString& ggClassyCollectionContainer::TypeID()
 const QString& ggClassyCollectionContainer::VTypeID() const
 {
   return TypeID();
+}
+
+
+ggClassyCollectionContainer& ggClassyCollectionContainer::operator = (const ggClassyCollectionContainer& aOther)
+{
+  // one collective notification (and not each individual class)
+  ggSubject::cExecutorLazy vLazy(this);
+
+  // delete all classes
+  DeleteAllCollections();
+
+  // add (and notify) copies
+  ggWalkerT<tCollections::const_iterator> vOtherCollectionsWalker(aOther.mCollections);
+  while (vOtherCollectionsWalker) {
+    AddCollection(new ggClassyCollection(**vOtherCollectionsWalker));
+  }
+
+  return *this;
 }
 
 
@@ -51,7 +80,7 @@ ggClassyCollection* ggClassyCollectionContainer::RemoveCollection(const QString&
 
 ggClassyCollection* ggClassyCollectionContainer::FindCollection(const QString& aName)
 {
-  ggClassyCollection vCollection(aName);
+  static ggClassyCollection vCollection(""); vCollection.SetName(aName);
   tCollections::iterator vCollectionsIterator = mCollections.find(&vCollection);
   if (vCollectionsIterator != mCollections.end()) return *vCollectionsIterator;
   else return nullptr;
@@ -60,7 +89,7 @@ ggClassyCollection* ggClassyCollectionContainer::FindCollection(const QString& a
 
 const ggClassyCollection* ggClassyCollectionContainer::FindCollection(const QString& aName) const
 {
-  ggClassyCollection vCollection(aName);
+  static ggClassyCollection vCollection(""); vCollection.SetName(aName);
   tCollections::iterator vCollectionsIterator = mCollections.find(&vCollection);
   if (vCollectionsIterator != mCollections.end()) return *vCollectionsIterator;
   else return nullptr;
@@ -71,7 +100,8 @@ void ggClassyCollectionContainer::DeleteAllCollections()
 {
   ggWalkerT<tCollections::iterator> vCollectionsWalker(mCollections);
   while (vCollectionsWalker) {
-    delete *vCollectionsWalker;
+    ggClassyCollection* vCollection = *vCollectionsWalker;
+    delete vCollection;
   }
   mCollections.clear();
   Notify();
@@ -81,6 +111,12 @@ void ggClassyCollectionContainer::DeleteAllCollections()
 ggUSize ggClassyCollectionContainer::GetSize() const
 {
   return mCollections.size();
+}
+
+
+ggClassyCollection* ggClassyCollectionContainer::GetCollection(ggUSize aIndex)
+{
+  return mCollections[aIndex];
 }
 
 
