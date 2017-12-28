@@ -281,7 +281,8 @@ void ggClassyGraphicsBoxItem::hoverLeaveEvent(QGraphicsSceneHoverEvent* aEvent)
 QVariant ggClassyGraphicsBoxItem::itemChange(GraphicsItemChange aChange, const QVariant& aValue)
 {
   if (aChange == ItemSelectedHasChanged) {
-    mShadow->SetShadowColors(aValue.toBool() ? QColor(255, 255, 0, 255) : QColor(0, 0, 0, 40));
+    mShadow->SetShadowColors(aValue.toBool() ? QColor(200, 255, 0, 255) : QColor(0, 0, 0, 40));
+    mShadow->setPos(aValue.toBool() ? QPointF(0.0f, 0.0f) : QPointF(3.0f, 2.0f));
   }
 
   return ggGraphicsManipulatorBarItemT<>::itemChange(aChange, aValue);
