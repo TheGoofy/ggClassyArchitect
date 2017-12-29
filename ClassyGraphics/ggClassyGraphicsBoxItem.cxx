@@ -64,149 +64,150 @@ ggClassyGraphicsBoxItem::ggClassyGraphicsBoxItem(ggClassyClass* aClass,
 
 
 class ggClassyConnectionItem :
-  public QGraphicsEllipseItem,
+  public QGraphicsItem,
   public ggObserver
 {
 public:
 
   ggClassyConnectionItem(float aSize, ggClassyGraphicsBoxItem* aParent = nullptr) :
-    QGraphicsEllipseItem(QRect(-aSize/2.0f, -aSize/2.0f, aSize, aSize), aParent)
+    QGraphicsItem(aParent)
   {
-    setFlag(ItemIsMovable);
-    setFlag(ItemSendsGeometryChanges);
-    //setFlag(ItemIgnoresTransformations);
-    setAcceptHoverEvents(true);
-    setCursor(Qt::DragMoveCursor);
-    setToolTip("Click and drag.");
-    setZValue(1.0f);
-    setPen(Qt::NoPen);
-    setBrush(Qt::red);
-    mLine = new ggGraphicsDecoratedPathItem(this);
-    mLine->hide();
-    mLine->setPen(QPen(Qt::red, 1.5f));
-    mLine->SetDecorationDst(ggDecoration::cType::eTriangle);
-    HideHandle();
+    mDraggerItem = new ggGraphicsHandleItemEllipse(aSize, this);
+    mDraggerItem->setCursor(Qt::DragMoveCursor);
+    mDraggerItem->setToolTip("Click and drag for connecting a base-class");
+    HideDragger();
+
+    mPathItem = new ggGraphicsDecoratedPathItem(this);
+    mPathItem->setPen(QPen(Qt::red, 1.5f));
+    mPathItem->SetDecorationSrc(ggDecoration::cType::eLine, 2.0f);
+    mPathItem->SetDecorationDst(ggDecoration::cType::eTriangle, 13.0f);
+    UpdatePath();
+
+    Attach(mDraggerItem->GetSubjectPosition());
+    Attach(mDraggerItem->GetSubjectMouseRelease());
   }
 
   void SetSize(float aSize)
   {
-    setRect(-aSize/2.0f, -aSize/2.0f, aSize, aSize);
+    mDraggerItem->SetSize(aSize);
   }
 
   float GetSize() const
   {
-    return rect().width();
+    return mDraggerItem->GetSize();
   }
 
-  void SetPointPosition(const QPointF& aPosition)
+  void SetPositionSrc(const QPointF& aPosition)
   {
     mPositionSrc = aPosition;
-    setPos(aPosition);
+    mDraggerItem->setPos(aPosition);
+    UpdatePath();
   }
 
-  void ShowHandle() {
-    setBrush(QColor(255, 0, 0, 255));
+  void ShowDragger()
+  {
+    mDraggerItem->setBrush(QColor(255, 0, 0, 255));
   }
 
-  void HideHandle() {
-    setBrush(Qt::transparent);
+  void HideDragger()
+  {
+    mDraggerItem->setBrush(Qt::transparent);
   }
 
 protected:
 
   virtual void Update(const ggSubject* aSubject) override
   {
-  }
-
-  virtual QVariant itemChange(GraphicsItemChange aChange,
-                              const QVariant& aValue) override
-  {
-    // notify position change
-    if (aChange == ItemPositionHasChanged) {
+    if (aSubject == mDraggerItem->GetSubjectPosition()) {
       UpdatePath();
     }
-
-    // execute base item change
-    return QGraphicsEllipseItem::itemChange(aChange, aValue);
-  }
-
-  virtual void mousePressEvent(QGraphicsSceneMouseEvent* aEvent) override
-  {
-    // handle is clicked (for dragging): if the scene selection is not cleared,
-    // all the selected items will be moved. alternatively this it could have
-    // its selectable-flag set, but that looks very ugly.
-    if (scene() != nullptr) {
-      scene()->clearSelection();
+    else if (aSubject == mDraggerItem->GetSubjectMouseRelease()) {
+      // connect base class
+      ggClassyGraphicsBoxItem* vDstBoxItem = GetDstBoxItem();
+      if (vDstBoxItem != nullptr) {
+        GetSrcBoxItem()->GetClass()->AddBaseClassName(vDstBoxItem->GetClass()->GetName());
+      }
+      // reset manipulator
+      mDraggerItem->setPos(mPositionSrc);
+      UpdatePath();
     }
-
-    // do inherited event handling
-    QGraphicsEllipseItem::mousePressEvent(aEvent);
   }
 
-  virtual void mouseReleaseEvent(QGraphicsSceneMouseEvent* aEvent) override
+  virtual QRectF boundingRect() const override
   {
-    // reset position
-    setPos(mPositionSrc);
-    mLine->hide();
+    return mPathItem->boundingRect();
+  }
 
-    // do inherited event handling
-    QGraphicsEllipseItem::mouseReleaseEvent(aEvent);
+  virtual void paint(QPainter*, const QStyleOptionGraphicsItem*, QWidget*) override
+  {
   }
 
 private:
 
-  ggClassyGraphicsBoxItem* GetParentBoxItem()
+  ggClassyGraphicsBoxItem* GetSrcBoxItem()
   {
     return dynamic_cast<ggClassyGraphicsBoxItem*>(parentItem());
   }
 
+  ggClassyGraphicsBoxItem* GetDstBoxItem()
+  {
+    ggClassyGraphicsBoxItem* vDstBoxItem = nullptr;
+    ggClassyGraphicsBoxItem* vSrcBoxItem = GetSrcBoxItem();
+    if (scene() != nullptr) {
+      QList<QGraphicsItem*> vItems = scene()->collidingItems(mDraggerItem);
+      auto vItemsIterator = vItems.begin();
+      while (vItemsIterator != vItems.end()) {
+        ggClassyGraphicsBoxItem* vBoxItem = dynamic_cast<ggClassyGraphicsBoxItem*>(*vItemsIterator);
+        if (vBoxItem != nullptr &&
+            vBoxItem->GetClass()->GetName() != vSrcBoxItem->GetClass()->GetName()) {
+          vDstBoxItem = vBoxItem;
+          break;
+        }
+        vItemsIterator++;
+      }
+    }
+    return vDstBoxItem;
+  }
+
   ggConnectionPoint GetConnectionSrc()
   {
-    return *GetParentBoxItem()->GetClassConnectionTop();
+    return *GetSrcBoxItem()->GetClassConnectionTop();
   }
 
   ggConnectionPoint GetConnectionDst()
   {
-    if (scene() != nullptr) {
-      ggClassyGraphicsBoxItem* vBoxItem = nullptr;
-      QList<QGraphicsItem*> vItems = scene()->collidingItems(this);
-      auto vItemsIterator = vItems.begin();
-      while (vItemsIterator != vItems.end()) {
-        vBoxItem = dynamic_cast<ggClassyGraphicsBoxItem*>(*vItemsIterator);
-        if (vBoxItem != nullptr) {
-          ggClassyGraphicsBoxItem* vParentBoxItem = GetParentBoxItem();
-          if (vParentBoxItem->GetClass()->GetName() != vBoxItem->GetClass()->GetName()) break;
-        }
-        vItemsIterator++;
-      }
-      if (vBoxItem != nullptr) {
-        return *vBoxItem->GetClassConnectionBottom();
-      }
+    ggClassyGraphicsBoxItem* vDstBoxItem = GetDstBoxItem();
+    if (vDstBoxItem != nullptr) {
+      return *vDstBoxItem->GetClassConnectionBottom();
     }
-    ggConnectionPoint vPointDst;
-    vPointDst.SetPosition(mapToScene(QPointF()));
-    vPointDst.SetDirection(QVector2D(mPositionSrc - pos()));
-    return vPointDst;
+    else {
+      ggConnectionPoint vPointDst;
+      vPointDst.SetPosition(mapToScene(mDraggerItem->pos()));
+      vPointDst.SetDirection(QVector2D(mPositionSrc - mDraggerItem->pos()));
+      return vPointDst;
+    }
   }
 
   void UpdatePath()
   {
-    if (pos() != mPositionSrc) {
+    if (mDraggerItem->pos() != mPositionSrc) {
       ggConnectionPoint vSrc = GetConnectionSrc();
       ggConnectionPoint vDst = GetConnectionDst();
       vSrc.SetPosition(mapFromScene(vSrc.GetPosition()));
       vDst.SetPosition(mapFromScene(vDst.GetPosition()));
-      mLine->SetConnection(vSrc, vDst);
-      mLine->show();
+      mPathItem->SetConnection(vSrc, vDst);
+      mPathItem->show();
     }
     else {
-      mLine->hide();
+      mPathItem->ClearConnection();
+      mPathItem->hide();
     }
   }
 
   QPointF mPositionSrc;
 
-  ggGraphicsDecoratedPathItem* mLine;
+  ggGraphicsHandleItemEllipse* mDraggerItem;
+  ggGraphicsDecoratedPathItem* mPathItem;
 
 };
 
@@ -419,7 +420,7 @@ void ggClassyGraphicsBoxItem::hoverEnterEvent(QGraphicsSceneHoverEvent* aEvent)
 {
   mMembersCheckBox->SetHighlightOn();
   mDescriptionCheckBox->SetHighlightOn();
-  mBaseClassConnector->ShowHandle();
+  mBaseClassConnector->ShowDragger();
   ggGraphicsManipulatorBarItemT<>::hoverEnterEvent(aEvent);
 }
 
@@ -428,7 +429,7 @@ void ggClassyGraphicsBoxItem::hoverLeaveEvent(QGraphicsSceneHoverEvent* aEvent)
 {
   mMembersCheckBox->SetHighlightOff();
   mDescriptionCheckBox->SetHighlightOff();
-  mBaseClassConnector->HideHandle();
+  mBaseClassConnector->HideDragger();
   ggGraphicsManipulatorBarItemT<>::hoverLeaveEvent(aEvent);
 }
 
@@ -532,7 +533,8 @@ void ggClassyGraphicsBoxItem::UpdateClassWrite()
     // no need to send notifications to myself
     cExecutorBlocking vBlock(this, GetClass());
     // collect notifications and only send one to al other observers
-    cExecutorLazy vLazy(GetClass());
+    cExecutorLazy vLazyClass(GetClass());
+    cExecutorLazy vLazyConnection(GetClass()->GetDataSet()->GetSubjectConnections());
     // renaming fails, if there is another class with the same name
     if (!GetClass()->SetName(mClassNameText->GetText())) {
       QMessageBox::information(nullptr, "Can't change class name",
@@ -543,6 +545,8 @@ void ggClassyGraphicsBoxItem::UpdateClassWrite()
     }
     GetClass()->SetMembersText(mMembersText->GetText());
     GetClass()->SetDescription(mDescriptionText->GetText());
+    UpdateLayout();
+    UpdateConnectionPoints();
   }
 }
 
@@ -662,7 +666,7 @@ void ggClassyGraphicsBoxItem::UpdateLayout()
   mShadow->SetInnerRect(vBorderRect);
 
   // connection manipulator
-  mBaseClassConnector->SetPointPosition(QPointF(rect().center().x(), rect().top()));
+  mBaseClassConnector->SetPositionSrc(QPointF(rect().center().x(), rect().top()));
 }
 
 

@@ -58,6 +58,7 @@ public:
   const ggClassyClassBoxContainer& GetClassBoxes() const;
 
   // other
+  ggSubject* GetSubjectConnections();
   const ggSubject* GetSubjectConnections() const;
   void Clear();
 

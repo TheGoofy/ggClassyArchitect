@@ -15,7 +15,8 @@
  *
  */
 template <class TBaseItem>
-class ggGraphicsHandleItemT : public TBaseItem
+class ggGraphicsHandleItemT :
+  public TBaseItem
 {
 
 public:
@@ -33,8 +34,24 @@ public:
     TBaseItem::setPen(Qt::NoPen);
   }
 
+  void SetSize(float aSize) {
+    TBaseItem::setRect(-aSize/2.0f, -aSize/2.0f, aSize, aSize);
+  }
+
+  float GetSize() const {
+    return TBaseItem::rect().width();
+  }
+
   const ggSubject* GetSubjectPosition() const {
     return &mSubjectPosition;
+  }
+
+  const ggSubject* GetSubjectMousePress() const {
+    return &mSubjectMousePress;
+  }
+
+  const ggSubject* GetSubjectMouseRelease() const {
+    return &mSubjectMouseRelease;
   }
 
   void LinkX(ggGraphicsHandleItemT* aItem) {
@@ -62,21 +79,30 @@ protected:
   }
 
   virtual void mousePressEvent(QGraphicsSceneMouseEvent* aEvent) override {
-
     // handle is clicked (for dragging): if the scene selection is not cleared,
     // all the selected items will be moved. alternatively this HandleItem could have
     // its selectable-flag set, but that looks ugly.
     if (TBaseItem::scene() != nullptr) {
       TBaseItem::scene()->clearSelection();
     }
-
+    // notify press event
+    mSubjectMousePress.Notify();
     // do inherited event handling
     TBaseItem::mousePressEvent(aEvent);
+  }
+
+  virtual void mouseReleaseEvent(QGraphicsSceneMouseEvent* aEvent) override {
+    // notify release event
+    mSubjectMouseRelease.Notify();
+    // do inherited event handling
+    TBaseItem::mouseReleaseEvent(aEvent);
   }
 
 private:
 
   ggSubject mSubjectPosition;
+  ggSubject mSubjectMousePress;
+  ggSubject mSubjectMouseRelease;
 
   QList<ggGraphicsHandleItemT*> mLinkedItemsX;
   QList<ggGraphicsHandleItemT*> mLinkedItemsY;

@@ -148,6 +148,12 @@ ggClassyDataSet& ggClassyDataSet::operator = (const ggClassyDataSet& aOther)
 }
 
 
+ggSubject* ggClassyDataSet::GetSubjectConnections()
+{
+  return &mSubjectConnections;
+}
+
+
 const ggSubject* ggClassyDataSet::GetSubjectConnections() const
 {
   return &mSubjectConnections;

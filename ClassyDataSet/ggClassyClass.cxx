@@ -181,13 +181,19 @@ const ggStringSet& ggClassyClass::GetBaseClassNames() const
 
 void ggClassyClass::AddBaseClassName(const QString& aBaseClassName)
 {
-  if (mBaseClassNames.insert(aBaseClassName).second) Notify();
+  if (mBaseClassNames.insert(aBaseClassName).second) {
+    Notify();
+    if (mDataSet != nullptr) mDataSet->GetSubjectConnections()->Notify();
+  }
 }
 
 
 void ggClassyClass::RemoveBaseClassName(const QString& aBaseClassName)
 {
-  if (mBaseClassNames.erase(aBaseClassName)) Notify();
+  if (mBaseClassNames.erase(aBaseClassName)) {
+    Notify();
+    if (mDataSet != nullptr) mDataSet->GetSubjectConnections()->Notify();
+  }
 }
 
 
@@ -196,6 +202,7 @@ void ggClassyClass::RemoveAllBaseClassNames()
   if (!mBaseClassNames.empty()) {
     mBaseClassNames.clear();
     Notify();
+    if (mDataSet != nullptr) mDataSet->GetSubjectConnections()->Notify();
   }
 }
 
@@ -245,6 +252,7 @@ void ggClassyClass::SetMembersText(const QString& aText)
       mMembers.push_back(ggClassyClassMember(vMemberName, vMemberClassName));
     }
     Notify();
+    if (mDataSet != nullptr) mDataSet->GetSubjectConnections()->Notify();
   }
 }
 
@@ -276,6 +284,12 @@ void ggClassyClass::SetCollectionName(const QString& aName)
     mCollectionName = aName;
     Notify();
   }
+}
+
+
+ggClassyDataSet* ggClassyClass::GetDataSet()
+{
+  return mDataSet;
 }
 
 

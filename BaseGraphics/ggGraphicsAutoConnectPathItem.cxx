@@ -42,17 +42,21 @@ void ggGraphicsAutoConnectPathItem::ClearPointsDst()
 
 void ggGraphicsAutoConnectPathItem::InsertPointSrc(const ggSubjectConnectionPoint* aPoint)
 {
-  mPointsSrc.insert(aPoint);
-  ggObserver::Attach(aPoint);
-  RebuildPath();
+  if (aPoint != nullptr) {
+    mPointsSrc.insert(aPoint);
+    ggObserver::Attach(aPoint);
+    RebuildPath();
+  }
 }
 
 
 void ggGraphicsAutoConnectPathItem::InsertPointDst(const ggSubjectConnectionPoint* aPoint)
 {
-  mPointsDst.insert(aPoint);
-  ggObserver::Attach(aPoint);
-  RebuildPath();
+  if (aPoint != nullptr) {
+    mPointsDst.insert(aPoint);
+    ggObserver::Attach(aPoint);
+    RebuildPath();
+  }
 }
 
 

@@ -54,6 +54,7 @@ public:
   void SetDescription(const QString& aDescription);
   const QString& GetCollectionName() const;
   void SetCollectionName(const QString& aName);
+  ggClassyDataSet* GetDataSet();
   const ggClassyDataSet* GetDataSet() const;
   void SetDataSet(ggClassyDataSet* aDataSet);
   const ggClassyCollection* GetCollection() const;
