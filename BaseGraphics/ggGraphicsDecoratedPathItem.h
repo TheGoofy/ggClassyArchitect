@@ -46,6 +46,8 @@ protected:
                      const QStyleOptionGraphicsItem* aOption,
                      QWidget* aWidget) override;
 
+  virtual QPainterPath shape() const override;
+
 private:
 
   QPainterPath GetPath(const ggConnectionPoint& aPointSrc,

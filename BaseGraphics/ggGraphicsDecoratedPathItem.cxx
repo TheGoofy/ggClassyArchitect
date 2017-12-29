@@ -111,6 +111,13 @@ void ggGraphicsDecoratedPathItem::paint(QPainter* aPainter, const QStyleOptionGr
 }
 
 
+QPainterPath ggGraphicsDecoratedPathItem::shape() const
+{
+  QPainterPathStroker vPathStroker(pen());
+  return vPathStroker.createStroke(path()).simplified();
+}
+
+
 QPainterPath ggGraphicsDecoratedPathItem::GetPath(const ggConnectionPoint& aPointSrc,
                                                   const ggConnectionPoint& aPointDst) const
 {
