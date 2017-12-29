@@ -15,6 +15,7 @@ class ggDecoration
 public:
 
   enum class cType {
+    eNothing,
     eLine,
     eArrow,
     eArrowBack,

@@ -30,6 +30,7 @@ float ggPainterPath::GetDecorationRatio(ggDecoration::cType aType) const
 {
   if (mDecorationRatio != 0.0f) return mDecorationRatio;
   switch (aType) {
+    case ggDecoration::cType::eNothing: return 0.0f;
     case ggDecoration::cType::eLine: return 0.0f;
     case ggDecoration::cType::eArrow: return 0.8f;
     case ggDecoration::cType::eArrowBack: return 0.8f;
@@ -57,6 +58,7 @@ void ggPainterPath::AddDecoration(ggDecoration::cType aType,
                                   const QPointF& aEnd)
 {
   switch (aType) {
+    case ggDecoration::cType::eNothing: break;
     case ggDecoration::cType::eLine: AddLine(aStart, aEnd); break;
     case ggDecoration::cType::eArrow: AddArrow(aStart, aEnd); break;
     case ggDecoration::cType::eArrowBack: AddArrowBack(aStart, aEnd); break;

@@ -7,9 +7,9 @@
 
 
 ggDecoration::ggDecoration() :
-  mType(cType::eLine),
+  mType(cType::eNothing),
   mLength(0.0f),
-  mFill(cFill::eSolid)
+  mFill(cFill::eEmpty)
 {
 }
 
@@ -84,7 +84,8 @@ void ggDecoration::Set(cType aType,
 
 const ggDecoration::tTypes& ggDecoration::Types()
 {
-  static tTypes vTypes = {cType::eLine,
+  static tTypes vTypes = {cType::eNothing,
+                          cType::eLine,
                           cType::eArrow,
                           cType::eArrowBack,
                           cType::eTriangle,
