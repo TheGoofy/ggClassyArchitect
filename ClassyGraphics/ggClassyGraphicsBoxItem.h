@@ -48,6 +48,7 @@ public:
 
 protected:
 
+  virtual void paint(QPainter* aPainter, const QStyleOptionGraphicsItem* aOption, QWidget* aWidget) override;
   virtual void hoverEnterEvent(QGraphicsSceneHoverEvent* aEvent) override;
   virtual void hoverLeaveEvent(QGraphicsSceneHoverEvent* aEvent) override;
   virtual QVariant itemChange(GraphicsItemChange aChange, const QVariant& aValue) override;

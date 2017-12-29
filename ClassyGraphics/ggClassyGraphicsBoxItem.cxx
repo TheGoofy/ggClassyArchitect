@@ -4,6 +4,7 @@
 // 1) include system or QT
 #include <QGraphicsLineItem>
 #include <QGraphicsSceneMouseEvent>
+#include <QStyleOptionGraphicsItem>
 #include <QFontMetrics>
 #include <QMessageBox>
 #include <QDebug>
@@ -431,6 +432,16 @@ void ggClassyGraphicsBoxItem::hoverLeaveEvent(QGraphicsSceneHoverEvent* aEvent)
   mDescriptionCheckBox->SetHighlightOff();
   mBaseClassConnector->HideDragger();
   ggGraphicsManipulatorBarItemT<>::hoverLeaveEvent(aEvent);
+}
+
+
+void ggClassyGraphicsBoxItem::paint(QPainter* aPainter, const QStyleOptionGraphicsItem* aOption, QWidget* aWidget)
+{
+  // don't draw the (ugly) default selection box
+  QStyle::State vState = aOption->state;
+  const_cast<QStyleOptionGraphicsItem*>(aOption)->state = aOption->state & !QStyle::State_Selected;
+  ggGraphicsManipulatorBarItemT<>::paint(aPainter, aOption, aWidget);
+  const_cast<QStyleOptionGraphicsItem*>(aOption)->state = vState;
 }
 
 

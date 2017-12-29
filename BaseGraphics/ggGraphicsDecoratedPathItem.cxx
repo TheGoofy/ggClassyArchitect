@@ -2,6 +2,7 @@
 #include "ggGraphicsDecoratedPathItem.h"
 
 // 1) include system or QT
+#include <QStyleOptionGraphicsItem>
 #include <QPen>
 
 // 2) include own project-related (sort by component dependency)
@@ -12,8 +13,10 @@ ggGraphicsDecoratedPathItem::ggGraphicsDecoratedPathItem(QGraphicsItem* aParent)
   QGraphicsPathItem(aParent),
   mConnectionValid(false),
   mDecorationItemSrc(nullptr),
-  mDecorationItemDst(nullptr)
+  mDecorationItemDst(nullptr),
+  mColorSelected(QColor(200, 255, 0, 255))
 {
+  setFlag(ItemIsSelectable);
   QPen vPen(pen());
   vPen.setCapStyle(Qt::FlatCap);
   vPen.setJoinStyle(Qt::MiterJoin);
@@ -76,8 +79,35 @@ void ggGraphicsDecoratedPathItem::SetDecorationDst(ggDecoration::cType aType,
 
 void ggGraphicsDecoratedPathItem::setPen(const QPen& aPen)
 {
+  mColorNormal = aPen.color();
   QGraphicsPathItem::setPen(aPen);
   RebuildPath();
+}
+
+
+QVariant ggGraphicsDecoratedPathItem::itemChange(GraphicsItemChange aChange,
+                                                 const QVariant& aValue)
+{
+  // change color when selected
+  if (aChange == ItemSelectedHasChanged) {
+    QPen vPen(pen());
+    vPen.setColor(aValue.toBool() ? mColorSelected : mColorNormal);
+    QGraphicsPathItem::setPen(vPen);
+    RebuildPath();
+  }
+
+  // execute base item change
+  return QGraphicsPathItem::itemChange(aChange, aValue);
+}
+
+
+void ggGraphicsDecoratedPathItem::paint(QPainter* aPainter, const QStyleOptionGraphicsItem* aOption, QWidget* aWidget)
+{
+  // don't draw the (ugly) default selection box
+  QStyle::State vState = aOption->state;
+  const_cast<QStyleOptionGraphicsItem*>(aOption)->state = aOption->state & !QStyle::State_Selected;
+  QGraphicsPathItem::paint(aPainter, aOption, aWidget);
+  const_cast<QStyleOptionGraphicsItem*>(aOption)->state = vState;
 }
 
 

@@ -37,6 +37,15 @@ public:
 
   void setPen(const QPen& aPen);
 
+protected:
+
+  virtual QVariant itemChange(GraphicsItemChange aChange,
+                              const QVariant& aValue) override;
+
+  virtual void paint(QPainter* aPainter,
+                     const QStyleOptionGraphicsItem* aOption,
+                     QWidget* aWidget) override;
+
 private:
 
   QPainterPath GetPath(const ggConnectionPoint& aPointSrc,
@@ -59,6 +68,10 @@ private:
   // decoraton graph items
   QGraphicsItem* mDecorationItemSrc;
   QGraphicsItem* mDecorationItemDst;
+
+  // selection
+  QColor mColorNormal;
+  QColor mColorSelected;
 
 };
 
