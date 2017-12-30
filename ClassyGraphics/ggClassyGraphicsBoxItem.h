@@ -11,7 +11,7 @@
 // 3) forward declarations
 class ggGraphicsTextItem;
 class ggGraphicsCheckBoxItem;
-class ggGraphicsRectShadowItem;
+class ggGraphicsShadowRectItem;
 class ggClassyClassBoxPoints;
 class ggClassyClassBox;
 class ggClassyClass;
@@ -83,7 +83,7 @@ private:
 
   void UpdateCollectionRead();
 
-  ggGraphicsRectShadowItem* mShadow;
+  ggGraphicsShadowRectItem* mShadow;
   QGraphicsRectItem* mBoxBorder;
   ggGraphicsTextItem* mClassNameText;
   ggGraphicsTextItem* mMembersText;

@@ -79,8 +79,8 @@ HEADERS += \
     Base/ggVectorSetT.h \
     ClassyMain/ggClassyTreeItem.h \
     ClassyGraphics/ggClassyAutoConnectPathItem.h \
-    BaseGraphics/ggGraphicsRectShadowItem.h \
-    BaseGraphics/ggGraphicsRoundedRectItem.h
+    BaseGraphics/ggGraphicsRoundedRectItem.h \
+    BaseGraphics/ggGraphicsShadowRectItem.h
 
 SOURCES += \
     Base/ggItemLinked.cxx \
@@ -120,6 +120,6 @@ SOURCES += \
     BaseWidgets/ggColorChannelWidget.cxx \
     ClassyMain/ggClassyTreeItem.cxx \
     ClassyGraphics/ggClassyAutoConnectPathItem.cxx \
-    BaseGraphics/ggGraphicsRectShadowItem.cxx \
-    BaseGraphics/ggGraphicsRoundedRectItem.cxx
+    BaseGraphics/ggGraphicsRoundedRectItem.cxx \
+    BaseGraphics/ggGraphicsShadowRectItem.cxx
 

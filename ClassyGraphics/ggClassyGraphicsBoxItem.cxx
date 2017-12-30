@@ -14,7 +14,7 @@
 #include "BaseWidgets/ggUtilityQt.h"
 #include "BaseGraphics/ggGraphicsTextItem.h"
 #include "BaseGraphics/ggGraphicsCheckBoxItem.h"
-#include "BaseGraphics/ggGraphicsRectShadowItem.h"
+#include "BaseGraphics/ggGraphicsShadowRectItem.h"
 #include "BaseGraphics/ggGraphicsDecoratedPathItem.h"
 #include "ClassyDataSet/ggClassyDataSet.h"
 
@@ -221,7 +221,7 @@ void ggClassyGraphicsBoxItem::Construct()
   setBrush(Qt::NoBrush);
   setPen(QPen(Qt::black, 0.0f, Qt::NoPen));
 
-  mShadow = new ggGraphicsRectShadowItem(this);
+  mShadow = new ggGraphicsShadowRectItem(this);
   mShadow->setFlag(ItemStacksBehindParent);
   mShadow->SetRadius(7.0f);
   mShadow->setPen(Qt::NoPen);

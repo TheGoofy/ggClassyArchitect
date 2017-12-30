@@ -1,5 +1,5 @@
 // 0) include own header
-#include "ggGraphicsRectShadowItem.h"
+#include "ggGraphicsShadowRectItem.h"
 
 // 1) include system or QT
 #include <QPainter>
@@ -7,7 +7,7 @@
 // 2) include own project-related (sort by component dependency)
 
 
-ggGraphicsRectShadowItem::ggGraphicsRectShadowItem(QGraphicsItem* aParent) :
+ggGraphicsShadowRectItem::ggGraphicsShadowRectItem(QGraphicsItem* aParent) :
   QGraphicsRectItem(aParent),
   mRadius(1.0f),
   mOuterColor(Qt::black)
@@ -15,7 +15,7 @@ ggGraphicsRectShadowItem::ggGraphicsRectShadowItem(QGraphicsItem* aParent) :
 }
 
 
-ggGraphicsRectShadowItem::ggGraphicsRectShadowItem(const QRectF& aInnerRect, qreal aRadius,
+ggGraphicsShadowRectItem::ggGraphicsShadowRectItem(const QRectF& aInnerRect, qreal aRadius,
                                                    QGraphicsItem* aParent) :
   QGraphicsRectItem(aInnerRect + QMarginsF(aRadius, aRadius, aRadius, aRadius), aParent),
   mRadius(aRadius),
@@ -24,13 +24,13 @@ ggGraphicsRectShadowItem::ggGraphicsRectShadowItem(const QRectF& aInnerRect, qre
 }
 
 
-float ggGraphicsRectShadowItem::GetRadius() const
+float ggGraphicsShadowRectItem::GetRadius() const
 {
   return mRadius;
 }
 
 
-void ggGraphicsRectShadowItem::SetRadius(float aRadius)
+void ggGraphicsShadowRectItem::SetRadius(float aRadius)
 {
   if (aRadius != mRadius) {
     mRadius = aRadius;
@@ -39,25 +39,25 @@ void ggGraphicsRectShadowItem::SetRadius(float aRadius)
 }
 
 
-QRectF ggGraphicsRectShadowItem::GetInnerRect() const
+QRectF ggGraphicsShadowRectItem::GetInnerRect() const
 {
   return rect() - QMarginsF(mRadius, mRadius, mRadius, mRadius);
 }
 
 
-void ggGraphicsRectShadowItem::SetInnerRect(const QRectF& aRect)
+void ggGraphicsShadowRectItem::SetInnerRect(const QRectF& aRect)
 {
   setRect(aRect + QMarginsF(mRadius, mRadius, mRadius, mRadius));
 }
 
 
-const QColor& ggGraphicsRectShadowItem::GetOuterColor() const
+const QColor& ggGraphicsShadowRectItem::GetOuterColor() const
 {
   return mOuterColor;
 }
 
 
-void ggGraphicsRectShadowItem::SetOuterColor(const QColor& aColor)
+void ggGraphicsShadowRectItem::SetOuterColor(const QColor& aColor)
 {
   if (aColor != mOuterColor) {
     mOuterColor = aColor;
@@ -66,14 +66,14 @@ void ggGraphicsRectShadowItem::SetOuterColor(const QColor& aColor)
 }
 
 
-void ggGraphicsRectShadowItem::SetShadowColors(const QColor& aColor)
+void ggGraphicsShadowRectItem::SetShadowColors(const QColor& aColor)
 {
   mOuterColor = QColor(aColor.red(), aColor.green(), aColor.blue(), 0);
   setBrush(aColor);
 }
 
 
-void ggGraphicsRectShadowItem::paint(QPainter* aPainter,
+void ggGraphicsShadowRectItem::paint(QPainter* aPainter,
                                      const QStyleOptionGraphicsItem* aOption,
                                      QWidget* aWidget)
 {
@@ -124,7 +124,7 @@ void ggGraphicsRectShadowItem::paint(QPainter* aPainter,
 }
 
 
-QBrush ggGraphicsRectShadowItem::GetLinearBrush(qreal aX1, qreal aY1, qreal aX2, qreal aY2) const
+QBrush ggGraphicsShadowRectItem::GetLinearBrush(qreal aX1, qreal aY1, qreal aX2, qreal aY2) const
 {
   QLinearGradient vGradient(aX1, aY1, aX2, aY2);
   vGradient.setColorAt(0.0f, brush().color());
@@ -133,7 +133,7 @@ QBrush ggGraphicsRectShadowItem::GetLinearBrush(qreal aX1, qreal aY1, qreal aX2,
 }
 
 
-QBrush ggGraphicsRectShadowItem::GetRadialBrush(const QPointF& aCenter, qreal aRadius) const
+QBrush ggGraphicsShadowRectItem::GetRadialBrush(const QPointF& aCenter, qreal aRadius) const
 {
   QRadialGradient vGradient(aCenter, aRadius);
   vGradient.setColorAt(0.0f, brush().color());

@@ -8,14 +8,14 @@
 
 // 3) forward declarations
 
-class ggGraphicsRectShadowItem :
+class ggGraphicsShadowRectItem :
   public QGraphicsRectItem
 {
 public:
 
-  ggGraphicsRectShadowItem(QGraphicsItem* aParent = nullptr);
+  ggGraphicsShadowRectItem(QGraphicsItem* aParent = nullptr);
 
-  ggGraphicsRectShadowItem(const QRectF& aInnerRect, qreal aRadius,
+  ggGraphicsShadowRectItem(const QRectF& aInnerRect, qreal aRadius,
                            QGraphicsItem* aParent = nullptr);
 
   float GetRadius() const;
@@ -31,6 +31,8 @@ protected:
   virtual void paint(QPainter* aPainter, const QStyleOptionGraphicsItem* aOption, QWidget* aWidget) override;
   QBrush GetLinearBrush(qreal aX1, qreal aY1, qreal aX2, qreal aY2) const;
   QBrush GetRadialBrush(const QPointF& aCenter, qreal aRadius) const;
+
+private:
 
   qreal mRadius;
   QColor mOuterColor;
