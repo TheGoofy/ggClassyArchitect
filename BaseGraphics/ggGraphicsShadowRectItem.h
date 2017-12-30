@@ -20,6 +20,8 @@ public:
 
   float GetRadius() const;
   void SetRadius(float aRadius);
+  float GetShadowWidth() const;
+  void SetShadowWidth(float aWidth);
   QRectF GetInnerRect() const;
   void SetInnerRect(const QRectF& aRect);
   const QColor& GetOuterColor() const;
@@ -29,12 +31,15 @@ public:
 protected:
 
   virtual void paint(QPainter* aPainter, const QStyleOptionGraphicsItem* aOption, QWidget* aWidget) override;
-  QBrush GetLinearBrush(qreal aX1, qreal aY1, qreal aX2, qreal aY2) const;
-  QBrush GetRadialBrush(const QPointF& aCenter, qreal aRadius) const;
 
 private:
 
+  qreal GetGradientMiddle() const;
+  QBrush GetLinearBrush(qreal aX1, qreal aY1, qreal aX2, qreal aY2) const;
+  QBrush GetRadialBrush(const QPointF& aCenter, qreal aRadius) const;
+
   qreal mRadius;
+  qreal mWidth;
   QColor mOuterColor;
 
 };

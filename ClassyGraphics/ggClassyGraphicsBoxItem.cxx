@@ -224,6 +224,7 @@ void ggClassyGraphicsBoxItem::Construct()
   mShadow = new ggGraphicsShadowRectItem(this);
   mShadow->setFlag(ItemStacksBehindParent);
   mShadow->SetRadius(7.0f);
+  mShadow->SetShadowWidth(7.0f);
   mShadow->setPen(Qt::NoPen);
   mShadow->SetShadowColors(QColor(0, 0, 0, 40));
   mShadow->setPos(3.0f, 2.0f);
@@ -253,7 +254,7 @@ void ggClassyGraphicsBoxItem::Construct()
   mMembersCheckBox = new ggGraphicsCheckBoxItem(this);
   mDescriptionCheckBox = new ggGraphicsCheckBoxItem(this);
 
-  mBaseClassConnector = new ggClassyConnectionItem(11.0f, this);
+  mBaseClassConnector = new ggClassyConnectionItem(9.0f, this);
 
   mClassConnectionTop.SetDirectionUp();
   mClassConnectionBottom.SetDirectionDown();

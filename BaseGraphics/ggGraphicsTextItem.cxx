@@ -161,8 +161,10 @@ QMimeData* ggGraphicsTextItem::FormatMimeData(const QMimeData* aMimeData) const
 
 void ggGraphicsTextItem::SetBrush(const QBrush& aBrush)
 {
-  mBrush = aBrush;
-  update();
+  if (mBrush != aBrush) {
+    mBrush = aBrush;
+    update();
+  }
 }
 
 
@@ -174,8 +176,10 @@ const QBrush& ggGraphicsTextItem::Brush() const
 
 void ggGraphicsTextItem::SetPen(const QPen& aPen)
 {
-  mPen = aPen;
-  update();
+  if (mPen != aPen) {
+    mPen = aPen;
+    update();
+  }
 }
 
 
@@ -246,6 +250,20 @@ const ggSubject* ggGraphicsTextItem::GetSubjectText() const
 const ggSubject* ggGraphicsTextItem::GetSubjectEditingFinished() const
 {
   return mSubjectEditingFinished;
+}
+
+
+void ggGraphicsTextItem::SetAlignment(Qt::Alignment aAlignment)
+{
+  QTextOption vTextOption = document()->defaultTextOption();
+  vTextOption.setAlignment(aAlignment);
+  document()->setDefaultTextOption(vTextOption);
+}
+
+
+Qt::Alignment ggGraphicsTextItem::GetAlignment() const
+{
+  return document()->defaultTextOption().alignment();
 }
 
 

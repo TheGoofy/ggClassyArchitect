@@ -13,6 +13,155 @@
 #include "ClassyGraphics/ggClassyAutoConnectPathItem.h"
 
 
+
+
+
+
+#include <QTextDocument>
+#include <QTextOption>
+#include <QGraphicsSceneMouseEvent>
+#include "BaseGraphics/ggGraphicsRoundedRectItem.h"
+#include "BaseGraphics/ggGraphicsShadowRectItem.h"
+#include "BaseGraphics/ggGraphicsTextItem.h"
+
+class ggClassyGraphicsFrameItem :
+  public ggGraphicsRoundedRectItem,
+  public ggObserver
+{
+public:
+
+  ggClassyGraphicsFrameItem(QGraphicsItem* aParent = nullptr) :
+    ggGraphicsRoundedRectItem(aParent),
+    mShadow(nullptr)
+  {
+    Construct();
+  }
+
+  ggClassyGraphicsFrameItem(const QRectF& aRect,
+                            const qreal aRadius = 3.0f,
+                            QGraphicsItem* aParent = nullptr) :
+    ggGraphicsRoundedRectItem(aRect, aRadius, aParent)
+  {
+    Construct();
+  }
+
+  void SetRadius(qreal aRadius)
+  {
+    ggGraphicsRoundedRectItem::SetRadius(aRadius, aRadius);
+    UpdateLayout();
+  }
+
+  void SetRadius(qreal aRadiusX, qreal aRadiusY)
+  {
+    ggGraphicsRoundedRectItem::SetRadius(aRadiusX, aRadiusY);
+    UpdateLayout();
+  }
+
+  void setPen(const QPen& aPen)
+  {
+    ggGraphicsRoundedRectItem::setPen(aPen);
+    UpdateLayout();
+  }
+
+protected:
+
+  virtual void Update(const ggSubject* aSubject) override
+  {
+    if (aSubject == mText->GetSubjectText()) {
+      UpdateLayout();
+    }
+  }
+
+  virtual QVariant itemChange(GraphicsItemChange aChange, const QVariant& aValue) override
+  {
+    if (aChange == ItemSelectedHasChanged) {
+      mShadow->SetShadowColors(aValue.toBool() ? QColor(200, 255, 0, 255) : QColor(0, 0, 0, 40));
+      mShadow->setPos(aValue.toBool() ? QPointF(0.0f, 0.0f) : QPointF(3.0f, 2.0f));
+    }
+    return ggGraphicsRoundedRectItem::itemChange(aChange, aValue);
+  }
+
+  virtual void mousePressEvent(QGraphicsSceneMouseEvent* aEvent) override
+  {
+    // make it editable, if user clicks twice to the same position
+    QPointF vPos = aEvent->pos();
+    if (vPos == mLastMousePressPos) mText->SetEditable(true);
+    mLastMousePressPos = vPos;
+
+    // do inherited event handling
+    ggGraphicsRoundedRectItem::mousePressEvent(aEvent);
+  }
+
+private:
+
+  void Construct()
+  {
+    setFlag(ItemIsSelectable);
+    setFlag(ItemIsMovable);
+    setCursor(Qt::SizeAllCursor);
+    mShadow = new ggGraphicsShadowRectItem(this);
+    mShadow->setFlag(ItemStacksBehindParent);
+    mShadow->setPen(Qt::NoPen);
+    mShadow->SetShadowColors(QColor(0, 0, 0, 40));
+    mShadow->setPos(3.0f, 2.0f);
+    mText = new ggGraphicsTextItem(this);
+    mText->SetPen(Qt::NoPen);
+    mText->SetText("Goofy was here!");
+    mText->SetAlignment(Qt::AlignLeft | Qt::AlignBottom);
+    Attach(mText->GetSubjectText());
+    UpdateLayout();
+  }
+
+  Qt::Alignment GetVerticalAlignment() const
+  {
+    if (mText->GetAlignment() & Qt::AlignTop) return Qt::AlignTop;
+    if (mText->GetAlignment() & Qt::AlignVCenter) return Qt::AlignVCenter;
+    if (mText->GetAlignment() & Qt::AlignBottom) return Qt::AlignBottom;
+    return Qt::AlignTop;
+  }
+
+  void UpdateLayout()
+  {
+    // adjust the shadow
+    qreal vShadowWidth = 7.0f;
+    qreal vFrameBorder2 = pen().widthF() / 2.0f;
+    qreal vShadowMargin = vFrameBorder2 + vShadowWidth;
+    mShadow->SetShadowWidth(vShadowWidth);
+    mShadow->SetRadius(GetRadiusX() + vFrameBorder2 + vShadowWidth);
+    mShadow->setRect(rect() + QMarginsF(vShadowMargin, vShadowMargin, vShadowMargin, vShadowMargin));
+
+    // adjust the text
+    qreal vTextMargin = mText->document()->documentMargin();
+    qreal vTextBorder = (GetRadiusX() > vTextMargin + 3.0f) ? GetRadiusX() - vTextMargin - 3.0f: 0.0f;
+    qreal vTextWidth = rect().width() - 2.0f * vTextBorder;
+    mText->setTextWidth(vTextWidth);
+    qreal vTextHeight = mText->boundingRect().height();
+    mText->setX(rect().left() + vTextBorder);
+    switch (GetVerticalAlignment()) {
+      case Qt::AlignTop: mText->setY(rect().top() + vTextBorder); break;
+      case Qt::AlignVCenter: mText->setY(rect().top() + (rect().height() - vTextHeight) / 2.0f); break;
+      case Qt::AlignBottom: mText->setY(rect().bottom() - vTextHeight - vTextBorder); break;
+      default: mText->setY(rect().top() + vTextBorder); break;
+    }
+  }
+
+  ggGraphicsShadowRectItem* mShadow;
+  ggGraphicsTextItem* mText;
+  QPointF mLastMousePressPos;
+
+};
+
+
+
+
+
+
+
+
+
+
+
+
 ggClassyGraphicsScene::ggClassyGraphicsScene(QObject* aParent) :
   QGraphicsScene(aParent),
   mDataSet(nullptr),
@@ -20,6 +169,12 @@ ggClassyGraphicsScene::ggClassyGraphicsScene(QObject* aParent) :
 {
   setBackgroundBrush(Qt::gray);
   mBoxPoints = new ggClassyClassBoxPoints();
+
+
+  ggClassyGraphicsFrameItem* vRect = new ggClassyGraphicsFrameItem(QRectF(-200,-100,300,200), 15);
+  vRect->setPen(QPen(QColor(0,0,0,50), 1.0f));
+  vRect->setBrush(QColor(255,255,255,255));
+  addItem(vRect);
 }
 
 

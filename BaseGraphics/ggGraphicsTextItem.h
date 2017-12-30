@@ -39,6 +39,9 @@ public:
   QString GetText() const;
   const ggSubject* GetSubjectText() const;
   const ggSubject* GetSubjectEditingFinished() const;
+  void SetEditable(bool aEditable = true);
+  void SetAlignment(Qt::Alignment aAlignment);
+  Qt::Alignment GetAlignment() const;
 
 protected:
 
@@ -58,7 +61,6 @@ private slots:
 private:
 
   QMimeData* FormatMimeData(const QMimeData* aMimeData) const;
-  void SetEditable(bool aEditable = true);
 
   ggSubject* mSubjectText;
   ggSubject* mSubjectEditingFinished;
