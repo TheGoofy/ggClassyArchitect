@@ -131,6 +131,7 @@ ggClassyDataSet& ggClassyDataSet::operator = (const ggClassyDataSet& aOther)
   ggSubject::cExecutorLazy vCollectionsLazy(&mCollections);
   ggSubject::cExecutorLazy vClassesLazy(&mClasses);
   ggSubject::cExecutorLazy vClassBoxesLazy(&mClassBoxes);
+  ggSubject::cExecutorLazy vFramesLazy(&mFrames);
 
   // delete all members
   Clear();
@@ -152,6 +153,13 @@ ggClassyDataSet& ggClassyDataSet::operator = (const ggClassyDataSet& aOther)
   while (vClassesWalker) {
     ggClassyClass* vClass = *vClassesWalker;
     vClass->SetDataSet(this);
+  }
+
+  // tell all frames that "I'm the master"
+  ggWalkerT<ggClassyFrameContainer::iterator> vFramesWalker(mFrames);
+  while (vFramesWalker) {
+    ggClassyFrame* vFrame = *vFramesWalker;
+    vFrame->SetDataSet(this);
   }
 
   return *this;
@@ -348,8 +356,10 @@ const ggClassyFrameContainer& ggClassyDataSet::GetFrames() const
 void ggClassyDataSet::Clear()
 {
   // only notify when all members of ggDataSet are cleared
+  ggSubject::cExecutorLazy vCollectionsLazy(&mCollections);
   ggSubject::cExecutorLazy vClassesLazy(&mClasses);
   ggSubject::cExecutorLazy vClassBoxesLazy(&mClassBoxes);
+  ggSubject::cExecutorLazy vFramesLazy(&mFrames);
 
   // clear the containers
   mCollections.DeleteAllCollections();

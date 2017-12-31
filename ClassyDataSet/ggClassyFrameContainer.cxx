@@ -47,7 +47,7 @@ ggClassyFrameContainer& ggClassyFrameContainer::operator = (const ggClassyFrameC
 ggClassyFrame* ggClassyFrameContainer::AddFrame(ggClassyFrame* aFrame)
 {
   if (aFrame != nullptr) {
-    aFrame->mIndexZ = mFrames.size();
+    aFrame->SetIndexZ(mFrames.size());
     mFrames.push_back(aFrame);
     Notify();
   }

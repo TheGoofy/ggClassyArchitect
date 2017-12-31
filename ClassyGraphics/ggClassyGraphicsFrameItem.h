@@ -62,6 +62,8 @@ private:
   void ShowHandles();
   void HideHandles();
   void SetHandleBrush(const QBrush& aBrush);
+  QRectF GetRectAbsolute() const;
+  void SetRectAbsolute(const QRectF& aRect);
 
   ggGraphicsShadowRectItem* mShadow;
   ggGraphicsTextItem* mText;

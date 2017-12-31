@@ -91,6 +91,23 @@ void ggClassyGraphicsFrameItem::SetRadius(qreal aRadiusX, qreal aRadiusY)
 }
 
 
+QRectF ggClassyGraphicsFrameItem::GetRectAbsolute() const
+{
+  const QRectF& vRect(rect());
+  return QRectF(pos() + vRect.topLeft(), vRect.size());
+}
+
+
+void ggClassyGraphicsFrameItem::SetRectAbsolute(const QRectF& aRect)
+{
+  setFlag(ItemSendsGeometryChanges, false);
+  const QRectF vRect(QPointF(), aRect.size());
+  setPos(aRect.topLeft());
+  setRect(vRect);
+  setFlag(ItemSendsGeometryChanges, true);
+}
+
+
 void ggClassyGraphicsFrameItem::setPen(const QPen& aPen)
 {
   ggGraphicsRoundedRectItem::setPen(aPen);
@@ -141,10 +158,15 @@ void ggClassyGraphicsFrameItem::Update(const ggSubject* aSubject)
 
 QVariant ggClassyGraphicsFrameItem::itemChange(GraphicsItemChange aChange, const QVariant& aValue)
 {
+  if (aChange == ItemPositionHasChanged) {
+    UpdateFrameWrite();
+  }
+
   if (aChange == ItemSelectedHasChanged) {
     mShadow->SetShadowColors(aValue.toBool() ? QColor(200, 255, 0, 255) : QColor(0, 0, 0, 40));
     mShadow->setPos(aValue.toBool() ? QPointF(0.0f, 0.0f) : QPointF(3.0f, 2.0f));
   }
+
   return ggGraphicsRoundedRectItem::itemChange(aChange, aValue);
 }
 
@@ -258,7 +280,7 @@ void ggClassyGraphicsFrameItem::SetHandleBrush(const QBrush& aBrush)
 void ggClassyGraphicsFrameItem::UpdateFrameRead()
 {
   if (GetFrame() != nullptr) {
-    setRect(GetFrame()->GetRect());
+    SetRectAbsolute(GetFrame()->GetRect());
     mText->SetText(GetFrame()->GetDescription());
     mText->SetAlignment(GetFrame()->GetAlignment());
   }
@@ -270,7 +292,7 @@ void ggClassyGraphicsFrameItem::UpdateFrameWrite()
   if (GetFrame() != nullptr) {
     ggObserver::cExecutorBlocking vBlock(this, GetFrame());
     ggSubject::cExecutorLazy vLazy(GetFrame());
-    GetFrame()->SetRect(rect());
+    GetFrame()->SetRect(GetRectAbsolute());
     GetFrame()->SetDescription(mText->GetText());
     GetFrame()->SetAlignment(mText->GetAlignment());
   }
