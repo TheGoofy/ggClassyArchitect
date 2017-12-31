@@ -17,6 +17,7 @@ ggGraphicsDecoratedPathItem::ggGraphicsDecoratedPathItem(QGraphicsItem* aParent)
   mColorSelected(QColor(200, 255, 0, 255))
 {
   setFlag(ItemIsSelectable);
+  setCursor(Qt::CrossCursor);
   QPen vPen(pen());
   vPen.setCapStyle(Qt::FlatCap);
   vPen.setJoinStyle(Qt::MiterJoin);
