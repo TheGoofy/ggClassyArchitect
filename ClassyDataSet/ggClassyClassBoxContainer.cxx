@@ -73,6 +73,19 @@ ggClassyClassBoxContainer& ggClassyClassBoxContainer::operator = (const ggClassy
 
 void ggClassyClassBoxContainer::DeleteClassBox(const ggClassyClassBox* aClassBox)
 {
+  // don't like nullptr
+  if (aClassBox == nullptr) return;
+
+  // if index-z was properly updated, it's simple
+  ggUSize vIndex = (ggUSize)aClassBox->GetIndexZ();
+  if (vIndex < mClassBoxes.size() && mClassBoxes[vIndex] == aClassBox) {
+    mClassBoxes.erase(mClassBoxes.begin() + vIndex);
+    delete aClassBox;
+    Notify();
+    return;
+  }
+
+  // search the class
   ggClassyClassBoxContainer::iterator vClassBoxesIterator = mClassBoxes.begin();
   while (vClassBoxesIterator != mClassBoxes.end()) {
     ggClassyClassBox* vClassBox = *vClassBoxesIterator;
@@ -97,8 +110,13 @@ void ggClassyClassBoxContainer::DeleteClassBoxes(const QString& aClassName)
   ggWalkerT<std::vector<ggClassyClassBox*>::iterator> vClassBoxesWalker(vClassBoxes);
   while (vClassBoxesWalker) {
     ggClassyClassBox* vClassBox = *vClassBoxesWalker;
-    if (vClassBox->GetClassName() == aClassName) delete vClassBox;
-    else mClassBoxes.push_back(vClassBox);
+    if (vClassBox->GetClassName() != aClassName) {
+      vClassBox->SetIndexZ(mClassBoxes.size());
+      mClassBoxes.push_back(vClassBox);
+    }
+    else {
+      delete vClassBox;
+    }
   }
 
   // maybe there was nothing deleted? notify only, if there was a change

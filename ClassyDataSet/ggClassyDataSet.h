@@ -9,6 +9,7 @@
 #include "ClassyDataSet/ggClassyClassContainer.h"
 #include "ClassyDataSet/ggClassyCollectionContainer.h"
 #include "ClassyDataSet/ggClassyClassBoxContainer.h"
+#include "ClassyDataSet/ggClassyFrameContainer.h"
 #include "ClassyDataSet/ggClassyFrame.h"
 
 // 3) forward declarations
@@ -57,6 +58,11 @@ public:
   ggClassyClassBoxContainer& GetClassBoxes();
   const ggClassyClassBoxContainer& GetClassBoxes() const;
 
+  // frames
+  void AddFrame(ggClassyFrame* aFrame);
+  ggClassyFrameContainer& GetFrames();
+  const ggClassyFrameContainer& GetFrames() const;
+
   // other
   ggSubject* GetSubjectConnections();
   const ggSubject* GetSubjectConnections() const;
@@ -71,7 +77,7 @@ private:
   ggClassyCollectionContainer mCollections;
   ggClassyClassContainer mClasses;
   ggClassyClassBoxContainer mClassBoxes;
-  std::vector<ggClassyFrame*> mFrames;
+  ggClassyFrameContainer mFrames;
 
   ggSubject mSubjectConnections;
 

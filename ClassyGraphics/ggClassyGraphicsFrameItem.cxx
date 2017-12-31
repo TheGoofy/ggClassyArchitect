@@ -10,22 +10,70 @@
 #include "BaseGraphics/ggGraphicsTextItem.h"
 #include "BaseGraphics/ggGraphicsHandleItemT.h"
 #include "BaseGraphics/ggGraphicsShadowRectItem.h"
+#include "ClassyDataSet/ggClassyFrame.h"
+#include "ClassyDataSet/ggClassyCollection.h"
 
 
-ggClassyGraphicsFrameItem::ggClassyGraphicsFrameItem(QGraphicsItem* aParent) :
-  ggGraphicsRoundedRectItem(aParent),
-  mShadow(nullptr)
+ggClassyGraphicsFrameItem::ggClassyGraphicsFrameItem(ggClassyFrame* aFrame,
+                                                     QGraphicsItem* aParent) :
+  ggGraphicsRoundedRectItem(QRectF(), 8.0f, aParent),
+  mShadow(nullptr),
+  mText(nullptr),
+  mHandleTL(nullptr),
+  mHandleTR(nullptr),
+  mHandleBL(nullptr),
+  mHandleBR(nullptr),
+  mFrame(nullptr)
 {
   Construct();
+  SetFrame(aFrame);
 }
 
 
 ggClassyGraphicsFrameItem::ggClassyGraphicsFrameItem(const QRectF& aRect,
                                                      const qreal aRadius,
+                                                     ggClassyFrame* aFrame,
                                                      QGraphicsItem* aParent) :
-  ggGraphicsRoundedRectItem(aRect, aRadius, aParent)
+  ggGraphicsRoundedRectItem(aRect, aRadius, aParent),
+  mShadow(nullptr),
+  mText(nullptr),
+  mHandleTL(nullptr),
+  mHandleTR(nullptr),
+  mHandleBL(nullptr),
+  mHandleBR(nullptr),
+  mFrame(nullptr)
 {
   Construct();
+  SetFrame(aFrame);
+}
+
+
+void ggClassyGraphicsFrameItem::SetFrame(ggClassyFrame* aFrame)
+{
+  if (aFrame != mFrame) {
+
+    // disconnect (old) subjects
+    Detach(mFrame);
+    Detach(GetCollection());
+
+    // assign new frame
+    mFrame = aFrame;
+
+    // connect new subjects
+    Attach(aFrame);
+    Attach(GetCollection());
+
+    // initialize the item
+    UpdateFrameRead();
+    UpdateCollectionRead();
+    UpdateLayout();
+  }
+}
+
+
+ggClassyFrame* ggClassyGraphicsFrameItem::GetFrame() const
+{
+  return mFrame;
 }
 
 
@@ -56,12 +104,17 @@ void ggClassyGraphicsFrameItem::Update(const ggSubject* aSubject)
     UpdateLayout();
   }
 
+  else if (aSubject == mText->GetSubjectEditingFinished()) {
+    UpdateFrameWrite();
+  }
+
   else if (aSubject == mHandleTL->GetSubjectPosition()) {
     QRectF vRect(mHandleTL->pos(), mHandleBR->pos());
     if (vRect.width() < 2.0f * GetRadiusX()) vRect.setLeft(vRect.right() - 2.0f * GetRadiusX());
     if (vRect.height() < 2.0f * GetRadiusY()) vRect.setTop(vRect.bottom() - 2.0f * GetRadiusY());
     setRect(vRect.normalized());
     UpdateLayout();
+    UpdateFrameWrite();
   }
 
   else if (aSubject == mHandleBR->GetSubjectPosition()) {
@@ -69,6 +122,18 @@ void ggClassyGraphicsFrameItem::Update(const ggSubject* aSubject)
     if (vRect.width() < 2.0f * GetRadiusX()) vRect.setWidth(2.0f * GetRadiusX());
     if (vRect.height() < 2.0f * GetRadiusY()) vRect.setHeight(2.0f * GetRadiusY());
     setRect(vRect.normalized());
+    UpdateLayout();
+    UpdateFrameWrite();
+  }
+
+  else if (aSubject == GetCollection()) {
+    UpdateCollectionRead();
+    UpdateLayout();
+  }
+
+  else if (aSubject == mFrame) {
+    UpdateFrameRead();
+    UpdateCollectionRead();
     UpdateLayout();
   }
 }
@@ -115,9 +180,11 @@ void ggClassyGraphicsFrameItem::Construct()
   // own properties
   setFlag(ItemIsSelectable);
   setFlag(ItemIsMovable);
+  setFlag(ItemSendsGeometryChanges);
   setAcceptHoverEvents(true);
   setCursor(Qt::SizeAllCursor);
   setZValue(-2.0f);
+  setBrush(Qt::white);
 
   // shadow
   mShadow = new ggGraphicsShadowRectItem(this);
@@ -148,10 +215,12 @@ void ggClassyGraphicsFrameItem::Construct()
 
   // attach subjects
   Attach(mText->GetSubjectText());
+  Attach(mText->GetSubjectEditingFinished());
   Attach(mHandleTL->GetSubjectPosition());
   Attach(mHandleBR->GetSubjectPosition());
 
   // arrange layout
+  UpdateCollectionRead();
   UpdateLayout();
 }
 
@@ -186,6 +255,28 @@ void ggClassyGraphicsFrameItem::SetHandleBrush(const QBrush& aBrush)
 }
 
 
+void ggClassyGraphicsFrameItem::UpdateFrameRead()
+{
+  if (GetFrame() != nullptr) {
+    setRect(GetFrame()->GetRect());
+    mText->SetText(GetFrame()->GetDescription());
+    mText->SetAlignment(GetFrame()->GetAlignment());
+  }
+}
+
+
+void ggClassyGraphicsFrameItem::UpdateFrameWrite()
+{
+  if (GetFrame() != nullptr) {
+    ggObserver::cExecutorBlocking vBlock(this, GetFrame());
+    ggSubject::cExecutorLazy vLazy(GetFrame());
+    GetFrame()->SetRect(rect());
+    GetFrame()->SetDescription(mText->GetText());
+    GetFrame()->SetAlignment(mText->GetAlignment());
+  }
+}
+
+
 void ggClassyGraphicsFrameItem::UpdateLayout()
 {
   // adjust the shadow
@@ -216,5 +307,24 @@ void ggClassyGraphicsFrameItem::UpdateLayout()
   ggObserver::cExecutorBlocking vBlockBR(this, mHandleBR->GetSubjectPosition());
   mHandleTL->setPos(vRect.topLeft());
   mHandleBR->setPos(vRect.bottomRight());
+}
 
+
+const ggClassyCollection* ggClassyGraphicsFrameItem::GetCollection() const
+{
+  if (mFrame != nullptr) return mFrame->GetCollection();
+  else return nullptr;
+}
+
+
+void ggClassyGraphicsFrameItem::UpdateCollectionRead()
+{
+  if (GetCollection() != nullptr) {
+    // box border
+    setPen(GetCollection()->mBoxBorder);
+    // description
+    mText->setFont(GetCollection()->mDescriptionFont);
+    mText->setDefaultTextColor(GetCollection()->mDescriptionColor);
+    setBrush(GetCollection()->mDescriptionBackground);
+  }
 }

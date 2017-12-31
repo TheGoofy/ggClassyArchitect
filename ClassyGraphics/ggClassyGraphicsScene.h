@@ -45,11 +45,13 @@ protected:
 private:
 
   void DeleteItems(const std::vector<QGraphicsItem*>& aItems);
-  void DeleteClassBoxItems();
+  void DeleteClassBoxAndConnectionItems();
   void DeleteConnectionItems();
+  void DeleteFrameItems();
 
   void CreateClassBoxItems();
   void CreateConnectionItems();
+  void CreateFrameItems();
 
   void AddTestConnections();
 

@@ -46,7 +46,7 @@ void ggClassyGraphicsScene::Update(const ggSubject* aSubject)
   if (mDataSet == nullptr) return;
 
   if (aSubject == &mDataSet->GetClassBoxes()) {
-    DeleteClassBoxItems();
+    DeleteClassBoxAndConnectionItems();
     CreateClassBoxItems();
     CreateConnectionItems();
   }
@@ -55,6 +55,11 @@ void ggClassyGraphicsScene::Update(const ggSubject* aSubject)
     DeleteConnectionItems();
     mBoxPoints->Refresh();
     CreateConnectionItems();
+  }
+
+  if (aSubject == &mDataSet->GetFrames()) {
+    DeleteFrameItems();
+    CreateFrameItems();
   }
 }
 
@@ -67,18 +72,22 @@ void ggClassyGraphicsScene::SetDataSet(ggClassyDataSet* aDataSet)
   // (re)connect subject
   if (mDataSet != nullptr) {
     Detach(&mDataSet->GetClassBoxes());
+    Detach(&mDataSet->GetFrames());
     Detach(mDataSet->GetSubjectConnections());
   }
   mDataSet = aDataSet;
   if (mDataSet != nullptr) {
     Attach(&mDataSet->GetClassBoxes());
+    Attach(&mDataSet->GetFrames());
     Attach(mDataSet->GetSubjectConnections());
   }
 
   // update all items
-  DeleteClassBoxItems();
+  DeleteClassBoxAndConnectionItems();
   CreateClassBoxItems();
   CreateConnectionItems();
+  DeleteFrameItems();
+  CreateFrameItems();
 }
 
 
@@ -162,7 +171,7 @@ void ggClassyGraphicsScene::DeleteItems(const std::vector<QGraphicsItem*>& aItem
 }
 
 
-void ggClassyGraphicsScene::DeleteClassBoxItems()
+void ggClassyGraphicsScene::DeleteClassBoxAndConnectionItems()
 {
   // collect items for removal (don't change the list of items, while iterating over it)
   std::vector<QGraphicsItem*> vItemsToDelete;
@@ -197,13 +206,28 @@ void ggClassyGraphicsScene::DeleteConnectionItems()
 }
 
 
+void ggClassyGraphicsScene::DeleteFrameItems()
+{
+  // collect items for removal (don't change the list of items, while iterating over it)
+  std::vector<QGraphicsItem*> vItemsToDelete;
+  foreach (QGraphicsItem* vItem, items()) {
+    if (dynamic_cast<ggClassyGraphicsFrameItem*>(vItem) != nullptr) {
+      vItemsToDelete.push_back(vItem);
+    }
+  }
+
+  // now remove and delete items
+  DeleteItems(vItemsToDelete);
+}
+
+
 void ggClassyGraphicsScene::CreateClassBoxItems()
 {
   // loop over box items
   if (mDataSet != nullptr) {
-    ggWalkerT<ggClassyClassBoxContainer::iterator> vClassBoxesIterator(mDataSet->GetClassBoxes());
-    while (vClassBoxesIterator) {
-      ggClassyClassBox* vClassBox = *vClassBoxesIterator;
+    ggWalkerT<ggClassyClassBoxContainer::iterator> vClassBoxesWalker(mDataSet->GetClassBoxes());
+    while (vClassBoxesWalker) {
+      ggClassyClassBox* vClassBox = *vClassBoxesWalker;
       ggClassyClass* vClass = mDataSet->FindClass(vClassBox->GetClassName());
       ggClassyGraphicsBoxItem* vBoxItem = new ggClassyGraphicsBoxItem(vClass, vClassBox);
       mBoxPoints->AddBoxItem(vBoxItem);
@@ -256,6 +280,20 @@ void ggClassyGraphicsScene::CreateConnectionItems()
         vAutoPath->setPen(vPen);
         QGraphicsScene::addItem(vAutoPath);
       }
+    }
+  }
+}
+
+
+void ggClassyGraphicsScene::CreateFrameItems()
+{
+  // loop over frame items
+  if (mDataSet != nullptr) {
+    ggWalkerT<ggClassyFrameContainer::iterator> vFramesWalker(mDataSet->GetFrames());
+    while (vFramesWalker) {
+      ggClassyFrame* vFrame = *vFramesWalker;
+      ggClassyGraphicsFrameItem* vFrameItem = new ggClassyGraphicsFrameItem(vFrame);
+      QGraphicsScene::addItem(vFrameItem);
     }
   }
 }

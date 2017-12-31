@@ -40,6 +40,14 @@ ggClassyTreeItem::ggClassyTreeItem(const ggClassyClassMember* aMember) :
 }
 
 
+ggClassyTreeItem::ggClassyTreeItem(const ggClassyFrame* aFrame) :
+  mType(cType::eFrame),
+  mData(aFrame),
+  mParent(nullptr)
+{
+}
+
+
 ggClassyTreeItem::~ggClassyTreeItem()
 {
   DeleteChildren();
@@ -60,6 +68,7 @@ template ggClassyTreeItem* ggClassyTreeItem::AddChild<ggClassyDataSet>(const ggC
 template ggClassyTreeItem* ggClassyTreeItem::AddChild<ggClassyCollection>(const ggClassyCollection*);
 template ggClassyTreeItem* ggClassyTreeItem::AddChild<ggClassyClass>(const ggClassyClass*);
 template ggClassyTreeItem* ggClassyTreeItem::AddChild<ggClassyClassMember>(const ggClassyClassMember*);
+template ggClassyTreeItem* ggClassyTreeItem::AddChild<ggClassyFrame>(const ggClassyFrame*);
 
 
 ggUSize ggClassyTreeItem::GetNumberOfChildren() const
@@ -129,6 +138,7 @@ const QString& ggClassyTreeItem::GetName() const
     case cType::eCollection: return GetCollection()->GetName();
     case cType::eClass: return GetClass()->GetName();
     case cType::eMember: return GetMember()->GetName();
+    case cType::eFrame: return GetFrame()->TypeID();
     default: {static const QString vName("Goofy"); return vName; }
   }
 }
@@ -155,6 +165,12 @@ const ggClassyClass* ggClassyTreeItem::GetClass() const
 const ggClassyClassMember* ggClassyTreeItem::GetMember() const
 {
   return (mType == cType::eMember) ? static_cast<const ggClassyClassMember*>(mData) : nullptr;
+}
+
+
+const ggClassyFrame* ggClassyTreeItem::GetFrame() const
+{
+  return (mType == cType::eFrame) ? static_cast<const ggClassyFrame*>(mData) : nullptr;
 }
 
 

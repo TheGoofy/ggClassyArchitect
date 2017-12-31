@@ -78,6 +78,12 @@ QDomElement ggClassyDataSet::CreateDomElement(QDomDocument& aDocument) const
     vElement.appendChild((*vClassBoxesWalker)->CreateDomElement(aDocument));
   }
 
+  // add frames as direct children
+  ggWalkerT<ggClassyFrameContainer::const_iterator> vFramesWalker(mFrames);
+  while (vFramesWalker) {
+    vElement.appendChild((*vFramesWalker)->CreateDomElement(aDocument));
+  }
+
   return vElement;
 }
 
@@ -105,6 +111,10 @@ ggClassyDataSet* ggClassyDataSet::Create(const QDomElement& aElement)
       // try to create and add a class box
       ggClassyClassBox* vClassBox = ggClassyClassBox::Create(vChildElement);
       if (vClassBox != nullptr) vDataSet->AddClassBox(vClassBox);
+
+      // try to create and add a frame
+      ggClassyFrame* vFrame = ggClassyFrame::Create(vChildElement);
+      if (vFrame != nullptr) vDataSet->AddFrame(vFrame);
 
       // nect child
       vChildElement = vChildElement.nextSiblingElement();
@@ -284,9 +294,9 @@ void ggClassyDataSet::DeleteClass(const QString& aClassName)
 
 ggClassyClassBox* ggClassyDataSet::AddClassBox(ggClassyClassBox* aClassBox)
 {
-  mClassBoxes.AddClassBox(aClassBox);
+  ggClassyClassBox* vClassBox = mClassBoxes.AddClassBox(aClassBox);
   mSubjectConnections.Notify();
-  return aClassBox;
+  return vClassBox;
 }
 
 
@@ -314,6 +324,27 @@ const ggClassyClassBoxContainer& ggClassyDataSet::GetClassBoxes() const
 }
 
 
+void ggClassyDataSet::AddFrame(ggClassyFrame* aFrame)
+{
+  if (aFrame != nullptr) {
+    aFrame->SetDataSet(this);
+    mFrames.AddFrame(aFrame);
+  }
+}
+
+
+ggClassyFrameContainer& ggClassyDataSet::GetFrames()
+{
+  return mFrames;
+}
+
+
+const ggClassyFrameContainer& ggClassyDataSet::GetFrames() const
+{
+  return mFrames;
+}
+
+
 void ggClassyDataSet::Clear()
 {
   // only notify when all members of ggDataSet are cleared
@@ -324,10 +355,7 @@ void ggClassyDataSet::Clear()
   mCollections.DeleteAllCollections();
   mClasses.DeleteAllClasses();
   mClassBoxes.DeleteAllClassBoxes();
-  
-  ggWalkerT<std::vector<ggClassyFrame*>::iterator> vFramesWalker(mFrames);
-  while (vFramesWalker) delete *vFramesWalker;
-  mFrames.clear();
+  mFrames.DeleteAllFrames();
 }
 
 
@@ -375,10 +403,10 @@ ggClassyDataSet* ggClassyDataSet::CreateTestDataSet()
   vClassBoxA2->SetPosition(QPointF(100, -300));
 
   ggClassyClassBox* vClassBoxB1 = new ggClassyClassBox(vClassB->GetName());
-  vClassBoxB1->SetPosition(QPointF(-100, -100));
+  vClassBoxB1->SetPosition(QPointF(-100, -150));
 
   ggClassyClassBox* vClassBoxB2 = new ggClassyClassBox(vClassB->GetName());
-  vClassBoxB2->SetPosition(QPointF(300, -100));
+  vClassBoxB2->SetPosition(QPointF(300, -150));
 
   ggClassyClassBox* vClassBoxC1 = new ggClassyClassBox(vClassC->GetName());
   vClassBoxC1->SetPosition(QPointF(-250, 0));
@@ -394,6 +422,20 @@ ggClassyDataSet* ggClassyDataSet::CreateTestDataSet()
   vDataSet->AddClassBox(vClassBoxB2);
   vDataSet->AddClassBox(vClassBoxC1);
   vDataSet->AddClassBox(vClassBoxC2);
+
+  ggClassyFrame* vFrameA = new ggClassyFrame();
+  vFrameA->SetDescription("This is a frame! Put the most beautiful classes into it!");
+  vFrameA->SetAlignment(Qt::AlignRight | Qt::AlignBottom);
+  vFrameA->SetCollectionName(vCollectionC->GetName());
+  vFrameA->SetRect(QRectF(-200, -350, 350, 500));
+
+  ggClassyFrame* vFrameB = new ggClassyFrame();
+  vFrameB->SetDescription("Hi there!");
+  vFrameB->SetAlignment(Qt::AlignCenter);
+  vFrameB->SetRect(QRectF(200, -350, 100, 30));
+
+  vDataSet->AddFrame(vFrameA);
+  vDataSet->AddFrame(vFrameB);
 
   return vDataSet;
 }

@@ -13,6 +13,7 @@ class ggClassyDataSet;
 class ggClassyCollection;
 class ggClassyClass;
 class ggClassyClassMember;
+class ggClassyFrame;
 
 /**
  * @brief The ggClassyTreeItem class represents a hierarchical structure of the ggClassyDataSet.
@@ -42,18 +43,21 @@ private:
   ggClassyTreeItem(const ggClassyCollection* aCollection);
   ggClassyTreeItem(const ggClassyClass* aClass);
   ggClassyTreeItem(const ggClassyClassMember* aMember);
+  ggClassyTreeItem(const ggClassyFrame* aFrame);
 
   const ggClassyDataSet* GetDataSet() const;
   const ggClassyCollection* GetCollection() const;
   const ggClassyClass* GetClass() const;
   const ggClassyClassMember* GetMember() const;
+  const ggClassyFrame* GetFrame() const;
 
   enum class cType {
     eUnknown,
     eDataSet,
     eCollection,
     eClass,
-    eMember
+    eMember,
+    eFrame,
   };
 
   struct cLess {

@@ -12,6 +12,8 @@ class ggGraphicsShadowRectItem;
 class ggGraphicsTextItem;
 class QGraphicsEllipseItem;
 template <class T> class ggGraphicsHandleItemT;
+class ggClassyFrame;
+class ggClassyCollection;
 
 /**
  * @brief The ggClassyGraphicsFrameItem class
@@ -22,11 +24,16 @@ class ggClassyGraphicsFrameItem :
 {
 public:
 
-  ggClassyGraphicsFrameItem(QGraphicsItem* aParent = nullptr);
+  ggClassyGraphicsFrameItem(ggClassyFrame* aFrame = nullptr,
+                            QGraphicsItem* aParent = nullptr);
 
   ggClassyGraphicsFrameItem(const QRectF& aRect,
-                            const qreal aRadius = 3.0f,
+                            const qreal aRadius = 8.0f,
+                            ggClassyFrame* aFrame = nullptr,
                             QGraphicsItem* aParent = nullptr);
+
+  void SetFrame(ggClassyFrame* aFrame);
+  ggClassyFrame* GetFrame() const;
 
   void SetRadius(qreal aRadius);
   void SetRadius(qreal aRadiusX, qreal aRadiusY);
@@ -45,11 +52,16 @@ private:
 
   void Construct();
 
+  void UpdateFrameRead();
+  void UpdateFrameWrite();
+  void UpdateCollectionRead();
+  void UpdateLayout();
+
+  const ggClassyCollection* GetCollection() const;
   Qt::Alignment GetVerticalTextAlignment() const;
   void ShowHandles();
   void HideHandles();
   void SetHandleBrush(const QBrush& aBrush);
-  void UpdateLayout();
 
   ggGraphicsShadowRectItem* mShadow;
   ggGraphicsTextItem* mText;
@@ -60,6 +72,7 @@ private:
   ggGraphicsHandleItemT<QGraphicsEllipseItem>* mHandleBR;
 
   QPointF mLastMousePressPos;
+  ggClassyFrame* mFrame;
 
 };
 

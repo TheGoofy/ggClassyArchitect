@@ -78,6 +78,22 @@ public:
         vClassTreeItem->AddChild(&vMember);
       }
     }
+
+    // add frames
+    ggWalkerT<ggClassyFrameContainer::iterator> vFramesWalker(mDataSet->GetFrames());
+    while (vFramesWalker) {
+
+      // add frame to collection (or root, if there is no collection)
+      ggClassyFrame* vFrame = *vFramesWalker;
+      tCollectionsMap::iterator vCollectionItemIterator = vCollectionsMap.find(vFrame->GetCollectionName());
+      if (vCollectionItemIterator != vCollectionsMap.end()) {
+        ggClassyTreeItem* vCollectionTreeItem = vCollectionItemIterator->second;
+        vCollectionTreeItem->AddChild(vFrame);
+      }
+      else {
+        mRootItem->AddChild(vFrame);
+      }
+    }
   }
 
   ggClassyDataSet* mDataSet;
