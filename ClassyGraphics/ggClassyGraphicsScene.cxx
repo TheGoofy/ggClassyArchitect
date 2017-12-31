@@ -70,6 +70,22 @@ protected:
     if (aSubject == mText->GetSubjectText()) {
       UpdateLayout();
     }
+
+    else if (aSubject == mHandleTL->GetSubjectPosition()) {
+      QRectF vRect(mHandleTL->pos(), mHandleBR->pos());
+      if (vRect.width() < 2.0f * GetRadiusX()) vRect.setLeft(vRect.right() - 2.0f * GetRadiusX());
+      if (vRect.height() < 2.0f * GetRadiusY()) vRect.setTop(vRect.bottom() - 2.0f * GetRadiusY());
+      setRect(vRect.normalized());
+      UpdateLayout();
+    }
+
+    else if (aSubject == mHandleBR->GetSubjectPosition()) {
+      QRectF vRect(mHandleTL->pos(), mHandleBR->pos());
+      if (vRect.width() < 2.0f * GetRadiusX()) vRect.setWidth(2.0f * GetRadiusX());
+      if (vRect.height() < 2.0f * GetRadiusY()) vRect.setHeight(2.0f * GetRadiusY());
+      setRect(vRect.normalized());
+      UpdateLayout();
+    }
   }
 
   virtual QVariant itemChange(GraphicsItemChange aChange, const QVariant& aValue) override
@@ -79,6 +95,18 @@ protected:
       mShadow->setPos(aValue.toBool() ? QPointF(0.0f, 0.0f) : QPointF(3.0f, 2.0f));
     }
     return ggGraphicsRoundedRectItem::itemChange(aChange, aValue);
+  }
+
+  virtual void hoverEnterEvent(QGraphicsSceneHoverEvent* aEvent) override
+  {
+    ShowHandles();
+    ggGraphicsRoundedRectItem::hoverEnterEvent(aEvent);
+  }
+
+  virtual void hoverLeaveEvent(QGraphicsSceneHoverEvent* aEvent) override
+  {
+    HideHandles();
+    ggGraphicsRoundedRectItem::hoverLeaveEvent(aEvent);
   }
 
   virtual void mousePressEvent(QGraphicsSceneMouseEvent* aEvent) override
@@ -96,28 +124,70 @@ private:
 
   void Construct()
   {
+    // own properties
     setFlag(ItemIsSelectable);
     setFlag(ItemIsMovable);
+    setAcceptHoverEvents(true);
     setCursor(Qt::SizeAllCursor);
+    setZValue(-2.0f);
+
+    // shadow
     mShadow = new ggGraphicsShadowRectItem(this);
     mShadow->setFlag(ItemStacksBehindParent);
     mShadow->setPen(Qt::NoPen);
     mShadow->SetShadowColors(QColor(0, 0, 0, 40));
     mShadow->setPos(3.0f, 2.0f);
+
+    // text
     mText = new ggGraphicsTextItem(this);
     mText->SetPen(Qt::NoPen);
     mText->SetText("Goofy was here!");
-    mText->SetAlignment(Qt::AlignLeft | Qt::AlignBottom);
+    mText->SetAlignment(Qt::AlignCenter | Qt::AlignVCenter);
+
+    // size handles
+    mHandleTL = new ggGraphicsHandleItemEllipse(9.0f, this);
+    mHandleTR = new ggGraphicsHandleItemEllipse(9.0f, this);
+    mHandleBL = new ggGraphicsHandleItemEllipse(9.0f, this);
+    mHandleBR = new ggGraphicsHandleItemEllipse(9.0f, this);
+    mHandleTL->LinkX(mHandleBL);
+    mHandleTL->LinkY(mHandleTR);
+    mHandleBR->LinkX(mHandleTR);
+    mHandleBR->LinkY(mHandleBL);
+    mHandleTL->setCursor(Qt::SizeFDiagCursor);
+    mHandleTR->setCursor(Qt::SizeBDiagCursor);
+    mHandleBL->setCursor(Qt::SizeBDiagCursor);
+    mHandleBR->setCursor(Qt::SizeFDiagCursor);
+
+    // attach subjects
     Attach(mText->GetSubjectText());
+    Attach(mHandleTL->GetSubjectPosition());
+    Attach(mHandleBR->GetSubjectPosition());
+
+    // arrange layout
     UpdateLayout();
   }
 
-  Qt::Alignment GetVerticalAlignment() const
+  Qt::Alignment GetVerticalTextAlignment() const
   {
     if (mText->GetAlignment() & Qt::AlignTop) return Qt::AlignTop;
     if (mText->GetAlignment() & Qt::AlignVCenter) return Qt::AlignVCenter;
     if (mText->GetAlignment() & Qt::AlignBottom) return Qt::AlignBottom;
     return Qt::AlignTop;
+  }
+
+  void ShowHandles() {
+    SetHandleBrush(QColor(255, 0, 0, 255));
+  }
+
+  void HideHandles() {
+    SetHandleBrush(Qt::transparent);
+  }
+
+  void SetHandleBrush(const QBrush& aBrush) {
+    mHandleTL->setBrush(aBrush);
+    mHandleTR->setBrush(aBrush);
+    mHandleBL->setBrush(aBrush);
+    mHandleBR->setBrush(aBrush);
   }
 
   void UpdateLayout()
@@ -126,27 +196,41 @@ private:
     qreal vShadowWidth = 7.0f;
     qreal vFrameBorder2 = pen().widthF() / 2.0f;
     qreal vShadowMargin = vFrameBorder2 + vShadowWidth;
+    const QRectF& vRect(rect());
     mShadow->SetShadowWidth(vShadowWidth);
     mShadow->SetRadius(GetRadiusX() + vFrameBorder2 + vShadowWidth);
-    mShadow->setRect(rect() + QMarginsF(vShadowMargin, vShadowMargin, vShadowMargin, vShadowMargin));
+    mShadow->setRect(vRect + QMarginsF(vShadowMargin, vShadowMargin, vShadowMargin, vShadowMargin));
 
     // adjust the text
     qreal vTextMargin = mText->document()->documentMargin();
     qreal vTextBorder = (GetRadiusX() > vTextMargin + 3.0f) ? GetRadiusX() - vTextMargin - 3.0f: 0.0f;
-    qreal vTextWidth = rect().width() - 2.0f * vTextBorder;
+    qreal vTextWidth = vRect.width() - 2.0f * vTextBorder;
     mText->setTextWidth(vTextWidth);
     qreal vTextHeight = mText->boundingRect().height();
-    mText->setX(rect().left() + vTextBorder);
-    switch (GetVerticalAlignment()) {
-      case Qt::AlignTop: mText->setY(rect().top() + vTextBorder); break;
-      case Qt::AlignVCenter: mText->setY(rect().top() + (rect().height() - vTextHeight) / 2.0f); break;
-      case Qt::AlignBottom: mText->setY(rect().bottom() - vTextHeight - vTextBorder); break;
-      default: mText->setY(rect().top() + vTextBorder); break;
+    mText->setX(vRect.left() + vTextBorder);
+    switch (GetVerticalTextAlignment()) {
+      case Qt::AlignTop: mText->setY(vRect.top() + vTextBorder); break;
+      case Qt::AlignVCenter: mText->setY(vRect.top() + (vRect.height() - vTextHeight) / 2.0f); break;
+      case Qt::AlignBottom: mText->setY(vRect.bottom() - vTextHeight - vTextBorder); break;
+      default: mText->setY(vRect.top() + vTextBorder); break;
     }
+
+    // adjust the handles position
+    ggObserver::cExecutorBlocking vBlockTL(this, mHandleTL->GetSubjectPosition());
+    ggObserver::cExecutorBlocking vBlockBR(this, mHandleBR->GetSubjectPosition());
+    mHandleTL->setPos(vRect.topLeft());
+    mHandleBR->setPos(vRect.bottomRight());
+
   }
 
   ggGraphicsShadowRectItem* mShadow;
   ggGraphicsTextItem* mText;
+
+  ggGraphicsHandleItemEllipse* mHandleTL;
+  ggGraphicsHandleItemEllipse* mHandleTR;
+  ggGraphicsHandleItemEllipse* mHandleBL;
+  ggGraphicsHandleItemEllipse* mHandleBR;
+
   QPointF mLastMousePressPos;
 
 };
@@ -171,10 +255,15 @@ ggClassyGraphicsScene::ggClassyGraphicsScene(QObject* aParent) :
   mBoxPoints = new ggClassyClassBoxPoints();
 
 
-  ggClassyGraphicsFrameItem* vRect = new ggClassyGraphicsFrameItem(QRectF(-200,-100,300,200), 15);
-  vRect->setPen(QPen(QColor(0,0,0,50), 1.0f));
-  vRect->setBrush(QColor(255,255,255,255));
-  addItem(vRect);
+  ggClassyGraphicsFrameItem* vRectA = new ggClassyGraphicsFrameItem(QRectF(-200,-100,300,200), 10);
+  vRectA->setPen(QPen(QColor(0,0,0,50), 1.0f));
+  vRectA->setBrush(QColor(255,255,255,255));
+  addItem(vRectA);
+
+  ggClassyGraphicsFrameItem* vRectB = new ggClassyGraphicsFrameItem(QRectF(-150,-200,200,100), 10);
+  vRectB->setPen(QPen(QColor(0,0,0,50), 1.0f));
+  vRectB->setBrush(QColor(255,255,255,255));
+  addItem(vRectB);
 }
 
 
