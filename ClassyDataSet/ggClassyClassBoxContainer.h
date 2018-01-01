@@ -51,9 +51,6 @@ public:
 
 private:
 
-  bool Find(const tClassBoxes& aClassBoxes,
-            const ggClassyClassBox* aClassBox) const;
-
   void UpdateIndicesZ();
 
   std::vector<ggClassyClassBox*> mClassBoxes;

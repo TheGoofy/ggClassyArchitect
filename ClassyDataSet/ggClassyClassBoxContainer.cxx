@@ -159,13 +159,6 @@ ggClassyClassBoxContainer::const_iterator ggClassyClassBoxContainer::end() const
 }
 
 
-bool ggClassyClassBoxContainer::Find(const tClassBoxes& aClassBoxes,
-                                     const ggClassyClassBox* aClassBox) const
-{
-  return aClassBoxes.find(aClassBox) != aClassBoxes.end();
-}
-
-
 void ggClassyClassBoxContainer::UpdateIndicesZ()
 {
   for (ggUSize vBoxIndex = 0; vBoxIndex < mClassBoxes.size(); vBoxIndex++) {
@@ -176,15 +169,7 @@ void ggClassyClassBoxContainer::UpdateIndicesZ()
 
 void ggClassyClassBoxContainer::MoveClassBoxesUp(const tClassBoxes& aClassBoxes)
 {
-  if (aClassBoxes.empty()) return;
-  if (mClassBoxes.size() < 2) return;
-  for (ggUSize vBoxIndex = mClassBoxes.size()-1; vBoxIndex > 0; vBoxIndex--) {
-    if (Find(aClassBoxes, mClassBoxes[vBoxIndex-1])) {
-      if (!Find(aClassBoxes, mClassBoxes[vBoxIndex])) {
-        ggUtility::Swap(mClassBoxes[vBoxIndex-1], mClassBoxes[vBoxIndex]);
-      }
-    }
-  }
+  ggUtility::MoveUp(mClassBoxes, aClassBoxes);
   UpdateIndicesZ();
   Notify();
 }
@@ -192,15 +177,7 @@ void ggClassyClassBoxContainer::MoveClassBoxesUp(const tClassBoxes& aClassBoxes)
 
 void ggClassyClassBoxContainer::MoveClassBoxesDown(const tClassBoxes& aClassBoxes)
 {
-  if (aClassBoxes.empty()) return;
-  if (mClassBoxes.size() < 2) return;
-  for (ggUSize vBoxIndex = 0; vBoxIndex+1 < mClassBoxes.size(); vBoxIndex++) {
-    if (Find(aClassBoxes, mClassBoxes[vBoxIndex+1])) {
-      if (!Find(aClassBoxes, mClassBoxes[vBoxIndex])) {
-        ggUtility::Swap(mClassBoxes[vBoxIndex+1], mClassBoxes[vBoxIndex]);
-      }
-    }
-  }
+  ggUtility::MoveDown(mClassBoxes, aClassBoxes);
   UpdateIndicesZ();
   Notify();
 }
@@ -208,18 +185,7 @@ void ggClassyClassBoxContainer::MoveClassBoxesDown(const tClassBoxes& aClassBoxe
 
 void ggClassyClassBoxContainer::MoveClassBoxesTop(const tClassBoxes& aClassBoxes)
 {
-  if (aClassBoxes.empty()) return;
-  std::vector<ggClassyClassBox*> vClassBoxesA;
-  std::vector<ggClassyClassBox*> vClassBoxesB;
-  ggWalkerT<std::vector<ggClassyClassBox*>::iterator> vClassBoxesWalker(mClassBoxes);
-  while (vClassBoxesWalker) {
-    ggClassyClassBox* vClassBox = *vClassBoxesWalker;
-    if (Find(aClassBoxes, vClassBox)) vClassBoxesA.push_back(vClassBox);
-    else vClassBoxesB.push_back(vClassBox);
-  }
-  mClassBoxes.clear();
-  mClassBoxes.insert(mClassBoxes.end(), vClassBoxesB.begin(), vClassBoxesB.end());
-  mClassBoxes.insert(mClassBoxes.end(), vClassBoxesA.begin(), vClassBoxesA.end());
+  ggUtility::MoveTop(mClassBoxes, aClassBoxes);
   UpdateIndicesZ();
   Notify();
 }
@@ -227,18 +193,7 @@ void ggClassyClassBoxContainer::MoveClassBoxesTop(const tClassBoxes& aClassBoxes
 
 void ggClassyClassBoxContainer::MoveClassBoxesBottom(const tClassBoxes& aClassBoxes)
 {
-  if (aClassBoxes.empty()) return;
-  std::vector<ggClassyClassBox*> vClassBoxesA;
-  std::vector<ggClassyClassBox*> vClassBoxesB;
-  ggWalkerT<std::vector<ggClassyClassBox*>::iterator> vClassBoxesWalker(mClassBoxes);
-  while (vClassBoxesWalker) {
-    ggClassyClassBox* vClassBox = *vClassBoxesWalker;
-    if (Find(aClassBoxes, vClassBox)) vClassBoxesA.push_back(vClassBox);
-    else vClassBoxesB.push_back(vClassBox);
-  }
-  mClassBoxes.clear();
-  mClassBoxes.insert(mClassBoxes.end(), vClassBoxesA.begin(), vClassBoxesA.end());
-  mClassBoxes.insert(mClassBoxes.end(), vClassBoxesB.begin(), vClassBoxesB.end());
+  ggUtility::MoveBottom(mClassBoxes, aClassBoxes);
   UpdateIndicesZ();
   Notify();
 }

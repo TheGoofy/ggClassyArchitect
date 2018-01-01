@@ -2,9 +2,12 @@
 #define GGUTILITIES_H
 
 // 1) include system
+#include <set>
+#include <vector>
 
 // 2) include own project-related (sort by component dependency)
 #include "Base/ggTypes.h"
+#include "Base/ggWalkerT.h"
 
 // 3) forward declarations
 
@@ -94,6 +97,74 @@ namespace ggUtility {
   inline const T& Max(const T& aA, const T& aB, const T& aC, const T& aD) {
     if (aA < aB) return Max(aB, aC, aD);
     return Max(aA, aC, aD);
+  }  
+
+  template <typename T1, typename T2>
+  bool Find(const std::set<T1>& aItems, const T2& aItem)
+  {
+    return aItems.find(aItem) != aItems.end();
+  }
+
+  template <typename T1, typename T2>
+  void MoveUp(std::vector<T1>& aItemsVector, const std::set<T2>& aItemsSet)
+  {
+    if (aItemsSet.empty()) return;
+    if (aItemsVector.size() < 2) return;
+    for (ggUSize vIndex = aItemsVector.size()-1; vIndex > 0; vIndex--) {
+      if (Find(aItemsSet, aItemsVector[vIndex-1])) {
+        if (!Find(aItemsSet, aItemsVector[vIndex])) {
+          ggUtility::Swap(aItemsVector[vIndex-1], aItemsVector[vIndex]);
+        }
+      }
+    }
+  }
+
+  template <typename T1, typename T2>
+  void MoveDown(std::vector<T1>& aItemsVector, const std::set<T2>& aItemsSet)
+  {
+    if (aItemsSet.empty()) return;
+    if (aItemsVector.size() < 2) return;
+    for (ggUSize vIndex = 0; vIndex+1 < aItemsVector.size(); vIndex++) {
+      if (Find(aItemsSet, aItemsVector[vIndex+1])) {
+        if (!Find(aItemsSet, aItemsVector[vIndex])) {
+          ggUtility::Swap(aItemsVector[vIndex+1], aItemsVector[vIndex]);
+        }
+      }
+    }
+  }
+
+  template <typename T1, typename T2>
+  void MoveTop(std::vector<T1>& aItemsVector, const std::set<T2>& aItemsSet)
+  {
+    if (aItemsSet.empty()) return;
+    std::vector<T1> vItemsVectorA;
+    std::vector<T1> vItemsVectorB;
+    ggWalkerT<typename std::vector<T1>::iterator> vItemsVectorWalker(aItemsVector);
+    while (vItemsVectorWalker) {
+      T1 vItem = *vItemsVectorWalker;
+      if (Find(aItemsSet, vItem)) vItemsVectorA.push_back(vItem);
+      else vItemsVectorB.push_back(vItem);
+    }
+    aItemsVector.clear();
+    aItemsVector.insert(aItemsVector.end(), vItemsVectorB.begin(), vItemsVectorB.end());
+    aItemsVector.insert(aItemsVector.end(), vItemsVectorA.begin(), vItemsVectorA.end());
+  }
+
+  template <typename T1, typename T2>
+  void MoveBottom(std::vector<T1>& aItemsVector, const std::set<T2>& aItemsSet)
+  {
+    if (aItemsSet.empty()) return;
+    std::vector<T1> vItemsVectorA;
+    std::vector<T1> vItemsVectorB;
+    ggWalkerT<typename std::vector<T1>::iterator> vItemsVectorWalker(aItemsVector);
+    while (vItemsVectorWalker) {
+      T1 vItem = *vItemsVectorWalker;
+      if (Find(aItemsSet, vItem)) vItemsVectorA.push_back(vItem);
+      else vItemsVectorB.push_back(vItem);
+    }
+    aItemsVector.clear();
+    aItemsVector.insert(aItemsVector.end(), vItemsVectorA.begin(), vItemsVectorA.end());
+    aItemsVector.insert(aItemsVector.end(), vItemsVectorB.begin(), vItemsVectorB.end());
   }
 }
 
