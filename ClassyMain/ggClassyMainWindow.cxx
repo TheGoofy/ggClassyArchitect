@@ -361,28 +361,28 @@ void ggClassyMainWindow::SaveDataSetAs()
 void ggClassyMainWindow::MoveSelectedItemsTop()
 {
   ggClassyGraphicsScene* vScene = dynamic_cast<ggClassyGraphicsScene*>(ui->mGraphicsView->scene());
-  if (vScene != nullptr) vScene->MoveSelectedClassBoxesTop();
+  if (vScene != nullptr) vScene->MoveSelectedItemsTop();
 }
 
 
 void ggClassyMainWindow::MoveSelectedItemsBottom()
 {
   ggClassyGraphicsScene* vScene = dynamic_cast<ggClassyGraphicsScene*>(ui->mGraphicsView->scene());
-  if (vScene != nullptr) vScene->MoveSelectedClassBoxesBottom();
+  if (vScene != nullptr) vScene->MoveSelectedItemsBottom();
 }
 
 
 void ggClassyMainWindow::MoveSelectedItemsUp()
 {
   ggClassyGraphicsScene* vScene = dynamic_cast<ggClassyGraphicsScene*>(ui->mGraphicsView->scene());
-  if (vScene != nullptr) vScene->MoveSelectedClassBoxesUp();
+  if (vScene != nullptr) vScene->MoveSelectedItemsUp();
 }
 
 
 void ggClassyMainWindow::MoveSelectedItemsDown()
 {
   ggClassyGraphicsScene* vScene = dynamic_cast<ggClassyGraphicsScene*>(ui->mGraphicsView->scene());
-  if (vScene != nullptr) vScene->MoveSelectedClassBoxesDown();
+  if (vScene != nullptr) vScene->MoveSelectedItemsDown();
 }
 
 

@@ -118,42 +118,89 @@ void ggClassyGraphicsScene::SelectClassBoxes(const tClassBoxes& aClassBoxes)
 }
 
 
-void ggClassyGraphicsScene::MoveSelectedClassBoxesUp()
+ggClassyGraphicsScene::tFrames ggClassyGraphicsScene::GetSelectedFrames() const
+{
+  tFrames vSelectedFrames;
+  foreach (QGraphicsItem* vItem, selectedItems()) {
+    ggClassyGraphicsFrameItem* vFrameItem = dynamic_cast<ggClassyGraphicsFrameItem*>(vItem);
+    if (vFrameItem != nullptr) {
+      vSelectedFrames.insert(vFrameItem->GetFrame());
+    }
+  }
+  return vSelectedFrames;
+}
+
+
+void ggClassyGraphicsScene::SelectFrames(const tFrames& aFrames)
+{
+  foreach (QGraphicsItem* vItem, items()) {
+    ggClassyGraphicsFrameItem* vFrameItem = dynamic_cast<ggClassyGraphicsFrameItem*>(vItem);
+    if (vFrameItem != nullptr) {
+      const ggClassyFrame* vFrame = vFrameItem->GetFrame();
+      if (aFrames.find(vFrame) != aFrames.end()) {
+        vFrameItem->setSelected(true);
+      }
+    }
+  }
+}
+
+
+void ggClassyGraphicsScene::MoveSelectedItemsUp()
 {
   if (mDataSet != nullptr) {
+    // class boxes
     const tClassBoxes& vClassBoxes = GetSelectedClassBoxes();
     mDataSet->GetClassBoxes().MoveClassBoxesUp(vClassBoxes);
     SelectClassBoxes(vClassBoxes);
+    // frames
+    const tFrames& vFrames = GetSelectedFrames();
+    mDataSet->GetFrames().MoveFramesUp(vFrames);
+    SelectFrames(vFrames);
   }
 }
 
 
-void ggClassyGraphicsScene::MoveSelectedClassBoxesDown()
+void ggClassyGraphicsScene::MoveSelectedItemsDown()
 {
   if (mDataSet != nullptr) {
+    // class boxes
     const tClassBoxes& vClassBoxes = GetSelectedClassBoxes();
     mDataSet->GetClassBoxes().MoveClassBoxesDown(vClassBoxes);
     SelectClassBoxes(vClassBoxes);
+    // frames
+    const tFrames& vFrames = GetSelectedFrames();
+    mDataSet->GetFrames().MoveFramesDown(vFrames);
+    SelectFrames(vFrames);
   }
 }
 
 
-void ggClassyGraphicsScene::MoveSelectedClassBoxesTop()
+void ggClassyGraphicsScene::MoveSelectedItemsTop()
 {
   if (mDataSet != nullptr) {
+    // class boxes
     const tClassBoxes& vClassBoxes = GetSelectedClassBoxes();
     mDataSet->GetClassBoxes().MoveClassBoxesTop(vClassBoxes);
     SelectClassBoxes(vClassBoxes);
+    // frames
+    const tFrames& vFrames = GetSelectedFrames();
+    mDataSet->GetFrames().MoveFramesTop(vFrames);
+    SelectFrames(vFrames);
   }
 }
 
 
-void ggClassyGraphicsScene::MoveSelectedClassBoxesBottom()
+void ggClassyGraphicsScene::MoveSelectedItemsBottom()
 {
   if (mDataSet != nullptr) {
+    // class boxes
     const tClassBoxes& vClassBoxes = GetSelectedClassBoxes();
     mDataSet->GetClassBoxes().MoveClassBoxesBottom(vClassBoxes);
     SelectClassBoxes(vClassBoxes);
+    // frames
+    const tFrames& vFrames = GetSelectedFrames();
+    mDataSet->GetFrames().MoveFramesBottom(vFrames);
+    SelectFrames(vFrames);
   }
 }
 

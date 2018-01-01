@@ -13,6 +13,7 @@ class ggClassyGraphicsBoxItem;
 class ggClassyClassBoxPoints;
 class ggClassyDataSet;
 class ggClassyClass;
+class ggClassyFrame;
 
 /**
  * @brief The ggClassyGraphicsScene class
@@ -29,14 +30,18 @@ public:
 
   void SetDataSet(ggClassyDataSet* aDataSet);
 
-  void MoveSelectedClassBoxesUp();
-  void MoveSelectedClassBoxesDown();
-  void MoveSelectedClassBoxesTop();
-  void MoveSelectedClassBoxesBottom();
+  void MoveSelectedItemsUp();
+  void MoveSelectedItemsDown();
+  void MoveSelectedItemsTop();
+  void MoveSelectedItemsBottom();
 
   typedef std::set<const ggClassyClassBox*> tClassBoxes;
   tClassBoxes GetSelectedClassBoxes() const;
   void SelectClassBoxes(const tClassBoxes& aClassBoxes);
+
+  typedef std::set<const ggClassyFrame*> tFrames;
+  tFrames GetSelectedFrames() const;
+  void SelectFrames(const tFrames& aFrames);
 
 protected:
 
