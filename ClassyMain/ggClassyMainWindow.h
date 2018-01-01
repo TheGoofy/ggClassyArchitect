@@ -13,6 +13,7 @@
 namespace Ui { class ggClassyMainWindow; }
 class ggColorWheelWidget;
 class ggColorChannelWidget;
+class QToolButton;
 
 /**
  * @brief The ggClassyMainWindow class
@@ -43,7 +44,17 @@ protected slots:
   void MoveSelectedItemsBottom();
   void OpenDataSet();
   void SaveDataSetAs();
-  void ChangeColor(const QColor& aColor);
+  void ChangeColor(const QColor& aColor);  
+
+  void AlignTL();
+  void AlignTC();
+  void AlignTR();
+  void AlignCL();
+  void AlignCC();
+  void AlignCR();
+  void AlignBL();
+  void AlignBC();
+  void AlignBR();
 
 protected:
   virtual void Update(const ggSubject* aSubject) override;
@@ -64,6 +75,19 @@ private:
   void ConnectColor(ggColorWheelWidget* aColorWheelWidget, ggColorChannelWidget* aColorChannelWidget) const;
   void ConnectColor(ggColorChannelWidget* aColorChannelWidget, ggColorWheelWidget* aColorWheelWidget) const;
   void ConnectColor(ggColorChannelWidget* aColorChannelWidgetA, ggColorChannelWidget* aColorChannelWidgetB) const;
+
+  void CreateAction(QAction*& aAction, const char* aMethod, QToolButton* aToolButton);
+  void SetAlignment(Qt::Alignment aAlignment);
+
+  QAction* mActionAlignTL;
+  QAction* mActionAlignTC;
+  QAction* mActionAlignTR;
+  QAction* mActionAlignCL;
+  QAction* mActionAlignCC;
+  QAction* mActionAlignCR;
+  QAction* mActionAlignBL;
+  QAction* mActionAlignBC;
+  QAction* mActionAlignBR;
 
 };
 

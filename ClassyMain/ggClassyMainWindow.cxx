@@ -7,6 +7,7 @@
 #include <QFileDialog>
 #include <QMessageBox>
 #include <QDebug>
+#include <QMetaMethod>
 
 // 2) include own project-related (sort by component dependency)
 #include "Base/ggWalkerT.h"
@@ -34,6 +35,16 @@ ggClassyMainWindow::ggClassyMainWindow(QWidget *parent) :
   ui->centralWidget->layout()->setSpacing(0);
   ui->mZoomComboBox->setCompleter(0);
   ui->mZoomComboBox->setFocusPolicy(Qt::ClickFocus);
+
+  CreateAction(mActionAlignTL, SLOT(AlignTL()), ui->mAlignTL);
+  CreateAction(mActionAlignTC, SLOT(AlignTC()), ui->mAlignTC);
+  CreateAction(mActionAlignTR, SLOT(AlignTR()), ui->mAlignTR);
+  CreateAction(mActionAlignCL, SLOT(AlignCL()), ui->mAlignCL);
+  CreateAction(mActionAlignCC, SLOT(AlignCC()), ui->mAlignCC);
+  CreateAction(mActionAlignCR, SLOT(AlignCR()), ui->mAlignCR);
+  CreateAction(mActionAlignBL, SLOT(AlignBL()), ui->mAlignBL);
+  CreateAction(mActionAlignBC, SLOT(AlignBC()), ui->mAlignBC);
+  CreateAction(mActionAlignBR, SLOT(AlignBR()), ui->mAlignBR);
 
   // make some objects (for development and testing)
   ggClassyDataSet* vDataSet = ggClassyApplication::GetInstance().GetDataSet();
@@ -393,19 +404,25 @@ void ggClassyMainWindow::ChangeColor(const QColor& aColor)
 
     // the selected collections (compile them in a set in order to avoid duplicates)
     std::set<ggClassyCollection*> vCollections;
-
-    // get the selected class boxes and the dataset
-    const ggClassyGraphicsScene::tClassBoxes& vSelectedClassBoxes = vScene->GetSelectedClassBoxes();
     ggClassyDataSet* vDataSet = ggClassyApplication::GetInstance().GetDataSet();
 
-    // loop over all selected class boxes
+    // get collections of the selected class boxes
+    const ggClassyGraphicsScene::tClassBoxes& vSelectedClassBoxes = vScene->GetSelectedClassBoxes();
     ggWalkerT<ggClassyGraphicsScene::tClassBoxes::const_iterator> vSelectedClassBoxesWalker(vSelectedClassBoxes);
     while (vSelectedClassBoxesWalker) {
       const ggClassyClassBox* vSelectedClassBox = *vSelectedClassBoxesWalker;
       vCollections.insert(vDataSet->FindCollectionFromClass(vSelectedClassBox->GetClassName()));
     }
 
-    // modify the collection
+    // get collections of the selected frames
+    const ggClassyGraphicsScene::tFrames& vSelectedFrames = vScene->GetSelectedFrames();
+    ggWalkerT<ggClassyGraphicsScene::tFrames::const_iterator> vSelectedFramesWalker(vSelectedFrames);
+    while (vSelectedFramesWalker) {
+      const ggClassyFrame* vSelectedFrame = *vSelectedFramesWalker;
+      vCollections.insert(vDataSet->GetCollections().FindCollection(vSelectedFrame->GetCollectionName()));
+    }
+
+    // modify the collection(s)
     ggWalkerT<std::set<ggClassyCollection*>::iterator> vCollectionsWalker(vCollections);
     while (vCollectionsWalker) {
       ggClassyCollection* vCollection = *vCollectionsWalker;
@@ -420,4 +437,84 @@ void ggClassyMainWindow::ChangeColor(const QColor& aColor)
       }
     }
   }
+}
+
+
+void ggClassyMainWindow::CreateAction(QAction*& aAction, const char* aMethod, QToolButton* aToolButton)
+{
+  aAction = new QAction("x", this);
+  aAction->setCheckable(true);
+  connect(aAction, SIGNAL(triggered()), this, aMethod);
+  aToolButton->setDefaultAction(aAction);
+  aToolButton->setAutoRaise(true);
+}
+
+
+void ggClassyMainWindow::SetAlignment(Qt::Alignment aAlignment)
+{
+  mActionAlignTL->setChecked(aAlignment == (Qt::AlignTop | Qt::AlignLeft));
+  mActionAlignTC->setChecked(aAlignment == (Qt::AlignTop | Qt::AlignHCenter));
+  mActionAlignTR->setChecked(aAlignment == (Qt::AlignTop | Qt::AlignRight));
+  mActionAlignCL->setChecked(aAlignment == (Qt::AlignVCenter | Qt::AlignLeft));
+  mActionAlignCC->setChecked(aAlignment == (Qt::AlignVCenter | Qt::AlignHCenter));
+  mActionAlignCR->setChecked(aAlignment == (Qt::AlignVCenter | Qt::AlignRight));
+  mActionAlignBL->setChecked(aAlignment == (Qt::AlignBottom | Qt::AlignLeft));
+  mActionAlignBC->setChecked(aAlignment == (Qt::AlignBottom | Qt::AlignHCenter));
+  mActionAlignBR->setChecked(aAlignment == (Qt::AlignBottom | Qt::AlignRight));
+
+  ggClassyGraphicsScene* vScene = dynamic_cast<ggClassyGraphicsScene*>(ui->mGraphicsView->scene());
+  if (vScene != nullptr) {
+    ggClassyGraphicsScene::tFrames vSelectedFrames = vScene->GetSelectedFrames();
+    ggWalkerT<ggClassyGraphicsScene::tFrames::iterator> vSelectedFramesWalker(vSelectedFrames);
+    while (vSelectedFramesWalker) {
+      const ggClassyFrame* vFrame = *vSelectedFramesWalker;
+      const_cast<ggClassyFrame*>(vFrame)->SetAlignment(aAlignment);
+    }
+  }
+}
+
+
+void ggClassyMainWindow::AlignTL()
+{
+  SetAlignment(Qt::AlignTop | Qt::AlignLeft);
+}
+
+void ggClassyMainWindow::AlignTC()
+{
+  SetAlignment(Qt::AlignTop | Qt::AlignHCenter);
+}
+
+void ggClassyMainWindow::AlignTR()
+{
+  SetAlignment(Qt::AlignTop | Qt::AlignRight);
+}
+
+void ggClassyMainWindow::AlignCL()
+{
+  SetAlignment(Qt::AlignVCenter | Qt::AlignLeft);
+}
+
+void ggClassyMainWindow::AlignCC()
+{
+  SetAlignment(Qt::AlignVCenter | Qt::AlignHCenter);
+}
+
+void ggClassyMainWindow::AlignCR()
+{
+  SetAlignment(Qt::AlignVCenter | Qt::AlignRight);
+}
+
+void ggClassyMainWindow::AlignBL()
+{
+  SetAlignment(Qt::AlignBottom | Qt::AlignLeft);
+}
+
+void ggClassyMainWindow::AlignBC()
+{
+  SetAlignment(Qt::AlignBottom | Qt::AlignHCenter);
+}
+
+void ggClassyMainWindow::AlignBR()
+{
+  SetAlignment(Qt::AlignBottom | Qt::AlignRight);
 }
