@@ -461,7 +461,6 @@ void ggClassyGraphicsBoxItem::Update(const ggSubject* aSubject)
 {
   if (aSubject == GetSubjectPosition()) {
     UpdateClassBoxWrite();
-    NotifyClassBoxChange();
     UpdateConnectionPoints();
     NotifyConnectionPoints();
   }
@@ -470,7 +469,6 @@ void ggClassyGraphicsBoxItem::Update(const ggSubject* aSubject)
     UpdateLayout();
     NotifySize();
     UpdateClassBoxWrite();
-    NotifyClassBoxChange();
     UpdateConnectionPoints();
     NotifyConnectionPoints();
   }
@@ -481,7 +479,6 @@ void ggClassyGraphicsBoxItem::Update(const ggSubject* aSubject)
     UpdateLayout();
     NotifySize();
     UpdateClassBoxWrite();
-    NotifyClassBoxChange();
     UpdateConnectionPoints();
     NotifyConnectionPoints();
   }
@@ -490,7 +487,6 @@ void ggClassyGraphicsBoxItem::Update(const ggSubject* aSubject)
            aSubject == mMembersText->GetSubjectEditingFinished() ||
            aSubject == mDescriptionText->GetSubjectEditingFinished()) {
     UpdateClassWrite();
-    NotifyClassChange();
   }
 
   else if (aSubject == mMembersCheckBox->GetSubjectChecked() ||
@@ -498,7 +494,6 @@ void ggClassyGraphicsBoxItem::Update(const ggSubject* aSubject)
     UpdateLayout();
     NotifySize();
     UpdateClassBoxWrite();
-    NotifyClassBoxChange();
     UpdateConnectionPoints();
     NotifyConnectionPoints();
   }
@@ -563,12 +558,6 @@ void ggClassyGraphicsBoxItem::UpdateClassWrite()
 }
 
 
-void ggClassyGraphicsBoxItem::NotifyClassChange()
-{
-  if (GetClass() != nullptr) GetClass()->Notify(this);
-}
-
-
 void ggClassyGraphicsBoxItem::UpdateClassBoxRead()
 {
   if (GetClassBox() != nullptr) {
@@ -590,12 +579,6 @@ void ggClassyGraphicsBoxItem::UpdateClassBoxWrite()
     GetClassBox()->SetMembersVisible(mMembersCheckBox->GetChecked());
     GetClassBox()->SetDescriptionVisible(mDescriptionCheckBox->GetChecked());
   }
-}
-
-
-void ggClassyGraphicsBoxItem::NotifyClassBoxChange()
-{
-  if (GetClassBox() != nullptr) GetClassBox()->Notify(this);
 }
 
 

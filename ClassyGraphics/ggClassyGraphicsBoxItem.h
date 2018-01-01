@@ -72,11 +72,9 @@ private:
 
   void UpdateClassRead();
   void UpdateClassWrite();
-  void NotifyClassChange();
 
   void UpdateClassBoxRead();
   void UpdateClassBoxWrite();
-  void NotifyClassBoxChange();
 
   void UpdateConnectionPoints();
   void NotifyConnectionPoints();
