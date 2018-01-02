@@ -8,6 +8,7 @@
 #include "Base/ggObserver.h"
 
 // 3) forward declarations
+class ggClassyCollection;
 class ggClassyClassBox;
 class ggClassyGraphicsBoxItem;
 class ggClassyAutoConnectPathItem;
@@ -35,6 +36,13 @@ public:
   void MoveSelectedItemsDown();
   void MoveSelectedItemsTop();
   void MoveSelectedItemsBottom();
+
+  typedef std::set<const ggClassyCollection*> tCollections;
+  tCollections GetSelectedCollections() const;
+
+  typedef std::set<const ggClassyClass*> tClasses;
+  tClasses GetSelectedClasses() const;
+  void SelectClasses(const tClasses& aClasses);
 
   typedef std::set<const ggClassyClassBox*> tClassBoxes;
   tClassBoxes GetSelectedClassBoxes() const;

@@ -91,6 +91,53 @@ void ggClassyGraphicsScene::SetDataSet(ggClassyDataSet* aDataSet)
 }
 
 
+
+ggClassyGraphicsScene::tCollections ggClassyGraphicsScene::GetSelectedCollections() const
+{
+  tCollections vSelectedCollections;
+  foreach (QGraphicsItem* vItem, selectedItems()) {
+    ggClassyGraphicsBoxItem* vClassBoxItem = dynamic_cast<ggClassyGraphicsBoxItem*>(vItem);
+    if (vClassBoxItem != nullptr) {
+      const ggClassyCollection* vCollection = vClassBoxItem->GetCollection();
+      if (vCollection != nullptr) {
+        vSelectedCollections.insert(vCollection);
+      }
+    }
+  }
+  return vSelectedCollections;
+}
+
+
+ggClassyGraphicsScene::tClasses ggClassyGraphicsScene::GetSelectedClasses() const
+{
+  tClasses vSelectedClasses;
+  foreach (QGraphicsItem* vItem, selectedItems()) {
+    ggClassyGraphicsBoxItem* vClassBoxItem = dynamic_cast<ggClassyGraphicsBoxItem*>(vItem);
+    if (vClassBoxItem != nullptr) {
+      const ggClassyClass* vClass = vClassBoxItem->GetClass();
+      if (vClass != nullptr) {
+        vSelectedClasses.insert(vClass);
+      }
+    }
+  }
+  return vSelectedClasses;
+}
+
+
+void ggClassyGraphicsScene::SelectClasses(const tClasses& aClasses)
+{
+  foreach (QGraphicsItem* vItem, items()) {
+    ggClassyGraphicsBoxItem* vClassBoxItem = dynamic_cast<ggClassyGraphicsBoxItem*>(vItem);
+    if (vClassBoxItem != nullptr) {
+      const ggClassyClass* vClass = vClassBoxItem->GetClass();
+      if (aClasses.find(vClass) != aClasses.end()) {
+        if (vClass != nullptr) vClassBoxItem->setSelected(true);
+      }
+    }
+  }
+}
+
+
 ggClassyGraphicsScene::tClassBoxes ggClassyGraphicsScene::GetSelectedClassBoxes() const
 {
   tClassBoxes vSelectedClassBoxes;

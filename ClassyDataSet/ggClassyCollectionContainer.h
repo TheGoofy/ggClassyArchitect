@@ -33,6 +33,7 @@ public:
   const ggClassyCollection* FindCollection(const QString& aName) const;
   ggClassyCollection* GetCollection(ggUSize aIndex);
   const ggClassyCollection* GetCollection(ggUSize aIndex) const;
+  void DeleteCollection(const QString& aName);
   void DeleteAllCollections();
   ggUSize GetSize() const;
 

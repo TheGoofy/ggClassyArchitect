@@ -73,7 +73,10 @@ ggClassyCollection* ggClassyCollectionContainer::AddCollection(ggClassyCollectio
 ggClassyCollection* ggClassyCollectionContainer::RemoveCollection(const QString& aName)
 {
   ggClassyCollection* vCollection = FindCollection(aName);
-  mCollections.erase(vCollection);
+  if (vCollection != nullptr) {
+    mCollections.erase(vCollection);
+    Notify();
+  }
   return vCollection;
 }
 
@@ -93,6 +96,13 @@ const ggClassyCollection* ggClassyCollectionContainer::FindCollection(const QStr
   tCollections::iterator vCollectionsIterator = mCollections.find(&vCollection);
   if (vCollectionsIterator != mCollections.end()) return *vCollectionsIterator;
   else return nullptr;
+}
+
+
+void ggClassyCollectionContainer::DeleteCollection(const QString& aName)
+{
+  ggClassyCollection* vCollection = RemoveCollection(aName);
+  delete vCollection;
 }
 
 

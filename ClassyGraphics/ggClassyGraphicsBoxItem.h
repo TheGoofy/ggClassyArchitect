@@ -36,6 +36,7 @@ public:
 
   ggClassyClass* GetClass() const;
   ggClassyClassBox* GetClassBox() const;  
+  const ggClassyCollection* GetCollection() const;
 
   const ggSubject* GetSubjectSize() const;
 
@@ -65,7 +66,6 @@ private:
   QPointF GetClassPositionRight() const;
   QPointF GetMemberPositionLeft(ggUSize aMemberIndex) const;
   QPointF GetMemberPositionRight(ggUSize aMemberIndex) const;
-  const ggClassyCollection* GetCollection() const;
 
   void UpdateLayout();
   void NotifySize();

@@ -228,6 +228,24 @@ QPointF& ggClassyMainWindow::GetNewPosition()
 }
 
 
+void ggClassyMainWindow::on_mNewCollectionPushButton_clicked()
+{
+  // find a new unused collection name
+  QString vCollectionNameBase = "ggClassyCollection";
+  int vCollectionNameNumber = 0;
+  QString vCollectionName = vCollectionNameBase + QString::number(vCollectionNameNumber++);
+  while (ggClassyApplication::GetInstance().GetDataSet()->GetCollections().FindCollection(vCollectionName) != nullptr) {
+    vCollectionName = vCollectionNameBase + QString::number(vCollectionNameNumber++);
+  }
+
+  // create the new collection
+  ggClassyCollection* vCollection = new ggClassyCollection(vCollectionName);
+
+  // add it to the dataset
+  ggClassyApplication::GetInstance().GetDataSet()->AddCollection(vCollection);
+}
+
+
 void ggClassyMainWindow::on_mNewClassPushButton_clicked()
 {
   // find a new unused class name
@@ -322,6 +340,29 @@ void ggClassyMainWindow::on_mNewFramePushButton_clicked()
   // select the newly created frames
   if (vScene != nullptr) {
     vScene->SelectFrames(vNewFrames);
+  }
+}
+
+
+void ggClassyMainWindow::on_mDeleteCollectionPushButton_clicked()
+{
+  ggClassyGraphicsScene* vScene = dynamic_cast<ggClassyGraphicsScene*>(ui->mGraphicsView->scene());
+  if (vScene != nullptr) {
+
+    // for lazy notify ...
+    ggClassyDataSet* vDataSet = ggClassyApplication::GetInstance().GetDataSet();
+    ggSubject::cExecutorLazy vLazyCollections(&vDataSet->GetCollections());
+
+    // loop over all selected collections
+    const ggClassyGraphicsScene::tCollections& vSelectedCollections = vScene->GetSelectedCollections();
+    ggWalkerT<ggClassyGraphicsScene::tCollections::const_iterator> vSelectedCollectionsWalker(vSelectedCollections);
+    while (vSelectedCollectionsWalker) {
+
+      // delete the collection
+      const ggClassyCollection* vSelectedCollection = *vSelectedCollectionsWalker;
+      QString vSelectedCollectionName = vSelectedCollection->GetName();
+      vDataSet->GetCollections().DeleteCollection(vSelectedCollectionName);
+    }
   }
 }
 
