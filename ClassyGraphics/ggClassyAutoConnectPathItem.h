@@ -19,6 +19,11 @@ public:
 
   void SetCollection(const ggClassyCollection* aCollection);
 
+  void SetClassInfo(const QString& aClassNameSrc, const QString& aClassNameDst, int aMemberIndex = -1);
+  const QString& GetClassNameSrc() const;
+  const QString& GetClassNameDst() const;
+  int GetMemberIndex() const;
+
 protected:
 
   virtual void Update(const ggSubject* aSubject) override;
@@ -28,6 +33,10 @@ private:
   void UpdateCollectionRead();
 
   const ggClassyCollection* mCollection;
+
+  QString mClassNameSrc;
+  QString mClassNameDst;
+  int mMemberIndex;
 
 };
 

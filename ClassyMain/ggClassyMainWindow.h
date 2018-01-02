@@ -39,6 +39,7 @@ protected slots:
   void on_mNewFramePushButton_clicked();
   void on_mDeleteClassPushButton_clicked();
   void on_mDeleteClassBoxPushButton_clicked();
+  void on_mDeleteConnectionPushButton_clicked();
   void on_mDeleteFramePushButton_clicked();
   void MoveSelectedItemsTop();
   void MoveSelectedItemsUp();

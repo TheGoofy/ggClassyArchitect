@@ -10,6 +10,7 @@
 // 3) forward declarations
 class ggClassyClassBox;
 class ggClassyGraphicsBoxItem;
+class ggClassyAutoConnectPathItem;
 class ggClassyClassBoxPoints;
 class ggClassyDataSet;
 class ggClassyClass;
@@ -38,6 +39,10 @@ public:
   typedef std::set<const ggClassyClassBox*> tClassBoxes;
   tClassBoxes GetSelectedClassBoxes() const;
   void SelectClassBoxes(const tClassBoxes& aClassBoxes);
+
+  typedef std::set<const ggClassyAutoConnectPathItem*> tConnections;
+  tConnections GetSelectedConnections() const;
+  void SelectConnections(const tConnections& aConnections);
 
   typedef std::set<const ggClassyFrame*> tFrames;
   tFrames GetSelectedFrames() const;

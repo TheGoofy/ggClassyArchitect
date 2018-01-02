@@ -15,6 +15,7 @@
 #include "ClassyDataSet/ggClassyDataSet.h"
 #include "ClassyMain/ggClassyApplication.h"
 #include "ClassyGraphics/ggClassyGraphicsScene.h"
+#include "ClassyGraphics/ggClassyAutoConnectPathItem.h"
 
 
 ggClassyMainWindow::ggClassyMainWindow(QWidget *parent) :
@@ -365,6 +366,39 @@ void ggClassyMainWindow::on_mDeleteClassBoxPushButton_clicked()
       // delete the box
       const ggClassyClassBox* vSelectedClassBox = *vSelectedClassBoxesWalker;
       vDataSet->GetClassBoxes().DeleteClassBox(vSelectedClassBox);
+    }
+  }
+}
+
+
+void ggClassyMainWindow::on_mDeleteConnectionPushButton_clicked()
+{
+  ggClassyGraphicsScene* vScene = dynamic_cast<ggClassyGraphicsScene*>(ui->mGraphicsView->scene());
+  if (vScene != nullptr) {
+
+    // notify changes only at the very end
+    ggClassyDataSet* vDataSet = ggClassyApplication::GetInstance().GetDataSet();
+    ggSubject::cExecutorLazy vLazyClasses(&vDataSet->GetClasses());
+    ggSubject::cExecutorLazy vLazyClassBoxes(&vDataSet->GetClassBoxes());
+    ggSubject::cExecutorLazy vLazyConnections(vDataSet->GetSubjectConnections());
+
+    // loop over all selected connections
+    const ggClassyGraphicsScene::tConnections& vSelectedConnections = vScene->GetSelectedConnections();
+    ggWalkerT<ggClassyGraphicsScene::tConnections::const_iterator> vSelectedConnectionsWalker(vSelectedConnections);
+    while (vSelectedConnectionsWalker) {
+
+      // delete the connection
+      const ggClassyAutoConnectPathItem* vSelectedConnection = *vSelectedConnectionsWalker;
+      ggClassyClass* vClass = vDataSet->FindClass(vSelectedConnection->GetClassNameSrc());
+      if (vClass != nullptr) {
+        int vMemberIndex = vSelectedConnection->GetMemberIndex();
+        if (vMemberIndex == -1) {
+          vClass->RemoveBaseClassName(vSelectedConnection->GetClassNameDst());
+        }
+        else if (vClass->GetMemberClassName(vMemberIndex) == vSelectedConnection->GetClassNameDst()) {
+          vClass->SetMemberClassName(vMemberIndex, "");
+        }
+      }
     }
   }
 }

@@ -50,6 +50,10 @@ public:
   const tMembers& GetMembers() const;
   QString GetMembersText() const;
   void SetMembersText(const QString& aText);
+  const QString& GetMemberName(int aIndex) const;
+  const QString& GetMemberClassName(int aIndex) const;
+  void SetMemberName(int aIndex, const QString& aName);
+  void SetMemberClassName(int aIndex, const QString& aClassName);
   const QString& GetDescription() const;
   void SetDescription(const QString& aDescription);
   const QString& GetCollectionName() const;

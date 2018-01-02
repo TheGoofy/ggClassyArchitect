@@ -10,7 +10,10 @@
 
 ggClassyAutoConnectPathItem::ggClassyAutoConnectPathItem(QGraphicsItem* aParent) :
   ggGraphicsAutoConnectPathItem(aParent),
-  mCollection(nullptr)
+  mCollection(nullptr),
+  mClassNameSrc(""),
+  mClassNameDst(""),
+  mMemberIndex(-1)
 {
 }
 
@@ -28,6 +31,34 @@ void ggClassyAutoConnectPathItem::SetCollection(const ggClassyCollection* aColle
     ggObserver::Attach(mCollection);
     UpdateCollectionRead();
   }
+}
+
+
+void ggClassyAutoConnectPathItem::SetClassInfo(const QString& aClassNameSrc,
+                                               const QString& aClassNameDst,
+                                               int aMemberIndex)
+{
+  mClassNameSrc = aClassNameSrc;
+  mClassNameDst = aClassNameDst;
+  mMemberIndex = aMemberIndex;
+}
+
+
+const QString& ggClassyAutoConnectPathItem::GetClassNameSrc() const
+{
+  return mClassNameSrc;
+}
+
+
+const QString& ggClassyAutoConnectPathItem::GetClassNameDst() const
+{
+  return mClassNameDst;
+}
+
+
+int ggClassyAutoConnectPathItem::GetMemberIndex() const
+{
+  return mMemberIndex;
 }
 
 

@@ -257,6 +257,44 @@ void ggClassyClass::SetMembersText(const QString& aText)
 }
 
 
+const QString& ggClassyClass::GetMemberName(int aIndex) const
+{
+  static const QString vNoName("");
+  return (0 < aIndex && aIndex < (int)mMembers.size()) ? mMembers[aIndex].GetName() : vNoName;
+}
+
+
+const QString& ggClassyClass::GetMemberClassName(int aIndex) const
+{
+  static const QString vNoName("");
+  return (0 < aIndex && aIndex < (int)mMembers.size()) ? mMembers[aIndex].GetClassName() : vNoName;
+}
+
+
+void ggClassyClass::SetMemberName(int aIndex, const QString& aName)
+{
+  if (0 <= aIndex && aIndex < (int)mMembers.size()) {
+    if (mMembers[aIndex].GetName() != aName) {
+      mMembers[aIndex].SetName(aName);
+      Notify();
+      if (mDataSet != nullptr) mDataSet->GetSubjectConnections()->Notify();
+    }
+  }
+}
+
+
+void ggClassyClass::SetMemberClassName(int aIndex, const QString& aClassName)
+{
+  if (0 <= aIndex && aIndex < (int)mMembers.size()) {
+    if (mMembers[aIndex].GetClassName() != aClassName) {
+      mMembers[aIndex].SetClassName(aClassName);
+      Notify();
+      if (mDataSet != nullptr) mDataSet->GetSubjectConnections()->Notify();
+    }
+  }
+}
+
+
 const QString& ggClassyClass::GetDescription() const
 {
   return mDescription;

@@ -118,6 +118,32 @@ void ggClassyGraphicsScene::SelectClassBoxes(const tClassBoxes& aClassBoxes)
 }
 
 
+ggClassyGraphicsScene::tConnections ggClassyGraphicsScene::GetSelectedConnections() const
+{
+  tConnections vSelectedConnections;
+  foreach (QGraphicsItem* vItem, selectedItems()) {
+    ggClassyAutoConnectPathItem* vConnectionItem = dynamic_cast<ggClassyAutoConnectPathItem*>(vItem);
+    if (vConnectionItem != nullptr) {
+      vSelectedConnections.insert(vConnectionItem);
+    }
+  }
+  return vSelectedConnections;
+}
+
+
+void ggClassyGraphicsScene::SelectConnections(const tConnections& aConnections)
+{
+  foreach (QGraphicsItem* vItem, items()) {
+    ggClassyAutoConnectPathItem* vConnectionItem = dynamic_cast<ggClassyAutoConnectPathItem*>(vItem);
+    if (vConnectionItem != nullptr) {
+      if (aConnections.find(vConnectionItem) != aConnections.end()) {
+        vConnectionItem->setSelected(true);
+      }
+    }
+  }
+}
+
+
 ggClassyGraphicsScene::tFrames ggClassyGraphicsScene::GetSelectedFrames() const
 {
   tFrames vSelectedFrames;
@@ -306,6 +332,7 @@ void ggClassyGraphicsScene::CreateConnectionItems()
         vAutoPath->InsertPointSrc(vBoxItem->GetClassConnectionTop());
         vAutoPath->InsertPointsDst(mBoxPoints->GetClassPointsBottom(vBaseClassName));
         vAutoPath->SetCollection(mDataSet->FindCollectionFromClass(vBaseClassName));
+        vAutoPath->SetClassInfo(vClass->GetName(), vBaseClassName);
         QGraphicsScene::addItem(vAutoPath);
       }
 
@@ -322,6 +349,7 @@ void ggClassyGraphicsScene::CreateConnectionItems()
         vAutoPath->InsertPointSrc(vBoxItem->GetMemberConnectionRight(vMemberIndex));
         vAutoPath->InsertPointsDst(mBoxPoints->GetClassPointsLeftRight(vMemberClassName));
         vAutoPath->SetCollection(mDataSet->FindCollectionFromClass(vMemberClassName));
+        vAutoPath->SetClassInfo(vClass->GetName(), vMemberClassName, vMemberIndex);
         QPen vPen(vAutoPath->pen());
         vPen.setStyle(Qt::DashLine);
         vAutoPath->setPen(vPen);
