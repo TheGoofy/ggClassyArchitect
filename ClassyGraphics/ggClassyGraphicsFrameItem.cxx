@@ -334,8 +334,10 @@ void ggClassyGraphicsFrameItem::UpdateLayout()
 
 const ggClassyCollection* ggClassyGraphicsFrameItem::GetCollection() const
 {
-  if (mFrame != nullptr) return mFrame->GetCollection();
-  else return nullptr;
+  const ggClassyCollection* vCollection = nullptr;
+  if (mFrame != nullptr) vCollection = mFrame->GetCollection();
+  if (vCollection == nullptr) vCollection = ggClassyCollection::GetDefaultCollection();
+  return vCollection;
 }
 
 

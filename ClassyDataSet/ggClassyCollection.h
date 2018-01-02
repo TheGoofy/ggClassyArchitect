@@ -41,6 +41,9 @@ public:
   QDomElement CreateDomElement(QDomDocument& aDocument) const;
   static ggClassyCollection* Create(const QDomElement& aElement);
 
+  // default collection
+  static ggClassyCollection* GetDefaultCollection();
+
   // box frame and connections
   QPen mBoxBorder;
   QPen mConnectionLines;
@@ -66,6 +69,8 @@ private:
 
   // owning dataset (needed for checking unique collection name)
   ggClassyDataSet* mDataSet;
+
+  static ggClassyCollection* mDefaultCollection;
 
 };
 

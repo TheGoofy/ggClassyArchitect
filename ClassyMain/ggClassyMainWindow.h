@@ -49,8 +49,7 @@ protected slots:
   void MoveSelectedItemsBottom();
   void OpenDataSet();
   void SaveDataSetAs();
-  void ChangeColor(const QColor& aColor);  
-
+  void ChangeColor(const QColor& aColor);
   void AlignTL();
   void AlignTC();
   void AlignTR();
@@ -81,7 +80,7 @@ private:
   void ConnectColor(ggColorChannelWidget* aColorChannelWidget, ggColorWheelWidget* aColorWheelWidget) const;
   void ConnectColor(ggColorChannelWidget* aColorChannelWidgetA, ggColorChannelWidget* aColorChannelWidgetB) const;
 
-  void CreateAction(QAction*& aAction, const char* aMethod, QToolButton* aToolButton);
+  void CreateAction(QAction*& aAction, const char* aSlotMethodName, QToolButton* aToolButton);
   void SetAlignment(Qt::Alignment aAlignment);
 
   QAction* mActionAlignTL;

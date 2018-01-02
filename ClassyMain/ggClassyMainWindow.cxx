@@ -548,7 +548,8 @@ void ggClassyMainWindow::ChangeColor(const QColor& aColor)
     ggWalkerT<ggClassyGraphicsScene::tClassBoxes::const_iterator> vSelectedClassBoxesWalker(vSelectedClassBoxes);
     while (vSelectedClassBoxesWalker) {
       const ggClassyClassBox* vSelectedClassBox = *vSelectedClassBoxesWalker;
-      vCollections.insert(vDataSet->FindCollectionFromClass(vSelectedClassBox->GetClassName()));
+      ggClassyCollection* vCollection = vDataSet->FindCollectionFromClass(vSelectedClassBox->GetClassName());
+      if (vCollection != nullptr) vCollections.insert(vCollection);
     }
 
     // get collections of the selected frames
@@ -556,7 +557,15 @@ void ggClassyMainWindow::ChangeColor(const QColor& aColor)
     ggWalkerT<ggClassyGraphicsScene::tFrames::const_iterator> vSelectedFramesWalker(vSelectedFrames);
     while (vSelectedFramesWalker) {
       const ggClassyFrame* vSelectedFrame = *vSelectedFramesWalker;
-      vCollections.insert(vDataSet->GetCollections().FindCollection(vSelectedFrame->GetCollectionName()));
+      ggClassyCollection* vCollection = vDataSet->GetCollections().FindCollection(vSelectedFrame->GetCollectionName());
+      if (vCollection != nullptr) vCollections.insert(vCollection);
+    }
+
+    // if there is no collection from a selected item, let's change the default collection
+    if (vCollections.empty()) {
+      if (!vSelectedClassBoxes.empty() || !vSelectedFrames.empty()) {
+        vCollections.insert(ggClassyCollection::GetDefaultCollection());
+      }
     }
 
     // modify the collection(s)
@@ -577,11 +586,13 @@ void ggClassyMainWindow::ChangeColor(const QColor& aColor)
 }
 
 
-void ggClassyMainWindow::CreateAction(QAction*& aAction, const char* aMethod, QToolButton* aToolButton)
+void ggClassyMainWindow::CreateAction(QAction*& aAction,
+                                      const char* aSlotMethodName,
+                                      QToolButton* aToolButton)
 {
   aAction = new QAction("x", this);
   aAction->setCheckable(true);
-  connect(aAction, SIGNAL(triggered()), this, aMethod);
+  connect(aAction, SIGNAL(triggered()), this, aSlotMethodName);
   aToolButton->setDefaultAction(aAction);
   aToolButton->setAutoRaise(true);
 }

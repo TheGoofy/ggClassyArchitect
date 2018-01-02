@@ -91,7 +91,6 @@ void ggClassyGraphicsScene::SetDataSet(ggClassyDataSet* aDataSet)
 }
 
 
-
 ggClassyGraphicsScene::tCollections ggClassyGraphicsScene::GetSelectedCollections() const
 {
   tCollections vSelectedCollections;

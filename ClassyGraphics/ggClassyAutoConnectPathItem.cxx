@@ -15,6 +15,7 @@ ggClassyAutoConnectPathItem::ggClassyAutoConnectPathItem(QGraphicsItem* aParent)
   mClassNameDst(""),
   mMemberIndex(-1)
 {
+  SetCollection(ggClassyCollection::GetDefaultCollection());
 }
 
 
@@ -25,7 +26,8 @@ ggClassyAutoConnectPathItem::~ggClassyAutoConnectPathItem()
 
 void ggClassyAutoConnectPathItem::SetCollection(const ggClassyCollection* aCollection)
 {
-  if (mCollection != aCollection) {
+  if (mCollection != aCollection &&
+      aCollection != nullptr) {
     ggObserver::Detach(mCollection);
     mCollection = aCollection;
     ggObserver::Attach(mCollection);

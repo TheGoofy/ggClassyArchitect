@@ -64,6 +64,12 @@ ggClassyGraphicsBoxItem::ggClassyGraphicsBoxItem(ggClassyClass* aClass,
 }
 
 
+
+
+
+
+
+
 class ggClassyConnectionItem :
   public QGraphicsItem,
   public ggObserver
@@ -211,6 +217,8 @@ private:
   ggGraphicsDecoratedPathItem* mPathItem;
 
 };
+
+
 
 
 
@@ -525,7 +533,7 @@ void ggClassyGraphicsBoxItem::Update(const ggSubject* aSubject)
 void ggClassyGraphicsBoxItem::UpdateClassRead()
 {
   if (GetClass() != nullptr) {
-    Attach(GetCollection());
+    Attach(GetCollection()); // what about detaching from the "old" collection? we'll still be
     UpdateCollectionRead();
     mClassNameText->SetText(GetClass()->GetName());
     mMembersText->SetText(GetClass()->GetMembersText());
@@ -712,27 +720,30 @@ void ggClassyGraphicsBoxItem::NotifyConnectionPoints()
 
 const ggClassyCollection* ggClassyGraphicsBoxItem::GetCollection() const
 {
-  if (GetClass() != nullptr) return GetClass()->GetCollection();
-  else return nullptr;
+  const ggClassyCollection* vCollection = nullptr;
+  if (GetClass() != nullptr) vCollection = GetClass()->GetCollection();
+  if (vCollection == nullptr) vCollection = ggClassyCollection::GetDefaultCollection();
+  return vCollection;
 }
 
 
 void ggClassyGraphicsBoxItem::UpdateCollectionRead()
 {
-  if (GetCollection() != nullptr) {
+  const ggClassyCollection* vCollection = GetCollection();
+  if (vCollection != nullptr) {
     // box border
-    mBoxBorder->setPen(GetCollection()->mBoxBorder);
+    mBoxBorder->setPen(vCollection->mBoxBorder);
     // class name
-    mClassNameText->setFont(GetCollection()->mNameFont);
-    mClassNameText->setDefaultTextColor(GetCollection()->mNameColor);
-    mClassNameText->SetBrush(GetCollection()->mNameBackground);
+    mClassNameText->setFont(vCollection->mNameFont);
+    mClassNameText->setDefaultTextColor(vCollection->mNameColor);
+    mClassNameText->SetBrush(vCollection->mNameBackground);
     // member functions
-    mMembersText->setFont(GetCollection()->mMembersFont);
-    mMembersText->setDefaultTextColor(GetCollection()->mMembersColor);
-    mMembersText->SetBrush(GetCollection()->mMembersBackground);
+    mMembersText->setFont(vCollection->mMembersFont);
+    mMembersText->setDefaultTextColor(vCollection->mMembersColor);
+    mMembersText->SetBrush(vCollection->mMembersBackground);
     // description
-    mDescriptionText->setFont(GetCollection()->mDescriptionFont);
-    mDescriptionText->setDefaultTextColor(GetCollection()->mDescriptionColor);
-    mDescriptionText->SetBrush(GetCollection()->mDescriptionBackground);
+    mDescriptionText->setFont(vCollection->mDescriptionFont);
+    mDescriptionText->setDefaultTextColor(vCollection->mDescriptionColor);
+    mDescriptionText->SetBrush(vCollection->mDescriptionBackground);
   }
 }

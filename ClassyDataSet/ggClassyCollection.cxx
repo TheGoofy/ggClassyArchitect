@@ -272,3 +272,15 @@ void ggClassyCollection::SetNameBackground(const QBrush& aBrush)
     Notify();
   }
 }
+
+
+ggClassyCollection* ggClassyCollection::GetDefaultCollection()
+{
+  if (mDefaultCollection == nullptr) {
+    mDefaultCollection = new ggClassyCollection("mDefaultCollection");
+  }
+  return mDefaultCollection;
+}
+
+
+ggClassyCollection* ggClassyCollection::mDefaultCollection(nullptr);
