@@ -67,6 +67,7 @@ ggClassyFrame* ggClassyFrameContainer::RemoveFrame(const ggClassyFrame* aFrame)
       if (vFrame == aFrame) {
         mFrames.erase(mFrames.begin() + vIndexZ);
         UpdateIndicesZ();
+        Notify();
         return vFrame;
       }
     }
@@ -78,6 +79,7 @@ ggClassyFrame* ggClassyFrameContainer::RemoveFrame(const ggClassyFrame* aFrame)
       if (vFrame == aFrame) {
         mFrames.erase(vFramesIterator);
         UpdateIndicesZ();
+        Notify();
         return vFrame;
       }
       ++vFramesIterator;

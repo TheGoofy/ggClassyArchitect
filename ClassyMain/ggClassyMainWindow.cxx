@@ -265,7 +265,7 @@ void ggClassyMainWindow::on_mNewClassBoxPushButton_clicked()
 
     // get the selected class boxes
     const ggClassyGraphicsScene::tClassBoxes& vSelectedClassBoxes = vScene->GetSelectedClassBoxes();
-    ggClassyGraphicsScene::tClassBoxes vNewlassBoxes;
+    ggClassyGraphicsScene::tClassBoxes vNewClassBoxes;
 
     // loop over all selected class boxes
     ggWalkerT<ggClassyGraphicsScene::tClassBoxes::const_iterator> vSelectedClassBoxesWalker(vSelectedClassBoxes);
@@ -276,11 +276,51 @@ void ggClassyMainWindow::on_mNewClassBoxPushButton_clicked()
       ggClassyClassBox* vClassBox = new ggClassyClassBox(*vSelectedClassBox);
       vClassBox->SetPosition(vClassBox->GetPosition() + QPointF(20.0f, 20.0f));
       ggClassyApplication::GetInstance().GetDataSet()->AddClassBox(vClassBox);
-      vNewlassBoxes.insert(vClassBox);
+      vNewClassBoxes.insert(vClassBox);
     }
 
     // select the new class box(es)
-    vScene->SelectClassBoxes(vNewlassBoxes);
+    vScene->SelectClassBoxes(vNewClassBoxes);
+  }
+}
+
+
+void ggClassyMainWindow::on_mNewFramePushButton_clicked()
+{
+  // container for newly created frames, dataset
+  ggClassyGraphicsScene::tFrames vNewFrames;
+  ggClassyDataSet* vDataSet = ggClassyApplication::GetInstance().GetDataSet();
+
+  // try to make copies from selected frames (use them as a template)
+  ggClassyGraphicsScene* vScene = dynamic_cast<ggClassyGraphicsScene*>(ui->mGraphicsView->scene());
+  if (vScene != nullptr) {
+
+    // loop over all selected class boxes
+    ggSubject::cExecutorLazy vLazyFrames(&vDataSet->GetFrames());
+    const ggClassyGraphicsScene::tFrames& vSelectedFrames = vScene->GetSelectedFrames();
+    ggWalkerT<ggClassyGraphicsScene::tFrames::const_iterator> vSelectedFramesWalker(vSelectedFrames);
+    while (vSelectedFramesWalker) {
+
+      // add new box for each selected box
+      const ggClassyFrame* vSelectedFrame = *vSelectedFramesWalker;
+      ggClassyFrame* vFrame = new ggClassyFrame(*vSelectedFrame);
+      vFrame->SetRect(vFrame->GetRect().translated(20.0f, 20.0f));
+      vDataSet->AddFrame(vFrame);
+      vNewFrames.insert(vFrame);
+    }
+  }
+
+  // if there was no template frame selected, make a new frame from scratch
+  if (vNewFrames.empty()) {
+    ggClassyFrame* vFrame = new ggClassyFrame();
+    vFrame->SetRect(QRectF(GetNewPosition(), QSizeF(150.0f, 60.0f)));
+    vDataSet->AddFrame(vFrame);
+    vNewFrames.insert(vFrame);
+  }
+
+  // select the newly created frames
+  if (vScene != nullptr) {
+    vScene->SelectFrames(vNewFrames);
   }
 }
 
@@ -325,6 +365,28 @@ void ggClassyMainWindow::on_mDeleteClassBoxPushButton_clicked()
       // delete the box
       const ggClassyClassBox* vSelectedClassBox = *vSelectedClassBoxesWalker;
       vDataSet->GetClassBoxes().DeleteClassBox(vSelectedClassBox);
+    }
+  }
+}
+
+
+void ggClassyMainWindow::on_mDeleteFramePushButton_clicked()
+{
+  ggClassyGraphicsScene* vScene = dynamic_cast<ggClassyGraphicsScene*>(ui->mGraphicsView->scene());
+  if (vScene != nullptr) {
+
+    // notify change at the very end
+    ggClassyDataSet* vDataSet = ggClassyApplication::GetInstance().GetDataSet();
+    ggSubject::cExecutorLazy vLazyFrames(&vDataSet->GetFrames());
+
+    // loop over all selected frames
+    const ggClassyGraphicsScene::tFrames& vSelectedFrames = vScene->GetSelectedFrames();
+    ggWalkerT<ggClassyGraphicsScene::tFrames::const_iterator> vSelectedFramesWalker(vSelectedFrames);
+    while (vSelectedFramesWalker) {
+
+      // delete the frame
+      const ggClassyFrame* vSelectedFrame = *vSelectedFramesWalker;
+      vDataSet->GetFrames().DeleteFrame(vSelectedFrame);
     }
   }
 }

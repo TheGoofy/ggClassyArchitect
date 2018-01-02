@@ -64,6 +64,13 @@
        </widget>
       </item>
       <item>
+       <widget class="QPushButton" name="mNewCollectionPushButton">
+        <property name="text">
+         <string>New Coll.</string>
+        </property>
+       </widget>
+      </item>
+      <item>
        <widget class="QPushButton" name="mNewClassPushButton">
         <property name="sizePolicy">
          <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
@@ -84,6 +91,27 @@
        </widget>
       </item>
       <item>
+       <widget class="QPushButton" name="mNewFramePushButton">
+        <property name="text">
+         <string>New Frame</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="Line" name="line_6">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="mDeleteCollectionPushButton">
+        <property name="text">
+         <string>Del Coll.</string>
+        </property>
+       </widget>
+      </item>
+      <item>
        <widget class="QPushButton" name="mDeleteClassPushButton">
         <property name="text">
          <string>Del Class</string>
@@ -91,9 +119,23 @@
        </widget>
       </item>
       <item>
+       <widget class="QPushButton" name="mDeleteConnectionPushButton">
+        <property name="text">
+         <string>Del Conn.</string>
+        </property>
+       </widget>
+      </item>
+      <item>
        <widget class="QPushButton" name="mDeleteClassBoxPushButton">
         <property name="text">
          <string>Del Box</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="mDeleteFramePushButton">
+        <property name="text">
+         <string>Del Frame</string>
         </property>
        </widget>
       </item>
@@ -532,6 +574,36 @@
    <container>1</container>
   </customwidget>
  </customwidgets>
+ <tabstops>
+  <tabstop>mGraphicsView</tabstop>
+  <tabstop>mOpenPushButton</tabstop>
+  <tabstop>mSaveAsPushButton</tabstop>
+  <tabstop>mNewCollectionPushButton</tabstop>
+  <tabstop>mNewClassPushButton</tabstop>
+  <tabstop>mNewClassBoxPushButton</tabstop>
+  <tabstop>mNewFramePushButton</tabstop>
+  <tabstop>mDeleteCollectionPushButton</tabstop>
+  <tabstop>mDeleteClassPushButton</tabstop>
+  <tabstop>mDeleteConnectionPushButton</tabstop>
+  <tabstop>mDeleteClassBoxPushButton</tabstop>
+  <tabstop>mDeleteFramePushButton</tabstop>
+  <tabstop>mMoveTopPushButton</tabstop>
+  <tabstop>mMoveUpPushButton</tabstop>
+  <tabstop>mMoveDownPushButton</tabstop>
+  <tabstop>mMoveBottomPushButton</tabstop>
+  <tabstop>mAlignTL</tabstop>
+  <tabstop>mAlignTC</tabstop>
+  <tabstop>mAlignTR</tabstop>
+  <tabstop>mAlignCL</tabstop>
+  <tabstop>mAlignCC</tabstop>
+  <tabstop>mAlignCR</tabstop>
+  <tabstop>mAlignBL</tabstop>
+  <tabstop>mAlignBC</tabstop>
+  <tabstop>mAlignBR</tabstop>
+  <tabstop>mZoomComboBox</tabstop>
+  <tabstop>mZoomResetPushButton</tabstop>
+  <tabstop>mZoomFitPushButton</tabstop>
+ </tabstops>
  <resources/>
  <connections/>
  <slots>

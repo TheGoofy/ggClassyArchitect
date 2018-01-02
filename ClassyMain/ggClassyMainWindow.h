@@ -36,8 +36,10 @@ protected slots:
   void on_mZoomResetPushButton_clicked();
   void on_mNewClassPushButton_clicked();
   void on_mNewClassBoxPushButton_clicked();
+  void on_mNewFramePushButton_clicked();
   void on_mDeleteClassPushButton_clicked();
   void on_mDeleteClassBoxPushButton_clicked();
+  void on_mDeleteFramePushButton_clicked();
   void MoveSelectedItemsTop();
   void MoveSelectedItemsUp();
   void MoveSelectedItemsDown();

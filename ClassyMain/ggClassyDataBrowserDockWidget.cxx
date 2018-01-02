@@ -28,13 +28,15 @@ public:
     mDataSet = ggClassyApplication::GetInstance().GetDataSet();
     Attach(&mDataSet->GetCollections());
     Attach(&mDataSet->GetClasses());
+    Attach(&mDataSet->GetFrames());
     UpdateTree();
   }
 
   virtual void Update(const ggSubject* aSubject) override
   {
     if (aSubject == &mDataSet->GetCollections() ||
-        aSubject == &mDataSet->GetClasses()) {
+        aSubject == &mDataSet->GetClasses() ||
+        aSubject == &mDataSet->GetFrames()) {
       beginResetModel();
       UpdateTree();
       endResetModel();
