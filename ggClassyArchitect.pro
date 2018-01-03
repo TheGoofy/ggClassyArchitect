@@ -82,7 +82,8 @@ HEADERS += \
     BaseGraphics/ggGraphicsRoundedRectItem.h \
     BaseGraphics/ggGraphicsShadowRectItem.h \
     ClassyGraphics/ggClassyGraphicsFrameItem.h \
-    ClassyDataSet/ggClassyFrameContainer.h
+    ClassyDataSet/ggClassyFrameContainer.h \
+    ClassyGraphics/ggClassyConnectionManipulatorItem.h
 
 SOURCES += \
     Base/ggItemLinked.cxx \
@@ -125,5 +126,6 @@ SOURCES += \
     BaseGraphics/ggGraphicsRoundedRectItem.cxx \
     BaseGraphics/ggGraphicsShadowRectItem.cxx \
     ClassyGraphics/ggClassyGraphicsFrameItem.cxx \
-    ClassyDataSet/ggClassyFrameContainer.cxx
+    ClassyDataSet/ggClassyFrameContainer.cxx \
+    ClassyGraphics/ggClassyConnectionManipulatorItem.cxx
 

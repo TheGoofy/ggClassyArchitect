@@ -16,7 +16,7 @@ class ggClassyClassBoxPoints;
 class ggClassyClassBox;
 class ggClassyClass;
 class ggClassyCollection;
-class ggClassyConnectionItem;
+class ggClassyConnectionManipulatorItem;
 
 /**
  * @brief The ggClassyGraphicsBoxItem class
@@ -88,7 +88,7 @@ private:
   ggGraphicsTextItem* mDescriptionText;
   ggGraphicsCheckBoxItem* mMembersCheckBox;
   ggGraphicsCheckBoxItem* mDescriptionCheckBox;
-  ggClassyConnectionItem* mBaseClassConnector;
+  ggClassyConnectionManipulatorItem* mBaseClassConnector;
 
   ggSubject mSubjectSize;
 
