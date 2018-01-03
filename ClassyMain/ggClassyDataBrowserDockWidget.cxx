@@ -23,7 +23,9 @@ class ggClassyDataModel :
 public:
 
   ggClassyDataModel(QObject* aParent = nullptr) :
-    QAbstractItemModel(aParent)
+    QAbstractItemModel(aParent),
+    mDataSet(nullptr),
+    mRootItem(nullptr)
   {
     mDataSet = ggClassyApplication::GetInstance().GetDataSet();
     Attach(&mDataSet->GetCollections());
@@ -98,9 +100,6 @@ public:
     }
   }
 
-  ggClassyDataSet* mDataSet;
-  ggClassyTreeItem* mRootItem;
-
   virtual QModelIndex index(int aRow, int aColumn, const QModelIndex& aIndex = QModelIndex()) const override
   {
     if (!hasIndex(aRow, aColumn, aIndex)) return QModelIndex();
@@ -167,11 +166,14 @@ public:
 
 private:
 
+  ggClassyDataSet* mDataSet;
+  ggClassyTreeItem* mRootItem;
+
 };
 
 
-ggClassyDataBrowserDockWidget::ggClassyDataBrowserDockWidget(QWidget *parent) :
-  QDockWidget(parent),
+ggClassyDataBrowserDockWidget::ggClassyDataBrowserDockWidget(QWidget* aParent) :
+  QDockWidget(aParent),
   ui(new Ui::ggClassyDataBrowserDockWidget)
 {
   ui->setupUi(this);
@@ -185,8 +187,27 @@ ggClassyDataBrowserDockWidget::ggClassyDataBrowserDockWidget(QWidget *parent) :
   ggClassyDataModel* vModel = new ggClassyDataModel(this);
   ui->mDataBrowserTreeView->setModel(vModel);
 
-  //ui->mDataBrowserTreeView->setHeaderHidden(true);
+}
 
+
+void ggClassyDataBrowserDockWidget::on_mNewPushButton_clicked()
+{
+  QItemSelectionModel* vSelection = ui->mDataBrowserTreeView->selectionModel();
+  QModelIndexList vSelectedIndices = vSelection->selectedIndexes();
+  foreach (QModelIndex vModelIndex, vSelectedIndices) {
+    ggClassyTreeItem* vTreeItem = static_cast<ggClassyTreeItem*>(vModelIndex.internalPointer());
+    const ggClassyClass* vClass = vTreeItem->GetClass();
+    if (vClass != nullptr) {
+      ggClassyClassBox* vClassBox = new ggClassyClassBox(vClass->GetName());
+      ggClassyApplication::GetInstance().GetDataSet()->AddClassBox(vClassBox);
+    }
+  }
+}
+
+
+void ggClassyDataBrowserDockWidget::on_mDelPushButton_clicked()
+{
+  qDebug() << __PRETTY_FUNCTION__;
 }
 
 

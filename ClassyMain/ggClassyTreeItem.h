@@ -38,18 +38,18 @@ public:
   void DeleteChild(ggUSize aIndex);
   void DeleteChildren();
 
+  const ggClassyDataSet* GetDataSet() const;
+  const ggClassyCollection* GetCollection() const;
+  const ggClassyClass* GetClass() const;
+  const ggClassyClassMember* GetMember() const;
+  const ggClassyFrame* GetFrame() const;
+
 private:
 
   ggClassyTreeItem(const ggClassyCollection* aCollection);
   ggClassyTreeItem(const ggClassyClass* aClass);
   ggClassyTreeItem(const ggClassyClassMember* aMember);
   ggClassyTreeItem(const ggClassyFrame* aFrame);
-
-  const ggClassyDataSet* GetDataSet() const;
-  const ggClassyCollection* GetCollection() const;
-  const ggClassyClass* GetClass() const;
-  const ggClassyClassMember* GetMember() const;
-  const ggClassyFrame* GetFrame() const;
 
   enum class cType {
     eUnknown,

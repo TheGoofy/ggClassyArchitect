@@ -17,8 +17,13 @@ class ggClassyDataBrowserDockWidget : public QDockWidget
   Q_OBJECT
 
 public:
-  explicit ggClassyDataBrowserDockWidget(QWidget *parent = 0);
+  explicit ggClassyDataBrowserDockWidget(QWidget* aParent = nullptr);
   ~ggClassyDataBrowserDockWidget();
+
+protected slots:
+
+  void on_mNewPushButton_clicked();
+  void on_mDelPushButton_clicked();
 
 private:
   Ui::ggClassyDataBrowserDockWidget *ui;
