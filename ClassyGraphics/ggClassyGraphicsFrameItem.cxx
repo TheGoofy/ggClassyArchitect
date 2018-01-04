@@ -164,7 +164,7 @@ QVariant ggClassyGraphicsFrameItem::itemChange(GraphicsItemChange aChange, const
 
   if (aChange == ItemSelectedHasChanged) {
     mShadow->SetShadowColors(aValue.toBool() ? QColor(200, 255, 0, 255) : QColor(0, 0, 0, 40));
-    mShadow->setPos(aValue.toBool() ? QPointF(0.0f, 0.0f) : QPointF(3.0f, 2.0f));
+    mShadow->setPos(aValue.toBool() ? QPointF(0.0f, 0.0f) : QPointF(1.0f, 1.0f));
   }
 
   return ggGraphicsRoundedRectItem::itemChange(aChange, aValue);
@@ -213,7 +213,7 @@ void ggClassyGraphicsFrameItem::Construct()
   mShadow->setFlag(ItemStacksBehindParent);
   mShadow->setPen(Qt::NoPen);
   mShadow->SetShadowColors(QColor(0, 0, 0, 40));
-  mShadow->setPos(3.0f, 2.0f);
+  mShadow->setPos(1.0f, 1.0f);
 
   // text
   mText = new ggGraphicsTextItem(this);
@@ -302,7 +302,7 @@ void ggClassyGraphicsFrameItem::UpdateFrameWrite()
 void ggClassyGraphicsFrameItem::UpdateLayout()
 {
   // adjust the shadow
-  qreal vShadowWidth = 7.0f;
+  qreal vShadowWidth = 4.0f;
   qreal vFrameBorder2 = pen().widthF() / 2.0f;
   qreal vShadowMargin = vFrameBorder2 + vShadowWidth;
   const QRectF& vRect(rect());

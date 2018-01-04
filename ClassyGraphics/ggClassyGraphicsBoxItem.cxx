@@ -73,11 +73,11 @@ void ggClassyGraphicsBoxItem::Construct()
 
   mShadow = new ggGraphicsShadowRectItem(this);
   mShadow->setFlag(ItemStacksBehindParent);
-  mShadow->SetRadius(7.0f);
-  mShadow->SetShadowWidth(7.0f);
+  mShadow->SetRadius(4.0f);
+  mShadow->SetShadowWidth(4.0f);
   mShadow->setPen(Qt::NoPen);
   mShadow->SetShadowColors(QColor(0, 0, 0, 40));
-  mShadow->setPos(3.0f, 2.0f);
+  mShadow->setPos(1.0f, 1.0f);
   mBoxBorder = new QGraphicsRectItem(this);
   mBoxBorder->setFlag(ItemStacksBehindParent);
   mBoxBorder->setBrush(Qt::NoBrush);
@@ -300,7 +300,7 @@ QVariant ggClassyGraphicsBoxItem::itemChange(GraphicsItemChange aChange, const Q
 {
   if (aChange == ItemSelectedHasChanged) {
     mShadow->SetShadowColors(aValue.toBool() ? QColor(200, 255, 0, 255) : QColor(0, 0, 0, 40));
-    mShadow->setPos(aValue.toBool() ? QPointF(0.0f, 0.0f) : QPointF(3.0f, 2.0f));
+    mShadow->setPos(aValue.toBool() ? QPointF(0.0f, 0.0f) : QPointF(1.0f, 1.0f));
   }
 
   return ggGraphicsManipulatorBarItemT<>::itemChange(aChange, aValue);
