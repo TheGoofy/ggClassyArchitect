@@ -22,6 +22,7 @@ ggGraphicsTextItem::ggGraphicsTextItem(QGraphicsItem* aParent) :
   QGraphicsTextItem(aParent),
   mSubjectText(new ggSubject()),
   mSubjectEditingFinished(new ggSubject()),
+  mSuppressRichText(true),
   mSuppressLineBreaks(false),
   mEnterKeyFinishesEdit(false),
   mLastMousePressPos(0.0f, 0.0f),
@@ -45,7 +46,9 @@ ggGraphicsTextItem::~ggGraphicsTextItem()
 void ggGraphicsTextItem::dropEvent(QGraphicsSceneDragDropEvent* aEvent)
 {
   // accept only plain text: adjust mime-data
-  aEvent->setMimeData(FormatMimeData(aEvent->mimeData()));
+  if (mSuppressRichText) {
+    aEvent->setMimeData(StripMimeData(aEvent->mimeData()));
+  }
 
   // do inherited event handling
   QGraphicsTextItem::dropEvent(aEvent);
@@ -55,9 +58,9 @@ void ggGraphicsTextItem::dropEvent(QGraphicsSceneDragDropEvent* aEvent)
 void ggGraphicsTextItem::keyPressEvent(QKeyEvent* aEvent)
 {
   // accept only plain text: adjust mime-data
-  if (aEvent->matches(QKeySequence::Paste)) {
+  if (aEvent->matches(QKeySequence::Paste) && mSuppressRichText) {
     QClipboard* vClipboard = ggClassyApplication::GetInstance().clipboard();
-    vClipboard->setMimeData(FormatMimeData(vClipboard->mimeData()));
+    vClipboard->setMimeData(StripMimeData(vClipboard->mimeData()));
   }
 
   // interpret <return> key ...
@@ -95,8 +98,10 @@ void ggGraphicsTextItem::keyPressEvent(QKeyEvent* aEvent)
 void ggGraphicsTextItem::contextMenuEvent(QGraphicsSceneContextMenuEvent* aEvent)
 {
   // accept only plain text: adjust mime-data
-  QClipboard* vClipboard = ggClassyApplication::GetInstance().clipboard();
-  vClipboard->setMimeData(FormatMimeData(vClipboard->mimeData()));
+  if (mSuppressRichText) {
+    QClipboard* vClipboard = ggClassyApplication::GetInstance().clipboard();
+    vClipboard->setMimeData(StripMimeData(vClipboard->mimeData()));
+  }
 
   // do inherited event handling
   QGraphicsTextItem::contextMenuEvent(aEvent);
@@ -149,7 +154,7 @@ void ggGraphicsTextItem::paint(QPainter* aPainter,
 }
 
 
-QMimeData* ggGraphicsTextItem::FormatMimeData(const QMimeData* aMimeData) const
+QMimeData* ggGraphicsTextItem::StripMimeData(const QMimeData* aMimeData) const
 {
   QString vText = aMimeData->text();
   if (GetSuppressLineBreaks()) vText = vText.simplified();
@@ -189,9 +194,27 @@ const QPen& ggGraphicsTextItem::Pen() const
 }
 
 
+void ggGraphicsTextItem::SetSuppressRichText(bool aSuppressRichText)
+{
+  if (mSuppressRichText != aSuppressRichText) {
+    mSuppressRichText = aSuppressRichText;
+    update();
+  }
+}
+
+
+bool ggGraphicsTextItem::GetSuppressRichText() const
+{
+  return mSuppressRichText;
+}
+
+
 void ggGraphicsTextItem::SetSuppressLineBreaks(bool aSuppressLineBreaks)
 {
-  mSuppressLineBreaks = aSuppressLineBreaks;
+  if (mSuppressLineBreaks != aSuppressLineBreaks) {
+    mSuppressLineBreaks = aSuppressLineBreaks;
+    update();
+  }
 }
 
 
@@ -203,7 +226,10 @@ bool ggGraphicsTextItem::GetSuppressLineBreaks() const
 
 void ggGraphicsTextItem::SetEnterKeyFinishesEdit(bool aEnterKeyFinishesEdit)
 {
-  mEnterKeyFinishesEdit = aEnterKeyFinishesEdit;
+  if (mEnterKeyFinishesEdit != aEnterKeyFinishesEdit) {
+    mEnterKeyFinishesEdit = aEnterKeyFinishesEdit;
+    update();
+  }
 }
 
 

@@ -25,6 +25,8 @@ public:
   ggGraphicsTextItem(QGraphicsItem* aParent = nullptr);
   virtual ~ggGraphicsTextItem();
 
+  void SetSuppressRichText(bool aSuppressRichText);
+  bool GetSuppressRichText() const;
   void SetSuppressLineBreaks(bool aSuppressLineBreaks);
   bool GetSuppressLineBreaks() const;
   void SetEnterKeyFinishesEdit(bool aEnterKeyFinishesEdit);
@@ -60,10 +62,11 @@ private slots:
 
 private:
 
-  QMimeData* FormatMimeData(const QMimeData* aMimeData) const;
+  QMimeData* StripMimeData(const QMimeData* aMimeData) const;
 
   ggSubject* mSubjectText;
   ggSubject* mSubjectEditingFinished;
+  bool mSuppressRichText;
   bool mSuppressLineBreaks;
   bool mEnterKeyFinishesEdit;
   QString mHtmlBackup;
