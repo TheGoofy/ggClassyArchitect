@@ -218,8 +218,7 @@ void ggClassyGraphicsFrameItem::Construct()
   // text
   mText = new ggGraphicsTextItem(this);
   mText->SetPen(Qt::NoPen);
-  mText->SetText("Goofy was here!");
-  mText->SetAlignment(Qt::AlignCenter | Qt::AlignVCenter);
+  mText->SetSuppressRichText(false);
 
   // size handles
   mHandleTL = new ggGraphicsHandleItemEllipse(9.0f, this);
@@ -281,7 +280,7 @@ void ggClassyGraphicsFrameItem::UpdateFrameRead()
 {
   if (GetFrame() != nullptr) {
     SetRectAbsolute(GetFrame()->GetRect());
-    mText->SetText(GetFrame()->GetDescription());
+    mText->setHtml(GetFrame()->GetDescription());
     mText->SetAlignment(GetFrame()->GetAlignment());
   }
 }
@@ -293,7 +292,7 @@ void ggClassyGraphicsFrameItem::UpdateFrameWrite()
     ggObserver::cExecutorBlocking vBlock(this, GetFrame());
     ggSubject::cExecutorLazy vLazy(GetFrame());
     GetFrame()->SetRect(GetRectAbsolute());
-    GetFrame()->SetDescription(mText->GetText());
+    GetFrame()->SetDescription(mText->toHtml());
     GetFrame()->SetAlignment(mText->GetAlignment());
   }
 }
