@@ -26,6 +26,7 @@ class ggClassyTreeItem {
 public:
 
   ggClassyTreeItem();
+  ggClassyTreeItem(const ggClassyTreeItem& aOther);
   ggClassyTreeItem(const ggClassyItem* aItem);
   virtual ~ggClassyTreeItem();
 

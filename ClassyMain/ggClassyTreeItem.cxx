@@ -16,6 +16,14 @@ ggClassyTreeItem::ggClassyTreeItem() :
 }
 
 
+ggClassyTreeItem::ggClassyTreeItem(const ggClassyTreeItem& aOther) :
+  mItem(aOther.mItem),
+  mParent(aOther.mParent),
+  mChildren(aOther.mChildren)
+{
+}
+
+
 ggClassyTreeItem::ggClassyTreeItem(const ggClassyItem* aItem) :
   mItem(aItem),
   mParent(nullptr)
