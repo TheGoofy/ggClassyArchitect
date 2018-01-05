@@ -17,7 +17,8 @@
 /**
  * @brief The ggClassyDataSet class
  */
-class ggClassyDataSet
+class ggClassyDataSet :
+  public ggClassyItem
 {
 public:
 
@@ -30,7 +31,7 @@ public:
 
   // identification
   static const QString& TypeID();
-  virtual const QString& VTypeID() const;
+  virtual const QString& VTypeID() const override;
   QString GetFormatVersion() const;
 
   // assignment operator

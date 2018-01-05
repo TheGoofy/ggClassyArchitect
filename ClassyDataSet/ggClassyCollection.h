@@ -8,6 +8,7 @@
 
 // 2) include own project-related (sort by component dependency)
 #include "Base/ggSubject.h"
+#include "ClassyDataSet/ggClassyItem.h"
 
 // 3) forward declarations
 class ggClassyDataSet;
@@ -16,6 +17,7 @@ class ggClassyDataSet;
  * @brief The ggClassyCollection class
  */
 class ggClassyCollection :
+  public ggClassyItem,
   public ggSubject
 {
 public:
@@ -26,7 +28,7 @@ public:
 
   // identification
   static const QString& TypeID();
-  virtual const QString& VTypeID() const;
+  virtual const QString& VTypeID() const override;
 
   void SetDataSet(ggClassyDataSet* aDataSet);
   ggClassyDataSet* GetDataSet() const;

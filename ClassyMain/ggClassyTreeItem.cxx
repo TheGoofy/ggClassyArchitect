@@ -9,40 +9,15 @@
 #include "ClassyDataSet/ggClassyDataSet.h"
 
 
-ggClassyTreeItem::ggClassyTreeItem(const ggClassyDataSet* aDataSet) :
-  mType(cType::eDataSet),
-  mData(aDataSet),
+ggClassyTreeItem::ggClassyTreeItem() :
+  mItem(nullptr),
   mParent(nullptr)
 {
 }
 
 
-ggClassyTreeItem::ggClassyTreeItem(const ggClassyCollection* aCollection) :
-  mType(cType::eCollection),
-  mData(aCollection),
-  mParent(nullptr)
-{
-}
-
-
-ggClassyTreeItem::ggClassyTreeItem(const ggClassyClass* aClass) :
-  mType(cType::eClass),
-  mData(aClass),
-  mParent(nullptr)
-{
-}
-
-ggClassyTreeItem::ggClassyTreeItem(const ggClassyClassMember* aMember) :
-  mType(cType::eMember),
-  mData(aMember),
-  mParent(nullptr)
-{
-}
-
-
-ggClassyTreeItem::ggClassyTreeItem(const ggClassyFrame* aFrame) :
-  mType(cType::eFrame),
-  mData(aFrame),
+ggClassyTreeItem::ggClassyTreeItem(const ggClassyItem* aItem) :
+  mItem(aItem),
   mParent(nullptr)
 {
 }
@@ -54,21 +29,26 @@ ggClassyTreeItem::~ggClassyTreeItem()
 }
 
 
-template <typename TClassyType>
-ggClassyTreeItem* ggClassyTreeItem::AddChild(const TClassyType* aClassyChildItem)
+const QString& ggClassyTreeItem::TypeID()
 {
-  ggClassyTreeItem* vChildItem = new ggClassyTreeItem(aClassyChildItem);
+  static const QString vTypeID("ggClassyTreeItem");
+  return vTypeID;
+}
+
+
+const QString& ggClassyTreeItem::VTypeID() const
+{
+  return TypeID();
+}
+
+
+ggClassyTreeItem* ggClassyTreeItem::AddChild(const ggClassyItem* aItem)
+{
+  ggClassyTreeItem* vChildItem = new ggClassyTreeItem(aItem);
   vChildItem->mParent = this;
   mChildren.insert(vChildItem);
   return vChildItem;
 }
-
-
-template ggClassyTreeItem* ggClassyTreeItem::AddChild<ggClassyDataSet>(const ggClassyDataSet*);
-template ggClassyTreeItem* ggClassyTreeItem::AddChild<ggClassyCollection>(const ggClassyCollection*);
-template ggClassyTreeItem* ggClassyTreeItem::AddChild<ggClassyClass>(const ggClassyClass*);
-template ggClassyTreeItem* ggClassyTreeItem::AddChild<ggClassyClassMember>(const ggClassyClassMember*);
-template ggClassyTreeItem* ggClassyTreeItem::AddChild<ggClassyFrame>(const ggClassyFrame*);
 
 
 ggUSize ggClassyTreeItem::GetNumberOfChildren() const
@@ -133,44 +113,57 @@ ggUSize ggClassyTreeItem::GetSiblingIndex() const
 
 const QString& ggClassyTreeItem::GetName() const
 {
-  switch (mType) {
-    case cType::eDataSet: return GetDataSet()->TypeID();
-    case cType::eCollection: return GetCollection()->GetName();
-    case cType::eClass: return GetClass()->GetName();
-    case cType::eMember: return GetMember()->GetName();
-    case cType::eFrame: return GetFrame()->TypeID();
-    default: {static const QString vName("Goofy"); return vName; }
-  }
+  if (GetDataSet() != nullptr) return GetDataSet()->TypeID();
+  if (GetCollection() != nullptr) return GetCollection()->GetName();
+  if (GetClass() != nullptr) return GetClass()->GetName();
+  if (GetMember() != nullptr) return GetMember()->GetName();
+  if (GetFrame() != nullptr) return GetFrame()->TypeID();
+  if (mItem != nullptr) return mItem->VTypeID();
+  static const QString vName("ggClassyTreeItem::GetName() - nullptr");
+  return vName;
+}
+
+
+const QString& ggClassyTreeItem::GetDescription() const
+{
+  if (GetDataSet() != nullptr) return GetDataSet()->TypeID();
+  if (GetCollection() != nullptr) return GetCollection()->TypeID();
+  if (GetClass() != nullptr) return GetClass()->GetDescription();
+  if (GetMember() != nullptr) return GetMember()->GetClassName();
+  if (GetFrame() != nullptr) return GetFrame()->GetDescription();
+  if (mItem != nullptr) return mItem->VTypeID();
+  static const QString vDescription("ggClassyTreeItem::GetDescription() - nullptr");
+  return vDescription;
 }
 
 
 const ggClassyDataSet* ggClassyTreeItem::GetDataSet() const
 {
-  return (mType == cType::eDataSet) ? static_cast<const ggClassyDataSet*>(mData) : nullptr;
+  return dynamic_cast<const ggClassyDataSet*>(mItem);
 }
 
 
 const ggClassyCollection* ggClassyTreeItem::GetCollection() const
 {
-  return (mType == cType::eCollection) ? static_cast<const ggClassyCollection*>(mData) : nullptr;
+  return dynamic_cast<const ggClassyCollection*>(mItem);
 }
 
 
 const ggClassyClass* ggClassyTreeItem::GetClass() const
 {
-  return (mType == cType::eClass) ? static_cast<const ggClassyClass*>(mData) : nullptr;
+  return dynamic_cast<const ggClassyClass*>(mItem);
 }
 
 
 const ggClassyClassMember* ggClassyTreeItem::GetMember() const
 {
-  return (mType == cType::eMember) ? static_cast<const ggClassyClassMember*>(mData) : nullptr;
+  return dynamic_cast<const ggClassyClassMember*>(mItem);
 }
 
 
 const ggClassyFrame* ggClassyTreeItem::GetFrame() const
 {
-  return (mType == cType::eFrame) ? static_cast<const ggClassyFrame*>(mData) : nullptr;
+  return dynamic_cast<const ggClassyFrame*>(mItem);
 }
 
 
@@ -178,13 +171,13 @@ bool ggClassyTreeItem::cLess::operator () (const ggClassyTreeItem* aItemA,
                                            const ggClassyTreeItem* aItemB) const
 {
   // first compare the types
-  if (aItemA->mType != aItemB->mType)
-    return (aItemA->mType < aItemB->mType);
+  if (aItemA->VTypeID() != aItemB->VTypeID())
+    return (aItemA->VTypeID() < aItemB->VTypeID());
 
   // the types are the same: compare the names
   if (aItemA->GetName() != aItemB->GetName())
     return (aItemA->GetName() < aItemB->GetName());
 
   // in case of the same name, let's compare the address (pointer)
-  return aItemA->mData < aItemB->mData;
+  return aItemA->mItem < aItemB->mItem;
 }

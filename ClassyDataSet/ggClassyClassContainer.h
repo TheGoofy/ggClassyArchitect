@@ -6,6 +6,7 @@
 
 // 2) include own project-related (sort by component dependency)
 #include "Base/ggTypes.h"
+#include "ClassyDataSet/ggClassyItem.h"
 #include "ClassyDataSet/ggClassyClass.h"
 
 // 3) forward declarations
@@ -14,6 +15,7 @@
  * @brief The ggClassyClassContainer class
  */
 class ggClassyClassContainer :
+  public ggClassyItem,
   public ggSubject
 {
 public:
@@ -25,7 +27,7 @@ public:
 
   // identification
   static const QString& TypeID();
-  virtual const QString& VTypeID() const;
+  virtual const QString& VTypeID() const override;
 
   // assignment operator
   ggClassyClassContainer& operator = (const ggClassyClassContainer& aOther);

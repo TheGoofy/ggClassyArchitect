@@ -18,13 +18,14 @@ class ggClassyCollection;
  * @brief The ggClassyFrame class
  */
 class ggClassyFrame :
+  public ggClassyItem,
   public ggSubject
 {
 public:
 
   // identification
   static const QString& TypeID();
-  virtual const QString& VTypeID() const;
+  virtual const QString& VTypeID() const override;
 
   // persist as dom-element
   QDomElement CreateDomElement(QDomDocument& aDocument) const;

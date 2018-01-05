@@ -7,6 +7,7 @@
 
 // 2) include own project-related (sort by component dependency)
 #include "Base/ggSubject.h"
+#include "ClassyDataSet/ggClassyItem.h"
 
 // 3) forward declarations
 
@@ -14,6 +15,7 @@
  * @brief The ggClassyClassBox class
  */
 class ggClassyClassBox :
+  public ggClassyItem,
   public ggSubject
 {
 public:
@@ -23,7 +25,7 @@ public:
 
   // identification
   static const QString& TypeID();
-  virtual const QString& VTypeID() const;
+  virtual const QString& VTypeID() const override;
 
   // main members
   const QString& GetClassName() const;

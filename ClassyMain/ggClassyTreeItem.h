@@ -9,6 +9,7 @@
 #include "Base/ggVectorSetT.h"
 
 // 3) forward declarations
+class ggClassyItem;
 class ggClassyDataSet;
 class ggClassyCollection;
 class ggClassyClass;
@@ -24,17 +25,21 @@ class ggClassyFrame;
 class ggClassyTreeItem {
 public:
 
-  ggClassyTreeItem(const ggClassyDataSet* aDataSet);
+  ggClassyTreeItem();
+  ggClassyTreeItem(const ggClassyItem* aItem);
   virtual ~ggClassyTreeItem();
 
-  template <typename TClassyType>
-  ggClassyTreeItem* AddChild(const TClassyType* aClassyChildItem);
+  static const QString& TypeID();
+  virtual const QString& VTypeID() const;
+
+  ggClassyTreeItem* AddChild(const ggClassyItem* aItem);
   ggUSize GetNumberOfChildren() const;
   ggClassyTreeItem* GetChild(ggUSize aIndex) const;
   ggClassyTreeItem* RemoveChild(ggUSize aIndex);
   ggClassyTreeItem* GetParent() const;
   ggUSize GetSiblingIndex() const;
   const QString& GetName() const;
+  const QString& GetDescription() const;
   void DeleteChild(ggUSize aIndex);
   void DeleteChildren();
 
@@ -46,28 +51,13 @@ public:
 
 private:
 
-  ggClassyTreeItem(const ggClassyCollection* aCollection);
-  ggClassyTreeItem(const ggClassyClass* aClass);
-  ggClassyTreeItem(const ggClassyClassMember* aMember);
-  ggClassyTreeItem(const ggClassyFrame* aFrame);
-
-  enum class cType {
-    eUnknown,
-    eDataSet,
-    eCollection,
-    eClass,
-    eMember,
-    eFrame,
-  };
-
   struct cLess {
     bool operator () (const ggClassyTreeItem* aItemA, const ggClassyTreeItem* aItemB) const;
   };
 
   typedef ggVectorSetT<ggClassyTreeItem*, cLess> tChildren;
 
-  const cType mType;
-  const void* mData;
+  const ggClassyItem* mItem;
   ggClassyTreeItem* mParent;
   tChildren mChildren;
 

@@ -5,12 +5,15 @@
 #include <QDomElement>
 
 // 2) include own project-related (sort by component dependency)
+#include "ClassyDataSet/ggClassyItem.h"
+
 // 3) forward declarations
 
 /**
  * @brief The ggClassyClassMember class
  */
-class ggClassyClassMember
+class ggClassyClassMember :
+  public ggClassyItem
 {
 public:
 
@@ -20,7 +23,7 @@ public:
 
   // identification
   static const QString& TypeID();
-  virtual const QString& VTypeID() const;
+  virtual const QString& VTypeID() const override;
 
   // main members
   void SetName(const QString& aName);

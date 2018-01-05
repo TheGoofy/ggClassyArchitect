@@ -27,6 +27,20 @@ ggClassyFrameContainer::~ggClassyFrameContainer()
 }
 
 
+
+const QString& ggClassyFrameContainer::TypeID()
+{
+  static const QString vTypeID("ggClassyFrameContainer");
+  return vTypeID;
+}
+
+
+const QString& ggClassyFrameContainer::VTypeID() const
+{
+  return TypeID();
+}
+
+
 ggClassyFrameContainer& ggClassyFrameContainer::operator = (const ggClassyFrameContainer& aOther)
 {
   // one collective notification (and not each individual frame)

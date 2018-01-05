@@ -6,6 +6,7 @@
 #include <QString>
 
 // 2) include own project-related (sort by component dependency)
+#include "ClassyDataSet/ggClassyItem.h"
 #include "ClassyDataSet/ggClassyClassBox.h"
 
 // 3) forward declarations
@@ -14,6 +15,7 @@
  * @brief The ggClassyClassContainer class
  */
 class ggClassyClassBoxContainer :
+  public ggClassyItem,
   public ggSubject
 {
 public:
@@ -25,7 +27,7 @@ public:
 
   // identification
   static const QString& TypeID();
-  virtual const QString& VTypeID() const;
+  virtual const QString& VTypeID() const override;
 
   // assignment operator
   ggClassyClassBoxContainer& operator = (const ggClassyClassBoxContainer& aOther);

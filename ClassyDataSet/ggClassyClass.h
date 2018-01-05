@@ -7,6 +7,7 @@
 // 2) include own project-related (sort by component dependency)
 #include "Base/ggString.h"
 #include "Base/ggSubject.h"
+#include "ClassyDataSet/ggClassyItem.h"
 #include "ClassyDataSet/ggClassyClassMember.h"
 #include "ClassyDataSet/ggClassyDescription.h"
 
@@ -18,6 +19,7 @@ class ggClassyCollection;
  * @brief The ggClassyClass class
  */
 class ggClassyClass :
+  public ggClassyItem,
   public ggSubject
 {
 public:
@@ -31,7 +33,7 @@ public:
 
   // identification
   static const QString& TypeID();
-  virtual const QString& VTypeID() const;
+  virtual const QString& VTypeID() const override;
 
   // assignment operator
   ggClassyClass& operator = (const ggClassyClass& aOther);
