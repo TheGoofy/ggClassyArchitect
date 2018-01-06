@@ -16,6 +16,22 @@
 
 
 
+
+
+#include <QMimeData>
+
+QDataStream& operator << (QDataStream& aStreamOut, const ggClassyTreeItem* aTreeItem)
+{
+  aStreamOut.writeRawData((char*)&aTreeItem, sizeof(ggClassyTreeItem*));
+  return aStreamOut;
+}
+
+QDataStream& operator >> (QDataStream& aStreamIn, ggClassyTreeItem*& aTreeItem)
+{
+  aStreamIn.readRawData((char*)&aTreeItem, sizeof(ggClassyTreeItem*));
+  return aStreamIn;
+}
+
 class ggClassyDataModel :
   public QAbstractItemModel,
   public ggObserver
@@ -138,31 +154,130 @@ public:
     return vTreeItem->GetNumberOfChildren();
   }
 
-  virtual int columnCount(const QModelIndex& /*aIndex = QModelIndex()*/) const override
+  virtual int columnCount(const QModelIndex& /*aIndex*/) const override
   {
     return 1;
+  }
+
+  QBrush GetBackgroundBrush(ggClassyTreeItem* aTreeItem) const
+  {
+    if (aTreeItem != nullptr) {
+      if (aTreeItem->GetCollection() != nullptr) return QColor(255, 220, 200, 255);
+    }
+    return QBrush();
+  }
+
+  QBrush GetForegroundBrush(ggClassyTreeItem* aTreeItem) const
+  {
+    if (aTreeItem != nullptr) {
+      if (aTreeItem->GetCollection() != nullptr) return QColor(150, 50, 0, 255);
+    }
+    return QBrush();
   }
 
   virtual QVariant data(const QModelIndex& aIndex, int aRole = Qt::DisplayRole) const override
   {
     if (!aIndex.isValid()) return QVariant();
-    if (aRole != Qt::DisplayRole) return QVariant();
 
     ggClassyTreeItem* vTreeItem = static_cast<ggClassyTreeItem*>(aIndex.internalPointer());
-    if (vTreeItem != nullptr) return vTreeItem->GetName();
-
+    if (aRole == Qt::DisplayRole) return vTreeItem->GetName();
+    if (aRole == Qt::EditRole) return vTreeItem->GetName();
+    if (aRole == Qt::ToolTipRole) return vTreeItem->GetDescription();
+    if (aRole == Qt::BackgroundRole) return GetBackgroundBrush(vTreeItem);
+    if (aRole == Qt::ForegroundRole) return GetForegroundBrush(vTreeItem);
+    if (aRole == Qt::CheckStateRole) if (vTreeItem->GetMember() != nullptr) return Qt::Checked;
     return QVariant();
   }
 
-  /*Qt::ItemFlags flags(const QModelIndex& aIndex) const override
+  virtual bool setData(const QModelIndex& aIndex,
+                       const QVariant& aValue,
+                       int aRole) override
   {
-    //qDebug() << __PRETTY_FUNCTION__ << aIndex;
-    if (!aIndex.isValid()) return 0;
-    return Qt::ItemIsEditable | QAbstractItemModel::flags(aIndex);
-  }*/
+    ggClassyTreeItem* vTreeItem = static_cast<ggClassyTreeItem*>(aIndex.internalPointer());
+    QString vName = vTreeItem != nullptr ? vTreeItem->GetName() : "goofy";
+    qDebug() << __PRETTY_FUNCTION__ << vName << aValue << aRole;
+    return QAbstractItemModel::setData(aIndex, aValue, aRole);
+  }
 
-  // virtual QModelIndex sibling(int row, int column, const QModelIndex &idx) const override
-  // virtual bool hasChildren(const QModelIndex &aParent = QModelIndex()) const override
+  virtual Qt::ItemFlags flags(const QModelIndex& aIndex) const override
+  {
+    Qt::ItemFlags vFlags = Qt::ItemIsEnabled | Qt::ItemIsSelectable;
+    if (!aIndex.isValid()) return vFlags;
+    ggClassyTreeItem* vTreeItem = static_cast<ggClassyTreeItem*>(aIndex.internalPointer());
+    if (vTreeItem->GetDataSet() != nullptr)    vFlags = vFlags | Qt::ItemIsDropEnabled;
+    if (vTreeItem->GetCollection() != nullptr) vFlags = vFlags | Qt::ItemIsEditable | Qt::ItemIsDropEnabled;
+    if (vTreeItem->GetClass() != nullptr)      vFlags = vFlags | Qt::ItemIsEditable | Qt::ItemIsDragEnabled;
+    if (vTreeItem->GetMember() != nullptr)     vFlags = vFlags | Qt::ItemIsEditable | Qt::ItemNeverHasChildren | Qt::ItemIsUserCheckable;
+    if (vTreeItem->GetFrame() != nullptr)      vFlags = vFlags | Qt::ItemIsEditable | Qt::ItemIsDragEnabled;
+    return vFlags;
+  }
+
+  virtual bool hasChildren(const QModelIndex& aIndex) const override
+  {
+    if (!aIndex.isValid()) return QAbstractItemModel::hasChildren(aIndex);
+    ggClassyTreeItem* vTreeItem = static_cast<ggClassyTreeItem*>(aIndex.internalPointer());
+    return vTreeItem->GetNumberOfChildren() > 0;
+  }
+
+  virtual Qt::DropActions supportedDropActions() const override
+  {
+    return Qt::CopyAction | Qt::MoveAction;
+  }
+
+  virtual Qt::DropActions supportedDragActions() const override
+  {
+    return Qt::CopyAction | Qt::MoveAction;
+  }
+
+  static const QString& GetTreeItemListMimeType()
+  {
+    static const QString vTreeItemMimeType("application/x-" + ggClassyTreeItem::TypeID() + "List");
+    return vTreeItemMimeType;
+  }
+
+  virtual QStringList mimeTypes() const override
+  {
+    QStringList vMimeTypes = QAbstractItemModel::mimeTypes();
+    vMimeTypes << GetTreeItemListMimeType();
+    return vMimeTypes;
+  }
+
+  virtual QMimeData* mimeData(const QModelIndexList& aIndices) const override
+  {
+    QByteArray vMimeDataBytes;
+    QDataStream vMimeDataStream(&vMimeDataBytes, QIODevice::WriteOnly);
+    foreach (QModelIndex vIndex, aIndices) {
+      if (vIndex.isValid()) {
+        ggClassyTreeItem* vTreeItem = static_cast<ggClassyTreeItem*>(vIndex.internalPointer());
+        if (vTreeItem != nullptr) vMimeDataStream << vTreeItem;
+      }
+    }
+
+    QMimeData* vMimeData = QAbstractItemModel::mimeData(aIndices);
+    vMimeData->setData(GetTreeItemListMimeType(), vMimeDataBytes);
+    return vMimeData;
+  }
+
+  virtual bool dropMimeData(const QMimeData* aData,
+                            Qt::DropAction aAction,
+                            int aRow, int aColumn,
+                            const QModelIndex& aIndex) override
+  {
+    if (aData->hasFormat(GetTreeItemListMimeType())) {
+      QByteArray vMimeDataBytes = aData->data(GetTreeItemListMimeType());
+      QDataStream vMimeDataStream(&vMimeDataBytes, QIODevice::ReadOnly);
+      while (!vMimeDataStream.atEnd()) {
+        ggClassyTreeItem* vTreeItem = nullptr;
+        vMimeDataStream >> vTreeItem;
+        if (vTreeItem != nullptr) qDebug() << __PRETTY_FUNCTION__ << "dropped item with name:" << vTreeItem->GetName();
+      }
+    }
+
+    ggClassyTreeItem* vTreeItem = static_cast<ggClassyTreeItem*>(aIndex.internalPointer());
+    QString vName = vTreeItem != nullptr ? vTreeItem->GetName() : "goofy";
+    qDebug() << __PRETTY_FUNCTION__ << aAction << aRow << aColumn << vName;
+    return QAbstractItemModel::dropMimeData(aData, aAction, aRow, aColumn, aIndex);
+  }
 
 private:
 
@@ -172,21 +287,29 @@ private:
 };
 
 
+
+
+
 ggClassyDataBrowserDockWidget::ggClassyDataBrowserDockWidget(QWidget* aParent) :
   QDockWidget(aParent),
   ui(new Ui::ggClassyDataBrowserDockWidget)
 {
   ui->setupUi(this);
 
-  /*
-  QFileSystemModel *model = new QFileSystemModel(this);
-  model->setRootPath(QDir::currentPath());
-  ui->mDataBrowserTreeView->setModel(model);
-  */
-
+  // setup model
   ggClassyDataModel* vModel = new ggClassyDataModel(this);
   ui->mDataBrowserTreeView->setModel(vModel);
 
+  // setup selection
+  ui->mDataBrowserTreeView->setSelectionMode(QAbstractItemView::ExtendedSelection);
+  ui->mDataBrowserTreeView->setSelectionBehavior(QAbstractItemView::SelectRows);
+
+  // setup draw/drop
+  ui->mDataBrowserTreeView->setDragEnabled(true);
+  ui->mDataBrowserTreeView->setDropIndicatorShown(true);
+  ui->mDataBrowserTreeView->setDragDropMode(QAbstractItemView::DragDrop);
+  ui->mDataBrowserTreeView->setAcceptDrops(true);
+  ui->mDataBrowserTreeView->setAutoExpandDelay(500);
 }
 
 
