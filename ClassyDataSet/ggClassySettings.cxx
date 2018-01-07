@@ -16,12 +16,12 @@ ggClassySettings::ggClassySettings()
 
 void ggClassySettings::Sync()
 {
-  GetValue("ClassySettings/SelectionColor", QColor(20, 255, 0, 255), mSelectionColor); // 200, 255, 0, 255
-  GetValue("ClassySettings/HighlightColor", QColor(25, 255, 255, 255), mHighlightColor); // 255, 150, 0, 255
-  GetValue("ClassySettings/ShadowColor", QColor(0, 0, 255, 100), mShadowColor); // 0, 0, 0, 40
-  GetValue("ClassySettings/ShadowOffset", QPointF(-6.5, 2.0), mShadowOffset); // 1.5, 1.0
-  GetValue("ClassySettings/ShadowWidth", 10.0, mShadowWidth); // 4.0
-  GetValue("ClassySettings/HandleSize", 15.0, mHandleSize); // 9.0
+  GetValue("ClassySettings/SelectionColor", QColor(200, 255, 0, 255), mSelectionColor);
+  GetValue("ClassySettings/HighlightColor", QColor(255, 100, 0, 255), mHighlightColor);
+  GetValue("ClassySettings/ShadowColor", QColor(0, 0, 0, 40), mShadowColor);
+  GetValue("ClassySettings/ShadowOffset", QPointF(1.5, 1.0), mShadowOffset);
+  GetValue("ClassySettings/ShadowWidth", 4.0, mShadowWidth);
+  GetValue("ClassySettings/HandleSize", 9.0, mHandleSize);
 }
 
 
