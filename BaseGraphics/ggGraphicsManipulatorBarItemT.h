@@ -83,6 +83,17 @@ public:
     return (mHandleItemTR->pos().x() - mHandleItemTL->pos().x());
   }
 
+  void SetHandleSize(float aSize) {
+    mHandleItemTL->SetSize(aSize);
+    mHandleItemTR->SetSize(aSize);
+  }
+
+  void SetHandleColor(const QColor& aColor) {
+    if (mHandleColor != aColor) {
+      mHandleColor = aColor;
+    }
+  }
+
 protected:
 
   virtual void hoverEnterEvent(QGraphicsSceneHoverEvent* aEvent) override {
@@ -116,7 +127,7 @@ protected:
 private:
 
   void ShowHandles() {
-    SetHandleBrush(QColor(255, 0, 0, 255));
+    SetHandleBrush(mHandleColor);
   }
 
   void HideHandles() {
@@ -137,6 +148,7 @@ private:
     TBaseItem::setRect(vRect.normalized());
   }
 
+  QColor mHandleColor;
   THandleItem* mHandleItemTL;
   THandleItem* mHandleItemTR;
 

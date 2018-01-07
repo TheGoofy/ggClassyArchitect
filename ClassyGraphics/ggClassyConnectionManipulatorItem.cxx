@@ -9,9 +9,22 @@
 #include "ClassyGraphics/ggClassyGraphicsBoxItem.h"
 
 
+ggClassyConnectionManipulatorItem::ggClassyConnectionManipulatorItem(ggClassyGraphicsBoxItem* aParent) :
+  QGraphicsItem(aParent)
+{
+  Construct(9.0f);
+}
+
+
 ggClassyConnectionManipulatorItem::ggClassyConnectionManipulatorItem(float aSize,
                                                                      ggClassyGraphicsBoxItem* aParent) :
   QGraphicsItem(aParent)
+{
+  Construct(aSize);
+}
+
+
+void ggClassyConnectionManipulatorItem::Construct(float aSize)
 {
   mDraggerItem = new ggGraphicsHandleItemEllipse(aSize, this);
   mDraggerItem->setCursor(Qt::DragMoveCursor);
@@ -49,9 +62,27 @@ void ggClassyConnectionManipulatorItem::SetPositionSrc(const QPointF& aPosition)
 }
 
 
+void ggClassyConnectionManipulatorItem::SetColor(const QColor& aColor)
+{
+  if (mColor != aColor) {
+    mColor = aColor;
+    QPen vPen(mPathItem->pen());
+    vPen.setColor(aColor);
+    mPathItem->setPen(vPen);
+    update();
+  }
+}
+
+
+const QColor& ggClassyConnectionManipulatorItem::GetColor() const
+{
+  return mColor;
+}
+
+
 void ggClassyConnectionManipulatorItem::ShowDragger()
 {
-  mDraggerItem->setBrush(QColor(255, 0, 0, 255));
+  mDraggerItem->setBrush(mColor);
 }
 
 

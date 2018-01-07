@@ -86,6 +86,21 @@ void ggGraphicsDecoratedPathItem::setPen(const QPen& aPen)
 }
 
 
+void ggGraphicsDecoratedPathItem::SetColorSelected(const QColor& aColor)
+{
+  if (mColorSelected != aColor) {
+    mColorSelected = aColor;
+    RebuildPath();
+  }
+}
+
+
+const QColor& ggGraphicsDecoratedPathItem::GetColorSelected() const
+{
+  return mColorSelected;
+}
+
+
 QVariant ggGraphicsDecoratedPathItem::itemChange(GraphicsItemChange aChange,
                                                  const QVariant& aValue)
 {

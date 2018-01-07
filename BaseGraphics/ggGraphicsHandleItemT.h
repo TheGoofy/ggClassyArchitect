@@ -21,17 +21,16 @@ class ggGraphicsHandleItemT :
 
 public:
 
+  ggGraphicsHandleItemT(QGraphicsItem* aParent = nullptr)
+    : TBaseItem(aParent)
+  {
+    Construct();
+  }
+
   ggGraphicsHandleItemT(float aSize, QGraphicsItem* aParent = nullptr)
     : TBaseItem(-0.5f*aSize, -0.5f*aSize, aSize, aSize, aParent)
   {
-    TBaseItem::setFlag(TBaseItem::ItemIsMovable);
-    TBaseItem::setFlag(TBaseItem::ItemSendsGeometryChanges);
-    TBaseItem::setFlag(TBaseItem::ItemIgnoresTransformations);
-    TBaseItem::setAcceptHoverEvents(true);
-    TBaseItem::setCursor(Qt::SizeAllCursor);
-    TBaseItem::setToolTip("Click and drag for changing the size.");
-    TBaseItem::setZValue(1.0f);
-    TBaseItem::setPen(Qt::NoPen);
+    Construct();
   }
 
   void SetSize(float aSize) {
@@ -99,6 +98,17 @@ protected:
   }
 
 private:
+
+  void Construct() {
+    TBaseItem::setFlag(TBaseItem::ItemIsMovable);
+    TBaseItem::setFlag(TBaseItem::ItemSendsGeometryChanges);
+    TBaseItem::setFlag(TBaseItem::ItemIgnoresTransformations);
+    TBaseItem::setAcceptHoverEvents(true);
+    TBaseItem::setCursor(Qt::SizeAllCursor);
+    TBaseItem::setToolTip("Click and drag for changing the size.");
+    TBaseItem::setZValue(1.0f);
+    TBaseItem::setPen(Qt::NoPen);
+  }
 
   ggSubject mSubjectPosition;
   ggSubject mSubjectMousePress;

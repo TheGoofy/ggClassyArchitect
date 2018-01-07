@@ -16,6 +16,7 @@
 #include "BaseGraphics/ggGraphicsCheckBoxItem.h"
 #include "BaseGraphics/ggGraphicsShadowRectItem.h"
 #include "BaseGraphics/ggGraphicsDecoratedPathItem.h"
+#include "ClassyDataSet/ggClassySettings.h"
 #include "ClassyDataSet/ggClassyDataSet.h"
 #include "ClassyGraphics/ggClassyConnectionManipulatorItem.h"
 
@@ -73,11 +74,7 @@ void ggClassyGraphicsBoxItem::Construct()
 
   mShadow = new ggGraphicsShadowRectItem(this);
   mShadow->setFlag(ItemStacksBehindParent);
-  mShadow->SetRadius(4.0f);
-  mShadow->SetShadowWidth(4.0f);
   mShadow->setPen(Qt::NoPen);
-  mShadow->SetShadowColors(QColor(0, 0, 0, 40));
-  mShadow->setPos(1.0f, 1.0f);
   mBoxBorder = new QGraphicsRectItem(this);
   mBoxBorder->setFlag(ItemStacksBehindParent);
   mBoxBorder->setBrush(Qt::NoBrush);
@@ -104,13 +101,14 @@ void ggClassyGraphicsBoxItem::Construct()
   mMembersCheckBox = new ggGraphicsCheckBoxItem(this);
   mDescriptionCheckBox = new ggGraphicsCheckBoxItem(this);
 
-  mBaseClassConnector = new ggClassyConnectionManipulatorItem(9.0f, this);
+  mBaseClassConnector = new ggClassyConnectionManipulatorItem(this);
 
   mClassConnectionTop.SetDirectionUp();
   mClassConnectionBottom.SetDirectionDown();
   mClassConnectionLeft.SetDirectionLeft();
   mClassConnectionRight.SetDirectionRight();
 
+  Attach(ggClassySettings::GetInstance());
   Attach(mClassNameText->GetSubjectText());
   Attach(mClassNameText->GetSubjectEditingFinished());
   Attach(mMembersText->GetSubjectText());
@@ -121,6 +119,8 @@ void ggClassyGraphicsBoxItem::Construct()
   Attach(mDescriptionCheckBox->GetSubjectChecked());
   Attach(GetSubjectPosition());
   Attach(GetSubjectWidth());
+
+  UpdateSettings();
 }
 
 
@@ -299,8 +299,8 @@ void ggClassyGraphicsBoxItem::paint(QPainter* aPainter, const QStyleOptionGraphi
 QVariant ggClassyGraphicsBoxItem::itemChange(GraphicsItemChange aChange, const QVariant& aValue)
 {
   if (aChange == ItemSelectedHasChanged) {
-    mShadow->SetShadowColors(aValue.toBool() ? QColor(200, 255, 0, 255) : QColor(0, 0, 0, 40));
-    mShadow->setPos(aValue.toBool() ? QPointF(0.0f, 0.0f) : QPointF(1.0f, 1.0f));
+    mShadow->SetShadowColors(aValue.toBool() ? ggClassySettings::GetInstance()->GetSelectionColor() : ggClassySettings::GetInstance()->GetShadowColor());
+    mShadow->setPos(aValue.toBool() ? QPointF(0.0f, 0.0f) : ggClassySettings::GetInstance()->GetShadowOffset());
   }
 
   return ggGraphicsManipulatorBarItemT<>::itemChange(aChange, aValue);
@@ -366,6 +366,10 @@ void ggClassyGraphicsBoxItem::Update(const ggSubject* aSubject)
 
   else if (aSubject == GetCollection()) {
     UpdateCollectionRead();
+  }
+
+  else if (aSubject == ggClassySettings::GetInstance()) {
+    UpdateSettings();
   }
 
   ggGraphicsManipulatorBarItemT<>::Update(aSubject);
@@ -588,4 +592,19 @@ void ggClassyGraphicsBoxItem::UpdateCollectionRead()
     mDescriptionText->setDefaultTextColor(vCollection->mDescriptionColor);
     mDescriptionText->SetBrush(vCollection->mDescriptionBackground);
   }
+}
+
+
+void ggClassyGraphicsBoxItem::UpdateSettings()
+{
+  SetHandleSize(ggClassySettings::GetInstance()->GetHandleSize());
+  SetHandleColor(ggClassySettings::GetInstance()->GetHighlightColor());
+  mBaseClassConnector->SetSize(ggClassySettings::GetInstance()->GetHandleSize());
+  mBaseClassConnector->SetColor(ggClassySettings::GetInstance()->GetHighlightColor());
+  mShadow->SetRadius(ggClassySettings::GetInstance()->GetShadowWidth());
+  mShadow->SetShadowWidth(ggClassySettings::GetInstance()->GetShadowWidth());
+  mShadow->SetShadowColors(ggClassySettings::GetInstance()->GetShadowColor());
+  mShadow->setPos(ggClassySettings::GetInstance()->GetShadowOffset());
+  mMembersCheckBox->SetColor(ggClassySettings::GetInstance()->GetHighlightColor());
+  mDescriptionCheckBox->SetColor(ggClassySettings::GetInstance()->GetHighlightColor());
 }

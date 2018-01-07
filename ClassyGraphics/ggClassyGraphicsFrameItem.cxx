@@ -10,6 +10,7 @@
 #include "BaseGraphics/ggGraphicsTextItem.h"
 #include "BaseGraphics/ggGraphicsHandleItemT.h"
 #include "BaseGraphics/ggGraphicsShadowRectItem.h"
+#include "ClassyDataSet/ggClassySettings.h"
 #include "ClassyDataSet/ggClassyFrame.h"
 #include "ClassyDataSet/ggClassyCollection.h"
 
@@ -153,6 +154,10 @@ void ggClassyGraphicsFrameItem::Update(const ggSubject* aSubject)
     UpdateCollectionRead();
     UpdateLayout();
   }
+
+  else if (aSubject == ggClassySettings::GetInstance()) {
+    UpdateSettings();
+  }
 }
 
 
@@ -163,8 +168,8 @@ QVariant ggClassyGraphicsFrameItem::itemChange(GraphicsItemChange aChange, const
   }
 
   if (aChange == ItemSelectedHasChanged) {
-    mShadow->SetShadowColors(aValue.toBool() ? QColor(200, 255, 0, 255) : QColor(0, 0, 0, 40));
-    mShadow->setPos(aValue.toBool() ? QPointF(0.0f, 0.0f) : QPointF(1.0f, 1.0f));
+    mShadow->SetShadowColors(aValue.toBool() ? ggClassySettings::GetInstance()->GetSelectionColor() : ggClassySettings::GetInstance()->GetShadowColor());
+    mShadow->setPos(aValue.toBool() ? QPointF(0.0f, 0.0f) : ggClassySettings::GetInstance()->GetShadowOffset());
   }
 
   return ggGraphicsRoundedRectItem::itemChange(aChange, aValue);
@@ -212,8 +217,6 @@ void ggClassyGraphicsFrameItem::Construct()
   mShadow = new ggGraphicsShadowRectItem(this);
   mShadow->setFlag(ItemStacksBehindParent);
   mShadow->setPen(Qt::NoPen);
-  mShadow->SetShadowColors(QColor(0, 0, 0, 40));
-  mShadow->setPos(1.0f, 1.0f);
 
   // text
   mText = new ggGraphicsTextItem(this);
@@ -221,10 +224,10 @@ void ggClassyGraphicsFrameItem::Construct()
   mText->SetSuppressRichText(false);
 
   // size handles
-  mHandleTL = new ggGraphicsHandleItemEllipse(9.0f, this);
-  mHandleTR = new ggGraphicsHandleItemEllipse(9.0f, this);
-  mHandleBL = new ggGraphicsHandleItemEllipse(9.0f, this);
-  mHandleBR = new ggGraphicsHandleItemEllipse(9.0f, this);
+  mHandleTL = new ggGraphicsHandleItemEllipse(this);
+  mHandleTR = new ggGraphicsHandleItemEllipse(this);
+  mHandleBL = new ggGraphicsHandleItemEllipse(this);
+  mHandleBR = new ggGraphicsHandleItemEllipse(this);
   mHandleTL->LinkX(mHandleBL);
   mHandleTL->LinkY(mHandleTR);
   mHandleBR->LinkX(mHandleTR);
@@ -239,8 +242,10 @@ void ggClassyGraphicsFrameItem::Construct()
   Attach(mText->GetSubjectEditingFinished());
   Attach(mHandleTL->GetSubjectPosition());
   Attach(mHandleBR->GetSubjectPosition());
+  Attach(ggClassySettings::GetInstance());
 
   // arrange layout
+  UpdateSettings();
   UpdateCollectionRead();
   UpdateLayout();
 }
@@ -257,7 +262,7 @@ Qt::Alignment ggClassyGraphicsFrameItem::GetVerticalTextAlignment() const
 
 void ggClassyGraphicsFrameItem::ShowHandles()
 {
-  SetHandleBrush(QColor(255, 0, 0, 255));
+  SetHandleBrush(ggClassySettings::GetInstance()->GetHighlightColor());
 }
 
 
@@ -298,18 +303,24 @@ void ggClassyGraphicsFrameItem::UpdateFrameWrite()
 }
 
 
+void ggClassyGraphicsFrameItem::UpdateShadow(qreal aShadowWidth)
+{
+  const QRectF& vRect(rect());
+  qreal vFrameBorder2 = pen().widthF() / 2.0f;
+  qreal vShadowMargin = vFrameBorder2 + aShadowWidth;
+  mShadow->SetShadowWidth(aShadowWidth);
+  mShadow->SetRadius(GetRadiusX() + vFrameBorder2 + aShadowWidth);
+  mShadow->setRect(vRect + QMarginsF(vShadowMargin, vShadowMargin, vShadowMargin, vShadowMargin));
+}
+
+
 void ggClassyGraphicsFrameItem::UpdateLayout()
 {
-  // adjust the shadow
-  qreal vShadowWidth = 4.0f;
-  qreal vFrameBorder2 = pen().widthF() / 2.0f;
-  qreal vShadowMargin = vFrameBorder2 + vShadowWidth;
-  const QRectF& vRect(rect());
-  mShadow->SetShadowWidth(vShadowWidth);
-  mShadow->SetRadius(GetRadiusX() + vFrameBorder2 + vShadowWidth);
-  mShadow->setRect(vRect + QMarginsF(vShadowMargin, vShadowMargin, vShadowMargin, vShadowMargin));
+  // update the shadow
+  UpdateShadow(ggClassySettings::GetInstance()->GetShadowWidth());
 
   // adjust the text
+  const QRectF& vRect(rect());
   qreal vTextMargin = mText->document()->documentMargin();
   qreal vTextBorder = (GetRadiusX() > vTextMargin + 3.0f) ? GetRadiusX() - vTextMargin - 3.0f: 0.0f;
   qreal vTextWidth = vRect.width() - 2.0f * vTextBorder;
@@ -328,6 +339,18 @@ void ggClassyGraphicsFrameItem::UpdateLayout()
   ggObserver::cExecutorBlocking vBlockBR(this, mHandleBR->GetSubjectPosition());
   mHandleTL->setPos(vRect.topLeft());
   mHandleBR->setPos(vRect.bottomRight());
+}
+
+
+void ggClassyGraphicsFrameItem::UpdateSettings()
+{
+  mHandleTL->SetSize(ggClassySettings::GetInstance()->GetHandleSize());
+  mHandleTR->SetSize(ggClassySettings::GetInstance()->GetHandleSize());
+  mHandleBL->SetSize(ggClassySettings::GetInstance()->GetHandleSize());
+  mHandleBR->SetSize(ggClassySettings::GetInstance()->GetHandleSize());
+  mShadow->SetShadowColors(ggClassySettings::GetInstance()->GetShadowColor());
+  mShadow->setPos(ggClassySettings::GetInstance()->GetShadowOffset());
+  UpdateShadow(ggClassySettings::GetInstance()->GetShadowWidth());
 }
 
 

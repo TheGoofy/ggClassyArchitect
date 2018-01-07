@@ -5,6 +5,7 @@
 #include <QDebug>
 
 // 2) include own project-related (sort by component dependency)
+#include "ClassyDataSet/ggClassySettings.h"
 #include "ClassyDataSet/ggClassyCollection.h"
 
 
@@ -15,7 +16,9 @@ ggClassyAutoConnectPathItem::ggClassyAutoConnectPathItem(QGraphicsItem* aParent)
   mClassNameDst(""),
   mMemberIndex(-1)
 {
+  ggObserver::Attach(ggClassySettings::GetInstance());
   SetCollection(ggClassyCollection::GetDefaultCollection());
+  UpdateSettings();
 }
 
 
@@ -69,6 +72,11 @@ void ggClassyAutoConnectPathItem::Update(const ggSubject* aSubject)
   if (aSubject == mCollection) {
     UpdateCollectionRead();
   }
+
+  else if (aSubject == ggClassySettings::GetInstance()) {
+    UpdateSettings();
+  }
+
   ggGraphicsAutoConnectPathItem::Update(aSubject);
 }
 
@@ -78,4 +86,10 @@ void ggClassyAutoConnectPathItem::UpdateCollectionRead()
   if (mCollection != nullptr) {
     setPen(mCollection->mConnectionLines);
   }
+}
+
+
+void ggClassyAutoConnectPathItem::UpdateSettings()
+{
+  SetColorSelected(ggClassySettings::GetInstance()->GetSelectionColor());
 }

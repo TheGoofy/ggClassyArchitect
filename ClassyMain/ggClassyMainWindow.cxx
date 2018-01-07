@@ -8,6 +8,8 @@
 #include <QMessageBox>
 #include <QDebug>
 #include <QMetaMethod>
+#include <QSettings>
+#include <QCloseEvent>
 
 // 2) include own project-related (sort by component dependency)
 #include "Base/ggWalkerT.h"
@@ -36,6 +38,8 @@ ggClassyMainWindow::ggClassyMainWindow(QWidget *parent) :
   ui->centralWidget->layout()->setSpacing(0);
   ui->mZoomComboBox->setCompleter(0);
   ui->mZoomComboBox->setFocusPolicy(Qt::ClickFocus);
+
+  ReadSettings();
 
   CreateAction(mActionAlignTL, SLOT(AlignTL()), ui->mAlignTL);
   CreateAction(mActionAlignTC, SLOT(AlignTC()), ui->mAlignTC);
@@ -72,7 +76,7 @@ ggClassyMainWindow::ggClassyMainWindow(QWidget *parent) :
   ui->mColorChannelWidgetB->SetColor(ui->mColorWheelWidget->GetColor());
   ui->mColorChannelWidgetA->SetChannel(ggColorChannelWidget::cChannel::eAlpha);
   ui->mColorChannelWidgetA->SetColor(ui->mColorWheelWidget->GetColor());
-  ui->mColorChannelWidgetV->SetChannel(ggColorChannelWidget::cChannel::eLightness);
+  ui->mColorChannelWidgetV->SetChannel(ggColorChannelWidget::cChannel::eValue);
   ui->mColorChannelWidgetV->SetColor(ui->mColorWheelWidget->GetColor());
 
   ConnectColor(ui->mColorWheelWidget, ui->mColorChannelWidgetR);
@@ -534,6 +538,9 @@ void ggClassyMainWindow::MoveSelectedItemsDown()
 }
 
 
+#include "ClassyDataSet/ggClassySettings.h"
+
+
 void ggClassyMainWindow::ChangeColor(const QColor& aColor)
 {
   ggClassyGraphicsScene* vScene = dynamic_cast<ggClassyGraphicsScene*>(ui->mGraphicsView->scene());
@@ -665,4 +672,31 @@ void ggClassyMainWindow::AlignBC()
 void ggClassyMainWindow::AlignBR()
 {
   SetAlignment(Qt::AlignBottom | Qt::AlignRight);
+}
+
+
+void ggClassyMainWindow::closeEvent(QCloseEvent* aEvent)
+{
+  WriteSettings();
+  aEvent->accept();
+}
+
+
+void ggClassyMainWindow::WriteSettings()
+{
+  QSettings vSettings;
+  vSettings.beginGroup("MainWindow");
+  vSettings.setValue("size", size());
+  vSettings.setValue("pos", pos());
+  vSettings.endGroup();
+}
+
+
+void ggClassyMainWindow::ReadSettings()
+{
+  QSettings vSettings;
+  vSettings.beginGroup("MainWindow");
+  resize(vSettings.value("size", size()).toSize());
+  move(vSettings.value("pos", pos()).toPoint());
+  vSettings.endGroup();
 }

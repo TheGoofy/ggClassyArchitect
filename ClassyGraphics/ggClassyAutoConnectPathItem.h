@@ -31,6 +31,7 @@ protected:
 private:
 
   void UpdateCollectionRead();
+  void UpdateSettings();
 
   const ggClassyCollection* mCollection;
 

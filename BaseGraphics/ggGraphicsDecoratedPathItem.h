@@ -36,6 +36,8 @@ public:
                         ggDecoration::cFill aFill = ggDecoration::cFill::eSolid);
 
   void setPen(const QPen& aPen);
+  void SetColorSelected(const QColor& aColor);
+  const QColor& GetColorSelected() const;
 
 protected:
 

@@ -87,6 +87,7 @@ void ggGraphicsShadowRectItem::SetShadowColors(const QColor& aColor)
 {
   mOuterColor = QColor(aColor.red(), aColor.green(), aColor.blue(), 0);
   setBrush(aColor);
+  update();
 }
 
 

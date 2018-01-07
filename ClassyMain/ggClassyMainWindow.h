@@ -62,6 +62,7 @@ protected slots:
 
 protected:
   virtual void Update(const ggSubject* aSubject) override;
+  virtual void closeEvent(QCloseEvent* aEvent) override;
 
 private: 
 
@@ -71,6 +72,9 @@ private:
   // other user interfaces
   ggClassyDataBrowserDockWidget* mDataBrowser;
   ggClassyDataPropertiesDockWidget* mDataProperties;
+
+  void WriteSettings();
+  void ReadSettings();
 
   static QPointF& GetNewPosition();
   QString ZoomToString(float aZoomFloat) const;

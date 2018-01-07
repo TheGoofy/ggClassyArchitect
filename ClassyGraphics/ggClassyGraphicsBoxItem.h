@@ -80,6 +80,7 @@ private:
   void NotifyConnectionPoints();
 
   void UpdateCollectionRead();
+  void UpdateSettings();
 
   ggGraphicsShadowRectItem* mShadow;
   QGraphicsRectItem* mBoxBorder;

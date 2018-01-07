@@ -6,6 +6,7 @@
 #include <QTextStream>
 #include <QDateTime>
 #include <QDebug>
+#include <QSettings>
 
 // 2) include own project-related (sort by component dependency)
 #include "Base/ggWalkerT.h"
@@ -19,6 +20,14 @@ ggClassyApplication::ggClassyApplication(int &argc, char **argv) :
   mVersionPatch(1),
   mDataSet(nullptr)
 {
+  QCoreApplication::setOrganizationName("Goofy Soft");
+  QCoreApplication::setApplicationName(VTypeID());
+  qDebug() << __PRETTY_FUNCTION__ << organizationDomain();
+  qDebug() << __PRETTY_FUNCTION__ << organizationName();
+  
+  QSettings vSettings;
+  qDebug() << __PRETTY_FUNCTION__ << vSettings.fileName();
+
   mDataSet = ggClassyDataSet::CreateTestDataSet();
 }
 

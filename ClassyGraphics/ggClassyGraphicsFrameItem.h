@@ -56,6 +56,7 @@ private:
   void UpdateFrameWrite();
   void UpdateCollectionRead();
   void UpdateLayout();
+  void UpdateSettings();
 
   const ggClassyCollection* GetCollection() const;
   Qt::Alignment GetVerticalTextAlignment() const;
@@ -64,6 +65,7 @@ private:
   void SetHandleBrush(const QBrush& aBrush);
   QRectF GetRectAbsolute() const;
   void SetRectAbsolute(const QRectF& aRect);
+  void UpdateShadow(qreal aShadowWidth);
 
   ggGraphicsShadowRectItem* mShadow;
   ggGraphicsTextItem* mText;

@@ -20,11 +20,14 @@ class ggClassyConnectionManipulatorItem :
 {
 public:
 
+  ggClassyConnectionManipulatorItem(ggClassyGraphicsBoxItem* aParent = nullptr);
   ggClassyConnectionManipulatorItem(float aSize, ggClassyGraphicsBoxItem* aParent = nullptr);
 
   void SetSize(float aSize);
   float GetSize() const;
   void SetPositionSrc(const QPointF& aPosition);
+  void SetColor(const QColor& aColor);
+  const QColor& GetColor() const;
   void ShowDragger();
   void HideDragger();
 
@@ -36,6 +39,8 @@ protected:
 
 private:
 
+  void Construct(float aSize);
+
   ggClassyGraphicsBoxItem* GetSrcBoxItem();
   ggClassyGraphicsBoxItem* GetDstBoxItem();
   ggConnectionPoint GetConnectionSrc();
@@ -45,6 +50,7 @@ private:
   QPointF mPositionSrc;
   ggGraphicsHandleItemT<QGraphicsEllipseItem>* mDraggerItem;
   ggGraphicsDecoratedPathItem* mPathItem;
+  QColor mColor;
 
 };
 
