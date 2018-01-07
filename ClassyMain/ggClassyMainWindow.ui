@@ -252,6 +252,16 @@
        </widget>
       </item>
       <item>
+       <widget class="ggColorPreviewWidget" name="mColorPreviewWidget" native="true">
+        <property name="minimumSize">
+         <size>
+          <width>16</width>
+          <height>16</height>
+         </size>
+        </property>
+       </widget>
+      </item>
+      <item>
        <widget class="Line" name="line_5">
         <property name="orientation">
          <enum>Qt::Horizontal</enum>
@@ -571,6 +581,12 @@
    <class>ggColorChannelWidget</class>
    <extends>QWidget</extends>
    <header>BaseWidgets/ggColorChannelWidget.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>ggColorPreviewWidget</class>
+   <extends>QWidget</extends>
+   <header>BaseWidgets/ggColorPreviewWidget.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

@@ -276,23 +276,6 @@ void ggColorChannelWidget::resizeEvent(QResizeEvent* aEvent)
 }
 
 
-QBrush CheckerBoardBrush(int aSize, const QColor& aColor)
-{
-  QBitmap vBitmap(2*aSize, 2*aSize);
-  QPainter vBitmapPainter(&vBitmap);
-  vBitmapPainter.setPen(Qt::NoPen);
-  vBitmapPainter.setBrush(Qt::black);
-  vBitmapPainter.drawRect(    0,     0, aSize, aSize);
-  vBitmapPainter.drawRect(aSize, aSize, aSize, aSize);
-  vBitmapPainter.setBrush(Qt::white);
-  vBitmapPainter.drawRect(aSize,     0, aSize, aSize);
-  vBitmapPainter.drawRect(    0, aSize, aSize, aSize);
-  QBrush vBrush(vBitmap);
-  vBrush.setColor(aColor);
-  return vBrush;
-}
-
-
 QBrush GradientBrush(const QPointF& aPositionA,
                      const QPointF& aPositionB,
                      const QColor& aColorA,
@@ -366,7 +349,7 @@ void ggColorChannelWidget::paintEvent(QPaintEvent* aEvent)
   if (mChannel == cChannel::eAlpha) {
     vPainter.setBrush(QColor(130,130,130,255));
     vPainter.drawRoundedRect(mColorBar, 2.0f * mSelectorRadius, 2.0f * mSelectorRadius);
-    vPainter.setBrush(CheckerBoardBrush(1.5f * mSelectorRadius, QColor(170,170,170,255)));
+    vPainter.setBrush(ggUtilityQt::GetCheckerBoardBrush(1.5f * mSelectorRadius));
     vPainter.drawRoundedRect(mColorBar, 2.0f * mSelectorRadius, 2.0f * mSelectorRadius);
   }
   vPainter.setBrush(GetGradientBrush());

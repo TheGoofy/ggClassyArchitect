@@ -4,6 +4,7 @@
 // 1) include system (or QT)
 #include <QColor>
 #include <QRect>
+#include <QBrush>
 
 // 2) include own project-related (sort by component dependency)
 #include "Base/ggUtility.h"
@@ -36,6 +37,7 @@ namespace ggUtilityQt
   template <typename T>
   T FromString(const QString& aString, bool* aOK = nullptr);
 
+  QBrush GetCheckerBoardBrush(int aSize = 5, const QColor& aColor = QColor(170, 170, 170, 255));
 }
 
 #endif // GGUTILITYQT_H

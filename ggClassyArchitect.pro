@@ -85,7 +85,8 @@ HEADERS += \
     ClassyDataSet/ggClassyFrameContainer.h \
     ClassyGraphics/ggClassyConnectionManipulatorItem.h \
     ClassyDataSet/ggClassyItem.h \
-    ClassyDataSet/ggClassySettings.h
+    ClassyDataSet/ggClassySettings.h \
+    BaseWidgets/ggColorPreviewWidget.h
 
 SOURCES += \
     Base/ggItemLinked.cxx \
@@ -131,5 +132,6 @@ SOURCES += \
     ClassyDataSet/ggClassyFrameContainer.cxx \
     ClassyGraphics/ggClassyConnectionManipulatorItem.cxx \
     ClassyDataSet/ggClassyItem.cxx \
-    ClassyDataSet/ggClassySettings.cxx
+    ClassyDataSet/ggClassySettings.cxx \
+    BaseWidgets/ggColorPreviewWidget.cxx
 

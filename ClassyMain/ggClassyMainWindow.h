@@ -29,6 +29,10 @@ public:
   virtual ~ggClassyMainWindow();
   void UpdateUI();
 
+signals:
+
+  void ColorChanged(const QColor& aColor);
+
 protected slots:
   void on_mZoomComboBox_editingFinished();
   void on_mZoomComboBox_activated(int);
@@ -49,7 +53,7 @@ protected slots:
   void MoveSelectedItemsBottom();
   void OpenDataSet();
   void SaveDataSetAs();
-  void ChangeColor(const QColor& aColor);
+  void SetColor(const QColor& aColor);
   void AlignTL();
   void AlignTC();
   void AlignTR();

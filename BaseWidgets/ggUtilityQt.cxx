@@ -3,6 +3,8 @@
 
 // 1) include system
 #include <QDebug>
+#include <QBitmap>
+#include <QPainter>
 
 // 2) include own project-related (sort by component dependency)
 
@@ -129,3 +131,20 @@ T ggUtilityQt::FromString(const QString& aString, bool* aOK)
 
 
 template QColor ggUtilityQt::FromString<QColor>(const QString& aString, bool* aOK);
+
+
+QBrush ggUtilityQt::GetCheckerBoardBrush(int aSize, const QColor& aColor)
+{
+  QBitmap vBitmap(2*aSize, 2*aSize);
+  QPainter vBitmapPainter(&vBitmap);
+  vBitmapPainter.setPen(Qt::NoPen);
+  vBitmapPainter.setBrush(Qt::black);
+  vBitmapPainter.drawRect(    0,     0, aSize, aSize);
+  vBitmapPainter.drawRect(aSize, aSize, aSize, aSize);
+  vBitmapPainter.setBrush(Qt::white);
+  vBitmapPainter.drawRect(aSize,     0, aSize, aSize);
+  vBitmapPainter.drawRect(    0, aSize, aSize, aSize);
+  QBrush vBrush(vBitmap);
+  vBrush.setColor(aColor);
+  return vBrush;
+}

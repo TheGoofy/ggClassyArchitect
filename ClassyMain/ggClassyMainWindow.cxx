@@ -78,7 +78,7 @@ ggClassyMainWindow::ggClassyMainWindow(QWidget *parent) :
   ui->mColorChannelWidgetA->SetColor(ui->mColorWheelWidget->GetColor());
   ui->mColorChannelWidgetV->SetChannel(ggColorChannelWidget::cChannel::eValue);
   ui->mColorChannelWidgetV->SetColor(ui->mColorWheelWidget->GetColor());
-
+/*
   ConnectColor(ui->mColorWheelWidget, ui->mColorChannelWidgetR);
   ConnectColor(ui->mColorWheelWidget, ui->mColorChannelWidgetG);
   ConnectColor(ui->mColorWheelWidget, ui->mColorChannelWidgetB);
@@ -114,13 +114,21 @@ ggClassyMainWindow::ggClassyMainWindow(QWidget *parent) :
   ConnectColor(ui->mColorChannelWidgetV, ui->mColorChannelWidgetG);
   ConnectColor(ui->mColorChannelWidgetV, ui->mColorChannelWidgetB);
   ConnectColor(ui->mColorChannelWidgetV, ui->mColorChannelWidgetA);
+*/
+  connect(ui->mColorWheelWidget, SIGNAL(ColorChanged(QColor)), this, SLOT(SetColor(QColor)));
+  connect(ui->mColorChannelWidgetR, SIGNAL(ColorChanged(QColor)), this, SLOT(SetColor(QColor)));
+  connect(ui->mColorChannelWidgetG, SIGNAL(ColorChanged(QColor)), this, SLOT(SetColor(QColor)));
+  connect(ui->mColorChannelWidgetB, SIGNAL(ColorChanged(QColor)), this, SLOT(SetColor(QColor)));
+  connect(ui->mColorChannelWidgetA, SIGNAL(ColorChanged(QColor)), this, SLOT(SetColor(QColor)));
+  connect(ui->mColorChannelWidgetV, SIGNAL(ColorChanged(QColor)), this, SLOT(SetColor(QColor)));
 
-  connect(ui->mColorWheelWidget, SIGNAL(ColorChanged(QColor)), this, SLOT(ChangeColor(QColor)));
-  connect(ui->mColorChannelWidgetR, SIGNAL(ColorChanged(QColor)), this, SLOT(ChangeColor(QColor)));
-  connect(ui->mColorChannelWidgetG, SIGNAL(ColorChanged(QColor)), this, SLOT(ChangeColor(QColor)));
-  connect(ui->mColorChannelWidgetB, SIGNAL(ColorChanged(QColor)), this, SLOT(ChangeColor(QColor)));
-  connect(ui->mColorChannelWidgetA, SIGNAL(ColorChanged(QColor)), this, SLOT(ChangeColor(QColor)));
-  connect(ui->mColorChannelWidgetV, SIGNAL(ColorChanged(QColor)), this, SLOT(ChangeColor(QColor)));
+  connect(this, SIGNAL(ColorChanged(QColor)), ui->mColorWheelWidget, SLOT(SetColor(QColor)));
+  connect(this, SIGNAL(ColorChanged(QColor)), ui->mColorChannelWidgetR, SLOT(SetColor(QColor)));
+  connect(this, SIGNAL(ColorChanged(QColor)), ui->mColorChannelWidgetG, SLOT(SetColor(QColor)));
+  connect(this, SIGNAL(ColorChanged(QColor)), ui->mColorChannelWidgetB, SLOT(SetColor(QColor)));
+  connect(this, SIGNAL(ColorChanged(QColor)), ui->mColorChannelWidgetA, SLOT(SetColor(QColor)));
+  connect(this, SIGNAL(ColorChanged(QColor)), ui->mColorChannelWidgetV, SLOT(SetColor(QColor)));
+  connect(this, SIGNAL(ColorChanged(QColor)), ui->mColorPreviewWidget, SLOT(SetColor(QColor)));
 
   addDockWidget(Qt::LeftDockWidgetArea, mDataBrowser);
   addDockWidget(Qt::LeftDockWidgetArea, mDataProperties);
@@ -538,10 +546,7 @@ void ggClassyMainWindow::MoveSelectedItemsDown()
 }
 
 
-#include "ClassyDataSet/ggClassySettings.h"
-
-
-void ggClassyMainWindow::ChangeColor(const QColor& aColor)
+void ggClassyMainWindow::SetColor(const QColor& aColor)
 {
   ggClassyGraphicsScene* vScene = dynamic_cast<ggClassyGraphicsScene*>(ui->mGraphicsView->scene());
   if (vScene != nullptr) {
@@ -590,6 +595,8 @@ void ggClassyMainWindow::ChangeColor(const QColor& aColor)
       }
     }
   }
+
+  emit ColorChanged(aColor);
 }
 
 
