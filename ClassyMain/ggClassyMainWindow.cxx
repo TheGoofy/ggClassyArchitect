@@ -196,8 +196,16 @@ void ggClassyMainWindow::on_mZoomFitPushButton_clicked()
 }
 
 
+#include <QColorDialog>
+#include "BaseWidgets/ggColorDialog.h"
+
+
 void ggClassyMainWindow::on_mZoomResetPushButton_clicked()
 {
+  ggColorDialog vColorDialog(this);
+  connect(&vColorDialog, SIGNAL(currentColorChanged(QColor)), this, SLOT(SetColor(QColor)));
+  vColorDialog.exec();
+
   ui->mGraphicsView->SetZoomReset();
 }
 

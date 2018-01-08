@@ -25,7 +25,8 @@ DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs depr
 FORMS += \
     ClassyMain/ggClassyMainWindow.ui \
     ClassyMain/ggClassyDataBrowserDockWidget.ui \
-    ClassyMain/ggClassyDataPropertiesDockWidget.ui
+    ClassyMain/ggClassyDataPropertiesDockWidget.ui \
+    BaseWidgets/ggColorDialog.ui
 
 DISTFILES += \
     README.md
@@ -86,7 +87,8 @@ HEADERS += \
     ClassyGraphics/ggClassyConnectionManipulatorItem.h \
     ClassyDataSet/ggClassyItem.h \
     ClassyDataSet/ggClassySettings.h \
-    BaseWidgets/ggColorPreviewWidget.h
+    BaseWidgets/ggColorPreviewWidget.h \
+    BaseWidgets/ggColorDialog.h
 
 SOURCES += \
     Base/ggItemLinked.cxx \
@@ -133,5 +135,6 @@ SOURCES += \
     ClassyGraphics/ggClassyConnectionManipulatorItem.cxx \
     ClassyDataSet/ggClassyItem.cxx \
     ClassyDataSet/ggClassySettings.cxx \
-    BaseWidgets/ggColorPreviewWidget.cxx
+    BaseWidgets/ggColorPreviewWidget.cxx \
+    BaseWidgets/ggColorDialog.cxx
 
