@@ -146,34 +146,6 @@ ggClassyMainWindow::~ggClassyMainWindow()
 }
 
 
-void ggClassyMainWindow::ConnectColor(ggColorWheelWidget* aColorWheelWidgetA, ggColorWheelWidget* aColorWheelWidgetB) const
-{
-  connect(aColorWheelWidgetA, SIGNAL(ColorChanged(QColor)), aColorWheelWidgetB, SLOT(SetColor(QColor)));
-  connect(aColorWheelWidgetB, SIGNAL(ColorChanged(QColor)), aColorWheelWidgetA, SLOT(SetColor(QColor)));
-}
-
-
-void ggClassyMainWindow::ConnectColor(ggColorWheelWidget* aColorWheelWidget, ggColorChannelWidget* aColorChannelWidget) const
-{
-  connect(aColorChannelWidget, SIGNAL(ColorChanged(QColor)), aColorWheelWidget, SLOT(SetColor(QColor)));
-  connect(aColorWheelWidget, SIGNAL(ColorChanged(QColor)), aColorChannelWidget, SLOT(SetColor(QColor)));
-}
-
-
-void ggClassyMainWindow::ConnectColor(ggColorChannelWidget* aColorChannelWidget, ggColorWheelWidget* aColorWheelWidget) const
-{
-  connect(aColorChannelWidget, SIGNAL(ColorChanged(QColor)), aColorWheelWidget, SLOT(SetColor(QColor)));
-  connect(aColorWheelWidget, SIGNAL(ColorChanged(QColor)), aColorChannelWidget, SLOT(SetColor(QColor)));
-}
-
-
-void ggClassyMainWindow::ConnectColor(ggColorChannelWidget* aColorChannelWidgetA, ggColorChannelWidget* aColorChannelWidgetB) const
-{
-  connect(aColorChannelWidgetA, SIGNAL(ColorChanged(QColor)), aColorChannelWidgetB, SLOT(SetColor(QColor)));
-  connect(aColorChannelWidgetB, SIGNAL(ColorChanged(QColor)), aColorChannelWidgetA, SLOT(SetColor(QColor)));
-}
-
-
 void ggClassyMainWindow::UpdateUI()
 {
   ui->mZoomComboBox->lineEdit()->setText(ZoomToString(ui->mGraphicsView->GetSubjectZoom()->GetValue()));
