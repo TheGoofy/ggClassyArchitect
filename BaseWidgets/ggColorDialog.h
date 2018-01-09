@@ -1,7 +1,12 @@
 #ifndef GGCOLORDIALOG_H
 #define GGCOLORDIALOG_H
 
+// 1) include system or QT
 #include <QDialog>
+
+// 2) include own project-related (sort by component dependency)
+
+// 3) forward declarations
 
 namespace Ui {
   class ggColorDialog;

@@ -78,43 +78,7 @@ ggClassyMainWindow::ggClassyMainWindow(QWidget *parent) :
   ui->mColorChannelWidgetA->SetColor(ui->mColorWheelWidget->GetColor());
   ui->mColorChannelWidgetV->SetChannel(ggColorChannelWidget::cChannel::eValue);
   ui->mColorChannelWidgetV->SetColor(ui->mColorWheelWidget->GetColor());
-/*
-  ConnectColor(ui->mColorWheelWidget, ui->mColorChannelWidgetR);
-  ConnectColor(ui->mColorWheelWidget, ui->mColorChannelWidgetG);
-  ConnectColor(ui->mColorWheelWidget, ui->mColorChannelWidgetB);
-  ConnectColor(ui->mColorWheelWidget, ui->mColorChannelWidgetA);
-  ConnectColor(ui->mColorWheelWidget, ui->mColorChannelWidgetV);
 
-  ConnectColor(ui->mColorChannelWidgetR, ui->mColorWheelWidget);
-  ConnectColor(ui->mColorChannelWidgetR, ui->mColorChannelWidgetG);
-  ConnectColor(ui->mColorChannelWidgetR, ui->mColorChannelWidgetB);
-  ConnectColor(ui->mColorChannelWidgetR, ui->mColorChannelWidgetA);
-  ConnectColor(ui->mColorChannelWidgetR, ui->mColorChannelWidgetV);
-
-  ConnectColor(ui->mColorChannelWidgetG, ui->mColorWheelWidget);
-  ConnectColor(ui->mColorChannelWidgetG, ui->mColorChannelWidgetR);
-  ConnectColor(ui->mColorChannelWidgetG, ui->mColorChannelWidgetB);
-  ConnectColor(ui->mColorChannelWidgetG, ui->mColorChannelWidgetA);
-  ConnectColor(ui->mColorChannelWidgetG, ui->mColorChannelWidgetV);
-
-  ConnectColor(ui->mColorChannelWidgetB, ui->mColorWheelWidget);
-  ConnectColor(ui->mColorChannelWidgetB, ui->mColorChannelWidgetR);
-  ConnectColor(ui->mColorChannelWidgetB, ui->mColorChannelWidgetG);
-  ConnectColor(ui->mColorChannelWidgetB, ui->mColorChannelWidgetA);
-  ConnectColor(ui->mColorChannelWidgetB, ui->mColorChannelWidgetV);
-
-  ConnectColor(ui->mColorChannelWidgetA, ui->mColorWheelWidget);
-  ConnectColor(ui->mColorChannelWidgetA, ui->mColorChannelWidgetR);
-  ConnectColor(ui->mColorChannelWidgetA, ui->mColorChannelWidgetG);
-  ConnectColor(ui->mColorChannelWidgetA, ui->mColorChannelWidgetB);
-  ConnectColor(ui->mColorChannelWidgetA, ui->mColorChannelWidgetV);
-
-  ConnectColor(ui->mColorChannelWidgetV, ui->mColorWheelWidget);
-  ConnectColor(ui->mColorChannelWidgetV, ui->mColorChannelWidgetR);
-  ConnectColor(ui->mColorChannelWidgetV, ui->mColorChannelWidgetG);
-  ConnectColor(ui->mColorChannelWidgetV, ui->mColorChannelWidgetB);
-  ConnectColor(ui->mColorChannelWidgetV, ui->mColorChannelWidgetA);
-*/
   connect(ui->mColorWheelWidget, SIGNAL(ColorChanged(QColor)), this, SLOT(SetColor(QColor)));
   connect(ui->mColorChannelWidgetR, SIGNAL(ColorChanged(QColor)), this, SLOT(SetColor(QColor)));
   connect(ui->mColorChannelWidgetG, SIGNAL(ColorChanged(QColor)), this, SLOT(SetColor(QColor)));
@@ -131,7 +95,10 @@ ggClassyMainWindow::ggClassyMainWindow(QWidget *parent) :
   connect(this, SIGNAL(ColorChanged(QColor)), ui->mColorPreviewWidget, SLOT(SetColor(QColor)));
 
   addDockWidget(Qt::LeftDockWidgetArea, mDataBrowser);
-  addDockWidget(Qt::LeftDockWidgetArea, mDataProperties);
+
+  mDataProperties->setVisible(true);
+  mDataProperties->setFloating(true);
+  // addDockWidget(Qt::LeftDockWidgetArea, mDataProperties);
 
   // register subject(s)
   Attach(ui->mGraphicsView->GetSubjectZoom());

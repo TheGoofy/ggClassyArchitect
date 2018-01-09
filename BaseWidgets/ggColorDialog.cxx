@@ -1,5 +1,10 @@
+// 0) include own header
 #include "ggColorDialog.h"
 #include "ui_ggColorDialog.h"
+
+// 1) include system or QT
+
+// 2) include own project-related (sort by component dependency)
 
 
 ggColorDialog::ggColorDialog(QWidget *aParent) :
