@@ -132,7 +132,7 @@ void ggColorPreviewWidget::paintEvent(QPaintEvent* aEvent)
 
   // draw main color
   qreal vRadius = 2.0 * mSelectorRadius;
-  vPainter.setBrush(ggUtilityQt::GetColorWithAlpha(mColor, 1.0f));
+  vPainter.setBrush(ggUtilityQt::GetColorWithAlpha(mColor, (mColor.alpha() != 255 ? 1.0f : 0.33f)));
   vPainter.drawRoundedRect(mColorBar, vRadius, vRadius);
   QRectF vIndicatorRect = GetIndicatorRect(1.0);
   QRectF vIndicatorRect1 = GetIndicatorRect(0.0);
@@ -160,8 +160,8 @@ void ggColorPreviewWidget::paintEvent(QPaintEvent* aEvent)
   // grey out, if disabled
   if (!isEnabled()) {
     vPainter.setPen(Qt::NoPen);
-    const QColor& vColor = palette().color(QPalette::Disabled, QPalette::Window);
-    vPainter.setBrush(ggUtilityQt::GetColorWithAlpha(vColor, 0.75f));
+    const QColor& vBackgroundColor = palette().color(QPalette::Disabled, QPalette::Window);
+    vPainter.setBrush(ggUtilityQt::GetColorWithAlpha(vBackgroundColor, 0.75f));
     vPainter.drawRect(rect());
   }
 

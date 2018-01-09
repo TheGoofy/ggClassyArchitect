@@ -6,11 +6,12 @@
 
 // 2) include own project-related (sort by component dependency)
 #include "Base/ggObserver.h"
-#include "ClassyMain/ggClassyDataBrowserDockWidget.h"
-#include "ClassyMain/ggClassyDataPropertiesDockWidget.h"
 
 // 3) forward declarations
 namespace Ui { class ggClassyMainWindow; }
+class ggClassySettingsDockWidget;
+class ggClassyDataBrowserDockWidget;
+class ggClassyDataPropertiesDockWidget;
 class ggColorWheelWidget;
 class ggColorChannelWidget;
 class QToolButton;
@@ -74,6 +75,7 @@ private:
   Ui::ggClassyMainWindow* ui;
 
   // other user interfaces
+  ggClassySettingsDockWidget* mSettings;
   ggClassyDataBrowserDockWidget* mDataBrowser;
   ggClassyDataPropertiesDockWidget* mDataProperties;
 

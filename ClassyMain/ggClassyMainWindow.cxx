@@ -18,11 +18,15 @@
 #include "ClassyMain/ggClassyApplication.h"
 #include "ClassyGraphics/ggClassyGraphicsScene.h"
 #include "ClassyGraphics/ggClassyAutoConnectPathItem.h"
+#include "ClassyMain/ggClassySettingsDockWidget.h"
+#include "ClassyMain/ggClassyDataBrowserDockWidget.h"
+#include "ClassyMain/ggClassyDataPropertiesDockWidget.h"
 
 
 ggClassyMainWindow::ggClassyMainWindow(QWidget *parent) :
   QMainWindow(parent),
   ui(new Ui::ggClassyMainWindow),
+  mSettings(new ggClassySettingsDockWidget(this)),
   mDataBrowser(new ggClassyDataBrowserDockWidget(this)),
   mDataProperties(new ggClassyDataPropertiesDockWidget(this))
 {
@@ -94,11 +98,11 @@ ggClassyMainWindow::ggClassyMainWindow(QWidget *parent) :
   connect(this, SIGNAL(ColorChanged(QColor)), ui->mColorChannelWidgetV, SLOT(SetColor(QColor)));
   connect(this, SIGNAL(ColorChanged(QColor)), ui->mColorPreviewWidget, SLOT(SetColor(QColor)));
 
-  addDockWidget(Qt::LeftDockWidgetArea, mDataBrowser);
+  mSettings->setFloating(true);
+  mSettings->setVisible(true);
 
-  mDataProperties->setVisible(true);
-  mDataProperties->setFloating(true);
-  // addDockWidget(Qt::LeftDockWidgetArea, mDataProperties);
+  addDockWidget(Qt::LeftDockWidgetArea, mDataBrowser);
+  addDockWidget(Qt::LeftDockWidgetArea, mDataProperties);
 
   // register subject(s)
   Attach(ui->mGraphicsView->GetSubjectZoom());
@@ -109,6 +113,9 @@ ggClassyMainWindow::ggClassyMainWindow(QWidget *parent) :
 
 ggClassyMainWindow::~ggClassyMainWindow()
 {
+  delete mDataProperties;
+  delete mDataBrowser;
+  delete mSettings;
   delete ui;
 }
 

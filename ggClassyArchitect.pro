@@ -26,7 +26,8 @@ FORMS += \
     ClassyMain/ggClassyMainWindow.ui \
     ClassyMain/ggClassyDataBrowserDockWidget.ui \
     ClassyMain/ggClassyDataPropertiesDockWidget.ui \
-    BaseWidgets/ggColorDialog.ui
+    BaseWidgets/ggColorDialog.ui \
+    ClassyMain/ggClassySettingsDockWidget.ui
 
 DISTFILES += \
     README.md
@@ -88,7 +89,8 @@ HEADERS += \
     ClassyDataSet/ggClassyItem.h \
     ClassyDataSet/ggClassySettings.h \
     BaseWidgets/ggColorPreviewWidget.h \
-    BaseWidgets/ggColorDialog.h
+    BaseWidgets/ggColorDialog.h \
+    ClassyMain/ggClassySettingsDockWidget.h
 
 SOURCES += \
     Base/ggItemLinked.cxx \
@@ -136,5 +138,6 @@ SOURCES += \
     ClassyDataSet/ggClassyItem.cxx \
     ClassyDataSet/ggClassySettings.cxx \
     BaseWidgets/ggColorPreviewWidget.cxx \
-    BaseWidgets/ggColorDialog.cxx
+    BaseWidgets/ggColorDialog.cxx \
+    ClassyMain/ggClassySettingsDockWidget.cxx
 
