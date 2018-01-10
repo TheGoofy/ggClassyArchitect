@@ -5,6 +5,7 @@
 #include <QPainter>
 
 // 2) include own project-related (sort by component dependency)
+#include "Base/ggUtility.h"
 
 
 ggGraphicsShadowRectItem::ggGraphicsShadowRectItem(QGraphicsItem* aParent) :
@@ -95,6 +96,9 @@ void ggGraphicsShadowRectItem::paint(QPainter* aPainter,
                                      const QStyleOptionGraphicsItem* aOption,
                                      QWidget* aWidget)
 {
+  GG_UTILITY_UNUSED(aOption);
+  GG_UTILITY_UNUSED(aWidget);
+
   // adjust radius, if rect too small
   qreal vRadius = mRadius;
   if (vRadius > 2.0f * rect().width()) vRadius = rect().width() / 2.0f;

@@ -12,6 +12,11 @@
 // 3) forward declarations
 
 /**
+ * commonly useful macros
+ */
+#define GG_UTILITY_UNUSED(aExpression) (void)(aExpression);
+
+/**
  * collection of general, simple utilities
  */
 namespace ggUtility {

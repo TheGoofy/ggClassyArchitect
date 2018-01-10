@@ -16,6 +16,7 @@ ggColorPreviewWidget::ggColorPreviewWidget(QWidget* aParent) :
   mSelectorRadiusLarge(9.0f),
   mLayout(cLayout::eVertical)
 {
+  setMouseTracking(true);
   SetHorizontal();
   SetColor(QColor(200, 150, 50, 255));
 }
@@ -79,12 +80,26 @@ QSize ggColorPreviewWidget::sizeHint() const
 }
 
 
+void ggColorPreviewWidget::mouseMoveEvent(QMouseEvent* aEvent)
+{
+  // adjust mouse pointer if insied preview area
+  setCursor(mColorIndicatorLarge.contains(aEvent->pos()) ? Qt::PointingHandCursor : Qt::ArrowCursor);
+
+  // call base function
+  QWidget::mouseMoveEvent(aEvent);
+}
+
+
 void ggColorPreviewWidget::resizeEvent(QResizeEvent* aEvent)
 {
   // color bar corners
   mColorBar = QRectF(mSelectorRadius, mSelectorRadius,
                      aEvent->size().width() - 2.0f * mSelectorRadius,
                      aEvent->size().height() - 2.0f * mSelectorRadius);
+
+  // color indicator
+  mColorIndicatorSmall = GetIndicatorRect(1.0);
+  mColorIndicatorLarge = GetIndicatorRect(0.0);
 
   // base method
   QWidget::resizeEvent(aEvent);
@@ -134,28 +149,26 @@ void ggColorPreviewWidget::paintEvent(QPaintEvent* aEvent)
   qreal vRadius = 2.0 * mSelectorRadius;
   vPainter.setBrush(ggUtilityQt::GetColorWithAlpha(mColor, (mColor.alpha() != 255 ? 1.0f : 0.33f)));
   vPainter.drawRoundedRect(mColorBar, vRadius, vRadius);
-  QRectF vIndicatorRect = GetIndicatorRect(1.0);
-  QRectF vIndicatorRect1 = GetIndicatorRect(0.0);
 
   // draw checkered background (if the color is transparent)
   if (mColor.alpha() != 255) {
     QRectF vColorBarLowerRect(GetColorBarLowerRect());
     vPainter.setBrush(QColor(130, 130, 130, 255));
     vPainter.drawRoundedRect(vColorBarLowerRect, vRadius, vRadius);
-    vPainter.drawRoundedRect(vIndicatorRect, mSelectorRadiusLarge, mSelectorRadiusLarge);
+    vPainter.drawRoundedRect(mColorIndicatorSmall, mSelectorRadiusLarge, mSelectorRadiusLarge);
     vPainter.setBrush(ggUtilityQt::GetCheckerBoardBrush(1.5f * mSelectorRadius));
     vPainter.drawRoundedRect(vColorBarLowerRect, vRadius, vRadius);
-    vPainter.drawRoundedRect(vIndicatorRect, mSelectorRadiusLarge, mSelectorRadiusLarge);
+    vPainter.drawRoundedRect(mColorIndicatorSmall, mSelectorRadiusLarge, mSelectorRadiusLarge);
   }
 
   // indicator of selected color
   vRadius = mSelectorRadiusLarge - 1.0;
   vPainter.setPen(QPen(Qt::white, 1.5f));
   vPainter.setBrush(Qt::NoBrush);
-  vPainter.drawRoundedRect(vIndicatorRect1, vRadius + 1.0, vRadius + 1.0);
+  vPainter.drawRoundedRect(mColorIndicatorLarge, vRadius + 1.0, vRadius + 1.0);
   vPainter.setPen(Qt::black);
   vPainter.setBrush(GetColor());
-  vPainter.drawRoundedRect(vIndicatorRect, vRadius, vRadius);
+  vPainter.drawRoundedRect(mColorIndicatorSmall, vRadius, vRadius);
 
   // grey out, if disabled
   if (!isEnabled()) {

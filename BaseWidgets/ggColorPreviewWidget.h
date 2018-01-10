@@ -34,6 +34,7 @@ public slots:
 protected:
 
   virtual QSize sizeHint() const override;
+  virtual void mouseMoveEvent(QMouseEvent* aEvent) override;
   virtual void resizeEvent(QResizeEvent* aEvent) override;
   virtual void paintEvent(QPaintEvent* aEvent) override;
 
@@ -58,6 +59,8 @@ private:
 
   // area for color channel
   QRectF mColorBar;
+  QRectF mColorIndicatorLarge;
+  QRectF mColorIndicatorSmall;
 
 };
 

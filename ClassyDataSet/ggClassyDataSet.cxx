@@ -6,25 +6,26 @@
 
 // 2) include own project-related (sort by component dependency)
 #include "Base/ggWalkerT.h"
+#include "Base/ggUtility.h"
 
 
-#define GG_FORMAT_VERSION_MAJOR 0
-#define GG_FORMAT_VERSION_MINOR 0
-#define GG_FORMAT_VERSION_PATCH 1
+#define GG_CLASSY_DATA_SET_FORMAT_VERSION_MAJOR 0
+#define GG_CLASSY_DATA_SET_FORMAT_VERSION_MINOR 0
+#define GG_CLASSY_DATA_SET_FORMAT_VERSION_PATCH 1
 
 
 ggClassyDataSet::ggClassyDataSet() :
-  mFormatVersionMajor(GG_FORMAT_VERSION_MAJOR),
-  mFormatVersionMinor(GG_FORMAT_VERSION_MINOR),
-  mFormatVersionPatch(GG_FORMAT_VERSION_PATCH)
+  mFormatVersionMajor(GG_CLASSY_DATA_SET_FORMAT_VERSION_MAJOR),
+  mFormatVersionMinor(GG_CLASSY_DATA_SET_FORMAT_VERSION_MINOR),
+  mFormatVersionPatch(GG_CLASSY_DATA_SET_FORMAT_VERSION_PATCH)
 {
 }
 
 
 ggClassyDataSet::ggClassyDataSet(const ggClassyDataSet& aOther):
-  mFormatVersionMajor(GG_FORMAT_VERSION_MAJOR),
-  mFormatVersionMinor(GG_FORMAT_VERSION_MINOR),
-  mFormatVersionPatch(GG_FORMAT_VERSION_PATCH)
+  mFormatVersionMajor(GG_CLASSY_DATA_SET_FORMAT_VERSION_MAJOR),
+  mFormatVersionMinor(GG_CLASSY_DATA_SET_FORMAT_VERSION_MINOR),
+  mFormatVersionPatch(GG_CLASSY_DATA_SET_FORMAT_VERSION_PATCH)
 {
   *this = aOther;
 }
@@ -376,6 +377,8 @@ ggClassyDataSet* ggClassyDataSet::CreateTestDataSet()
   ggClassyCollection* vCollectionA = vDataSet->AddCollection(new ggClassyCollection("ggCollectionA"));
   ggClassyCollection* vCollectionB = vDataSet->AddCollection(new ggClassyCollection("ggCollectionB"));
   ggClassyCollection* vCollectionC = vDataSet->AddCollection(new ggClassyCollection("ggCollectionC"));
+
+  GG_UTILITY_UNUSED(vCollectionB);
 
   ggClassyClass* vClassA = vDataSet->AddClass(new ggClassyClass("ggClassA"));
   vClassA->AddMember("Ping()", "void");
