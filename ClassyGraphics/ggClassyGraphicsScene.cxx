@@ -9,6 +9,7 @@
 #include "Base/ggWalkerT.h"
 #include "BaseGraphics/ggGraphicsConnectionPointItem.h"
 #include "ClassyDataSet/ggClassyDataSet.h"
+#include "ClassyDataSet/ggClassySettings.h"
 #include "ClassyGraphics/ggClassyClassBoxPoints.h"
 #include "ClassyGraphics/ggClassyAutoConnectPathItem.h"
 #include "ClassyGraphics/ggClassyGraphicsFrameItem.h"
@@ -31,6 +32,9 @@ ggClassyGraphicsScene::ggClassyGraphicsScene(QObject* aParent) :
   vRectB->setPen(QPen(QColor(0,0,0,50), 1.0f));
   vRectB->setBrush(QColor(255,255,255,255));
   addItem(vRectB);
+
+  Attach(ggClassySettings::GetInstance());
+  UpdateSettings();
 }
 
 
@@ -40,9 +44,19 @@ ggClassyGraphicsScene::~ggClassyGraphicsScene()
 }
 
 
+void ggClassyGraphicsScene::UpdateSettings()
+{
+  setBackgroundBrush(ggClassySettings::GetInstance()->GetBackgroundColor());
+}
+
+
 void ggClassyGraphicsScene::Update(const ggSubject* aSubject)
 {
-  // nothing to do, if there is no dataset
+  if (aSubject == ggClassySettings::GetInstance()) {
+    UpdateSettings();
+  }
+
+  // the following subjects can only be handled, if there is a dataset
   if (mDataSet == nullptr) return;
 
   if (aSubject == &mDataSet->GetClassBoxes()) {
@@ -57,7 +71,7 @@ void ggClassyGraphicsScene::Update(const ggSubject* aSubject)
     CreateConnectionItems();
   }
 
-  if (aSubject == &mDataSet->GetFrames()) {
+  else if (aSubject == &mDataSet->GetFrames()) {
     DeleteFrameItems();
     CreateFrameItems();
   }

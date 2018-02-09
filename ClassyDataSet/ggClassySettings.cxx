@@ -16,6 +16,7 @@ ggClassySettings::ggClassySettings()
 
 void ggClassySettings::Sync()
 {
+  GetValue("ClassySettings/BackgroundColor", QColor(150, 150, 150, 255), mBackgroundColor);
   GetValue("ClassySettings/SelectionColor", QColor(200, 255, 0, 255), mSelectionColor);
   GetValue("ClassySettings/HighlightColor", QColor(255, 100, 0, 255), mHighlightColor);
   GetValue("ClassySettings/ShadowColor", QColor(0, 0, 0, 40), mShadowColor);
@@ -50,6 +51,18 @@ void ggClassySettings::SetValue(const QString& aKey, const T& aValueIn, T& aValu
     vSettings.setValue(aKey, aValueIn);
     Notify();
   }
+}
+
+
+const QColor& ggClassySettings::GetBackgroundColor() const
+{
+  return mBackgroundColor;
+}
+
+
+void ggClassySettings::SetBackgroundColor(const QColor& aColor)
+{
+  SetValue("ClassySettings/BackgroundColor", aColor, mBackgroundColor);
 }
 
 

@@ -26,6 +26,7 @@ private slots:
   void ColorAccept();
   void ColorReject();
 
+  void on_mBackgroundColorPreviewWidget_Clicked();
   void on_mSelectionColorPreviewWidget_Clicked();
   void on_mHighlightColorPreviewWidget_Clicked();
   void on_mShadowColorPreviewWidget_Clicked();

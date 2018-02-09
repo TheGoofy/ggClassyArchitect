@@ -17,13 +17,16 @@ ggClassySettingsDockWidget::ggClassySettingsDockWidget(QWidget* aParent) :
 {
   ui->setupUi(this);
 
+  ui->mBackgroundColorPreviewWidget->SetColor(ggClassySettings::GetInstance()->GetBackgroundColor());
   ui->mSelectionColorPreviewWidget->SetColor(ggClassySettings::GetInstance()->GetSelectionColor());
   ui->mHighlightColorPreviewWidget->SetColor(ggClassySettings::GetInstance()->GetHighlightColor());
   ui->mShadowColorPreviewWidget->SetColor(ggClassySettings::GetInstance()->GetShadowColor());
+
   ui->mShadowWidthSpinBox->setValue(ggClassySettings::GetInstance()->GetShadowWidth());
   ui->mShadowOffsetXSpinBox->setValue(ggClassySettings::GetInstance()->GetShadowOffset().x());
   ui->mShadowOffsetYSpinBox->setValue(ggClassySettings::GetInstance()->GetShadowOffset().y());
 
+  ui->mBackgroundColorPreviewWidget->SetClickable(true);
   ui->mSelectionColorPreviewWidget->SetClickable(true);
   ui->mHighlightColorPreviewWidget->SetClickable(true);
   ui->mShadowColorPreviewWidget->SetClickable(true);
@@ -42,6 +45,7 @@ void ggClassySettingsDockWidget::SetColor(const QColor& aColor)
     // update preview
     mEditedColorPreview->SetColor(aColor);
     // update the settings
+    if (mEditedColorPreview == ui->mBackgroundColorPreviewWidget) ggClassySettings::GetInstance()->SetBackgroundColor(aColor);
     if (mEditedColorPreview == ui->mSelectionColorPreviewWidget) ggClassySettings::GetInstance()->SetSelectionColor(aColor);
     if (mEditedColorPreview == ui->mHighlightColorPreviewWidget) ggClassySettings::GetInstance()->SetHighlightColor(aColor);
     if (mEditedColorPreview == ui->mShadowColorPreviewWidget) ggClassySettings::GetInstance()->SetShadowColor(aColor);
@@ -80,6 +84,12 @@ void ggClassySettingsDockWidget::EditColor(ggColorPreviewWidget* aColorPreview)
     connect(&vColorDialog, SIGNAL(rejected()), this, SLOT(ColorReject()));
     vColorDialog.exec();
   }
+}
+
+
+void ggClassySettingsDockWidget::on_mBackgroundColorPreviewWidget_Clicked()
+{
+  EditColor(ui->mBackgroundColorPreviewWidget);
 }
 
 

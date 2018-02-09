@@ -62,6 +62,8 @@ protected:
 
 private:
 
+  void UpdateSettings();
+
   void DeleteItems(const std::vector<QGraphicsItem*>& aItems);
   void DeleteClassBoxAndConnectionItems();
   void DeleteConnectionItems();

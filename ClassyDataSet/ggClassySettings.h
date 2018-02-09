@@ -17,6 +17,8 @@ public:
 
   static ggClassySettings* GetInstance();
 
+  const QColor& GetBackgroundColor() const;
+  void SetBackgroundColor(const QColor& aColor);
   const QColor& GetSelectionColor() const;
   void SetSelectionColor(const QColor& aColor);
   const QColor& GetHighlightColor() const;
@@ -43,6 +45,7 @@ private:
   template <typename T>
   void SetValue(const QString& aKey, const T& aValueIn, T& aValueOut);
 
+  QColor mBackgroundColor;
   QColor mSelectionColor;
   QColor mHighlightColor;
   QColor mShadowColor;
