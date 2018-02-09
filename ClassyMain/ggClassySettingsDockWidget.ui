@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>214</width>
-    <height>216</height>
+    <width>206</width>
+    <height>186</height>
    </rect>
   </property>
   <property name="features">
@@ -256,22 +256,6 @@
        </size>
       </property>
      </spacer>
-    </item>
-    <item>
-     <widget class="QDialogButtonBox" name="mButtonBox">
-      <property name="sizePolicy">
-       <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-        <horstretch>0</horstretch>
-        <verstretch>0</verstretch>
-       </sizepolicy>
-      </property>
-      <property name="standardButtons">
-       <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
-      </property>
-      <property name="centerButtons">
-       <bool>false</bool>
-      </property>
-     </widget>
     </item>
    </layout>
   </widget>
