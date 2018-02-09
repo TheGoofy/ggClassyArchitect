@@ -90,6 +90,7 @@ void ggGraphicsDecoratedPathItem::SetColorSelected(const QColor& aColor)
 {
   if (mColorSelected != aColor) {
     mColorSelected = aColor;
+    QGraphicsPathItem::setPen(GetPen());
     RebuildPath();
   }
 }
@@ -101,14 +102,20 @@ const QColor& ggGraphicsDecoratedPathItem::GetColorSelected() const
 }
 
 
+QPen ggGraphicsDecoratedPathItem::GetPen() const
+{
+  QPen vPen(pen());
+  vPen.setColor(isSelected() ? mColorSelected : mColorNormal);
+  return vPen;
+}
+
+
 QVariant ggGraphicsDecoratedPathItem::itemChange(GraphicsItemChange aChange,
                                                  const QVariant& aValue)
 {
   // change color when selected
   if (aChange == ItemSelectedHasChanged) {
-    QPen vPen(pen());
-    vPen.setColor(aValue.toBool() ? mColorSelected : mColorNormal);
-    QGraphicsPathItem::setPen(vPen);
+    QGraphicsPathItem::setPen(GetPen());
     RebuildPath();
   }
 

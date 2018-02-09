@@ -52,6 +52,8 @@ protected:
 
 private:
 
+  QPen GetPen() const;
+
   QPainterPath GetPath(const ggConnectionPoint& aPointSrc,
                        const ggConnectionPoint& aPointDst) const;
 
