@@ -23,9 +23,13 @@ public:
   bool IsHorizontal() const;
   bool IsVertical() const;
 
+  void SetClickable(bool aClickable);
+  bool IsClickable() const;
+
 signals:
 
   void ColorChanged(const QColor& aColor);
+  void Clicked();
 
 public slots:
 
@@ -35,6 +39,7 @@ protected:
 
   virtual QSize sizeHint() const override;
   virtual void mouseMoveEvent(QMouseEvent* aEvent) override;
+  virtual void mouseReleaseEvent(QMouseEvent* aEvent) override;
   virtual void resizeEvent(QResizeEvent* aEvent) override;
   virtual void paintEvent(QPaintEvent* aEvent) override;
 
@@ -56,6 +61,9 @@ private:
     eVertical
   };
   cLayout mLayout;
+
+  // clickable like a button
+  bool mClickable;
 
   // area for color channel
   QRectF mColorBar;

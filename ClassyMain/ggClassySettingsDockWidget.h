@@ -8,6 +8,7 @@
 
 // 3) forward declarations
 namespace Ui { class ggClassySettingsDockWidget; }
+class ggColorPreviewWidget;
 
 class ggClassySettingsDockWidget :
   public QDockWidget
@@ -15,11 +16,31 @@ class ggClassySettingsDockWidget :
   Q_OBJECT
 
 public:
+
   explicit ggClassySettingsDockWidget(QWidget* aParent = nullptr);
   virtual ~ggClassySettingsDockWidget();
 
+private slots:
+
+  void SetColor(const QColor& aColor);
+  void ColorAccept();
+  void ColorReject();
+
+  void on_mSelectionColorPreviewWidget_Clicked();
+  void on_mHighlightColorPreviewWidget_Clicked();
+  void on_mShadowColorPreviewWidget_Clicked();
+  void on_mShadowWidthSpinBox_valueChanged(double aValue);
+  void on_mShadowOffsetXSpinBox_valueChanged(double aValue);
+  void on_mShadowOffsetYSpinBox_valueChanged(double aValue);
+
 private:
-  Ui::ggClassySettingsDockWidget *ui;
+
+  Ui::ggClassySettingsDockWidget* ui;
+
+  void EditColor(ggColorPreviewWidget* aColorPreview);
+  ggColorPreviewWidget* mEditedColorPreview;
+  QColor mColorBackup;
+
 };
 
 #endif // GGCLASSYSETTINGSDOCKWIDGET_H

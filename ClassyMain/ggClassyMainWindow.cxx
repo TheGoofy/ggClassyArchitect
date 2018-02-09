@@ -98,11 +98,9 @@ ggClassyMainWindow::ggClassyMainWindow(QWidget *parent) :
   connect(this, SIGNAL(ColorChanged(QColor)), ui->mColorChannelWidgetV, SLOT(SetColor(QColor)));
   connect(this, SIGNAL(ColorChanged(QColor)), ui->mColorPreviewWidget, SLOT(SetColor(QColor)));
 
-  mSettings->setFloating(true);
-  mSettings->setVisible(true);
-
   addDockWidget(Qt::LeftDockWidgetArea, mDataBrowser);
   addDockWidget(Qt::LeftDockWidgetArea, mDataProperties);
+  addDockWidget(Qt::LeftDockWidgetArea, mSettings);
 
   // register subject(s)
   Attach(ui->mGraphicsView->GetSubjectZoom());
@@ -170,16 +168,8 @@ void ggClassyMainWindow::on_mZoomFitPushButton_clicked()
 }
 
 
-#include <QColorDialog>
-#include "BaseWidgets/ggColorDialog.h"
-
-
 void ggClassyMainWindow::on_mZoomResetPushButton_clicked()
 {
-  ggColorDialog vColorDialog(this);
-  connect(&vColorDialog, SIGNAL(currentColorChanged(QColor)), this, SLOT(SetColor(QColor)));
-  vColorDialog.exec();
-
   ui->mGraphicsView->SetZoomReset();
 }
 

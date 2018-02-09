@@ -14,7 +14,8 @@ ggColorPreviewWidget::ggColorPreviewWidget(QWidget* aParent) :
   QWidget(aParent),
   mSelectorRadius(3.0f),
   mSelectorRadiusLarge(9.0f),
-  mLayout(cLayout::eVertical)
+  mLayout(cLayout::eVertical),
+  mClickable(false)
 {
   setMouseTracking(true);
   SetHorizontal();
@@ -70,6 +71,20 @@ bool ggColorPreviewWidget::IsVertical() const
 }
 
 
+void ggColorPreviewWidget::SetClickable(bool aClickable)
+{
+  if (mClickable != aClickable) {
+    mClickable = aClickable;
+  }
+}
+
+
+bool ggColorPreviewWidget::IsClickable() const
+{
+  return mClickable;
+}
+
+
 QSize ggColorPreviewWidget::sizeHint() const
 {
   int vSize = 2.0f * mSelectorRadiusLarge;
@@ -83,10 +98,17 @@ QSize ggColorPreviewWidget::sizeHint() const
 void ggColorPreviewWidget::mouseMoveEvent(QMouseEvent* aEvent)
 {
   // adjust mouse pointer if insied preview area
-  setCursor(mColorIndicatorLarge.contains(aEvent->pos()) ? Qt::PointingHandCursor : Qt::ArrowCursor);
+  setCursor(mClickable && mColorIndicatorLarge.contains(aEvent->pos()) ? Qt::PointingHandCursor : Qt::ArrowCursor);
 
   // call base function
   QWidget::mouseMoveEvent(aEvent);
+}
+
+
+void ggColorPreviewWidget::mouseReleaseEvent(QMouseEvent* aEvent)
+{
+  if (mClickable && mColorIndicatorLarge.contains(aEvent->pos())) emit Clicked();
+  else QWidget::mouseReleaseEvent(aEvent);
 }
 
 
