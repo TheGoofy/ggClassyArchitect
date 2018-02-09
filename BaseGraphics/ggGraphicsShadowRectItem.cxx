@@ -148,10 +148,10 @@ void ggGraphicsShadowRectItem::paint(QPainter* aPainter,
 
 qreal ggGraphicsShadowRectItem::GetGradientMiddle() const
 {
-  if ((mRadius > 0.0f) && (mWidth > 0.0f) && (mRadius > mWidth)) {
+  if ((mRadius > 0.0f) && (mWidth > 0.0f) && (mRadius >= mWidth)) {
     return (mRadius - mWidth) / mRadius;
   }
-  return 0.0f;
+  return 0.999f;
 }
 
 

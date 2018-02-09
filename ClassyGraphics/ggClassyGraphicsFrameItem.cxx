@@ -168,8 +168,9 @@ QVariant ggClassyGraphicsFrameItem::itemChange(GraphicsItemChange aChange, const
   }
 
   if (aChange == ItemSelectedHasChanged) {
-    mShadow->SetShadowColors(aValue.toBool() ? ggClassySettings::GetInstance()->GetSelectionColor() : ggClassySettings::GetInstance()->GetShadowColor());
-    mShadow->setPos(aValue.toBool() ? QPointF(0.0f, 0.0f) : ggClassySettings::GetInstance()->GetShadowOffset());
+    mShadow->SetShadowColors(GetShadowColor());
+    mShadow->setPos(GetShadowOffset());
+    setPen(GetBoxBorderPen());
   }
 
   return ggGraphicsRoundedRectItem::itemChange(aChange, aValue);
@@ -342,15 +343,42 @@ void ggClassyGraphicsFrameItem::UpdateLayout()
 }
 
 
+QPen ggClassyGraphicsFrameItem::GetBoxBorderPen() const
+{
+  QPen vPen = pen();
+  const ggClassyCollection* vCollection = GetCollection();
+  if (vCollection != nullptr) vPen = vCollection->mBoxBorder;
+  if (isSelected()) {
+    vPen.setColor(ggClassySettings::GetInstance()->GetSelectionColor());
+    if (vPen.widthF() < 1.0f) vPen.setWidth(1.0f);
+  }
+  return vPen;
+}
+
+
+const QColor& ggClassyGraphicsFrameItem::GetShadowColor() const
+{
+  return isSelected() ? ggClassySettings::GetInstance()->GetSelectionColor() : ggClassySettings::GetInstance()->GetShadowColor();
+}
+
+
+const QPointF& ggClassyGraphicsFrameItem::GetShadowOffset() const
+{
+  static const QPointF vOffsetSelected(0.0f, 0.0f);
+  return isSelected() ? vOffsetSelected : ggClassySettings::GetInstance()->GetShadowOffset();
+}
+
+
 void ggClassyGraphicsFrameItem::UpdateSettings()
 {
   mHandleTL->SetSize(ggClassySettings::GetInstance()->GetHandleSize());
   mHandleTR->SetSize(ggClassySettings::GetInstance()->GetHandleSize());
   mHandleBL->SetSize(ggClassySettings::GetInstance()->GetHandleSize());
   mHandleBR->SetSize(ggClassySettings::GetInstance()->GetHandleSize());
-  mShadow->SetShadowColors(ggClassySettings::GetInstance()->GetShadowColor());
-  mShadow->setPos(ggClassySettings::GetInstance()->GetShadowOffset());
+  mShadow->SetShadowColors(GetShadowColor());
+  mShadow->setPos(GetShadowOffset());
   UpdateShadow(ggClassySettings::GetInstance()->GetShadowWidth());
+  setPen(GetBoxBorderPen());
 }
 
 
@@ -367,7 +395,7 @@ void ggClassyGraphicsFrameItem::UpdateCollectionRead()
 {
   if (GetCollection() != nullptr) {
     // box border
-    setPen(GetCollection()->mBoxBorder);
+    setPen(GetBoxBorderPen());
     // description
     mText->setFont(GetCollection()->mDescriptionFont);
     mText->setDefaultTextColor(GetCollection()->mDescriptionColor);

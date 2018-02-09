@@ -299,8 +299,9 @@ void ggClassyGraphicsBoxItem::paint(QPainter* aPainter, const QStyleOptionGraphi
 QVariant ggClassyGraphicsBoxItem::itemChange(GraphicsItemChange aChange, const QVariant& aValue)
 {
   if (aChange == ItemSelectedHasChanged) {
-    mShadow->SetShadowColors(aValue.toBool() ? ggClassySettings::GetInstance()->GetSelectionColor() : ggClassySettings::GetInstance()->GetShadowColor());
-    mShadow->setPos(aValue.toBool() ? QPointF(0.0f, 0.0f) : ggClassySettings::GetInstance()->GetShadowOffset());
+    mBoxBorder->setPen(GetBoxBorderPen());
+    mShadow->SetShadowColors(GetShadowColor());
+    mShadow->setPos(GetShadowOffset());
   }
 
   return ggGraphicsManipulatorBarItemT<>::itemChange(aChange, aValue);
@@ -436,6 +437,14 @@ void ggClassyGraphicsBoxItem::UpdateClassBoxWrite()
 }
 
 
+void ggClassyGraphicsBoxItem::UpdateShadowLayout()
+{
+  float vBorderWidth2 = mBoxBorder->pen().widthF() / 2.0f;
+  QRectF vBorderRect = ggUtilityQt::GetRectInflated(rect(), vBorderWidth2);
+  mShadow->SetInnerRect(vBorderRect);
+}
+
+
 void ggClassyGraphicsBoxItem::UpdateLayout()
 {
   // apply the same width on all text items
@@ -512,7 +521,9 @@ void ggClassyGraphicsBoxItem::UpdateLayout()
   float vBorderWidth2 = mBoxBorder->pen().widthF() / 2.0f;
   QRectF vBorderRect = ggUtilityQt::GetRectInflated(rect(), vBorderWidth2);
   mBoxBorder->setRect(vBorderRect);
-  mShadow->SetInnerRect(vBorderRect);
+
+  // shadow
+  UpdateShadowLayout();
 
   // connection manipulator
   mBaseClassConnector->SetPositionSrc(QPointF(rect().center().x(), rect().top()));
@@ -573,12 +584,38 @@ const ggClassyCollection* ggClassyGraphicsBoxItem::GetCollection() const
 }
 
 
+QPen ggClassyGraphicsBoxItem::GetBoxBorderPen() const
+{
+  QPen vPen = mBoxBorder->pen();
+  const ggClassyCollection* vCollection = GetCollection();
+  if (vCollection != nullptr) vPen = vCollection->mBoxBorder;
+  if (isSelected()) {
+    vPen.setColor(ggClassySettings::GetInstance()->GetSelectionColor());
+    if (vPen.widthF() < 1.0f) vPen.setWidth(1.0f);
+  }
+  return vPen;
+}
+
+
+const QColor& ggClassyGraphicsBoxItem::GetShadowColor() const
+{
+  return isSelected() ? ggClassySettings::GetInstance()->GetSelectionColor() : ggClassySettings::GetInstance()->GetShadowColor();
+}
+
+
+const QPointF& ggClassyGraphicsBoxItem::GetShadowOffset() const
+{
+  static const QPointF vOffsetSelected(0.0f, 0.0f);
+  return isSelected() ? vOffsetSelected : ggClassySettings::GetInstance()->GetShadowOffset();
+}
+
+
 void ggClassyGraphicsBoxItem::UpdateCollectionRead()
 {
   const ggClassyCollection* vCollection = GetCollection();
   if (vCollection != nullptr) {
     // box border
-    mBoxBorder->setPen(vCollection->mBoxBorder);
+    mBoxBorder->setPen(GetBoxBorderPen());
     // class name
     mClassNameText->setFont(vCollection->mNameFont);
     mClassNameText->setDefaultTextColor(vCollection->mNameColor);
@@ -603,8 +640,10 @@ void ggClassyGraphicsBoxItem::UpdateSettings()
   mBaseClassConnector->SetColor(ggClassySettings::GetInstance()->GetHighlightColor());
   mShadow->SetRadius(ggClassySettings::GetInstance()->GetShadowWidth());
   mShadow->SetShadowWidth(ggClassySettings::GetInstance()->GetShadowWidth());
-  mShadow->SetShadowColors(ggClassySettings::GetInstance()->GetShadowColor());
-  mShadow->setPos(ggClassySettings::GetInstance()->GetShadowOffset());
+  mShadow->SetShadowColors(GetShadowColor());
+  mShadow->setPos(GetShadowOffset());
   mMembersCheckBox->SetColor(ggClassySettings::GetInstance()->GetHighlightColor());
   mDescriptionCheckBox->SetColor(ggClassySettings::GetInstance()->GetHighlightColor());
+  UpdateShadowLayout();
+  mBoxBorder->setPen(GetBoxBorderPen());
 }

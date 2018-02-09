@@ -65,6 +65,9 @@ private:
   void SetHandleBrush(const QBrush& aBrush);
   QRectF GetRectAbsolute() const;
   void SetRectAbsolute(const QRectF& aRect);
+  QPen GetBoxBorderPen() const;
+  const QColor& GetShadowColor() const;
+  const QPointF& GetShadowOffset() const;
   void UpdateShadow(qreal aShadowWidth);
 
   ggGraphicsShadowRectItem* mShadow;

@@ -67,6 +67,7 @@ private:
   QPointF GetMemberPositionLeft(ggUSize aMemberIndex) const;
   QPointF GetMemberPositionRight(ggUSize aMemberIndex) const;
 
+  void UpdateShadowLayout();
   void UpdateLayout();
   void NotifySize();
 
@@ -81,6 +82,10 @@ private:
 
   void UpdateCollectionRead();
   void UpdateSettings();
+
+  QPen GetBoxBorderPen() const;
+  const QColor& GetShadowColor() const;
+  const QPointF& GetShadowOffset() const;
 
   ggGraphicsShadowRectItem* mShadow;
   QGraphicsRectItem* mBoxBorder;
